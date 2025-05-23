@@ -1,0 +1,60 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : May 25, 2024, 2:46:21 PM
+    Author     : Admin
+*/
+
+/* Định dạng cho form */
+form {
+    margin-top: 20px;
+}
+
+/* Định dạng cho các input và label */
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="radio"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+label {
+    font-weight: bold;
+}
+
+/* Định dạng cho nút Submit */
+input[type="submit"] {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Định dạng cho radio button */
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Định dạng cho checkbox */
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Định dạng cho label checkbox */
+.checkbox-label {
+    font-size: 16px;
+}

@@ -1,0 +1,111 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : May 19, 2024, 4:28:20 PM
+    Author     : Admin
+*/
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.login-box {
+    width: 100%;
+}
+
+.login-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box input {
+    width: 90%;
+    padding: 10px 30px 10px 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    background: transparent;
+    color: #333;
+}
+
+.input-box label {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #aaa;
+    pointer-events: none;
+    transition: 0.5s;
+}
+
+.input-box i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #666;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+    top: -20px;
+    left: 10px;
+    color: #333;
+    font-size: 12px;
+}
+
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #333;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #555;
+}
+
+.forgot-password {
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    color: #333;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.forgot-password a:hover {
+    color: #555;
+}

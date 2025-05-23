@@ -1,0 +1,123 @@
+
+#style-span{
+    padding: 11px 150px;
+    margin-top: 10px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+}
+table.table-bordered, table.table-bordered th, table.table-bordered td {
+    border: 2px solid black;
+    text-align: center;
+}
+.detail-button {
+    color: #001C41;
+    background-color: #FFD43A;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 5px -2px;
+    display: block;
+}
+
+.detail-button:hover {
+    background-color: white;
+    color: #001C41;
+    border: 1px grey solid;
+}
+
+.form-select{
+    padding: 5px 53px;
+}
+#myForm{
+    display: flex;
+    justify-content: space-evenly;
+    font-weight: bold;
+}
+.add-button{
+    margin-right: 30px;
+    color: white;
+    background-color: #169D53;
+    padding: 10px 100px;
+    border-radius: 30px;
+    float: right;
+    font-weight: bold;
+    cursor: pointer;
+    border: 0;
+}
+.add-button:hover{
+    background-color: white;
+    color: #169D53;
+    border: 1px grey solid;
+}
+.accept-button {
+    color: #001C41;
+    background-color: #4CB5FB;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 5px -2px;
+    display: block;
+    border: 0;
+}
+.accept-button:hover{
+    border: 1px grey solid;
+    background-color: white;
+}
+
+.decline-button{
+    color: #001C41;
+    background-color: red;
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 10px -2px;
+    display: block;
+    border: 0px;
+}
+.decline-button:hover{
+    border: 1px grey solid;
+    background-color: white;
+}
+
+.btn-accept {
+    background-color: green;
+    color: white;
+    border-radius: 15px;
+    border: none;
+    padding: 5px 15px;
+}
+.btn-decline {
+    background-color: red;
+    color: white;
+    border-radius: 15px;
+    border: none;
+    padding: 5px 15px;
+}
+.btn-accept:hover, .btn-decline:hover {
+    opacity: 0.8;
+}
+.search-field {
+    width: 60%;
+}
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.325rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+.custom-checkbox .form-check-input {
+    width: 30px;
+    height: 30px;
+    margin: -15px -22px;
+}
+
+
+.custom-checkbox .form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
