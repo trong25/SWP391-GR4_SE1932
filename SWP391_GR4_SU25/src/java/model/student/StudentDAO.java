@@ -200,4 +200,58 @@ public class StudentDAO extends DBContext {
         }
         return false;
     }
+     public Student getStudentsById(String id) {
+        String sql = "select * from Students where id='" + id + "'";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Student student = new Student();
+                student = createStudent(resultSet);
+                return student;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+       public boolean updateStudent(Student student) {
+        String sql = "update dbo.[Students] set first_guardian_name=?, "
+                + "first_guardian_phone_number=?, "
+                + "second_guardian_name=?, "
+                + "second_guardian_phone_number=?, "
+                + "address=?,"
+                +"school_name=?,"
+                + " parent_special_note=?, "
+                + "first_name=?, "
+                + "last_name=?, "
+                + "birthday=?, "
+                + "email=?, "
+                + "avatar=? "
+                + "where id=?";
+        
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, student.getFirstGuardianName());
+            ps.setString(2, student.getFirstGuardianPhoneNumber());
+            ps.setString(3, student.getSecondGuardianName());
+            ps.setString(4, student.getSecondGuardianPhoneNumber());
+            ps.setString(5, student.getAddress());
+            ps.setString(6, student.getSchoolName());
+            ps.setString(7, student.getParentSpecialNote());
+           
+            ps.setString(8,student.getFirstName());
+            ps.setString(9, student.getLastName());
+            ps.setDate(10, new java.sql.Date(student.getBirthday().getTime()));
+            ps.setString(11, student.getEmail());
+            ps.setString(12, student.getAvatar());
+            ps.setString(13, student.getId());
+            ps.executeUpdate();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }

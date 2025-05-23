@@ -135,7 +135,7 @@
                                                         </c:if>
 
                                                     <td class="text-center">
-                                                        <form method="post" action="pupilprofile">
+                                                        <form method="post" action="studentprofile">
                                                             <input hidden="" value="${student.id}" name="id"/>
                                                             <input hidden="" value="view" name="action"/>
                                                             <button type="submit" class="btn btn-primary"> Thông tin chi tiết</button>
