@@ -200,4 +200,27 @@ public class StudentDAO extends DBContext {
         }
         return false;
     }
+    
+     public int getSumStudentInClass(String classId) {
+        String sql = "SELECT COUNT(*) AS total_pupils\n"
+                + "FROM Class INNER JOIN\n"
+                + "     classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
+                + "     Pupils ON classDetails.pupil_id = Pupils.id\n"
+                + "WHERE Class.id = ?";
+
+        int totalPupils = 0;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, classId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalPupils = resultSet.getInt("total_pupils");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalPupils;
+    }
 }

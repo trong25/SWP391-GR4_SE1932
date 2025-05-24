@@ -64,4 +64,23 @@ public class ClassDAO extends DBContext{
         }
         return null;
     }
+    
+    public Class getClassNameByTeacher(String teacherId) {
+        String sql = "SELECT *\n"
+                + "                FROM Class\n"
+                + "                WHERE teacher_id = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return createClass(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
