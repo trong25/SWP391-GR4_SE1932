@@ -18,21 +18,23 @@ import utils.DBContext;
  *
  * @author MSI
  */
-public class ClassDAO extends DBContext{
+public class ClassDAO extends DBContext {
+
     private Class createClass(ResultSet resultSet) throws SQLException {
         Class c = new Class();
         c.setId(resultSet.getString("id"));
         c.setName(resultSet.getString("name"));
         GradeDAO gradeDAO = new GradeDAO();
         c.setGrade(gradeDAO.getGrade(resultSet.getString("grade_id")));
-         PersonnelDAO personnelDAO = new PersonnelDAO();
+        PersonnelDAO personnelDAO = new PersonnelDAO();
         c.setTeacher(personnelDAO.getPersonnel(resultSet.getString("teacher_id")));
-         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
         c.setStatus(resultSet.getString("status"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
         return c;
     }
+
     public List<Class> getByStatus(String status, String schoolYearId) {
         String sql = " Select * from Class where [status] = N'" + status + "'  and school_year_id = ? order by id desc";
         try {
@@ -50,6 +52,7 @@ public class ClassDAO extends DBContext{
         }
         return null;
     }
+
     public Class getClassById(String id) {
         String sql = "select * from [Class] where id = ?";
         try {
@@ -64,4 +67,22 @@ public class ClassDAO extends DBContext{
         }
         return null;
     }
+
+    public List<Class> getBySchoolYear(String schoolYearId) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "select * from Class where school_year_id = ? order by id desc";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Class c = createClass(resultSet);
+                classes.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+      return classes;
+    }
+   
 }

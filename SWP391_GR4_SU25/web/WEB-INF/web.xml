@@ -2,15 +2,19 @@
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
-        <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
+        <servlet-class>controller.headteacher.DashboardAcademicStaffServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>StudentServlet</servlet-name>
-        <servlet-class>Controller.academicstaff.StudentServlet</servlet-class>
+        <servlet-class>controller.headteacher.StudentServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>HeadteacherServlet</servlet-name>
-        <servlet-class>Controller.DashBoardHeadTeacherServlet</servlet-class>
+        <servlet-class>.DashBoardHeadTeacherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassServlet</servlet-name>
+        <servlet-class>Controller.headteacher.ClassServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -23,5 +27,9 @@
     <servlet-mapping>
         <servlet-name>HeadteacherServlet</servlet-name>
         <url-pattern>/headteacher/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassServlet</servlet-name>
+        <url-pattern>/headteacher/class</url-pattern>
     </servlet-mapping>
 </web-app>

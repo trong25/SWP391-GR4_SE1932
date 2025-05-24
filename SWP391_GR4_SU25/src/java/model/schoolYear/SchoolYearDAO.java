@@ -18,7 +18,8 @@ import utils.DBContext;
  *
  * @author MSI
  */
-public class SchoolYearDAO extends DBContext{
+public class SchoolYearDAO extends DBContext {
+
     private SchoolYear createNewSchoolYear(ResultSet rs) throws SQLException {
         SchoolYear schoolYear = new SchoolYear();
         schoolYear.setId(rs.getString("id"));
@@ -26,12 +27,12 @@ public class SchoolYearDAO extends DBContext{
         schoolYear.setStartDate(rs.getDate("start_date"));
         schoolYear.setEndDate(rs.getDate("end_date"));
         schoolYear.setDescription(rs.getString("description"));
-         PersonnelDAO personnelDAO = new PersonnelDAO();
+        PersonnelDAO personnelDAO = new PersonnelDAO();
         Personnel personnel = personnelDAO.getPersonnel(rs.getString("created_by"));
         schoolYear.setCreatedBy(personnel);
         return schoolYear;
     }
-    
+
     public List<SchoolYear> getAll() {
         List<SchoolYear> schoolYears = new ArrayList<SchoolYear>();
         String sql = "select * from schoolYears order by id desc";
@@ -47,7 +48,8 @@ public class SchoolYearDAO extends DBContext{
         }
         return schoolYears;
     }
-     public SchoolYear getSchoolYear(String id) {
+
+    public SchoolYear getSchoolYear(String id) {
         String sql = "select * from schoolYears where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -62,26 +64,28 @@ public class SchoolYearDAO extends DBContext{
         }
         return null;
     }
-      public SchoolYear getClosestSchoolYears() {
+
+    public SchoolYear getClosestSchoolYears() {
         String sql = "select top 1  * from schoolYears where end_date >= CAST(GETDATE() AS DATE) order by start_date";
 
         SchoolYear schoolYear = new SchoolYear();
-        try{
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 schoolYear = createNewSchoolYear(resultSet);
 
-            }else{
+            } else {
                 return null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
         return schoolYear;
     }
-      public SchoolYear getSchoolYearByDate(Date date) {
+
+    public SchoolYear getSchoolYearByDate(Date date) {
         String sql = "SELECT * FROM SchoolYears WHERE ? BETWEEN start_date AND end_date";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -103,5 +107,23 @@ public class SchoolYearDAO extends DBContext{
             e.printStackTrace();
             return null;
         }
+    }
+
+    public SchoolYear getLatest() {
+        String sql = "SELECT TOP 1 * FROM SchoolYears ORDER BY ID DESC";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return createNewSchoolYear(resultSet);
+
+            }
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        return null;
     }
 }
