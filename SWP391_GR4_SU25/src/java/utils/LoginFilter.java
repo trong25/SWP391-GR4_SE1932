@@ -4,6 +4,7 @@
  */
 package utils;
 
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import model.user.User;
  *
  * @author ASUS VIVOBOOK
  */
-public class LoginFilter {
+public class LoginFilter implements Filter{
      private static final boolean debug = true;
 
   
@@ -28,23 +29,7 @@ public class LoginFilter {
     public LoginFilter() {
     }
 
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("LoginFilter:DoBeforeProcessing");
-        }
 
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("LoginFilter:DoAfterProcessing");
-        }
-
-    }
-
- 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -87,23 +72,5 @@ public class LoginFilter {
         }
     }
 
-    /**
-     * Return the filter configuration object for this filter.
-     */
-    public FilterConfig getFilterConfig() {
-        return (this.filterConfig);
-    }
 
-    /**
-     * Set the filter configuration object for this filter.
-     *
-     * @param filterConfig The filter configuration object
-     */
-    public void setFilterConfig(FilterConfig filterConfig) {
-        this.filterConfig = filterConfig;
-    }
-    
-        public void log(String msg) {
-        filterConfig.getServletContext().log(msg);
-    }
 }
