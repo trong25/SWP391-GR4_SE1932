@@ -133,31 +133,31 @@ if(schoolName ===""){
 }
                 // Validate first guardian's name
                 if (firstGuardianName === "") {
-                    toastr.error("Họ tên người giám hộ thứ nhất không được để trống");
+                    toastr.error("Họ tên bố không được để trống");
                     return false;
                 }
                 if (!isValidName(firstGuardianName)) {
-                    toastr.error("Họ tên người giám hộ thứ nhất chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
+                    toastr.error("Họ tên bố chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
                     return false;
                 }
 
                 // Validate first guardian's phone
                 if (firstGuardianPhone === "") {
-                    toastr.error("Số điện thoại người giám hộ thứ nhất không được để trống");
+                    toastr.error("Số điện thoại bố không được để trống");
                     return false;
                 }
 
                 // Validate second guardian's name and phone
                 if (secondGuardianName !== "" && secondGuardianPhone === "") {
-                    toastr.error("Vui lòng nhập số điện thoại người giám hộ thứ hai");
+                    toastr.error("Vui lòng nhập số điện thoại của mẹ");
                     return false;
                 }
                 if (secondGuardianPhone !== "" && secondGuardianName === "") {
-                    toastr.error("Vui lòng nhập họ tên người giám hộ thứ hai");
+                    toastr.error("Vui lòng nhập họ tên mẹ");
                     return false;
                 }
                 if (secondGuardianName !== "" && !isValidName(secondGuardianName)) {
-                    toastr.error("Họ tên người giám hộ thứ hai chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
+                    toastr.error("Họ tên người mẹ chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
                     return false;
                 }
 
@@ -237,22 +237,22 @@ if(schoolName ===""){
                                                     </tr>
                                                     <tr>
                                                         <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Người Giám Hộ Thứ Nhất:</h5> 
+                                                                <h5>Họ Tên Bố:</h5> 
                                                                 <input class="form-control form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" maxlength="25" title="Nhập tối da 25 kí tự" required=""/><br />
                                                             </div></td>
                                                         <td><div class="form-group col-md-8">
 
-                                                                <h5>Số Điện Thoại Người Giám Hộ Thứ Nhất<a style="color: red">(*)</a>:</h5> 
+                                                                <h5>Số Điện Thoại Bố<a style="color: red">(*)</a>:</h5> 
                                                                 <input class="form-control form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="[0-9]+" minlength="10" maxlength="10" title="Chỉ nhập số" required=""/><br />
                                                             </div></td>
                                                     </tr>
                                                     <tr>
                                                         <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Người Giám Hộ Thứ Hai<a style="color: red">(*)</a>:</h5> 
+                                                                <h5>Họ Tên Mẹ<a style="color: red">(*)</a>:</h5> 
                                                                 <input class="form-control form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
                                                             </div></td>
                                                         <td><div class="form-group col-md-8">
-                                                                <h5>Số Điện Thoại Người Giám Hộ Thứ Hai<a style="color: red">(*)</a>:</h5> 
+                                                                <h5>Số Điện Thoại Mẹ<a style="color: red">(*)</a>:</h5> 
                                                                 <input class="form-control form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" maxlength="10" minlength="10" pattern="[0-9]+" title="Chỉ nhập số"/><br />
                                                             </div></td>
                                                            <td><div class="form-group col-md-8">
@@ -293,7 +293,7 @@ if(schoolName ===""){
                                                         
 
                                                         <td><div class="form-group col-md-6">
-                                                                <h5>Ghi Chú:</h5> 
+                                                                <h5>Cam kết của phụ huynh học sinh<a style="color: red">(*)</a>:</h5> 
                                                                 <textarea class="form-control form-control-sm" name="note" style="width: 200%" maxlength="500">${student.parentSpecialNote}</textarea>
                                                             </div></td>
                                                             

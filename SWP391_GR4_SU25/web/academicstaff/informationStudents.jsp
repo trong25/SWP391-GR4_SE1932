@@ -170,19 +170,19 @@
                                                     </tr>
                                                     <tr>
                                                         <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Người Giám Hộ Thứ Nhất:</h5> <input class="form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{1,20}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
+                                                                <h5>Họ Tên Bố:</h5> <input class="form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{1,20}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
                                                             </div></td>
                                                         <td><div class="form-group col-md-8">
 
-                                                                <h5>Số Điện Thoại Người Giám Hộ Thứ Nhất:</h5> <input class="form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
+                                                                <h5>Số Điện Thoại Bố:</h5> <input class="form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
                                                             </div></td>
                                                     </tr>
                                                     <tr>
                                                         <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Người Giám Hộ Thứ Hai:</h5> <input class="form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{30}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
+                                                                <h5>Họ Tên Mẹ:</h5> <input class="form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{30}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
                                                             </div></td>
                                                         <td><div class="form-group col-md-8">
-                                                                <h5>Số Điện Thoại Người Giám Hộ Thứ Hai:</h5> <input class="form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
+                                                                <h5>Số Điện Thoại Mẹ:</h5> <input class="form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
                                                             </div></td>
                                                     </tr>
                                                     <tr>
@@ -196,7 +196,7 @@
                                                             <h5>Email:</h5> <input class="form-control-sm" type="text" name="email" value="${student.email}"  readonly="" /><br />
                                                         </div></td>
                                                     <td><div class="form-group col-md-5">
-                                                            <h5>Ghi Chú:</h5> <textarea class="form-control-sm" type="text" name="note" style="width: 200%" readonly>${student.parentSpecialNote}</textarea><br/>
+                                                            <h5>Cam kết của phụ huynh học sinh:</h5> <textarea class="form-control-sm" type="text" name="note" style="width: 200%" readonly>${student.parentSpecialNote}</textarea><br/>
                                                         </div></td>
                                                 </tr>
                                                 <tr>
