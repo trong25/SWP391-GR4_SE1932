@@ -6,7 +6,7 @@ package model.role;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model.role;
+
 
 /**
  *
@@ -44,7 +44,7 @@ public class Role {
     
     public String getVNeseDescription(){
 
-        public String getVNeseDescription(){
+
 
         switch(this.id){
             case "0":
@@ -61,7 +61,7 @@ public class Role {
             case "5":
 
                 return "Giáo viên";
-            case "4":
+            case "6":
 
                 return "Phụ huynh";
           
@@ -73,7 +73,7 @@ public class Role {
 
     
     
-}
+
 
 
 
