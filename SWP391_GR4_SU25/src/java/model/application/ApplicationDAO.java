@@ -75,23 +75,6 @@ public class ApplicationDAO extends DBContext {
         return applicationTypes;
     }
 
-    public List<Application> getForPersonnel(String role) {
-        List<Application> applications = new ArrayList<>();
-        String sql = "SELECT a.* FROM Applications a JOIN Application_Types at ON a.application_type = at.id WHERE at.receiver_role = ? ORDER BY id desc";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, role);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Application application = createApplication(resultSet);
-                applications.add(application);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return applications;
-    }
-
     public Application getApplicationById(String id) {
         Application app = new Application();
         String sql = "select * from [Applications] where id = ? order by id desc";
@@ -189,24 +172,6 @@ public class ApplicationDAO extends DBContext {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, senderUserId);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Application application = createApplication(resultSet);
-                applications.add(application);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return applications;
-    }
-
-    public List<Application> getForPersonnelWithStatus(String role, String status) {
-        List<Application> applications = new ArrayList<>();
-        String sql = "SELECT a.* FROM Applications a JOIN Application_Types at ON a.application_type = at.id WHERE at.receiver_role = ? and status=? ORDER BY id desc";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, role);
-            statement.setString(2, status);
-            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Application application = createApplication(resultSet);
                 applications.add(application);

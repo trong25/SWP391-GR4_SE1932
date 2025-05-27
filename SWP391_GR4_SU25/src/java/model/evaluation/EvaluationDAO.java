@@ -7,43 +7,35 @@ import model.student.StudentDAO;
 import utils.DBContext;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-public class EvaluationDAO {
-    public static List<Evaluation> getEvaluationsByStudentId(String studentId) {
-    List<Evaluation> list = new ArrayList<>();
-    String sql = "SELECT * FROM Evaluations WHERE student_id = ?";
-
-    DBContext db = new DBContext();
-
-    try (Connection conn = db.getConnection()) {
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, studentId);
-        ResultSet rs = ps.executeQuery();
-
+public class EvaluationDAO extends DBContext {
+    private Evaluation createEvaluation(ResultSet resultSet) throws SQLException {
         StudentDAO studentDAO = new StudentDAO();
         DayDAO dayDAO = new DayDAO();
-
-        while (rs.next()) {
-            Evaluation e = new Evaluation();
-            e.setId(rs.getString("id"));
-
-            Student student = studentDAO.getStudentById(studentId);
-            Day day = dayDAO.getDayByID(rs.getString("date_id"));
-
-            e.setStudent(student);
-            e.setDate(day);
-            e.setEvaluation(rs.getString("evaluation"));
-            e.setNotes(rs.getString("notes"));
-
-            list.add(e);
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
+        Evaluation evaluation = new Evaluation();
+        evaluation.setId(resultSet.getString("id"));
+        Student student = studentDAO.getStudentById(resultSet.getString("student_id"));
+        evaluation.setStudent(student);
+        Day day = dayDAO.getDayByID(resultSet.getString("date_id"));
+        evaluation.setDate(day);
+        evaluation.setEvaluation(resultSet.getString("evaluation"));
+        evaluation.setNotes(resultSet.getString("notes"));
+        return evaluation;
     }
-    return list;
-}
+    public Evaluation getEvaluationByStudentIdAndDay(String studentId, String dateId) {
+        String sql = "select * from Evaluations where student_id=? and date_id=?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, studentId);
+            preparedStatement.setString(2, dateId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createEvaluation(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }
 
 

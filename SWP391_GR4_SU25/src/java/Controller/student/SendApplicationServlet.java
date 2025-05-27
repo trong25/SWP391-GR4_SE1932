@@ -31,7 +31,7 @@ public class SendApplicationServlet extends HttpServlet {
         request.setAttribute("toastType", toastType);
         request.setAttribute("toastMessage", toastMessage);
         ApplicationDAO applicationDAO = new ApplicationDAO();
-        List<ApplicationType> applicationTypes = applicationDAO.getAllApplicationTypes("student");
+        List<ApplicationType> applicationTypes = applicationDAO.getAllApplicationTypes("pupil");
         request.setAttribute("applicationTypes", applicationTypes);
         request.getRequestDispatcher("sendApplication.jsp").forward(request, response);
     }

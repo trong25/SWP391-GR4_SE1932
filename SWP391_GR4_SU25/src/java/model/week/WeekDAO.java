@@ -7,6 +7,7 @@ package model.week;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import model.schoolYear.SchoolYearDAO;
 import utils.DBContext;
 
@@ -38,4 +39,20 @@ public class WeekDAO extends DBContext{
         }
         return null;
     }
+     public Week getCurrentWeek(Date date) {
+    String sql = "SELECT * FROM Weeks WHERE ? BETWEEN start_date AND end_date";
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
+        statement.setDate(1, today);
+        ResultSet rs = statement.executeQuery();
+        if (rs.next()) {
+            return createWeek(rs);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
 }

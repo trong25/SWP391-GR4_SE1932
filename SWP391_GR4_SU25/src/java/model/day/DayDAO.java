@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.week.WeekDAO;
+import java.sql.Date;
 import utils.DBContext;
 
 /**
@@ -57,4 +58,22 @@ public class DayDAO extends DBContext{
         }
         return null;
     }
+
+public String getDateIDbyDay(java.util.Date day) {
+    String sql = "SELECT id FROM Days WHERE date = ?";
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        // Chuyển java.util.Date sang java.sql.Date để set vào PreparedStatement
+        statement.setDate(1, new java.sql.Date(day.getTime()));
+        ResultSet rs = statement.executeQuery();
+        if (rs.next()) {
+            return rs.getString("id");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null; // Không tìm thấy id cho ngày đó
+}
+
+
 }

@@ -28,7 +28,7 @@
         <div id="content">
             <jsp:include page="header-student.jsp"/>
             <div class="container-fluid">
-                <h1 class="h3 mb-4 text-gray-800 text-center">Gửi Đơn</h1>'
+                <h1 class="h3 mb-4 text-gray-800 text-center">Gửi Đơn</h1>
 
                 <div class="card" style="max-width: 700px; margin: auto;">
                     <div class="card-body">

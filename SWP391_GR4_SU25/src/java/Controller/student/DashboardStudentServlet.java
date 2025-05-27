@@ -56,7 +56,7 @@ public class DashboardStudentServlet extends HttpServlet {
         String evaluation = "";
         String takeAttendance = "";
         if(weekDAO.getCurrentWeek(currentDate)==null){
-            evaluation = "Đang không trong năm học";
+            evaluation = "Không có đánh giá";
             takeAttendance = "Đang không trong năm học";
         }else{
             if( evaluationDAO.getEvaluationByStudentIdAndDay(studentDAO.getStudentByUserId(user.getId()).getId(),dayDAO.getDateIDbyDay(currentDate))!=null){
