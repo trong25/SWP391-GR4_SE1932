@@ -149,7 +149,7 @@
                             </div>
                         </div>
 
-                        <!-- New School Pupil Modal -->
+                       
                         <div class="modal fade create-pupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                              aria-hidden="true" >
                             <div class="modal-dialog modal-lg">
@@ -411,6 +411,7 @@
                 document.getElementById('address').value = '';
                 document.getElementById('lastName').value = '';
                 document.getElementById('firstName').value = '';
+                 document.getElementById('schooName').value = '';
                 document.getElementById('secondGuardianName').value = '';
                 document.getElementById('firstGuardianName').value = '';
                 document.getElementById('secondGuardianPhoneNumber').value = '';

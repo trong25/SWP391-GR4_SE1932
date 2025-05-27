@@ -34,22 +34,24 @@ public class ClassDAO extends DBContext{
         return c;
     }
     public List<Class> getByStatus(String status, String schoolYearId) {
-        String sql = " Select * from Class where [status] = N'" + status + "'  and school_year_id = ? order by id desc";
-        try {
-            List<Class> classes = new ArrayList<>();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, schoolYearId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Class c = createClass(resultSet);
-                classes.add(c);
-            }
-            return classes;
-        } catch (Exception e) {
-            e.printStackTrace();
+    String sql = "SELECT * FROM Class WHERE [status] = ? AND school_year_id = ? ORDER BY id DESC";
+    try {
+        List<Class> classes = new ArrayList<>();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, status);
+        preparedStatement.setString(2, schoolYearId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Class c = createClass(resultSet);
+            classes.add(c);
         }
-        return null;
+        return classes;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return null;
+}
+
     public Class getClassById(String id) {
         String sql = "select * from [Class] where id = ?";
         try {

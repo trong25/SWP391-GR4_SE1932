@@ -44,7 +44,7 @@ public class DashboardAcademicStaffServlet extends HttpServlet {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate = formatter.format(new Date());
         
-         // 👉 Danh sách lớp học trong năm học hiện tại
+         // ? Danh sách lớp học trong năm học hiện tại
         if (schoolYearDAO.getClosestSchoolYears() != null) {
             request.setAttribute("listClass", classDAO.getByStatus("đã được duyệt",
                     schoolYearDAO.getClosestSchoolYears().getId()));
@@ -55,19 +55,19 @@ public class DashboardAcademicStaffServlet extends HttpServlet {
             request.setAttribute("listClass", null);
         }
 
-        // 👉 Chấm công ngày hiện tại
+        // Chấm công ngày hiện tại
         if (dayDAO.getDayByDate(formattedDate) != null) {
             User user = (User)session.getAttribute("user");
             request.setAttribute("attendance", personnelAttendanceDAO.getAttendanceByPersonnelAndDay(
                     user.getUsername(), dayDAO.getDayByDate(formattedDate).getId()));
         }
 
-        // 👉 Sự kiện tương lai và số học sinh đang theo học
+        //  Sự kiện tương lai và số học sinh đang theo học
         request.setAttribute("listEvents", eventDAO.getFutureEvent(2));
         request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
 
-        // 👉 Forward về trang dashboard
-      // 👉 Forward về trang dashboard (có đường dẫn đúng)
+        // Forward về trang dashboard
+      //  Forward về trang dashboard (có đường dẫn đúng)
 request.getRequestDispatcher("/academicstaff/dashboard.jsp").forward(request, response);
 
 
