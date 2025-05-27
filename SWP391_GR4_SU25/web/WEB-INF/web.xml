@@ -12,6 +12,14 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DashboardStudentStaffServlet</servlet-name>
+        <servlet-class>Controller.student.DashboardStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>studentAttendance</servlet-name>
+        <servlet-class>model.student.studentAttendance</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -23,5 +31,13 @@
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>studentAttendance</servlet-name>
+        <url-pattern>/studentAttendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboarStudentServlet</servlet-name>
+        <url-pattern>/student/dashboard</url-pattern>
     </servlet-mapping>
 </web-app>

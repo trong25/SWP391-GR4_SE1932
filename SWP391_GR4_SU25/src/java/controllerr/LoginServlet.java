@@ -90,7 +90,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("teacher/dashboard");
                     break;
                 case 4:
-                    response.sendRedirect("parent/dashboard");
+                    response.sendRedirect("student/dashboard");
                     break;
                 default:
                     request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu");
