@@ -7,6 +7,8 @@ package model.week;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import model.schoolYear.SchoolYearDAO;
 import utils.DBContext;
 
@@ -38,4 +40,21 @@ public class WeekDAO extends DBContext{
         }
         return null;
     }
+      public List<Week> getWeeks(String schoolYearId) {
+        List<Week> weeks = new ArrayList<>();
+        String sql = "SELECT * FROM weeks WHERE school_year_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Week week = createWeek(rs);
+                weeks.add(week);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return weeks;
+    }
+
 }

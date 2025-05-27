@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("admin/dashboard");
                     break;
                 case 1:
-                    response.sendRedirect("headteacher/dashboard");
+                    response.sendRedirect("director/dashboard");
                     break;
                 case 2:
                     response.sendRedirect("academicstaff/dashboard");

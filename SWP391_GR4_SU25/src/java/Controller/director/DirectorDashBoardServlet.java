@@ -1,11 +1,9 @@
-package controller.headteacher;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-
+package Controller.director;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,13 +11,20 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.schoolYear.SchoolYear;
+import model.schoolYear.SchoolYearDAO;
+import model.student.Student;
 import model.student.StudentDAO;
+import model.classes.Class;
+import model.classes.ClassDAO;
+
 
 /**
  *
  * @author admin
  */
-public class DashBoardHeadTeacherServlet extends HttpServlet {
+public class DirectorDashBoardServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,10 +41,10 @@ public class DashBoardHeadTeacherServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HeadteacherServlet</title>");  
+            out.println("<title>Servlet DirectorDashBoardServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HeadteacherServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet DirectorDashBoardServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,8 +61,13 @@ public class DashBoardHeadTeacherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       // processRequest(request, response);
-       StudentDAO studentDAO =  new StudentDAO();
+      //  processRequest(request, response);   StudentDAO studentDAO =  new StudentDAO();
+      //Thanhnthe181132
+      StudentDAO studentDAO = new StudentDAO();
+      ClassDAO classDAO = new ClassDAO();
+List<Class> listClass = classDAO.getAll();
+request.setAttribute("listClass", listClass);
+
        request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     } 

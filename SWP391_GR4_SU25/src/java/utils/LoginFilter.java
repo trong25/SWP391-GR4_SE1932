@@ -75,7 +75,7 @@ public class LoginFilter {
             case 0: // Admin
                 return path.startsWith("/admin/");
             case 1: // Head Teacher
-                return path.startsWith("/headteacher/");
+                return path.startsWith("/director/");
             case 2: // Academic Staff
                 return path.startsWith("/academicstaff/");
             case 3: // Teacher

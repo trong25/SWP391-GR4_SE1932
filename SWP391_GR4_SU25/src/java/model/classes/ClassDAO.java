@@ -84,5 +84,58 @@ public class ClassDAO extends DBContext {
         }
       return classes;
     }
-   
+    
+public List<Class> getAll() {
+    List<Class> classes = new ArrayList<>();
+    String sql = "SELECT * FROM Class ORDER BY id DESC";
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            Class c = createClass(resultSet);
+            classes.add(c);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return classes;
+}
+
+     public String reviewClass(String newStatus, String id) {
+        StringBuilder sql = new StringBuilder("update [Class] set [status]= ");
+        try {
+
+            if (newStatus.equals("accept")) {
+                newStatus = "đã được duyệt";
+                sql.append("N'").append(newStatus).append("' where [id] = '").append(id).append("'");
+            } else {
+                newStatus = "không được duyệt";
+                sql.append("N'").append(newStatus).append("' , [teacher_id] = ").append("NULL").append(" where [id] = '").append(id).append("'");
+            }
+            System.out.println(sql.toString());
+            PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Có lỗi xả ra khi duyệt, vui lòng thử lại";
+        }
+        return "success";
+    }
+        public List<Class> getBySchoolYearandStatus(String schoolYearId) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "select * from Class where school_year_id = ? and status = N'đã được duyệt'";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Class c = createClass(resultSet);
+                classes.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
+    }
+
 }

@@ -108,7 +108,7 @@ public class SchoolYearDAO extends DBContext {
             return null;
         }
     }
-
+//Thanhnthe181132
     public SchoolYear getLatest() {
         String sql = "SELECT TOP 1 * FROM SchoolYears ORDER BY ID DESC";
 
@@ -125,5 +125,21 @@ public class SchoolYearDAO extends DBContext {
 
         }
         return null;
+    }
+    //Thanhnthe181132
+    public List<SchoolYear> getFutureSchoolYears(){
+          String sql = "select * from schoolYears where start_date > CAST(GETDATE() AS DATE)";
+        List<SchoolYear> schoolYears = new ArrayList<>();
+        try {
+           PreparedStatement statement = connection.prepareStatement(sql);
+           ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {                
+                SchoolYear schoolYear = createNewSchoolYear(resultSet);
+                schoolYears.add(schoolYear);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return schoolYears;
     }
 }

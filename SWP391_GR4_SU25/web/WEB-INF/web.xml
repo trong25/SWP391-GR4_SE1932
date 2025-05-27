@@ -13,12 +13,24 @@
         <servlet-class>.DashBoardHeadTeacherServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>DirectorDashBoardServlet</servlet-name>
+        <servlet-class>Controller.director.DirectorDashBoardServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ClassServlet</servlet-name>
-        <servlet-class>Controller.headteacher.ClassServlet</servlet-class>
+        <servlet-class>Controller.director.ClassServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controllerr.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReviewClassServlet</servlet-name>
+        <servlet-class>Controller.director.ReviewClassServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewTimeTableClassServlet</servlet-name>
+        <servlet-class>Controller.director.ViewTimeTableClassServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -38,6 +50,18 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ClassServlet</servlet-name>
-        <url-pattern>/headteacher/class</url-pattern>
+        <url-pattern>/director/class</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DirectorDashBoardServlet</servlet-name>
+        <url-pattern>/director/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewClassServlet</servlet-name>
+        <url-pattern>/director/reviewclass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewTimeTableClassServlet</servlet-name>
+        <url-pattern>/director/viewtimetableclass</url-pattern>
     </servlet-mapping>
 </web-app>
