@@ -24,7 +24,7 @@ import model.user.User;
 
 /**
  *
- * @author MSI
+ * @author TrongNV
  */
 public class DashboardAcademicStaffServlet extends HttpServlet {
    
@@ -44,7 +44,7 @@ public class DashboardAcademicStaffServlet extends HttpServlet {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate = formatter.format(new Date());
         
-         // ? Danh sách lớp học trong năm học hiện tại
+         //  Danh sách lớp học trong năm học hiện tại
         if (schoolYearDAO.getClosestSchoolYears() != null) {
             request.setAttribute("listClass", classDAO.getByStatus("đã được duyệt",
                     schoolYearDAO.getClosestSchoolYears().getId()));

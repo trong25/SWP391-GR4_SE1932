@@ -152,8 +152,8 @@
                                                                     <td>
                                                                         ${event.createdBy.lastName} ${event.createdBy.firstName}
                                                                     </td>
-                                                                    <td class="text-center"><a href="eventDetail?id=${event.id}"
-                                                                                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>
+<!--                                                                    <td class="text-center"><a href="eventDetail?id=${event.id}"
+                                                                                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>-->
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>
