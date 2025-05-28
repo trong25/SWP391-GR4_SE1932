@@ -12,7 +12,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>DashBoard</title>
+    <title>Trung tâm dạy thêm TaBi</title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -35,7 +35,7 @@
             <div class="container-fluid">
                 <!-- Page Heading -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">Chào mừng đến với Bono Kindergarten</h1>
+                    <h1 class="h3 mb-0 text-gray-800">Chào mừng đến với trung tâm học thêm Tabi</h1>
                 </div>
 
                 <!-- Content Row -->
