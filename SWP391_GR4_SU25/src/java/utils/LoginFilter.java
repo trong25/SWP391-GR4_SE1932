@@ -18,13 +18,10 @@ import model.user.User;
 
 /**
  *
- * @author ASUS VIVOBOOK
+ * @author HuyDV
  */
 public class LoginFilter implements Filter{
-     private static final boolean debug = true;
 
-  
-    private FilterConfig filterConfig = null;
 
     public LoginFilter() {
     }
@@ -60,13 +57,15 @@ public class LoginFilter implements Filter{
             case 0: // Admin
                 return path.startsWith("/admin/");
             case 1: // Head Teacher
-                return path.startsWith("/headteacher/");
+                return path.startsWith("/director/");
             case 2: // Academic Staff
                 return path.startsWith("/academicstaff/");
             case 3: // Teacher
                 return path.startsWith("/teacher/");
-            case 4: // Parent
-                return path.startsWith("/parent/");
+            case 4: // student
+                return path.startsWith("/student/");
+            case 5: 
+                return path.startsWith("/accountant/");
             default:
                 return false;
         }

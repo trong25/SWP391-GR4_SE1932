@@ -40,13 +40,15 @@ public class Role {
             case "0":
                 return "Nhân viên IT";
             case "1":
-                return "Hiệu trưởng";
+                return "Giám Đốc";
             case "2":
                 return "Giáo vụ";
             case "3":
                 return "Giáo viên";
             case "4":
-                return "Phụ huynh";
+                return "Học Sinh";
+            case "5":
+                return "Giáo Vụ";
           
         }
         return "";

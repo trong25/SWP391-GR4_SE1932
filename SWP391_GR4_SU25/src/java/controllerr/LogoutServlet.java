@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author ASUS VIVOBOOK
+ * @author HuyDV
  */
 @WebServlet(name="LogoutServlet", urlPatterns={"/logout"})
 public class LogoutServlet extends HttpServlet {
