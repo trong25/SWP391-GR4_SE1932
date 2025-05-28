@@ -200,6 +200,7 @@ public class StudentDAO extends DBContext {
         }
         return false;
     }
+
      public Student getStudentsById(String id) {
         String sql = "select * from Students where id='" + id + "'";
         try {
@@ -254,4 +255,21 @@ public class StudentDAO extends DBContext {
         }
         return false;
     }
+
+    
+    public Student getStudentById(String id) {
+    String sql = "SELECT * FROM Students WHERE id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return createStudent(rs);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+
 }

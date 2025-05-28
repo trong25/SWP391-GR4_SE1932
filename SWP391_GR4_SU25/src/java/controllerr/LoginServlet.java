@@ -91,9 +91,11 @@ public class LoginServlet extends HttpServlet {
                     break;
                 case 4:
                     response.sendRedirect("student/dashboard");
+
                     break;
                 case 5:
                     response.sendRedirect("accountant/dashboard");
+
                     break;
                 default:
                     request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu");
