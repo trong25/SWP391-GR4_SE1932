@@ -66,6 +66,7 @@ public class CreateNotificationServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();

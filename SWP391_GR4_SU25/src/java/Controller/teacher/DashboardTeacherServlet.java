@@ -14,26 +14,17 @@ import jakarta.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import model.application.ApplicationDAO;
-
 import model.classes.ClassDAO;
 import model.classes.Class;
-
 import model.day.DayDAO;
-
 import model.event.eventDAO;
-
 import model.notification.NotificationDAO;
-
 import model.personnel.Personnel;
 import model.personnel.PersonnelAttendanceDAO;
-
 import model.student.Student;
 import model.student.StudentDAO;
-
 import model.role.RoleDAO;
-
 import model.schoolYear.SchoolYearDAO;
 import model.user.User;
 
