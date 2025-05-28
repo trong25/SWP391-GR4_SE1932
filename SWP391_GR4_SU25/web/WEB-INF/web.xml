@@ -32,6 +32,7 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/accountant/*</url-pattern>
     </filter-mapping>
+    
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
@@ -40,7 +41,6 @@
         <servlet-name>StudentServlet</servlet-name>
         <servlet-class>Controller.academicstaff.StudentServlet</servlet-class>
     </servlet>
-    
     <servlet>
         <servlet-name>DirectorDashBoardServlet</servlet-name>
         <servlet-class>Controller.director.DirectorDashBoardServlet</servlet-class>
@@ -53,53 +53,43 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
-        <servlet>
+    <servlet>
         <servlet-name>DashboardTeacherServlet</servlet-name>
         <servlet-class>Controller.teacher.DashboardTeacherServlet</servlet-class>
-        </servlet>
+    </servlet>
     <servlet>
-
         <servlet-name>StudentsProfileServlet</servlet-name>
         <servlet-class>Controller.academicstaff.StudentsProfileServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>UpdateStudentsServlet</servlet-name>
         <servlet-class>Controller.academicstaff.UpdateStudentsServlet</servlet-class>
-     
     </servlet>
-        <servlet>
-
+    <servlet>
         <servlet-name>ReviewClassServlet</servlet-name>
         <servlet-class>Controller.director.ReviewClassServlet</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ViewTimeTableClassServlet</servlet-name>
         <servlet-class>Controller.director.ViewTimeTableClassServlet</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>controllerr.ForgotPasswordServlet</servlet-class>
-    </servlet>
-     <servlet>
-        <servlet-name>ViewTimeTableClassServlet</servlet-name>
-        <servlet-class>Controller.director.ViewTimeTableClassServlet</servlet-class>
-       
     </servlet>
     <servlet>
         <servlet-name>ValidatePassword</servlet-name>
         <servlet-class>controllerr.ValidatePassword</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ReviewTimetableServlet</servlet-name>
         <servlet-class>Controller.director.ReviewTimetableServlet</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>DashboardStudentServlet</servlet-name>
         <servlet-class>Controller.student.DashboardStudentServlet</servlet-class>
-
     </servlet>
+
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -117,7 +107,6 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>StudentsProfileServlet</servlet-name>
         <url-pattern>/academicstaff/studentprofile</url-pattern>
     </servlet-mapping>
@@ -126,7 +115,6 @@
         <url-pattern>/academicstaff/updatestudents</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>ClassServlet</servlet-name>
         <url-pattern>/director/class</url-pattern>
     </servlet-mapping>
@@ -142,27 +130,20 @@
         <servlet-name>ViewTimeTableClassServlet</servlet-name>
         <url-pattern>/director/viewtimetableclass</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
-
-     <servlet-mapping>
-
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <url-pattern>/forgotPassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ValidatePassword</servlet-name>
         <url-pattern>/ValidatePassword</url-pattern>
-
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ReviewTimetableServlet</servlet-name>
         <url-pattern>/director/reviewtimetable</url-pattern>
-
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DashboardStudentServlet</servlet-name>
         <url-pattern>/student/dashboard</url-pattern>
     </servlet-mapping>
-
 </web-app>
