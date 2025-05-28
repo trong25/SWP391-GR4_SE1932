@@ -34,17 +34,30 @@
     </filter-mapping>
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
-        <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
+        <servlet-class>controller.headteacher.DashboardAcademicStaffServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>StudentServlet</servlet-name>
-        <servlet-class>Controller.academicstaff.StudentServlet</servlet-class>
+        <servlet-class>controller.headteacher.StudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HeadteacherServlet</servlet-name>
+        <servlet-class>.DashBoardHeadTeacherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DirectorDashBoardServlet</servlet-name>
+        <servlet-class>Controller.director.DirectorDashBoardServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassServlet</servlet-name>
+        <servlet-class>Controller.director.ClassServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+
 
 
         <servlet-name>StudentsProfileServlet</servlet-name>
@@ -54,6 +67,14 @@
         <servlet-name>UpdateStudentsServlet</servlet-name>
         <servlet-class>Controller.academicstaff.UpdateStudentsServlet</servlet-class>
 
+        <servlet-name>ReviewClassServlet</servlet-name>
+        <servlet-class>Controller.director.ReviewClassServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewTimeTableClassServlet</servlet-name>
+        <servlet-class>Controller.director.ViewTimeTableClassServlet</servlet-class>
+
+
 
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>controllerr.ForgotPasswordServlet</servlet-class>
@@ -61,6 +82,8 @@
     <servlet>
         <servlet-name>ValidatePassword</servlet-name>
         <servlet-class>controllerr.ValidatePassword</servlet-class>
+
+
 
 
 
@@ -84,12 +107,33 @@
     <servlet-mapping>
 
 
+
         <servlet-name>StudentsProfileServlet</servlet-name>
         <url-pattern>/academicstaff/studentprofile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UpdateStudentsServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudents</url-pattern>
+
+        <servlet-name>HeadteacherServlet</servlet-name>
+        <url-pattern>/headteacher/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassServlet</servlet-name>
+        <url-pattern>/director/class</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DirectorDashBoardServlet</servlet-name>
+        <url-pattern>/director/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewClassServlet</servlet-name>
+        <url-pattern>/director/reviewclass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewTimeTableClassServlet</servlet-name>
+        <url-pattern>/director/viewtimetableclass</url-pattern>
+
 
 
         <servlet-name>ForgotPasswordServlet</servlet-name>

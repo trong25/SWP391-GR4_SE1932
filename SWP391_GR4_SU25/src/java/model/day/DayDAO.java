@@ -7,6 +7,8 @@ package model.day;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import model.week.WeekDAO;
 import java.sql.Date;
 import utils.DBContext;
@@ -59,6 +61,7 @@ public class DayDAO extends DBContext{
         return null;
     }
 
+
 public String getDateIDbyDay(java.util.Date day) {
     String sql = "SELECT id FROM Days WHERE date = ?";
     try {
@@ -75,5 +78,27 @@ public String getDateIDbyDay(java.util.Date day) {
     return null; // Không tìm thấy id cho ngày đó
 }
 
+
+
+      public List<Day> getDayByWeek(String weekId) {
+        List<Day> days = new ArrayList<>();
+        String sql = "SELECT id, week_id, date FROM Days WHERE week_id = ? AND DATEPART(WEEKDAY, date) BETWEEN 2 AND 6";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, weekId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Day day = new Day();
+                day.setId(rs.getString("id"));
+                WeekDAO weekDAO = new WeekDAO();
+                day.setWeek(weekDAO.getWeek(rs.getString("week_id")));
+                day.setDate(rs.getDate("date"));
+                days.add(day);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return days;
+    }
 
 }
