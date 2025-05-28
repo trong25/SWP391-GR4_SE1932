@@ -108,6 +108,7 @@ public class SchoolYearDAO extends DBContext {
             return null;
         }
     }
+
 //Thanhnthe181132
     public SchoolYear getLatest() {
         String sql = "SELECT TOP 1 * FROM SchoolYears ORDER BY ID DESC";
@@ -142,4 +143,6 @@ public class SchoolYearDAO extends DBContext {
         }
         return schoolYears;
     }
+
+
 }

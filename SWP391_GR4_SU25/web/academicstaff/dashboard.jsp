@@ -14,7 +14,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Trung tâm dạy thêm TB</title>
+        <title>Trung tâm dạy thêm TaBi</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -40,7 +40,7 @@
                     <div class="container-fluid">
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Chào mừng đến với trung tâm dạy học TB</h1>
+                            <h1 class="h3 mb-0 text-gray-800">Chào mừng đến với trung tâm dạy học TaBi</h1>
                         </div>
 
                         <!-- Content Row -->
@@ -152,8 +152,8 @@
                                                                     <td>
                                                                         ${event.createdBy.lastName} ${event.createdBy.firstName}
                                                                     </td>
-                                                                    <td class="text-center"><a href="eventDetail?id=${event.id}"
-                                                                                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>
+<!--                                                                    <td class="text-center"><a href="eventDetail?id=${event.id}"
+                                                                                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>-->
                                                                 </tr>
                                                             </c:forEach>
                                                         </tbody>

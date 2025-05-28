@@ -200,4 +200,153 @@ public class StudentDAO extends DBContext {
         }
         return false;
     }
+
+     public Student getStudentsById(String id) {
+        String sql = "select * from Students where id='" + id + "'";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Student student = new Student();
+                student = createStudent(resultSet);
+                return student;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+       public boolean updateStudent(Student student) {
+        String sql = "update dbo.[Students] set first_guardian_name=?, "
+                + "first_guardian_phone_number=?, "
+                + "second_guardian_name=?, "
+                + "second_guardian_phone_number=?, "
+                + "address=?,"
+                +"school_name=?,"
+                + " parent_special_note=?, "
+                + "first_name=?, "
+                + "last_name=?, "
+                + "birthday=?, "
+                + "email=?, "
+                + "avatar=? "
+                + "where id=?";
+        
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, student.getFirstGuardianName());
+            ps.setString(2, student.getFirstGuardianPhoneNumber());
+            ps.setString(3, student.getSecondGuardianName());
+            ps.setString(4, student.getSecondGuardianPhoneNumber());
+            ps.setString(5, student.getAddress());
+            ps.setString(6, student.getSchoolName());
+            ps.setString(7, student.getParentSpecialNote());
+           
+            ps.setString(8,student.getFirstName());
+            ps.setString(9, student.getLastName());
+            ps.setDate(10, new java.sql.Date(student.getBirthday().getTime()));
+            ps.setString(11, student.getEmail());
+            ps.setString(12, student.getAvatar());
+            ps.setString(13, student.getId());
+            ps.executeUpdate();
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    
+
+    public Student getStudentById(String id) {
+    String sql = "SELECT * FROM Students WHERE id = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return createStudent(rs);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+
+
+     public int getSumStudentInClass(String classId) {
+        String sql = "SELECT COUNT(*) AS total_students\n"
+                + "FROM Class INNER JOIN\n"
+                + "     classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
+                + "     Students ON classDetails.student_id = Students.id\n"
+                + "WHERE Class.id = ?";
+
+        int totalStudents = 0;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, classId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalStudents = resultSet.getInt("total_students");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return totalStudents;
+    }
+     public List<Student> getStudentsByTeacherAndTimetable(String teacherId, String date) {
+        String sql = "SELECT DISTINCT Students.id, Students.first_name, Students.last_name, Students.avatar\n"
+                + "FROM Students\n"
+                + "JOIN classDetails ON Students.id = classDetails.Students_id\n"
+                + "JOIN Timetables ON classDetails.class_id = Timetables.class_id\n"
+                + "JOIN dbo.Days ON Timetables.date_id = dbo.Days.id\n"
+                + "WHERE Timetables.teacher_id = ?\n"
+                + "AND ? = dbo.Days.date;";
+        List<Student> list = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, date);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Student student = new Student();
+                student.setId(rs.getString("id"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setLastName(rs.getString("last_name"));
+                student.setAvatar(rs.getString("avatar"));
+                list.add(student);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+     
+     
+     
+         public List<Student> getListStudentsByClass(String studentId, String classId) {
+        List<Student> listStudents = new ArrayList<>();
+
+        String sql = "select * from Students p join classDetails c on p.id = c.student_id \n"
+                + "where class_id= '" + classId + "'";
+        if (studentId != null) {
+            sql += " and student_id != '" + studentId + "'";
+        }
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = new Student();
+                student = createStudent(resultSet);
+                listStudents.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listStudents;
+    }
+
+
 }

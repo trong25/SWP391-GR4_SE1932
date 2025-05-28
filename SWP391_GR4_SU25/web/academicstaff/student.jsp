@@ -1,4 +1,10 @@
-
+<%--
+  Created by IntelliJ IDEA.
+  User: Anh Quan
+  Date: 5/22/2024
+  Time: 9:23 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -129,7 +135,7 @@
                                                         </c:if>
 
                                                     <td class="text-center">
-                                                        <form method="post" action="pupilprofile">
+                                                        <form method="post" action="studentprofile">
                                                             <input hidden="" value="${student.id}" name="id"/>
                                                             <input hidden="" value="view" name="action"/>
                                                             <button type="submit" class="btn btn-primary"> Thông tin chi tiết</button>
@@ -230,7 +236,7 @@
 
 
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="firstGuardianName">Họ tên người giám hộ 1<a
+                                                                    <label for="firstGuardianName">Họ tên Bố<a
                                                                             style="color: red">(*)</a></label>
                                                                     <input type="text" class="form-control"
                                                                            id="firstGuardianName" name="firstGuardianName"
@@ -238,21 +244,21 @@
                                                                 </div>
                                                                 <div class="form-group col-md-6">
                                                                     <label for="firstGuardianPhoneNumber" style="">Số điện thoại
-                                                                        người giám hộ 1<a style="color: red">(*)</a></label><br>
+                                                                        Bố<a style="color: red">(*)</a></label><br>
                                                                     <input style="width: 50%" type="text" class="form-control"
                                                                            id="firstGuardianPhoneNumber"
                                                                            name="firstGuardianPhoneNumber"
                                                                            value="${param.firstGuardianPhoneNumber}">
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="secondGuardianName">Họ tên người giám hộ 2</label>
+                                                                    <label for="secondGuardianName">Họ tên Mẹ</label>
                                                                     <input type="text" class="form-control"
                                                                            id="secondGuardianName" name="secondGuardianName"
                                                                            value="${param.secondGuardianName}">
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại người
-                                                                        giám hộ 2</label><br>
+                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại Mẹ
+                                                                        </label><br>
                                                                     <input style="width: 50%" type="text" class="form-control"
                                                                            id="secondGuardianPhoneNumber"
                                                                            name="secondGuardianPhoneNumber"
@@ -295,8 +301,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="parentNote">Ghi chú của phụ huynh<a
-                                                                            style="color: red"></a></label>
+                                                                    <label for="parentNote">Cam kết thông tin trên là chính xác<a
+                                                                            style="color: red">(*)</a></label>
                                                                     <textarea name="note" class="form-control" id="parentNote"
                                                                               rows="4" style="height: 60%"
                                                                               >${param.note}</textarea>

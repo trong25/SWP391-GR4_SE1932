@@ -36,22 +36,26 @@ public class ClassDAO extends DBContext {
     }
 
     public List<Class> getByStatus(String status, String schoolYearId) {
-        String sql = " Select * from Class where [status] = N'" + status + "'  and school_year_id = ? order by id desc";
-        try {
-            List<Class> classes = new ArrayList<>();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, schoolYearId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Class c = createClass(resultSet);
-                classes.add(c);
-            }
-            return classes;
-        } catch (Exception e) {
-            e.printStackTrace();
+    String sql = "SELECT * FROM Class WHERE [status] = ? AND school_year_id = ? ORDER BY id DESC";
+    try {
+        List<Class> classes = new ArrayList<>();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, status);
+        preparedStatement.setString(2, schoolYearId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Class c = createClass(resultSet);
+            classes.add(c);
         }
-        return null;
+        return classes;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+
+    return null;
+}
+
+
 
     public Class getClassById(String id) {
         String sql = "select * from [Class] where id = ?";
@@ -68,7 +72,8 @@ public class ClassDAO extends DBContext {
         return null;
     }
 
-    public List<Class> getBySchoolYear(String schoolYearId) {
+
+   public List<Class> getBySchoolYear(String schoolYearId) {
         List<Class> classes = new ArrayList<>();
         String sql = "select * from Class where school_year_id = ? order by id desc";
         try {
@@ -82,7 +87,25 @@ public class ClassDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
-      return classes;
+        return classes;
+    }
+    
+   public Class getClassNameByTeacher(String teacherId) {
+        String sql = "SELECT *\n"
+                + "                FROM Class\n"
+                + "                WHERE teacher_id = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return createClass(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
 public List<Class> getAll() {
@@ -136,6 +159,46 @@ public List<Class> getAll() {
             e.printStackTrace();
         }
         return classes;
+    }
+    
+    public String getClassNameByTeacherAndTimetable(String teacherId, String date) {
+        String sql = "SELECT DISTINCT c.name\n"
+                + "FROM Class c\n"
+                + "JOIN Timetables t ON c.id = t.class_id\n"
+                + "JOIN Days d ON t.date_id = d.id\n"
+                + "WHERE t.teacher_id = ?\n"
+                + "  AND ? = d.date and t.status = N'đã được duyệt';\n";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, date);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+        public Class getTeacherClassByYear(String year, String teacherId) {
+        String sql = "select * from Class c where teacher_id= ? and school_year_id= ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, year);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createClass(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
 }

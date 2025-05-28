@@ -62,10 +62,14 @@ public class LoginFilter implements Filter{
                 return path.startsWith("/academicstaff/");
             case 3: // Teacher
                 return path.startsWith("/teacher/");
+
             case 4: // student
                 return path.startsWith("/student/");
             case 5: 
                 return path.startsWith("/accountant/");
+
+        
+
             default:
                 return false;
         }

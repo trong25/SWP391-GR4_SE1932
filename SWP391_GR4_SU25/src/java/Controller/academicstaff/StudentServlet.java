@@ -25,7 +25,7 @@ import utils.Helper;
 
 /**
  *
- * @author MSI
+ * @author TrongNV
  */
 public class StudentServlet extends HttpServlet {
    
@@ -110,8 +110,7 @@ public class StudentServlet extends HttpServlet {
                 Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
                         Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName), secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy,
                         note, Helper.formatName(schoolName));
-                ////   Stage for create pupil
-                ////   Stage for create pupil
+                
 
                 if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
                         || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
@@ -139,8 +138,8 @@ public class StudentServlet extends HttpServlet {
                     session.setAttribute("toastMessage", toastMessage);
                     session.setAttribute("toastType", toastType);
                     List<Student> listStudent = studentDAO.getAllStudents();
-                    request.setAttribute("listPupil", listStudent);
-                    request.setAttribute("newPupilId", request.getParameter("id"));
+                    request.setAttribute("listStudent", listStudent);
+                    request.setAttribute("newStudentId", request.getParameter("id"));
                     request.getRequestDispatcher("student.jsp").forward(request, response);
                 } else if (!(avatar.endsWith("png") || avatar.endsWith("jpg"))) {
                     toastMessage = "Tạo thật bại ! Vui lòng chọn đúng tập hình ảnh !";
@@ -156,8 +155,8 @@ public class StudentServlet extends HttpServlet {
                     toastType = "error";
                     session.setAttribute("toastMessage", toastMessage);
                     session.setAttribute("toastType", toastType);
-                    List<Student> listPupil = studentDAO.getAllStudents();
-                    request.setAttribute("listStudent", listPupil);
+                    List<Student> listStudent = studentDAO.getAllStudents();
+                    request.setAttribute("listStudent", listStudent);
                     request.setAttribute("newStudentId", request.getParameter("id"));
                     request.getRequestDispatcher("student.jsp").forward(request, response);
                 } else if (studentDAO.checkFirstGuardianPhoneNumberExists(firstGuardianPhoneNumber) || studentDAO.checkSecondGuardianPhoneNumberExists(secondGuardianPhoneNumber)) {
@@ -191,8 +190,8 @@ public class StudentServlet extends HttpServlet {
                         toastType = "error";
                         session.setAttribute("toastMessage", toastMessage);
                         session.setAttribute("toastType", toastType);
-                        List<Student> listPupil = studentDAO.getAllStudents();
-                        request.setAttribute("listStudent", listPupil);
+                        List<Student> listStudent = studentDAO.getAllStudents();
+                        request.setAttribute("listStudent", listStudent);
                         request.setAttribute("newStudentId", request.getParameter("id"));
                         request.getRequestDispatcher("student.jsp").forward(request, response);
                     }

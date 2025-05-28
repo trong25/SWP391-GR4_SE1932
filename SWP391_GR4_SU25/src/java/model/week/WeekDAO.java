@@ -7,9 +7,19 @@ package model.week;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+
+import java.util.Date;
+
 import java.util.ArrayList;
 import java.util.List;
+
+
+import java.util.Date;
+
 import model.schoolYear.SchoolYearDAO;
+import java.util.ArrayList;
+import java.util.List;
 import utils.DBContext;
 
 /**
@@ -40,7 +50,28 @@ public class WeekDAO extends DBContext{
         }
         return null;
     }
-      public List<Week> getWeeks(String schoolYearId) {
+
+
+      public String getCurrentWeek(Date date){
+        String sql="SELECT id FROM Weeks WHERE ? BETWEEN start_date AND end_date";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDate(1, new java.sql.Date(date.getTime()));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+   
+
+     
+     public List<Week> getWeeks(String schoolYearId) {
+
         List<Week> weeks = new ArrayList<>();
         String sql = "SELECT * FROM weeks WHERE school_year_id = ?";
         try {
@@ -55,6 +86,26 @@ public class WeekDAO extends DBContext{
             e.printStackTrace();
         }
         return weeks;
+    }
+
+     
+    
+         
+         public Week getfirstWeekOfClosestSchoolYear(String id){
+        Week week = new Week();
+        String sql = " select top 1 w.* from Weeks w join SchoolYears sy on w.school_year_id = sy.id where school_year_id = ? order by id ASC";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                week = createWeek(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return week;
     }
 
 }
