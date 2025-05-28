@@ -18,21 +18,23 @@ import utils.DBContext;
  *
  * @author MSI
  */
-public class ClassDAO extends DBContext{
+public class ClassDAO extends DBContext {
+
     private Class createClass(ResultSet resultSet) throws SQLException {
         Class c = new Class();
         c.setId(resultSet.getString("id"));
         c.setName(resultSet.getString("name"));
         GradeDAO gradeDAO = new GradeDAO();
         c.setGrade(gradeDAO.getGrade(resultSet.getString("grade_id")));
-         PersonnelDAO personnelDAO = new PersonnelDAO();
+        PersonnelDAO personnelDAO = new PersonnelDAO();
         c.setTeacher(personnelDAO.getPersonnel(resultSet.getString("teacher_id")));
-         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
         c.setStatus(resultSet.getString("status"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
         return c;
     }
+
     public List<Class> getByStatus(String status, String schoolYearId) {
         String sql = " Select * from Class where [status] = N'" + status + "'  and school_year_id = ? order by id desc";
         try {
@@ -50,6 +52,7 @@ public class ClassDAO extends DBContext{
         }
         return null;
     }
+
     public Class getClassById(String id) {
         String sql = "select * from [Class] where id = ?";
         try {
@@ -64,4 +67,75 @@ public class ClassDAO extends DBContext{
         }
         return null;
     }
+
+    public List<Class> getBySchoolYear(String schoolYearId) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "select * from Class where school_year_id = ? order by id desc";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Class c = createClass(resultSet);
+                classes.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+      return classes;
+    }
+    
+public List<Class> getAll() {
+    List<Class> classes = new ArrayList<>();
+    String sql = "SELECT * FROM Class ORDER BY id DESC";
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            Class c = createClass(resultSet);
+            classes.add(c);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return classes;
+}
+
+     public String reviewClass(String newStatus, String id) {
+        StringBuilder sql = new StringBuilder("update [Class] set [status]= ");
+        try {
+
+            if (newStatus.equals("accept")) {
+                newStatus = "đã được duyệt";
+                sql.append("N'").append(newStatus).append("' where [id] = '").append(id).append("'");
+            } else {
+                newStatus = "không được duyệt";
+                sql.append("N'").append(newStatus).append("' , [teacher_id] = ").append("NULL").append(" where [id] = '").append(id).append("'");
+            }
+            System.out.println(sql.toString());
+            PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Có lỗi xả ra khi duyệt, vui lòng thử lại";
+        }
+        return "success";
+    }
+        public List<Class> getBySchoolYearandStatus(String schoolYearId) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "select * from Class where school_year_id = ? and status = N'đã được duyệt'";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Class c = createClass(resultSet);
+                classes.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
+    }
+
 }
