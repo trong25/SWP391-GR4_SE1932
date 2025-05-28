@@ -62,6 +62,7 @@ public class DayDAO extends DBContext{
     }
 
 
+
 public String getDateIDbyDay(java.util.Date day) {
     String sql = "SELECT id FROM Days WHERE date = ?";
     try {
@@ -94,11 +95,31 @@ public String getDateIDbyDay(java.util.Date day) {
                 day.setWeek(weekDAO.getWeek(rs.getString("week_id")));
                 day.setDate(rs.getDate("date"));
                 days.add(day);
+
+     
+         public List<Day> getDaysWithTimetableForClass(String weekId, String classId) {
+        List<Day> days = new ArrayList<>();
+        String sql = "SELECT DISTINCT d.*\n"
+                + "FROM Days d\n"
+                + "         JOIN Timetables t ON d.id = t.date_id\n"
+                + "WHERE d.week_id = ? and class_id = ? order by ID asc;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, weekId);
+            preparedStatement.setString(2, classId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                days.add(createDay(resultSet));
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return days;
+
     }
+
+
+    }     
 
 }

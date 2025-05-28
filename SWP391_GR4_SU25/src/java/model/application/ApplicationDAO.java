@@ -1,6 +1,9 @@
 package model.application;
 
 import model.personnel.PersonnelDAO;
+
+import model.personnel.PersonnelDAO;
+
 import model.schoolYear.SchoolYear;
 import utils.DBContext;
 import utils.Helper;
@@ -36,6 +39,7 @@ public class ApplicationDAO extends DBContext {
         return app;
     }
 
+
     public ApplicationType getById(String id) {
         ApplicationType app = new ApplicationType();
         String sql = "select * from [Application_Types] where id = ?";
@@ -49,16 +53,27 @@ public class ApplicationDAO extends DBContext {
                 app.setDescription(resultSet.getString("description"));
                 return app;
             }
+
         } catch (Exception e) {
+
+        }catch (Exception e) {
+
             e.printStackTrace();
         }
         return null;
     }
 
+
     public List<ApplicationType> getAllApplicationTypes(String role) {
         List<ApplicationType> applicationTypes = new ArrayList<>();
         String sql = "select id, name, description from [Application_Types] where sender_role = ?";
         try {
+
+    public List<ApplicationType> getAllApplicationTypes(String role) {
+        List<ApplicationType> applicationTypes = new ArrayList<ApplicationType>();
+        String sql = "select id, name, description from [Application_Types] where sender_role = ?";
+        try{
+
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, role);
             ResultSet resultSet = statement.executeQuery();
@@ -69,17 +84,70 @@ public class ApplicationDAO extends DBContext {
                 applicationType.setDescription(resultSet.getString("description"));
                 applicationTypes.add(applicationType);
             }
+
         } catch (Exception e) {
+
+        }catch (Exception e){
+
             e.printStackTrace();
         }
         return applicationTypes;
     }
+
 
     public String addApplication(Application application) {
         String sql = "insert into [Applications] values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             if (getLatest() == null) {
+
+
+    public List<Application> getForPersonnel(String role){
+        List<Application> applications = new ArrayList<>();
+        String sql = "SELECT a.*\n" +
+                "FROM Applications a\n" +
+                "JOIN Application_Types at\n" +
+                "ON a.application_type = at.id\n" +
+                "WHERE at.receiver_role = ?\n" +
+                "ORDER BY id desc";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, role);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Application application = createApplication(resultSet);
+                applications.add(application);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return applications;
+    }
+
+
+    public Application getApplicationById(String id){
+        Application app = new Application();
+        String sql = "select * from [Applications] where id = ? order by id desc";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                app = createApplication(resultSet);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return app;
+    }
+
+
+    public String addApplication(Application application) {
+        String sql = "insert into [Applications] values (?,?,?,?,?,?,?,?,?,?,?)";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            if(getLatest()==null){
+
                 preparedStatement.setString(1, "APP000001");
             } else {
                 preparedStatement.setString(1, generateId(getLatest().getId()));
@@ -91,37 +159,62 @@ public class ApplicationDAO extends DBContext {
             preparedStatement.setString(6, application.getStatus());
             preparedStatement.setString(7, application.getCreatedBy());
             preparedStatement.setString(8, Helper.convertDateToLocalDate(application.getCreatedAt()).toString());
+
             if (application.getStartDate() != null) {
+
+            if (application.getStartDate()!=null){
+
                 preparedStatement.setString(9, Helper.convertDateToLocalDate(application.getStartDate()).toString());
                 preparedStatement.setString(10, Helper.convertDateToLocalDate(application.getEndDate()).toString());
             } else {
                 preparedStatement.setNull(9, Types.VARCHAR);
                 preparedStatement.setNull(10, Types.VARCHAR);
             }
+
             preparedStatement.setNull(11, Types.VARCHAR);
             preparedStatement.executeUpdate();
         } catch (Exception e) {
+
+
+            preparedStatement.setNull(11, Types.VARCHAR);
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+
             e.printStackTrace();
             return "Gửi đơn thất bại! Vui lòng thử lại sau";
         }
         return "success";
     }
 
+
     private Application getLatest() {
         String sql = "SELECT TOP 1 * FROM [Applications] ORDER BY ID DESC";
         try {
+
+    private Application getLatest(){
+        String sql = "SELECT TOP 1 * FROM [Applications] ORDER BY ID DESC";
+        try{
+
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
                 return createApplication(rs);
             }
+
         } catch (Exception e) {
+
+        }catch (Exception e) {
+
             e.printStackTrace();
         }
         return null;
     }
 
+
     private String generateId(String latestId) {
+
+    private String generateId(String latestId){
+
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
         int number = 0;
@@ -129,11 +222,38 @@ public class ApplicationDAO extends DBContext {
             number = Integer.parseInt(matcher.group()) + 1;
         }
         DecimalFormat decimalFormat = new DecimalFormat("000000");
+
         return "APP" + decimalFormat.format(number);
     }
 
 
     public List<Application> getSentApplications(String senderUserId) {
+
+        String result = decimalFormat.format(number);
+        return "APP" + result;
+    }
+
+
+    public String processApplication(Application application) {
+        String sql = "update [Applications] set status = ?, process_note = ?, processed_at = ?, processed_by = ? where id = ?";
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, application.getStatus());
+            preparedStatement.setString(2, application.getProcessNote());
+            preparedStatement.setString(3, Helper.convertDateToLocalDate(application.getProcessedAt()).toString());
+            preparedStatement.setString(4, application.getProcessedBy().getId());
+            preparedStatement.setString(5, application.getId());
+            preparedStatement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Xử lý đơn thất bại! Vui lòng thử lại sau";
+        }
+        return "success";
+    }
+
+
+    public List<Application> getSentApplications(String senderUserId){
+
         String sql = "select * from [Applications] where created_by = ? order by id desc";
         List<Application> applications = new ArrayList<>();
         try {
@@ -144,11 +264,43 @@ public class ApplicationDAO extends DBContext {
                 Application application = createApplication(resultSet);
                 applications.add(application);
             }
+
         } catch (Exception e) {
+
+        }catch (Exception e){
+
             e.printStackTrace();
         }
         return applications;
     }
+
+
+
+
+    public List<Application> getForPersonnelWithStatus(String role, String status) {
+        List<Application> applications = new ArrayList<>();
+        String sql = "SELECT a.*\n" +
+                "FROM Applications a\n" +
+                "JOIN Application_Types at\n" +
+                "ON a.application_type = at.id\n" +
+                "WHERE at.receiver_role = ? and status=?\n" +
+                "ORDER BY id desc";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, role);
+            statement.setString(2, status);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Application application = createApplication(resultSet);
+                applications.add(application);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return applications;
+    }
+
+
 
     public List<Application> getSentApplicationsWithStatus(String senderUserId, String status) {
         String sql = "select * from [Applications] where created_by = ? and status = ? order by id desc";
@@ -162,7 +314,11 @@ public class ApplicationDAO extends DBContext {
                 Application application = createApplication(resultSet);
                 applications.add(application);
             }
+
         } catch (Exception e) {
+
+        }catch (Exception e){
+
             e.printStackTrace();
         }
         return applications;

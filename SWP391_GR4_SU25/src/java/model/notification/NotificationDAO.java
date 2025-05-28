@@ -1,3 +1,9 @@
+
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
 package model.notification;
 
 import java.sql.PreparedStatement;
@@ -13,9 +19,15 @@ import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import utils.DBContext;
 
+
 public class NotificationDAO extends DBContext {
 
     private PersonnelDAO personnelDAO = new PersonnelDAO();
+
+
+public class NotificationDAO extends DBContext  {
+
+
 
     public Notification createNotifi(ResultSet resultSet) throws SQLException {
         try {
@@ -23,6 +35,10 @@ public class NotificationDAO extends DBContext {
             notifi.setId(resultSet.getString(1));
             notifi.setHeading(resultSet.getString(2));
             notifi.setDetails(resultSet.getString(3));
+
+
+            PersonnelDAO personnelDAO = new PersonnelDAO();
+
             Personnel personnel = personnelDAO.getPersonnel(resultSet.getString(4));
             notifi.setCreatedBy(personnel);
             notifi.setCreatedAt(resultSet.getDate(5));
@@ -32,6 +48,7 @@ public class NotificationDAO extends DBContext {
         }
         return null;
     }
+
 
     public Notification getLatest() {
         String sql = "select TOP 1 * from [Notifications] order by id desc";
@@ -47,6 +64,7 @@ public class NotificationDAO extends DBContext {
         return null;
     }
 
+
     public String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -58,6 +76,7 @@ public class NotificationDAO extends DBContext {
         String result = decimalFormat.format(number);
         return "N" + result;
     }
+
 
     public boolean createNoti(Notification notification) {
         String sqlNotification = "INSERT INTO Notifications (id, heading, details, created_by, created_at) VALUES (?, ?, ?, ?, ?)";
@@ -79,13 +98,25 @@ public class NotificationDAO extends DBContext {
         return false;
     }
 
+
     public Notification getNotificationById(String id) {
         String sql = "select * from [Notifications] where id = ?";
+
+
+    public Notification getNotificationById(String id) {
+        String sql = "select * from [Notifications] where id = ?";
+        Notification notifi = new Notification();
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+
                     return createNotifi(rs);
+
+                    notifi = createNotifi(rs);
+                    return notifi;
+
                 }
             }
         } catch (SQLException e) {
@@ -93,6 +124,7 @@ public class NotificationDAO extends DBContext {
         }
         return null;
     }
+
 
     public List<Notification> getListNotifiByUserId(String userId) {
         String sql = "select * from Notifications n inner join NotificationDetails nd on n.id = nd.notification_id where nd.receiver_id = ? order by nd.notification_id desc";
@@ -108,7 +140,13 @@ public class NotificationDAO extends DBContext {
             e.printStackTrace();
         }
         return listnoti;
+
     }
+
+
+    }
+
+
 
     public List<Notification> getListSentNotifiById(String id) {
         List<Notification> listnotifi = new ArrayList<>();
@@ -126,10 +164,18 @@ public class NotificationDAO extends DBContext {
         return null;
     }
 
+
     public List<Integer> getRoleSentNotifiByIdandCreatBy(String id, String create_by) {
         List<Integer> listrole = new ArrayList<>();
         String sql = "SELECT DISTINCT role_id\n"
                 + "FROM [Cultural_Tutoring_Center_TB].[dbo].[Notifications] n\n"
+
+
+    public List<Integer> getRoleSentNotifiByIdandCreatBy(String id, String create_by) {
+        List<Integer> listrole = new ArrayList<>();
+        String sql = "SELECT DISTINCT role_id\n"
+                + "FROM [BoNo_Kindergarten].[dbo].[Notifications] n\n"
+
                 + "INNER JOIN NotificationDetails nd ON n.id = nd.notification_id\n"
                 + "INNER JOIN [User] u ON u.id = nd.receiver_id\n"
                 + "WHERE n.id = ? AND created_by = ?";
@@ -146,4 +192,21 @@ public class NotificationDAO extends DBContext {
         }
         return null;
     }
+
+    
+    public boolean createNotiDetails(NotificationDetails notificationdetails) {
+        String sqlNotification = "INSERT INTO NotificationDetails VALUES (?, ?)";
+        try (PreparedStatement statementNotification = connection.prepareStatement(sqlNotification);) {
+            statementNotification.setString(1, notificationdetails.getNotificationId());
+            statementNotification.setString(2, notificationdetails.getReceiver());
+            statementNotification.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 }
