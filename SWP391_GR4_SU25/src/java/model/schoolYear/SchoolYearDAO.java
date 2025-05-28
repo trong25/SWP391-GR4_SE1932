@@ -104,4 +104,18 @@ public class SchoolYearDAO extends DBContext{
             return null;
         }
     }
+      
+      public SchoolYear getLatest() {
+        String sql = "SELECT TOP 1 * FROM SchoolYears ORDER BY ID DESC";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return createNewSchoolYear(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

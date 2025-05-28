@@ -82,7 +82,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="pupilsattendance">
+                <a class="nav-link" href="studentsattendance">
                     <i class="fas fa-fw fa-calendar-check"></i>
                     <span>Xem Điểm Danh Học Sinh</span>
                 </a>

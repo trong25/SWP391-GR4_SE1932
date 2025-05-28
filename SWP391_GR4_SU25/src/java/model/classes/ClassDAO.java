@@ -82,5 +82,42 @@ public class ClassDAO extends DBContext{
         }
         return null;
     }
+    
+    public String getClassNameByTeacherAndTimetable(String teacherId, String date) {
+        String sql = "SELECT DISTINCT c.name\n"
+                + "FROM Class c\n"
+                + "JOIN Timetables t ON c.id = t.class_id\n"
+                + "JOIN Days d ON t.date_id = d.id\n"
+                + "WHERE t.teacher_id = ?\n"
+                + "  AND ? = d.date and t.status = N'đã được duyệt';\n";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, date);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+        public Class getTeacherClassByYear(String year, String teacherId) {
+        String sql = "select * from Class c where teacher_id= ? and school_year_id= ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, year);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createClass(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

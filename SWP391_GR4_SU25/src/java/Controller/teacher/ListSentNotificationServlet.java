@@ -7,41 +7,48 @@ package Controller.teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-
-import model.application.ApplicationDAO;
-
-import model.classes.ClassDAO;
-import model.classes.Class;
-
-import model.day.DayDAO;
-
-import model.event.eventDAO;
-
+import model.notification.Notification;
 import model.notification.NotificationDAO;
-
 import model.personnel.Personnel;
-import model.personnel.PersonnelAttendanceDAO;
-
-import model.student.Student;
-import model.student.StudentDAO;
-
-import model.role.RoleDAO;
-
-import model.schoolYear.SchoolYearDAO;
-import model.user.User;
 
 /**
  *
- * @author Admin
+ * @author PC
  */
-public class DashboardTeacherServlet extends HttpServlet {
+@WebServlet(name = "/teacher/ListSentNotificationServlet", urlPatterns = {"/teacher/listsentnotifi"})
+public class ListSentNotificationServlet extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ListSentNotificationServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ListSentNotificationServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -55,32 +62,13 @@ public class DashboardTeacherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        eventDAO eventDAO = new eventDAO();
-        StudentDAO studentDAO = new StudentDAO();
-        ClassDAO classDAO = new ClassDAO();
-
         HttpSession session = request.getSession();
         Personnel personnel = (Personnel) session.getAttribute("personnel");
-        
-        ClassDAO dao = new ClassDAO();
-        Class individualClass = dao.getClassNameByTeacher(personnel.getId());
-        if (individualClass != null) {
-            
-            int listStudentInClass = studentDAO.getSumStudentInClass(individualClass.getId());
-            ApplicationDAO applicationDAO = new ApplicationDAO();
-            RoleDAO roleDAO = new RoleDAO();
-            String roleName = roleDAO.getRoleName(personnel.getRoleId());
-            int sumApplication = applicationDAO.getForPersonnel(roleName).size();
-
-            NotificationDAO notificationDAO = new NotificationDAO();
-            int sumNotification = notificationDAO.getListNotifiByUserId(personnel.getUserId()).size();
-            request.setAttribute("listEvents", eventDAO.getFutureEvent(2));
-            request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
-            request.setAttribute("listStudentInClass", listStudentInClass);
-            request.setAttribute("sumApplication", sumApplication);
-            request.setAttribute("sumNotification", sumNotification);
-        }
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        String id = personnel.getId();
+        NotificationDAO notifiDAO = new NotificationDAO();
+        List<Notification> notifi = notifiDAO.getListSentNotifiById(id);
+        request.setAttribute("notifi", notifi);
+        request.getRequestDispatcher("listNotifisent.jsp").forward(request, response);
     }
 
     /**
@@ -94,6 +82,7 @@ public class DashboardTeacherServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

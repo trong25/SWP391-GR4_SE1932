@@ -84,13 +84,13 @@
                 </a>
             </li>
 
-            <!-- Nav Item - Thực đơn -->
+<!--             Nav Item - Thực đơn 
             <li class="nav-item">
                 <a class="nav-link" href="viewmealtimetable">
                     <i class='fas fa-fw fa-cheese'></i>
                     <span>Thực đơn</span>
                 </a>
-            </li>
+            </li>-->
 
             <!-- Nav Item - Điểm danh -->
             <li class="nav-item">
@@ -102,14 +102,14 @@
                 <div id="collapseAttendance" class="collapse" aria-labelledby="headingNoti" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="takeattendance">Điểm Danh Học Sinh</a>
-                        <a class="collapse-item" href="pupilsattendance">Xem Điểm Danh Học Sinh</a>
+                        <a class="collapse-item" href="studentsattendance">Xem Điểm Danh Học Sinh</a>
                     </div>
                 </div>
             </li>
 
             <!-- Nav Item - Quản lý học sinh -->
             <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/teacher/listpupil">
+                <a class="nav-link" href="${pageContext.request.contextPath}/teacher/liststudent">
                     <i class='fas fa-fw fa-solid fa-graduation-cap'></i>
                     <span>Quản lý học sinh</span>
                 </a>
@@ -131,24 +131,24 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Báo cáo sức khỏe -->
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list-pupil">
+<!--             Nav Item - Báo cáo sức khỏe -->
+<!--            <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list-student">
                     <i class='fas fa-fw fa-hand-holding-heart'></i>
                     <span>Báo cáo sức khỏe</span>
                 </a>
-            </li>
+            </li>-->
 
-            <!-- Nav Item - Phiếu bé ngoan -->
+<!--             Nav Item - Phiếu bé ngoan 
             <li class="nav-item">
                 <a class="nav-link" href="evaluationreport">
                     <i class='fas fa-fw fa-id-badge'></i>
                     <span>Phiếu bé ngoan</span>
                 </a>
-            </li>
+            </li>-->
 
             <!-- Nav Item - Đánh giá học sinh hằng ngày -->
-            <li class="nav-item">
+<!--            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEvaluate"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-solid fa-bell"></i>
@@ -160,7 +160,7 @@
                         <a class="collapse-item" href="schoolyearsummarize">Tổng kết năm học</a>
                     </div>
                 </div>
-            </li>
+            </li>-->
 
             <li class="nav-item">
                 <a class="nav-link" href="application">

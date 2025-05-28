@@ -17,10 +17,7 @@ import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import utils.DBContext;
 
-/**
- *
- * @author TuyenCute
- */
+
 public class NotificationDAO extends DBContext  {
 
 
@@ -163,5 +160,20 @@ public class NotificationDAO extends DBContext  {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public boolean createNotiDetails(NotificationDetails notificationdetails) {
+        String sqlNotification = "INSERT INTO NotificationDetails VALUES (?, ?)";
+        try (PreparedStatement statementNotification = connection.prepareStatement(sqlNotification);) {
+            statementNotification.setString(1, notificationdetails.getNotificationId());
+            statementNotification.setString(2, notificationdetails.getReceiver());
+            statementNotification.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }
