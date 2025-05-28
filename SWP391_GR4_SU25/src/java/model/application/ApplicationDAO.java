@@ -75,22 +75,6 @@ public class ApplicationDAO extends DBContext {
         return applicationTypes;
     }
 
-    public Application getApplicationById(String id) {
-        Application app = new Application();
-        String sql = "select * from [Applications] where id = ? order by id desc";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                app = createApplication(resultSet);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return app;
-    }
-
     public String addApplication(Application application) {
         String sql = "insert into [Applications] values (?,?,?,?,?,?,?,?,?,?,?)";
         try {
@@ -148,22 +132,6 @@ public class ApplicationDAO extends DBContext {
         return "APP" + decimalFormat.format(number);
     }
 
-    public String processApplication(Application application) {
-        String sql = "update [Applications] set status = ?, process_note = ?, processed_at = ?, processed_by = ? where id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, application.getStatus());
-            preparedStatement.setString(2, application.getProcessNote());
-            preparedStatement.setString(3, Helper.convertDateToLocalDate(application.getProcessedAt()).toString());
-            preparedStatement.setString(4, application.getProcessedBy().getId());
-            preparedStatement.setString(5, application.getId());
-            preparedStatement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Xử lý đơn thất bại! Vui lòng thử lại sau";
-        }
-        return "success";
-    }
 
     public List<Application> getSentApplications(String senderUserId) {
         String sql = "select * from [Applications] where created_by = ? order by id desc";
