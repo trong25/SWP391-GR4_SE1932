@@ -48,7 +48,7 @@
         <servlet>
         <servlet-name>DashboardTeacherServlet</servlet-name>
         <servlet-class>Controller.teacher.DashboardTeacherServlet</servlet-class>
-
+        </servlet>
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>controllerr.ForgotPasswordServlet</servlet-class>

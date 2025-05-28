@@ -66,9 +66,8 @@ public class Role {
 
                 return "Phụ huynh";
 
-                return "Học Sinh";
-            case "5":
-                return "Giáo Vụ";
+              
+
 
           
         }
