@@ -52,23 +52,22 @@ public class WeekDAO extends DBContext{
     }
 
 
-     public Week getCurrentWeek(Date date) {
-    String sql = "SELECT * FROM Weeks WHERE ? BETWEEN start_date AND end_date";
-    try {
-        PreparedStatement statement = connection.prepareStatement(sql);
-        java.sql.Date today = new java.sql.Date(System.currentTimeMillis());
-        statement.setDate(1, today);
-        ResultSet rs = statement.executeQuery();
-        if (rs.next()) {
-            return createWeek(rs);
+      public String getCurrentWeek(Date date){
+        String sql="SELECT id FROM Weeks WHERE ? BETWEEN start_date AND end_date";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setDate(1, new java.sql.Date(date.getTime()));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
 
-      public List<Week> getWeeks(String schoolYearId) {
+   
 
      
      public List<Week> getWeeks(String schoolYearId) {
@@ -90,20 +89,7 @@ public class WeekDAO extends DBContext{
     }
 
      
-         public String getCurrentWeek(Date date){
-        String sql="SELECT id FROM Weeks WHERE ? BETWEEN start_date AND end_date";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setDate(1, new java.sql.Date(date.getTime()));
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                return resultSet.getString(1);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
+    
          
          public Week getfirstWeekOfClosestSchoolYear(String id){
         Week week = new Week();

@@ -20,9 +20,8 @@ import model.personnel.PersonnelDAO;
 import utils.DBContext;
 
 
-public class NotificationDAO extends DBContext {
 
-    private PersonnelDAO personnelDAO = new PersonnelDAO();
+
 
 
 public class NotificationDAO extends DBContext  {
@@ -99,8 +98,6 @@ public class NotificationDAO extends DBContext  {
     }
 
 
-    public Notification getNotificationById(String id) {
-        String sql = "select * from [Notifications] where id = ?";
 
 
     public Notification getNotificationById(String id) {
@@ -114,9 +111,8 @@ public class NotificationDAO extends DBContext  {
 
                     return createNotifi(rs);
 
-                    notifi = createNotifi(rs);
-                    return notifi;
-
+                  
+         
                 }
             }
         } catch (SQLException e) {
@@ -144,11 +140,11 @@ public class NotificationDAO extends DBContext  {
     }
 
 
-    }
+    
 
 
 
-    public List<Notification> getListSentNotifiById(String id) {
+   public List<Notification> getListSentNotifiById(String id) {
         List<Notification> listnotifi = new ArrayList<>();
         String sql = "select * from Notifications where created_by = ? order by id desc";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -165,10 +161,7 @@ public class NotificationDAO extends DBContext  {
     }
 
 
-    public List<Integer> getRoleSentNotifiByIdandCreatBy(String id, String create_by) {
-        List<Integer> listrole = new ArrayList<>();
-        String sql = "SELECT DISTINCT role_id\n"
-                + "FROM [Cultural_Tutoring_Center_TB].[dbo].[Notifications] n\n"
+   
 
 
     public List<Integer> getRoleSentNotifiByIdandCreatBy(String id, String create_by) {

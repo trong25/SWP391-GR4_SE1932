@@ -43,7 +43,7 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
             request.setAttribute("schoolYearId", schoolYearId);
 
             String weekId = request.getParameter("weekId");
-            if (weekId == null){
+             if (weekId == null){
                 weekId = weekDAO.getCurrentWeek(new Date());
             }
             if (weekId == null){

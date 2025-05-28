@@ -95,7 +95,12 @@ public String getDateIDbyDay(java.util.Date day) {
                 day.setWeek(weekDAO.getWeek(rs.getString("week_id")));
                 day.setDate(rs.getDate("date"));
                 days.add(day);
-
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return days;
+    }
      
          public List<Day> getDaysWithTimetableForClass(String weekId, String classId) {
         List<Day> days = new ArrayList<>();
@@ -122,4 +127,4 @@ public String getDateIDbyDay(java.util.Date day) {
 
     }     
 
-}
+

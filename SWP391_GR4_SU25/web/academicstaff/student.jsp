@@ -1,4 +1,10 @@
-
+<%--
+  Created by IntelliJ IDEA.
+  User: Anh Quan
+  Date: 5/22/2024
+  Time: 9:23 PM
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -29,7 +35,7 @@
                         toastr.success(toastMessage);
                     } else if (toastType === 'error') {
                         toastr.error(toastMessage);
-                        $('.create-student').modal('show'); // Show the modal if the toast type is fail
+                        $('.create-pupil').modal('show'); // Show the modal if the toast type is fail
                     }
                 }
             });
@@ -87,7 +93,7 @@
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 font-weight-bold text-primary">Danh Sách Học Sinh</h6>
                                 <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                                        data-target=".create-student">
+                                        data-target=".create-pupil">
                                     <i class="fas fa-upload"></i> Thêm học sinh
                                 </button>
 
@@ -143,13 +149,8 @@
                             </div>
                         </div>
 
-
-                       
+                        <!-- New School Pupil Modal -->
                         <div class="modal fade create-pupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-
-                        <!-- New School student Modal -->
-                        <div class="modal fade create-student" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-
                              aria-hidden="true" >
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -235,7 +236,7 @@
 
 
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="firstGuardianName">Họ tên bố<a
+                                                                    <label for="firstGuardianName">Họ tên Bố<a
                                                                             style="color: red">(*)</a></label>
                                                                     <input type="text" class="form-control"
                                                                            id="firstGuardianName" name="firstGuardianName"
@@ -243,7 +244,7 @@
                                                                 </div>
                                                                 <div class="form-group col-md-6">
                                                                     <label for="firstGuardianPhoneNumber" style="">Số điện thoại
-                                                                       bố <a style="color: red">(*)</a></label><br>
+                                                                        Bố<a style="color: red">(*)</a></label><br>
                                                                     <input style="width: 50%" type="text" class="form-control"
                                                                            id="firstGuardianPhoneNumber"
                                                                            name="firstGuardianPhoneNumber"
@@ -256,8 +257,8 @@
                                                                            value="${param.secondGuardianName}">
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại 
-                                                                       Mẹ</label><br>
+                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại Mẹ
+                                                                        </label><br>
                                                                     <input style="width: 50%" type="text" class="form-control"
                                                                            id="secondGuardianPhoneNumber"
                                                                            name="secondGuardianPhoneNumber"
@@ -300,7 +301,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="parentNote">Cam kết của phụ huynh học sinh<a
+                                                                    <label for="parentNote">Cam kết thông tin trên là chính xác<a
                                                                             style="color: red">(*)</a></label>
                                                                     <textarea name="note" class="form-control" id="parentNote"
                                                                               rows="4" style="height: 60%"
@@ -387,7 +388,7 @@
                     // Check if the date field is empty
                     if (!selectedDateValue) {
                         toastr.error("Vui lòng chọn ngày sinh");
-                        $('.create-student').modal('show'); // Show the modal if the toast type is fail
+                        $('.create-pupil').modal('show'); // Show the modal if the toast type is fail
                         event.preventDefault(); // Prevent the form from being submitted
                         return;
                     }
@@ -395,7 +396,7 @@
                     const selectedDate = new Date(selectedDateValue);
                     if (selectedDate > minDate) {
                         toastr.error("Tuổi của học sinh phải lớn hơn hoặc bằng 11 tuổi !!!");
-                        $('.create-student').modal('show'); // Show the modal if the toast type is fail
+                        $('.create-pupil').modal('show'); // Show the modal if the toast type is fail
                         event.preventDefault(); // Prevent the form from being submitted
                     }
                 });
@@ -410,7 +411,6 @@
                 document.getElementById('address').value = '';
                 document.getElementById('lastName').value = '';
                 document.getElementById('firstName').value = '';
-                 document.getElementById('schooName').value = '';
                 document.getElementById('secondGuardianName').value = '';
                 document.getElementById('firstGuardianName').value = '';
                 document.getElementById('secondGuardianPhoneNumber').value = '';

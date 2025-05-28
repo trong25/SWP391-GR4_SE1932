@@ -1,9 +1,17 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model.student;
 
 import model.day.Day;
 
+/**
+ *
+ * @author MSI
+ */
 public class StudentAttendance {
-    private String id;
+      private String id;
     private Day day;
     private Student student;
     private String status;
@@ -59,4 +67,13 @@ public class StudentAttendance {
     public void setNote(String note) {
         this.note = note;
     }
+    
+    
 }
+
+
+
+  
+
+   
+

@@ -40,10 +40,7 @@
         <servlet-name>StudentServlet</servlet-name>
         <servlet-class>Controller.academicstaff.StudentServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>HeadteacherServlet</servlet-name>
-        <servlet-class>.DashBoardHeadTeacherServlet</servlet-class>
-    </servlet>
+    
     <servlet>
         <servlet-name>DirectorDashBoardServlet</servlet-name>
         <servlet-class>Controller.director.DirectorDashBoardServlet</servlet-class>

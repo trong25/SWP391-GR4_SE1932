@@ -56,18 +56,13 @@ public class ApplicationDAO extends DBContext {
 
         } catch (Exception e) {
 
-        }catch (Exception e) {
-
             e.printStackTrace();
         }
         return null;
     }
 
 
-    public List<ApplicationType> getAllApplicationTypes(String role) {
-        List<ApplicationType> applicationTypes = new ArrayList<>();
-        String sql = "select id, name, description from [Application_Types] where sender_role = ?";
-        try {
+    
 
     public List<ApplicationType> getAllApplicationTypes(String role) {
         List<ApplicationType> applicationTypes = new ArrayList<ApplicationType>();
@@ -87,7 +82,7 @@ public class ApplicationDAO extends DBContext {
 
         } catch (Exception e) {
 
-        }catch (Exception e){
+       
 
             e.printStackTrace();
         }
@@ -95,11 +90,7 @@ public class ApplicationDAO extends DBContext {
     }
 
 
-    public String addApplication(Application application) {
-        String sql = "insert into [Applications] values (?,?,?,?,?,?,?,?,?,?,?)";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            if (getLatest() == null) {
+   
 
 
     public List<Application> getForPersonnel(String role){
@@ -160,14 +151,14 @@ public class ApplicationDAO extends DBContext {
             preparedStatement.setString(7, application.getCreatedBy());
             preparedStatement.setString(8, Helper.convertDateToLocalDate(application.getCreatedAt()).toString());
 
-            if (application.getStartDate() != null) {
+          
 
             if (application.getStartDate()!=null){
 
                 preparedStatement.setString(9, Helper.convertDateToLocalDate(application.getStartDate()).toString());
                 preparedStatement.setString(10, Helper.convertDateToLocalDate(application.getEndDate()).toString());
             } else {
-                preparedStatement.setNull(9, Types.VARCHAR);
+                
                 preparedStatement.setNull(10, Types.VARCHAR);
             }
 
@@ -175,21 +166,15 @@ public class ApplicationDAO extends DBContext {
             preparedStatement.executeUpdate();
         } catch (Exception e) {
 
-
-            preparedStatement.setNull(11, Types.VARCHAR);
-            preparedStatement.executeUpdate();
-        }catch (Exception e){
-
             e.printStackTrace();
+        
             return "Gửi đơn thất bại! Vui lòng thử lại sau";
         }
         return "success";
     }
 
 
-    private Application getLatest() {
-        String sql = "SELECT TOP 1 * FROM [Applications] ORDER BY ID DESC";
-        try {
+    
 
     private Application getLatest(){
         String sql = "SELECT TOP 1 * FROM [Applications] ORDER BY ID DESC";
@@ -203,15 +188,14 @@ public class ApplicationDAO extends DBContext {
 
         } catch (Exception e) {
 
-        }catch (Exception e) {
-
+      
             e.printStackTrace();
         }
         return null;
     }
 
 
-    private String generateId(String latestId) {
+   
 
     private String generateId(String latestId){
 
@@ -227,11 +211,7 @@ public class ApplicationDAO extends DBContext {
     }
 
 
-    public List<Application> getSentApplications(String senderUserId) {
-
-        String result = decimalFormat.format(number);
-        return "APP" + result;
-    }
+  
 
 
     public String processApplication(Application application) {
@@ -267,7 +247,7 @@ public class ApplicationDAO extends DBContext {
 
         } catch (Exception e) {
 
-        }catch (Exception e){
+      
 
             e.printStackTrace();
         }
@@ -317,7 +297,7 @@ public class ApplicationDAO extends DBContext {
 
         } catch (Exception e) {
 
-        }catch (Exception e){
+     
 
             e.printStackTrace();
         }

@@ -324,21 +324,7 @@ public class StudentDAO extends DBContext {
         return list;
     }
      
-     public Student getStudentsById(String id) {
-        String sql = "select * from student where id='" + id + "'";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Student student = new Student();
-                student = createStudent(resultSet);
-                return student;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
+     
      
          public List<Student> getListStudentsByClass(String studentId, String classId) {
         List<Student> listStudents = new ArrayList<>();

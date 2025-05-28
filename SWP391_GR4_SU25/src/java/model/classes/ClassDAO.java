@@ -73,7 +73,7 @@ public class ClassDAO extends DBContext {
     }
 
 
-    public List<Class> getBySchoolYear(String schoolYearId) {
+   public List<Class> getBySchoolYear(String schoolYearId) {
         List<Class> classes = new ArrayList<>();
         String sql = "select * from Class where school_year_id = ? order by id desc";
         try {
@@ -83,9 +83,14 @@ public class ClassDAO extends DBContext {
             while (resultSet.next()) {
                 Class c = createClass(resultSet);
                 classes.add(c);
-
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
+    }
     
-    public Class getClassNameByTeacher(String teacherId) {
+   public Class getClassNameByTeacher(String teacherId) {
         String sql = "SELECT *\n"
                 + "                FROM Class\n"
                 + "                WHERE teacher_id = ?";
@@ -96,13 +101,11 @@ public class ClassDAO extends DBContext {
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 return createClass(rs);
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-      return classes;
+        return null;
     }
     
 public List<Class> getAll() {
@@ -151,8 +154,11 @@ public List<Class> getAll() {
             while (resultSet.next()) {
                 Class c = createClass(resultSet);
                 classes.add(c);
-
-        return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
     }
     
     public String getClassNameByTeacherAndTimetable(String teacherId, String date) {
@@ -174,8 +180,6 @@ public List<Class> getAll() {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return classes;
 
         return null;
     }

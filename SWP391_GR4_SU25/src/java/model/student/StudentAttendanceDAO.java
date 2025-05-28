@@ -7,20 +7,15 @@ import utils.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class StudentAttendanceDAO extends DBContext {
 
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-public class StudentAttendanceDAO extends DBContext  {
 
     private StudentAttendance createStudentAttendance(ResultSet resultSet) throws SQLException {
         StudentAttendance studentAttendance = new StudentAttendance();
@@ -40,9 +35,6 @@ public class StudentAttendanceDAO extends DBContext  {
 
 
 
-    public StudentAttendance getAttendanceByStudentAndDay(String studentId, String dayId) {
-        String sql = "select * from StudentsAttendance where student_id = ? and day_id = ?";
-        try {
 
     
     public String addAttendance(StudentAttendance studentAttendance) {
