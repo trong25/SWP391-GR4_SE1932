@@ -45,12 +45,17 @@
         <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>controllerr.ForgotPasswordServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ValidatePassword</servlet-name>
         <servlet-class>controllerr.ValidatePassword</servlet-class>
+
+        <servlet-name>DashboardStudentServlet</servlet-name>
+        <servlet-class>Controller.student.DashboardStudentServlet</servlet-class>
+
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -65,11 +70,16 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <url-pattern>/forgotPassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ValidatePassword</servlet-name>
         <url-pattern>/ValidatePassword</url-pattern>
+
+        <servlet-name>DashboardStudentServlet</servlet-name>
+        <url-pattern>/student/dashboard</url-pattern>
+
     </servlet-mapping>
 </web-app>
