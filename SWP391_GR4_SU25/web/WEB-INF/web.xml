@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>utils.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/login</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/teacher/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/director/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/academicstaff/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/student/*</url-pattern>
+    </filter-mapping>
+        <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/accountant/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <servlet-class>controller.headteacher.DashboardAcademicStaffServlet</servlet-class>
@@ -25,12 +57,21 @@
         <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>ReviewClassServlet</servlet-name>
         <servlet-class>Controller.director.ReviewClassServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewTimeTableClassServlet</servlet-name>
         <servlet-class>Controller.director.ViewTimeTableClassServlet</servlet-class>
+
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <servlet-class>controllerr.ForgotPasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ValidatePassword</servlet-name>
+        <servlet-class>controllerr.ValidatePassword</servlet-class>
+
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -45,6 +86,7 @@
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>HeadteacherServlet</servlet-name>
         <url-pattern>/headteacher/dashboard</url-pattern>
     </servlet-mapping>
@@ -63,5 +105,13 @@
     <servlet-mapping>
         <servlet-name>ViewTimeTableClassServlet</servlet-name>
         <url-pattern>/director/viewtimetableclass</url-pattern>
+
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <url-pattern>/forgotPassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ValidatePassword</servlet-name>
+        <url-pattern>/ValidatePassword</url-pattern>
+
     </servlet-mapping>
 </web-app>
