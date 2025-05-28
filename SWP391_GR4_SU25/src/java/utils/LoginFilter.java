@@ -4,6 +4,7 @@
  */
 package utils;
 
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
@@ -17,34 +18,15 @@ import model.user.User;
 
 /**
  *
- * @author ASUS VIVOBOOK
+ * @author HuyDV
  */
-public class LoginFilter {
-     private static final boolean debug = true;
+public class LoginFilter implements Filter{
 
-  
-    private FilterConfig filterConfig = null;
 
     public LoginFilter() {
     }
 
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("LoginFilter:DoBeforeProcessing");
-        }
 
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("LoginFilter:DoAfterProcessing");
-        }
-
-    }
-
- 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
@@ -75,35 +57,19 @@ public class LoginFilter {
             case 0: // Admin
                 return path.startsWith("/admin/");
             case 1: // Head Teacher
-                return path.startsWith("/headteacher/");
+                return path.startsWith("/director/");
             case 2: // Academic Staff
                 return path.startsWith("/academicstaff/");
             case 3: // Teacher
                 return path.startsWith("/teacher/");
-            case 4: // Parent
-                return path.startsWith("/parent/");
+            case 4: // student
+                return path.startsWith("/student/");
+            case 5: 
+                return path.startsWith("/accountant/");
             default:
                 return false;
         }
     }
 
-    /**
-     * Return the filter configuration object for this filter.
-     */
-    public FilterConfig getFilterConfig() {
-        return (this.filterConfig);
-    }
 
-    /**
-     * Set the filter configuration object for this filter.
-     *
-     * @param filterConfig The filter configuration object
-     */
-    public void setFilterConfig(FilterConfig filterConfig) {
-        this.filterConfig = filterConfig;
-    }
-    
-        public void log(String msg) {
-        filterConfig.getServletContext().log(msg);
-    }
 }

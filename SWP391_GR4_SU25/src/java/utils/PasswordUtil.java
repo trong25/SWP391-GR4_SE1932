@@ -11,7 +11,7 @@ import javax.crypto.spec.PBEKeySpec;
 
 /**
  *
- * @author ASUS VIVOBOOK
+ * @author HuyDV
  */
 public class PasswordUtil {
      private static final String ALGORITHM = "PBKDF2WithHmacSHA256";

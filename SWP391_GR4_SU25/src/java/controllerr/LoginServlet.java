@@ -20,7 +20,7 @@ import model.user.UserDAO;
 
 /**
  *
- * @author ASUS VIVOBOOK
+ * @author HuyDV
  */
 public class LoginServlet extends HttpServlet {
    
@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("admin/dashboard");
                     break;
                 case 1:
-                    response.sendRedirect("headteacher/dashboard");
+                    response.sendRedirect("director/dashboard");
                     break;
                 case 2:
                     response.sendRedirect("academicstaff/dashboard");
@@ -90,7 +90,10 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("teacher/dashboard");
                     break;
                 case 4:
-                    response.sendRedirect("parent/dashboard");
+                    response.sendRedirect("student/dashboard");
+                    break;
+                case 5:
+                    response.sendRedirect("accountant/dashboard");
                     break;
                 default:
                     request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu");
