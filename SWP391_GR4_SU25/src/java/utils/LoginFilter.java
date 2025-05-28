@@ -68,8 +68,7 @@ public class LoginFilter implements Filter{
             case 5: 
                 return path.startsWith("/accountant/");
 
-            case 4: // Parent
-                return path.startsWith("/student/");
+        
 
             default:
                 return false;
