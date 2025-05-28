@@ -36,7 +36,7 @@
 </script>
 <html>
     <head>
-        <title>Bono Kindergarten</title>
+        <title>Trung tâm dạy thêm TaBi</title>
     </head>
     <body>
         <div id="wrapper">
