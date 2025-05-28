@@ -56,6 +56,10 @@
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
+        <servlet>
+        <servlet-name>DashboardTeacherServlet</servlet-name>
+        <servlet-class>Controller.teacher.DashboardTeacherServlet</servlet-class>
+        </servlet>
     <servlet>
 
 
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>StudentServlet</servlet-name>
         <url-pattern>/academicstaff/student</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardTeacherServlet</servlet-name>
+        <url-pattern>/teacher/dashboard</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
@@ -128,4 +136,5 @@
 
 
     </servlet-mapping>
+
 </web-app>

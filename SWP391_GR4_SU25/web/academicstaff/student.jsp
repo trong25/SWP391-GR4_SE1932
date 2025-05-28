@@ -29,7 +29,7 @@
                         toastr.success(toastMessage);
                     } else if (toastType === 'error') {
                         toastr.error(toastMessage);
-                        $('.create-pupil').modal('show'); // Show the modal if the toast type is fail
+                        $('.create-student').modal('show'); // Show the modal if the toast type is fail
                     }
                 }
             });
@@ -87,7 +87,7 @@
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="m-0 font-weight-bold text-primary">Danh Sách Học Sinh</h6>
                                 <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                                        data-target=".create-pupil">
+                                        data-target=".create-student">
                                     <i class="fas fa-upload"></i> Thêm học sinh
                                 </button>
 
@@ -129,7 +129,7 @@
                                                         </c:if>
 
                                                     <td class="text-center">
-                                                        <form method="post" action="pupilprofile">
+                                                        <form method="post" action="studentprofile">
                                                             <input hidden="" value="${student.id}" name="id"/>
                                                             <input hidden="" value="view" name="action"/>
                                                             <button type="submit" class="btn btn-primary"> Thông tin chi tiết</button>
@@ -143,8 +143,8 @@
                             </div>
                         </div>
 
-                        <!-- New School Pupil Modal -->
-                        <div class="modal fade create-pupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                        <!-- New School student Modal -->
+                        <div class="modal fade create-student" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                              aria-hidden="true" >
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -382,7 +382,7 @@
                     // Check if the date field is empty
                     if (!selectedDateValue) {
                         toastr.error("Vui lòng chọn ngày sinh");
-                        $('.create-pupil').modal('show'); // Show the modal if the toast type is fail
+                        $('.create-student').modal('show'); // Show the modal if the toast type is fail
                         event.preventDefault(); // Prevent the form from being submitted
                         return;
                     }
@@ -390,7 +390,7 @@
                     const selectedDate = new Date(selectedDateValue);
                     if (selectedDate > minDate) {
                         toastr.error("Tuổi của học sinh phải lớn hơn hoặc bằng 11 tuổi !!!");
-                        $('.create-pupil').modal('show'); // Show the modal if the toast type is fail
+                        $('.create-student').modal('show'); // Show the modal if the toast type is fail
                         event.preventDefault(); // Prevent the form from being submitted
                     }
                 });

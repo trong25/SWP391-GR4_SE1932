@@ -9,8 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import utils.DBContext;
 import java.sql.PreparedStatement;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Objects;
 import utils.Email;
+
 import utils.PasswordUtil;
 
 
@@ -99,6 +104,25 @@ public User getUserByUsernamePassword(String userName, String password){
         return null;
     }
           
+
+              public List<User> getUserByRoleIdandTeacherId(int role, String teacherId) {
+        List<User> listUser = new ArrayList<>();
+        String sql = "select * from [User] u inner join classDetails cd on u.user_name"
+                + "= cd.student_id inner join Class c on c.id=cd.class_id where u.role_id=? and c.teacher_id=?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, role);
+            ps.setString(2, teacherId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                listUser.add(createUser(rs));
+            }
+            return listUser;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
           
      public User getByUsernameOrEmail (String key){
               
@@ -222,6 +246,7 @@ public User getUserByUsernamePassword(String userName, String password){
      
      
  
+
 
 
 }
