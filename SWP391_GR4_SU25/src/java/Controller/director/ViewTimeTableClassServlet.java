@@ -100,15 +100,19 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+        //Lấy thông tin người dùng chọn:
         String classId = request.getParameter("class");
         String week = request.getParameter("week");
         String schoolyear = request.getParameter("schoolyear");
+        
+        
         WeekDAO weekDAO = new WeekDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         Class aclass = new ClassDAO().getClassById(classId);
 
+        //Lấy danh sách lớp học của năm học đó
         List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
-        if (listClass.isEmpty()) {
+        if (listClass.isEmpty()) {//Kiểm tra nếu không có lớp nào
             HttpSession session = request.getSession();
             session.setAttribute("toastType", "error");
             session.setAttribute("toastMessage", "Năm này không có lớp học");
@@ -123,10 +127,10 @@ public class ViewTimeTableClassServlet extends HttpServlet {
         List<TimeSlot> timeslotList = timeSlotDAO.getTimeslotsForTimetable();
         DayDAO dayDAO = new DayDAO();
         List<Day> dayList = dayDAO.getDayByWeek(week);
-        if (dayList.size() > 0) {
+        if (dayList.size() > 0) {// Nếu có ngày học → set thêm timeslotList
             request.setAttribute("timeslotList", timeslotList);
         }
-        if (classId != null && week != null && schoolyear != null) {
+        if (classId != null && week != null && schoolyear != null) {// Lấy thời khóa biểu theo lớp và tuần
             timetable = new TimetableDAO().getTimetableByClassAndWeek(classId, week, "đã được duyệt");
         }
         request.setAttribute("listClass", listClass);
