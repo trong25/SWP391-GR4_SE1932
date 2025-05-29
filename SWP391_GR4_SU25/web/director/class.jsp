@@ -10,7 +10,7 @@
 <html>
 <head>
 
-    <title>Quản Lý Lớp Học</title>
+    <title>Danh Sách Lớp Học</title>
     <script>
         function submitForm() {
             document.getElementById("myForm").submit();
@@ -50,7 +50,7 @@
                         </form>
                     </div>
                 </div>
-                <div>${requestScope.error}</div>
+             
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Danh Sách Lớp Học</h6>
