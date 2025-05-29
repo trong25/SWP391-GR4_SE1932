@@ -11,6 +11,7 @@ import utils.DBContext;
 import java.sql.PreparedStatement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import java.util.Objects;
@@ -181,44 +182,26 @@ public User getUserByUsernamePassword(String userName, String password){
                    
                    
                    
-            public boolean checkPassword(String password, String username){  
-                try{
-                    byte[] salt = getUserSalt(username);
-                    byte[] expectedHashPassword = PasswordUtil.hashPassword(password.toCharArray(), salt);
-                    String sql = "select [hashed_password] from [User] where user_name = ?";
-                    PreparedStatement statement = connection.prepareStatement(sql);
-                    statement.setString(1, username);
-                    ResultSet rs = statement.executeQuery();
-                    if (rs.next()) {
-                    byte[] hashPassword = rs.getBytes("hashed_password");
-                    String expectedHex = bytesToHex(expectedHashPassword);
-                    String actualHex = bytesToHex(hashPassword);
-                    // Compare the hexadecimal representations
-                    return expectedHex.equals(actualHex);
-            }
-                    
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-                return false;
-             
-            }
-            
-            
-                         
-     private String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
-        for (byte b : bytes) {
-            String hex = Integer.toHexString(0xff & b);
-            if (hex.length() == 1) {
-                hexString.append('0');
-            }
-            hexString.append(hex);
+     public boolean checkPassword(String password, String username) {
+    try {
+        byte[] salt = getUserSalt(username); 
+        byte[] expectedHashPassword = PasswordUtil.hashPassword(password.toCharArray(), salt); 
+
+        String sql = "SELECT [hashed_password] FROM [User] WHERE user_name = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, username);
+        ResultSet rs = statement.executeQuery();
+
+        if (rs.next()) {
+            byte[] storedHashedPassword = rs.getBytes("hashed_password"); 
+            return Arrays.equals(expectedHashPassword, storedHashedPassword);
         }
-        return hexString.toString();
-    }    
-     
-     
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
      
           public boolean updateNewPassword(String newPassword, String userId) {
         String sql = "UPDATE [User]\n"
