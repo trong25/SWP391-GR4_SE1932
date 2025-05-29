@@ -49,7 +49,7 @@ public class NotificationDAO extends DBContext  {
     }
 
 
-    public Notification getLatest() {
+  public Notification getLatest() {
         String sql = "select TOP 1 * from [Notifications] order by id desc";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -64,6 +64,7 @@ public class NotificationDAO extends DBContext  {
     }
 
 
+
     public String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -75,6 +76,8 @@ public class NotificationDAO extends DBContext  {
         String result = decimalFormat.format(number);
         return "N" + result;
     }
+
+
 
 
     public boolean createNoti(Notification notification) {
@@ -187,7 +190,7 @@ public class NotificationDAO extends DBContext  {
     }
 
     
-    public boolean createNotiDetails(NotificationDetails notificationdetails) {
+   public boolean createNotiDetails(NotificationDetails notificationdetails) {
         String sqlNotification = "INSERT INTO NotificationDetails VALUES (?, ?)";
         try (PreparedStatement statementNotification = connection.prepareStatement(sqlNotification);) {
             statementNotification.setString(1, notificationdetails.getNotificationId());
@@ -201,5 +204,6 @@ public class NotificationDAO extends DBContext  {
         }
         return false;
     }
+
 
 }

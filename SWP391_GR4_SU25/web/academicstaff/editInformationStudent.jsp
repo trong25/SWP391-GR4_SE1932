@@ -121,16 +121,16 @@
                 var address = document.getElementsByName("address")[0].value.trim();
                 var lastName = document.getElementsByName("lastName")[0].value.trim();
                 var firstName = document.getElementsByName("firstName")[0].value.trim();
-var schoolName = document.getElementsByName("schoolName")[0].value.trim();
+                var schoolName = document.getElementsByName("schoolName")[0].value.trim();
                 // Validate address
                 if (address === "") {
                     toastr.error("Địa chỉ không được bỏ trống");
                     return false;
                 }
-if(schoolName ===""){
-     toastr.error(" không được bỏ trống");
+                if (schoolName === "") {
+                    toastr.error(" không được bỏ trống");
                     return false;
-}
+                }
                 // Validate first guardian's name
                 if (firstGuardianName === "") {
                     toastr.error("Họ tên bố không được để trống");
@@ -255,7 +255,7 @@ if(schoolName ===""){
                                                                 <h5>Số Điện Thoại Mẹ<a style="color: red">(*)</a>:</h5> 
                                                                 <input class="form-control form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" maxlength="10" minlength="10" pattern="[0-9]+" title="Chỉ nhập số"/><br />
                                                             </div></td>
-                                                           <td><div class="form-group col-md-8">
+                                                        <td><div class="form-group col-md-8">
                                                                 <h5>Tên Trường<a style="color: red">(*)</a>:</h5> 
                                                                 <input class="form-control form-control-sm" type="text" name="school_name" value="${student.schoolName}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
                                                             </div></td>
@@ -273,7 +273,7 @@ if(schoolName ===""){
                                                                 <input class="form-control form-control-sm" type="text" name="firstName" value="${student.firstName}" required="">
                                                             </div>
                                                         </td>
-                                                        
+
                                                     </tr>
                                                     <tr>
                                                         <td><div class="form-group col-md-8">
@@ -290,13 +290,13 @@ if(schoolName ===""){
                                                                 <h5>Địa Chỉ<a style="color: red">(*)</a>:</h5> 
                                                                 <textarea class="form-control form-control-sm" type="text" name="address" value="${student.address}" style="width: 200%" title="Tối đa 50 kí tự" required="" maxlength="50">${student.address}</textarea><br />
                                                             </div></td>
-                                                        
+
 
                                                         <td><div class="form-group col-md-6">
                                                                 <h5>Cam kết của phụ huynh học sinh<a style="color: red">(*)</a>:</h5> 
                                                                 <textarea class="form-control form-control-sm" name="note" style="width: 200%" maxlength="500">${student.parentSpecialNote}</textarea>
                                                             </div></td>
-                                                            
+
 
                                                     </tr>
                                                 <p>Chú ý : Những Tiêu Đề Có Dấu (*) Là Những Tiêu Đề Được Chỉnh Sửa. Nhấn Vào Ảnh Để Thay Đổi.</p>

@@ -116,7 +116,7 @@ public class CreateNotificationServlet extends HttpServlet {
         }
         HttpSession session = request.getSession();
         try {
-            List<User> user = new UserDAO().getUserByRoleIdandTeacherId(5, create_by);
+            List<User> user = new UserDAO().getUserByRoleIdandTeacherId(4, create_by);
             if (user.size() == 0) {
                 session.setAttribute("toastType", "error");
                 session.setAttribute("toastMessage", "Bạn Chưa Được Phân Công Lớp");
