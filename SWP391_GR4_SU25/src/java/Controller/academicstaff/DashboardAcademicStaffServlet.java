@@ -66,8 +66,7 @@ public class DashboardAcademicStaffServlet extends HttpServlet {
         request.setAttribute("listEvents", eventDAO.getFutureEvent(2));
         request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
 
-        // Forward về trang dashboard
-      //  Forward về trang dashboard (có đường dẫn đúng)
+       
 request.getRequestDispatcher("/academicstaff/dashboard.jsp").forward(request, response);
 
 

@@ -114,7 +114,7 @@ public class StudentServlet extends HttpServlet {
 
                 if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
                         || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
-                        || Helper.formatName(firstGuardianName).isBlank()) {
+                        || Helper.formatName(firstGuardianName).isBlank() || Helper.formatName(schoolName).isBlank()) {
                     if (address.isBlank()) {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường địa chỉ !";
                     } else if (Helper.formatName(firstName).isBlank()) {
@@ -133,6 +133,8 @@ public class StudentServlet extends HttpServlet {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường giới tính !";
                     } else if (email.isBlank()) {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường email !";
+                    }else if(schoolName.isBlank()){
+                        toastMessage ="Tạo thật bại ! Vui lòng không bỏ trống tên trường";
                     }
                     toastType = "error";
                     session.setAttribute("toastMessage", toastMessage);
