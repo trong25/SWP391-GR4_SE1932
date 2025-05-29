@@ -101,12 +101,13 @@ public class ViewTimeTableClassServlet extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         String classId = request.getParameter("class");
-        WeekDAO weekDAO = new WeekDAO();
-        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
-        model.classes.Class aclass = new ClassDAO().getClassById(classId);
         String week = request.getParameter("week");
         String schoolyear = request.getParameter("schoolyear");
-        List<model.classes.Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
+        WeekDAO weekDAO = new WeekDAO();
+        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+        Class aclass = new ClassDAO().getClassById(classId);
+
+        List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
         if (listClass.isEmpty()) {
             HttpSession session = request.getSession();
             session.setAttribute("toastType", "error");
@@ -115,8 +116,7 @@ public class ViewTimeTableClassServlet extends HttpServlet {
             return;
         }
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();
-            List<Week> weekList = weekDAO.getWeeks(schoolyear);
-
+        List<Week> weekList = weekDAO.getWeeks(schoolyear);
 
         List<Timetable> timetable = new ArrayList<>();
         TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
