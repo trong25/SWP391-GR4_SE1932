@@ -8,6 +8,36 @@
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 </head>
+ <script>
+            $(document).ready(function() {
+                $('#dataTable').DataTable({
+                    language: {
+                        sProcessing: "Đang xử lý...",
+                        sLengthMenu: "Xem _MENU_ mục",
+                        sZeroRecords: "Không tìm thấy dòng nào phù hợp",
+                        sInfo: "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                        sInfoEmpty: "Đang xem 0 đến 0 trong tổng số 0 mục",
+                        sInfoFiltered: "(được lọc từ _MAX_ mục)",
+                        sInfoPostFix: "",
+                        sSearch: "Tìm:",
+                        sUrl: "",
+                        sEmptyTable: "Không có dữ liệu trong bảng",
+                        sLoadingRecords: "Đang tải...",
+                        sInfoThousands: ",",
+                        oPaginate: {
+                            sFirst: "Đầu",
+                            sLast: "Cuối",
+                            sNext: "Tiếp",
+                            sPrevious: "Trước"
+                        },
+                        oAria: {
+                            sSortAscending: ": Sắp xếp thứ tự tăng dần",
+                            sSortDescending: ": Sắp xếp thứ tự giảm dần"
+                        }
+                    }
+                });
+            });
+        </script>
 <body id="page-top">
 
 <!-- Sidebar -->
@@ -18,7 +48,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">KitKat Edu</div>
+        <div class="sidebar-brand-text mx-3">TABI Edu</div>
     </a>
 
     <!-- Divider -->
