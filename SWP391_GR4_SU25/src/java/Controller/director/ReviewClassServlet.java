@@ -18,7 +18,8 @@ import model.schoolYear.SchoolYearDAO;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
+
  */
 public class ReviewClassServlet extends HttpServlet {
 

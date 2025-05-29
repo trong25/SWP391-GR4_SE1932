@@ -22,7 +22,8 @@ import model.classes.ClassDAO;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
+
  */
 public class DirectorDashBoardServlet extends HttpServlet {
    

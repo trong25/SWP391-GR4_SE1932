@@ -28,7 +28,7 @@ import model.week.Week;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
  */
 public class ViewTimeTableClassServlet extends HttpServlet {
 
