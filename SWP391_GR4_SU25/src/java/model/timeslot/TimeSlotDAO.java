@@ -58,7 +58,7 @@ public class TimeSlotDAO extends DBContext {
     }
 
     public List<TimeSlot> getTimeslotsForTimetable() {
-        List<String> allowedIds = Arrays.asList("TS001", "TS002", "TS003", "TS004", "TS008", "TS009", "TS010");
+        List<String> allowedIds = Arrays.asList("TS001", "TS002", "TS003", "TS004", "TS005", "TS006");
         String placeholders = String.join(",", Collections.nCopies(allowedIds.size(), "?"));
         String sql = "SELECT * FROM Timeslots WHERE id IN (" + placeholders + ")";
 
