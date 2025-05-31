@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
@@ -65,10 +66,24 @@ public class DirectorDashBoardServlet extends HttpServlet {
             throws ServletException, IOException {
         //  processRequest(request, response);   StudentDAO studentDAO =  new StudentDAO();
         //Thanhnthe181132
+
         StudentDAO studentDAO = new StudentDAO();
         ClassDAO classDAO = new ClassDAO();
+        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+        String schoolYearId = null;
+        List<SchoolYear> schoolYears = schoolYearDAO.getAll();
+        if (!schoolYears.isEmpty()) {
+            schoolYearId = schoolYears.get(0).getId(); // lấy năm học đầu tiên trong danh sách
+        }
+
         List<Class> listClass = classDAO.getAll();
-        
+        List<Class> pendingClasses = new ArrayList<>();
+
+        if (schoolYearId != null) {
+            pendingClasses = classDAO.getByStatus("đang chờ xử lý", schoolYearId);
+        }
+
+        request.setAttribute("pendingClasses", pendingClasses);
         request.setAttribute("listClass", listClass);
         request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
