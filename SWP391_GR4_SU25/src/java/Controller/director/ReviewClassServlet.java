@@ -68,7 +68,7 @@ public class ReviewClassServlet extends HttpServlet {
         String schoolYearId = request.getParameter("schoolYearId");
         List<SchoolYear> schoolYears = schoolYearDAO.getFutureSchoolYears();
         request.setAttribute("schoolYears", schoolYears);
-        try {
+        try {//nếu null thì lấy schoolYearId mới nhất 
             if (schoolYearId == null) {
                 schoolYearId = schoolYearDAO.getLatest().getId();
             }
