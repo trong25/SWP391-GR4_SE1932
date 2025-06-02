@@ -64,11 +64,13 @@ public class ReviewClassServlet extends HttpServlet {
         //Thanhnthe181132 
         ClassDAO classDAO = new ClassDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+        
         String schoolYearId = request.getParameter("schoolYearId");
+        
         List<SchoolYear> schoolYears = schoolYearDAO.getFutureSchoolYears();
         request.setAttribute("schoolYears", schoolYears);
         try {
-            if (schoolYearId == null) {
+            if (schoolYearId == null) {// Nếu chưa có schoolYearId được chọn, thì lấy năm học mới nhất làm mặc định.
                 schoolYearId = schoolYearDAO.getLatest().getId();
             }
             HttpSession session = request.getSession();
@@ -76,14 +78,14 @@ public class ReviewClassServlet extends HttpServlet {
             session.removeAttribute("result");
             if (result != null) {
                 if (result.equals("success")) {
-                    request.setAttribute("toastType", result);
+                    request.setAttribute("toastType", result);// toastType = "success"
                     request.setAttribute("toastMessage", "Duyệt thành công");
                 } else {
                     request.setAttribute("toastType", "error");
-                    request.setAttribute("toastMessage", result);
+                    request.setAttribute("toastMessage", result);// Hiển thị lỗi cụ thể
                 }
             }
-            request.setAttribute("classes", classDAO.getByStatus("đang chờ xử lý", schoolYearId));
+            request.setAttribute("classes", classDAO.getByStatus("đang chờ xử lý", schoolYearId));//Gửi ID của năm học được chọn sang JSP để có thể giữ nguyên lựa chọn dropdown.
             request.setAttribute("selectedSchoolYearId", schoolYearId);
             request.getRequestDispatcher("reviewClass.jsp").forward(request, response);
 
