@@ -75,14 +75,14 @@
             <!-- Nav Item -->
             <!-- Nav Item - Timekeeping -->
             <li class="nav-item">
-                <a class="nav-link" href="mytimekeeping">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-clock"></i>
                     <span>Chấm Công Của Tôi</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="studentsattendance">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-calendar-check"></i>
                     <span>Xem Điểm Danh Học Sinh</span>
                 </a>
@@ -98,7 +98,7 @@
 
             <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="class">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-graduation-cap"></i>
                     <span>Quản lý lớp học</span></a>
             </li>
@@ -122,18 +122,18 @@
 
             <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="schoolyear">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-school"></i>
                     <span>Quản lý năm học</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="subject">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Quản lý môn học</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="listevent">
+                <a class="nav-link" href="">
                     <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
                     <span>Danh Sách Sự Kiện</span></a>
             </li>
@@ -145,8 +145,8 @@
                 </a>
                 <div id="collapseNoti" class="collapse" aria-labelledby="headingNoti" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="createnotifi">Tạo Thông Báo</a>
-                        <a class="collapse-item" href="listsentnotifi">Thông Báo Đã Gửi</a>
+                        <a class="collapse-item" href="">Tạo Thông Báo</a>
+                        <a class="collapse-item" href="">Thông Báo Đã Gửi</a>
                     </div>
                 </div>
             </li>

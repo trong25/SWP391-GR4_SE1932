@@ -15,8 +15,9 @@ import utils.DBContext;
  *
  * @author MSI
  */
-public class PersonnelDAO extends DBContext{
-     private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
+public class PersonnelDAO extends DBContext {
+
+    private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
         Personnel person = new Personnel();
         person.setId(resultSet.getString("id"));
         person.setFirstName(resultSet.getString("first_name"));
@@ -30,11 +31,12 @@ public class PersonnelDAO extends DBContext{
         person.setStatus(resultSet.getString("status"));
         person.setAvatar(resultSet.getString("avatar"));
         person.setUserId(resultSet.getString("user_id"));
-        person.setSchoolName(resultSet.getString("school_name"));
+        person.setSchool_id(resultSet.getString("school_id"));
+        person.setSchool_class_id(resultSet.getString("school_class_id"));
         return person;
     }
-     
-     public List<Personnel> getAllPersonnels() {
+
+    public List<Personnel> getAllPersonnels() {
         String sql = "select * from [Personnels] order by id desc";
         List<Personnel> persons = new ArrayList<>();
         try {
@@ -55,7 +57,8 @@ public class PersonnelDAO extends DBContext{
                 person.setStatus(resultSet.getString("status"));
                 person.setAvatar(resultSet.getString("avatar"));
                 person.setUserId(resultSet.getString("user_id"));
-                person.setSchoolName(resultSet.getString("school_name"));
+                person.setSchool_id(resultSet.getString("school_id"));
+                person.setSchool_class_id(resultSet.getString("school_class_id"));
                 persons.add(person);
             }
         } catch (Exception e) {
@@ -63,8 +66,8 @@ public class PersonnelDAO extends DBContext{
         }
         return persons;
     }
-     
-     public Personnel getPersonnelByUserId(String userId) {
+
+    public Personnel getPersonnelByUserId(String userId) {
         String sql = "select * from [User] u join Personnels p on u.id=p.user_id \n"
                 + "where u.id = ?";
         Personnel personnel = new Personnel();
@@ -85,14 +88,16 @@ public class PersonnelDAO extends DBContext{
                 personnel.setStatus(resultSet.getString("status"));
                 personnel.setAvatar(resultSet.getString("avatar"));
                 personnel.setUserId(resultSet.getString("user_id"));
-                personnel.setSchoolName(resultSet.getString("school_name"));
+                personnel.setSchool_id(resultSet.getString("school_id"));
+                personnel.setSchool_class_id(resultSet.getString("school_class_id"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return personnel;
     }
-     public Personnel getPersonnel(String id) {
+
+    public Personnel getPersonnel(String id) {
         String sql = "select * from [Personnels] where id like ? ";
         Personnel person = new Personnel();
         try {
@@ -114,7 +119,8 @@ public class PersonnelDAO extends DBContext{
                 person.setStatus(resultSet.getString("status"));
                 person.setAvatar(resultSet.getString("avatar"));
                 person.setUserId(resultSet.getString("user_id"));
-                  person.setSchoolName(resultSet.getString("school_name"));
+                person.setSchool_id(resultSet.getString("school_id"));
+                person.setSchool_class_id(resultSet.getString("school_class_id"));
 
             }
         } catch (Exception e) {

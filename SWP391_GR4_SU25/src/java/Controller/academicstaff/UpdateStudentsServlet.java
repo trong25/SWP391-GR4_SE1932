@@ -59,7 +59,10 @@ public class UpdateStudentsServlet extends HttpServlet {
         student.setAddress(request.getParameter("address").trim());
          
         student.setParentSpecialNote(request.getParameter("note").trim());
-        student.setSchoolName(request.getParameter("school_name").trim());
+        student.setSchool_id(request.getParameter("school_id").trim());
+        student.setSchool_class_id(request.getParameter("school_class_id").trim());
+        student.setSchoolName(request.getParameter("schoolName").trim());
+         student.setClassName(request.getParameter("classname").trim());
         student.setEmail(request.getParameter("email").trim());
        
          String birthdayStr = request.getParameter("birthday");

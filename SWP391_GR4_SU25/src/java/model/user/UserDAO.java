@@ -160,7 +160,7 @@ public User getUserByUsernamePassword(String userName, String password){
                    public boolean resetPassword(String key){
              try{
                  String newPassword = generatePassword();
-                 Email.sendEmail(Objects.requireNonNull(getByUsernameOrEmail(key)).getEmail(), "Yêu cầu quên mật khẩu", "Mật khẩu mới: " + newPassword);
+                 Email.sendEmail(Objects.requireNonNull(getByUsernameOrEmail(key)).getEmail(), "Xử lí quên mật khẩu cho Tabi learning", "Mật khẩu mới: " + newPassword);
                  byte[] salt = PasswordUtil.generateSalt();
                  byte[] hashedNewPassword = PasswordUtil.hashPassword(newPassword.toCharArray(), salt);
                  String sql = "UPDATE [dbo].[User] SET [salt] =?, [hashed_password] = ? WHERE [email] = ? OR user_name = ?";

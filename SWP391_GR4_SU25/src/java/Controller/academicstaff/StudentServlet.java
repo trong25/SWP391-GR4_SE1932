@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller.academicstaff;
 
 import java.io.IOException;
@@ -28,12 +27,12 @@ import utils.Helper;
  * @author TrongNV
  */
 public class StudentServlet extends HttpServlet {
-   
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-      
-     StudentDAO studentDAO = new StudentDAO();
+            throws ServletException, IOException {
+
+        StudentDAO studentDAO = new StudentDAO();
 
         String status = request.getParameter("status");
         List<Student> listStudents = studentDAO.getAllStudents();
@@ -69,11 +68,10 @@ public class StudentServlet extends HttpServlet {
         request.getRequestDispatcher("student.jsp").forward(request, response);
     }
 
-  
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-      String action = request.getParameter("action");
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
         if (action.equals("create")) {
             HttpSession session = request.getSession();
             PersonnelDAO personnelDAO = new PersonnelDAO();
@@ -84,7 +82,10 @@ public class StudentServlet extends HttpServlet {
             if (session.getAttribute("user") != null) {
                 String avatar = request.getParameter("avatar").trim();
                 String firstName = request.getParameter("firstName").trim();
+                String school_id = request.getParameter("school_id").trim();
+                String school_class_id = request.getParameter("school_class_id").trim();
                 String schoolName = request.getParameter("schoolName").trim();
+                String className = request.getParameter("className").trim();
                 String lastName = request.getParameter("lastName").trim();
                 String secondGuardianName = request.getParameter("secondGuardianName").trim();
                 String firstGuardianName = request.getParameter("firstGuardianName").trim();
@@ -107,20 +108,25 @@ public class StudentServlet extends HttpServlet {
                 user = (User) session.getAttribute("user");
                 Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
 
+//                Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
+//                        Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName), secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy,
+//                        note, Helper.formatName(schoolName));
+//                Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
+//                        Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName),  secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy, 
+//                        note, school_id, school_class_id, Helper.formatName(schoolName),Helper.formatName(className));
                 Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
                         Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName), secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy,
-                        note, Helper.formatName(schoolName));
-                
+                        note, school_id, school_class_id, schoolName, className);
 
                 if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
                         || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
-                        || Helper.formatName(firstGuardianName).isBlank() || Helper.formatName(schoolName).isBlank()) {
+                        || Helper.formatName(firstGuardianName).isBlank() || school_id.isBlank() || school_class_id.isBlank()) {
                     if (address.isBlank()) {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường địa chỉ !";
                     } else if (Helper.formatName(firstName).isBlank()) {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường tên !";
-                    } else if (Helper.formatName(schoolName).isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường họ !";
+                    } else if (school_id.isBlank()) {
+                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống id trường!";
                     } else if (Helper.formatName(lastName).isBlank()) {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường họ !";
                     } else if (Helper.formatName(firstGuardianName).isBlank()) {
@@ -133,8 +139,14 @@ public class StudentServlet extends HttpServlet {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường giới tính !";
                     } else if (email.isBlank()) {
                         toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường email !";
+                    } else if (school_id.isBlank()) {
+                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống tên trường";
+                    } else if (school_class_id.isBlank()) {
+                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống id lớp";
                     }else if(schoolName.isBlank()){
-                        toastMessage ="Tạo thật bại ! Vui lòng không bỏ trống tên trường";
+                        toastMessage="Tạo thật bại ! Vui lòng không bỏ trống tên trường";
+                    }else if(className.isBlank()){
+                         toastMessage="Tạo thật bại ! Vui lòng không bỏ trống tên trường";
                     }
                     toastType = "error";
                     session.setAttribute("toastMessage", toastMessage);
@@ -198,9 +210,9 @@ public class StudentServlet extends HttpServlet {
                         request.getRequestDispatcher("student.jsp").forward(request, response);
                     }
                 }
-    }
+            }
 
         }
-    
+
     }
 }

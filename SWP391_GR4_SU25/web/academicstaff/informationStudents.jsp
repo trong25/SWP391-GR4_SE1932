@@ -121,106 +121,107 @@
                             </div>
                         </div>
                         <div class="row gutters">
-                            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                            <!-- Cột Avatar -->
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                                 <div class="card h-100">
-                                    <div class="card-body">
-                                        <div class="account-settings">
-                                            <div class="user-profile">
-                                                <div class="user-avatar">
-                                                    <img class="app-sidebar__user-avatar" id="avatarDisplay" src="../images/${student.avatar}" > 
-                                                </div>
-                                                <h5 class="user-name">${student.lastName} ${student.firstName}</h5>
-                                            </div>
+                                    <div class="card-body text-center">
+                                        <div class="user-avatar mb-3">
+                                            <img class="app-sidebar__user-avatar" id="avatarDisplay" src="../images/${student.avatar}" alt="avatar">
                                         </div>
+                                        <h5 class="user-name">${student.lastName} ${student.firstName}</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+
+                            <!-- Cột Thông Tin 1 -->
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
                                 <div class="card h-100">
                                     <div class="card-body">
-                                        <c:set var="vietnamesePattern" value="aáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵAÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶEÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊOÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢUÚÙỦŨỤƯỨỪỬỮỰYÝỲỶỸ\s]+"/>
                                         <form action="studentprofile" method="post">
                                             <input type="hidden" name="avatar" value="${student.avatar}"/>
                                             <input type="hidden" name="id" value="${student.id}"/>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Mã Người Dùng:</h5><input class="form-control-sm" placeholder="ID Người Dùng" type="text" name="userId" value="${student.userId!=null?student.userId:"Chưa có tài khoản"}" readonly=""/>
-                                                                <input  name="user_id" type="hidden" value="${student.userId!=null?student.userId:"Chưa có tài khoản"}" />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-6">
-                                                                <h5>Mã Học Sinh:</h5> <input class="form-control-sm" placeholder="ID" type="text" name="id" value="${student.id}" readonly=""/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-6">    
-                                                                <h5>Họ Tên Học Sinh:</h5> <input class="form-control-sm" type="text" name="name_pupil" value="${student.lastName} ${student.firstName}"  readonly="" /><br />
-                                                            </div></td>
-                                                            <td><div class="form-group col-md-6">    
-                                                                <h5>Tên Trường Học :</h5> <input class="form-control-sm" type="text" name="name_school" value="${student.schoolName}"  readonly="" /><br />
-                                                            </div></td>
-                                                        <td>
-                                                            <div class="form-group col-md-8">
-                                                                <h5>Ngày Sinh Của Học Sinh:</h5><input class="form-control-sm" type="date" name="birthday" value="${student.birthday}" readonly=""/><br />
-                                                            </div>
-                                                        </td>
-                                                       
-                                                       
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Bố:</h5> <input class="form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{1,20}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
+                                            <input type="hidden" name="first_name" value="${student.firstName}"/>
+                                            <input type="hidden" name="last_name" value="${student.lastName}"/>
 
-                                                                <h5>Số Điện Thoại Bố:</h5> <input class="form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Mẹ:</h5> <input class="form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{30}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Số Điện Thoại Mẹ:</h5> <input class="form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-
-                                                <input type="hidden" name="first_name" value="${student.firstName}"/>
-                                                <input type="hidden" name="last_name" value="${student.lastName}"/>
-
-                                                </tr>
-                                                <tr>
-                                                    <td><div class="form-group col-md-6">    
-                                                            <h5>Email:</h5> <input class="form-control-sm" type="text" name="email" value="${student.email}"  readonly="" /><br />
-                                                        </div></td>
-                                                    <td><div class="form-group col-md-5">
-                                                            <h5>Cam kết của phụ huynh học sinh:</h5> <textarea class="form-control-sm" type="text" name="note" style="width: 200%" readonly>${student.parentSpecialNote}</textarea><br/>
-                                                        </div></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><div class="form-group col-md-auto">
-                                                            <h5>Địa Chỉ:</h5> <textarea class="form-control-sm" type="text" name="address" value="" style="width: 200%" pattern="^[A-Za-z1-9,${vietnamesePattern}\s]{1,100}$" title="Địa chỉ không được quá 100 kí tự" readonly>${student.address}</textarea><br />
-                                                        </div></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="d-flex justify-content-end">
-                                                <div class="m-2">
-                                                    <button onclick="goBack()" type="button" class="btn btn-danger">Quay Lại</button>
-                                                </div>
-                                                <div class="m-2">
-                                                    <input hidden value="edit" name="action"/>
-                                                    <button type="submit" class="btn btn-primary">Chỉnh Sửa</button>
-                                                </div>
-
+                                            <div class="form-group">
+                                                <label>Mã Người Dùng:</label>
+                                                <input class="form-control-sm form-control" type="text" name="userId" value="${student.userId!=null?student.userId:'Chưa có tài khoản'}" readonly>
                                             </div>
+                                            <div class="form-group">
+                                                <label>Mã Học Sinh:</label>
+                                                <input class="form-control-sm form-control" type="text" name="id" value="${student.id}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Họ Tên Học Sinh:</label>
+                                                <input class="form-control-sm form-control" type="text" value="${student.lastName} ${student.firstName}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Ngày Sinh:</label>
+                                                <input class="form-control-sm form-control" type="date" name="birthday" value="${student.birthday}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email:</label>
+                                                <input class="form-control-sm form-control" type="text" name="email" value="${student.email}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Địa Chỉ:</label>
+                                                <textarea class="form-control-sm form-control" readonly>${student.address}</textarea>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cột Thông Tin 2 -->
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Id Trường Học:</label>
+                                            <input class="form-control-sm form-control" type="text" name="school_id" value="${student.school_id}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tên Trường Học:</label>
+                                            <input class="form-control-sm form-control" type="text" name="schoolName" value="${student.schoolName}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Id Lớp Học:</label>
+                                            <input class="form-control-sm form-control" type="text" name="school_class_id" value="${student.school_class_id}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tên Lớp Học:</label>
+                                            <input class="form-control-sm form-control" type="text" name="className" value="${student.className}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Họ Tên Bố:</label>
+                                            <input class="form-control-sm form-control" type="text" name="first_guardian_name" value="${student.firstGuardianName}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>SĐT Bố:</label>
+                                            <input class="form-control-sm form-control" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Họ Tên Mẹ:</label>
+                                            <input class="form-control-sm form-control" type="text" name="second_guardian_name" value="${student.secondGuardianName}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>SĐT Mẹ:</label>
+                                            <input class="form-control-sm form-control" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cam kết của phụ huynh:</label>
+                                            <textarea class="form-control-sm form-control" name="note" readonly>${student.parentSpecialNote}</textarea>
+                                        </div>
+                                        <div class="form-group d-flex justify-content-end">
+                                            <button onclick="goBack()" type="button" class="btn btn-danger mr-2">Quay Lại</button>
+                                            <input hidden value="edit" name="action"/>
+                                            <button type="submit" class="btn btn-primary">Chỉnh Sửa</button>
+                                        </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <jsp:include page="../footer.jsp"/>

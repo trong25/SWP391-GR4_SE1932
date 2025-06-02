@@ -43,7 +43,10 @@ public class StudentDAO extends DBContext {
             Personnel personnel = personnelDAO.getPersonnel(resultSet.getString("created_by"));
             student.setCreatedBy(personnel);
             student.setParentSpecialNote(resultSet.getString("parent_special_note"));
-            student.setSchoolName(resultSet.getString("School_name"));
+            student.setSchool_id(resultSet.getString("school_id"));
+            student.setSchool_class_id(resultSet.getString("school_class_id"));
+            student.setSchoolName(resultSet.getString("school_name"));      // lấy tên trường
+        student.setClassName(resultSet.getString("class_name"));        // lấy tên lớp
             return student;
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,8 +85,8 @@ public class StudentDAO extends DBContext {
         INSERT INTO [dbo].[Students]
         ([id], [user_id], [first_name], [last_name], [address], [email], [status],
          [birthday], [gender], [first_guardian_name], [first_guardian_phone_number], [avatar],
-         [second_guardian_name], [second_guardian_phone_number], [created_by], [parent_special_note], [school_name])
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         [second_guardian_name], [second_guardian_phone_number], [created_by], [parent_special_note], [school_id],[school_class_id])
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
     """;
 
         try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
@@ -111,8 +114,8 @@ public class StudentDAO extends DBContext {
             stmt.setString(14, student.getSecondGuardianPhoneNumber());
             stmt.setString(15, student.getCreatedBy().getId());
             stmt.setString(16, student.getParentSpecialNote());
-            stmt.setString(17, student.getSchoolName());
-
+            stmt.setString(17, student.getSchool_id());
+            stmt.setString(17, student.getSchool_class_id());
             // Thực thi
             int result = stmt.executeUpdate();
             return result == 1;
@@ -122,38 +125,61 @@ public class StudentDAO extends DBContext {
         }
 
     }
-    public List<Student> getStudentByStatus(String status) {
-        String sql = " Select * from Students where [status] = N'" + status + "' order by id desc";
-        List<Student> listStudents = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Student student = new Student();
-                student = createStudent(resultSet);
-                listStudents.add(student);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
+   public List<Student> getStudentByStatus(String status) {
+    String sql = """
+        SELECT s.*, 
+               sch.name AS school_name, 
+               cls.class_name AS class_name
+        FROM Students s
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
+        WHERE s.[status] = ?
+        ORDER BY s.id DESC
+    """;
+
+    List<Student> listStudents = new ArrayList<>();
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, status);  // tránh SQL injection
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Student student = createStudent(resultSet);
+            listStudents.add(student);
         }
-        return listStudents;
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
     }
-    public List<Student> getAllStudents() {
-        String sql = "select * from Students order by id desc";
-        List<Student> listStudent = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Student student = new Student();
-                student = createStudent(resultSet);
-                listStudent.add(student);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    return listStudents;
+}
+
+
+   public List<Student> getAllStudents() {
+    String sql = """
+        SELECT s.*, 
+               sch.name AS school_name, 
+               cls.class_name AS class_name
+        FROM Students s
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
+        ORDER BY s.id DESC
+    """;
+
+    List<Student> listStudent = new ArrayList<>();
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Student student = createStudent(resultSet);
+            listStudent.add(student);
         }
-        return listStudent;
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
     }
+    return listStudent;
+}
+
+
     public Student getStudentByUserId(String userId) {
         String sql = "SELECT * FROM Students WHERE user_id = ?";
         try {
@@ -170,6 +196,7 @@ public class StudentDAO extends DBContext {
         }
         return null;
     }
+
     public boolean checkFirstGuardianPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Students] WHERE first_guardian_phone_number = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -185,7 +212,6 @@ public class StudentDAO extends DBContext {
         return false;
     }
 
-   
     public boolean checkSecondGuardianPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Students] WHERE second_guardian_phone_number = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -201,28 +227,38 @@ public class StudentDAO extends DBContext {
         return false;
     }
 
-     public Student getStudentsById(String id) {
-        String sql = "select * from Students where id='" + id + "'";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Student student = new Student();
-                student = createStudent(resultSet);
-                return student;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+   public Student getStudentsById(String id) {
+    String sql = """
+        SELECT s.*, 
+               sch.name AS school_name, 
+               cls.class_name AS class_name
+        FROM Students s
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
+        WHERE s.id = ?
+    """;
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return createStudent(resultSet);
         }
-        return null;
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
     }
-       public boolean updateStudent(Student student) {
+    return null;
+}
+
+
+    public boolean updateStudent(Student student) {
         String sql = "update dbo.[Students] set first_guardian_name=?, "
                 + "first_guardian_phone_number=?, "
                 + "second_guardian_name=?, "
                 + "second_guardian_phone_number=?, "
                 + "address=?,"
-                +"school_name=?,"
+                + "school_id=?,"
+                + "school_class_id=?,"
                 + " parent_special_note=?, "
                 + "first_name=?, "
                 + "last_name=?, "
@@ -230,8 +266,7 @@ public class StudentDAO extends DBContext {
                 + "email=?, "
                 + "avatar=? "
                 + "where id=?";
-        
-        
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, student.getFirstGuardianName());
@@ -239,15 +274,16 @@ public class StudentDAO extends DBContext {
             ps.setString(3, student.getSecondGuardianName());
             ps.setString(4, student.getSecondGuardianPhoneNumber());
             ps.setString(5, student.getAddress());
-            ps.setString(6, student.getSchoolName());
-            ps.setString(7, student.getParentSpecialNote());
-           
-            ps.setString(8,student.getFirstName());
-            ps.setString(9, student.getLastName());
-            ps.setDate(10, new java.sql.Date(student.getBirthday().getTime()));
-            ps.setString(11, student.getEmail());
-            ps.setString(12, student.getAvatar());
-            ps.setString(13, student.getId());
+            ps.setString(6, student.getSchool_id());
+             ps.setString(7, student.getSchool_id());
+            ps.setString(8, student.getParentSpecialNote());
+
+            ps.setString(9, student.getFirstName());
+            ps.setString(10, student.getLastName());
+            ps.setDate(11, new java.sql.Date(student.getBirthday().getTime()));
+            ps.setString(12, student.getEmail());
+            ps.setString(13, student.getAvatar());
+            ps.setString(14, student.getId());
             ps.executeUpdate();
             return true;
         } catch (Exception ex) {
@@ -256,25 +292,21 @@ public class StudentDAO extends DBContext {
         return false;
     }
 
-    
-
     public Student getStudentById(String id) {
-    String sql = "SELECT * FROM Students WHERE id = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return createStudent(rs);
+        String sql = "SELECT * FROM Students WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return createStudent(rs);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
 
-
-
-     public int getSumStudentInClass(String classId) {
+    public int getSumStudentInClass(String classId) {
         String sql = "SELECT COUNT(*) AS total_students\n"
                 + "FROM Class INNER JOIN\n"
                 + "     classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
@@ -296,7 +328,8 @@ public class StudentDAO extends DBContext {
 
         return totalStudents;
     }
-     public List<Student> getStudentsByTeacherAndTimetable(String teacherId, String date) {
+
+    public List<Student> getStudentsByTeacherAndTimetable(String teacherId, String date) {
         String sql = "SELECT DISTINCT Students.id, Students.first_name, Students.last_name, Students.avatar\n"
                 + "FROM Students\n"
                 + "JOIN classDetails ON Students.id = classDetails.Students_id\n"
@@ -323,10 +356,8 @@ public class StudentDAO extends DBContext {
         }
         return list;
     }
-     
-     
-     
-         public List<Student> getListStudentsByClass(String studentId, String classId) {
+
+    public List<Student> getListStudentsByClass(String studentId, String classId) {
         List<Student> listStudents = new ArrayList<>();
 
         String sql = "select * from Students p join classDetails c on p.id = c.student_id \n"
@@ -347,6 +378,5 @@ public class StudentDAO extends DBContext {
         }
         return listStudents;
     }
-
 
 }

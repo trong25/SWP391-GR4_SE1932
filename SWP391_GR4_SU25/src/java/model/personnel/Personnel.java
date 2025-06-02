@@ -23,12 +23,13 @@ public class Personnel {
     private String status;
     private String avatar;
     private String userId;
-    private String schoolName;
+    private String school_id;
+    private String school_class_id;
 
     public Personnel() {
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String schoolName) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,8 +42,27 @@ public class Personnel {
         this.status = status;
         this.avatar = avatar;
         this.userId = userId;
-        this.schoolName = schoolName;
+        this.school_id = school_id;
+        this.school_class_id = school_class_id;
     }
+
+    public String getSchool_id() {
+        return school_id;
+    }
+
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
+    }
+
+    public String getSchool_class_id() {
+        return school_class_id;
+    }
+
+    public void setSchool_class_id(String school_class_id) {
+        this.school_class_id = school_class_id;
+    }
+
+    
 
     public String getId() {
         return id;
@@ -140,13 +160,6 @@ public class Personnel {
         this.userId = userId;
     }
 
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-    
+ 
     
 }

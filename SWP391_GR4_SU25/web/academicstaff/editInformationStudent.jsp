@@ -188,6 +188,64 @@
                 return /^[A-Za-z\s\-àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳỹỷỹỵđĐ]+$/.test(name);
             }
         </script>
+        <script>
+    function validateForm() {
+        // Lấy các trường cần kiểm tra
+        var firstGuardianName = document.getElementsByName("first_guardian_name")[0].value.trim();
+        var secondGuardianName = document.getElementsByName("second_guardian_name")[0].value.trim();
+        var lastName = document.getElementsByName("lastName")[0].value.trim();
+        var firstName = document.getElementsByName("firstName")[0].value.trim();
+        var birthday = document.getElementsByName("birthday")[0].value;
+
+        // Validate ngày sinh
+        if (!isOlderThan11Years(birthday)) {
+            toastr.error("Học sinh phải lớn hơn 11 tuổi");
+            return false;
+        }
+
+        // Validate tên không chứa số hoặc ký tự đặc biệt
+        if (!isValidPureName(firstGuardianName)) {
+            toastr.error("Họ tên bố không được chứa số hoặc ký tự đặc biệt");
+            return false;
+        }
+
+        if (secondGuardianName !== "" && !isValidPureName(secondGuardianName)) {
+            toastr.error("Họ tên mẹ không được chứa số hoặc ký tự đặc biệt");
+            return false;
+        }
+
+        if (!isValidPureName(firstName)) {
+            toastr.error("Tên học sinh không được chứa số hoặc ký tự đặc biệt");
+            return false;
+        }
+
+        if (!isValidPureName(lastName)) {
+            toastr.error("Họ học sinh không được chứa số hoặc ký tự đặc biệt");
+            return false;
+        }
+
+        return true;
+    }
+
+    function isValidPureName(name) {
+        // Chỉ cho phép chữ cái (bao gồm dấu tiếng Việt), khoảng trắng và dấu gạch ngang
+        return /^[A-Za-zÀ-ỹà-ỹ\s\-]+$/.test(name);
+    }
+
+    function isOlderThan11Years(birthday) {
+        if (!birthday) return false;
+        var birthDate = new Date(birthday);
+        var today = new Date();
+        var age = today.getFullYear() - birthDate.getFullYear();
+        var m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age > 11;
+    }
+</script>
+
+        
 
     </head>
     <body id="page-top">
@@ -257,7 +315,11 @@
                                                             </div></td>
                                                         <td><div class="form-group col-md-8">
                                                                 <h5>Tên Trường<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="school_name" value="${student.schoolName}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
+                                                                <input class="form-control form-control-sm" type="text" name="schoolName" value="${student.schoolName}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
+                                                            </div></td>
+                                                            <td><div class="form-group col-md-8">
+                                                                <h5>ID Trường<a style="color: red">(*)</a>:</h5> 
+                                                                <input class="form-control form-control-sm" type="text" name="school_id" value="${student.school_id}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
                                                             </div></td>
                                                     </tr>
                                                     <tr>

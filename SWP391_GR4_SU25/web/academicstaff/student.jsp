@@ -107,7 +107,9 @@
                                                 <th>Mã học sinh</th>
                                                 <th>Họ và tên</th>
                                                 <th>Ngày sinh</th>
-                                                <th>Trường Học</th>
+                                                <th>ID lớp học</th>
+                                                <th>Tên Trường Học</th>
+                                                <th>Tên Lớp Học</th>
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -119,7 +121,9 @@
                                                     <td>${student.id}</td>
                                                     <td>${student.lastName} ${student.firstName}</td>
                                                     <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd"/></td>
+                                                    <td>${student.school_id}</td>
                                                     <td>${student.schoolName}</td>
+                                                    <td>${student.className}</td>
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
                                                         <td><span class="badge badge-success">${status}</span></td>
@@ -228,12 +232,17 @@
                                                                            name="firstName" value="${param.firstName}">
                                                                 </div>
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="schoolName">Tên Trường Học<a
+                                                                    <label for="school_id">id trường học<a
                                                                             style="color: red">(*)</a></label>
-                                                                    <input type="text" class="form-control" id="schoolName" style="width: 70%"
-                                                                           name="schoolName" value="${param.schoolName}">
+                                                                    <input type="text" class="form-control" id="school_id" style="width: 70%"
+                                                                           name="school_id" value="${param.school_id}">
                                                                 </div>
-
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="school_class_id">id lớp học<a
+                                                                            style="color: red">(*)</a></label>
+                                                                    <input type="text" class="form-control" id="school_class_id" style="width: 70%"
+                                                                           name="school_class_id" value="${param.school_class_id}">
+                                                                </div>
 
                                                                 <div class="form-group col-md-6">
                                                                     <label for="firstGuardianName">Họ tên Bố<a

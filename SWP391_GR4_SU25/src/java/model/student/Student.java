@@ -12,6 +12,7 @@ import model.personnel.Personnel;
  * @author MSI
  */
 public class Student {
+
     private String id;
     private String userId;
     private String firstName;
@@ -28,12 +29,15 @@ public class Student {
     private String secondGuardianPhoneNumber;
     private Personnel createdBy;
     private String parentSpecialNote;
+    private String school_id;
+    private String school_class_id;
     private String schoolName;
+    private String className;
 
     public Student() {
     }
 
-    public Student(String id, String userId, String firstName, String lastName, String address, String email, String status, Date birthday, boolean gender, String firstGuardianName, String firstGuardianPhoneNumber, String avatar, String secondGuardianName, String secondGuardianPhoneNumber, Personnel createdBy, String parentSpecialNote, String schoolName) {
+    public Student(String id, String userId, String firstName, String lastName, String address, String email, String status, Date birthday, boolean gender, String firstGuardianName, String firstGuardianPhoneNumber, String avatar, String secondGuardianName, String secondGuardianPhoneNumber, Personnel createdBy, String parentSpecialNote, String school_id, String school_class_id, String schoolName, String className) {
         this.id = id;
         this.userId = userId;
         this.firstName = firstName;
@@ -50,7 +54,26 @@ public class Student {
         this.secondGuardianPhoneNumber = secondGuardianPhoneNumber;
         this.createdBy = createdBy;
         this.parentSpecialNote = parentSpecialNote;
+        this.school_id = school_id;
+        this.school_class_id = school_class_id;
         this.schoolName = schoolName;
+        this.className = className;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public String getId() {
@@ -181,13 +204,20 @@ public class Student {
         this.parentSpecialNote = parentSpecialNote;
     }
 
-    public String getSchoolName() {
-        return schoolName;
+    public String getSchool_id() {
+        return school_id;
     }
 
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
     }
-    
-    
+
+    public String getSchool_class_id() {
+        return school_class_id;
+    }
+
+    public void setSchool_class_id(String school_class_id) {
+        this.school_class_id = school_class_id;
+    }
+
 }
