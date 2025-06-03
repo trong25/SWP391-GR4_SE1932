@@ -18,54 +18,113 @@
             background: linear-gradient(135deg, #4A90E2, #50E3C2);
             height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: space-between;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
         }
+
+        .header {
+            text-align: center;
+            padding: 50px 0 10px;
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
         .login-container {
             background: white;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0,0,0,0.15);
             width: 380px;
             padding: 30px 40px;
+            margin: 0 auto;
         }
+
         .login-container .form-control:focus {
             box-shadow: 0 0 10px #4A90E2;
             border-color: #4A90E2;
         }
+
         .login-container .btn-primary {
             background-color: #4A90E2;
             border: none;
         }
+
         .login-container .btn-primary:hover {
             background-color: #3a76c1;
         }
-        .login-logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 25px;
-        }
-        .login-logo img {
-            width: 120px;
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(74,144,226,0.6);
-        }
+
         .error-message {
             color: #d9534f;
             font-weight: 600;
             margin-top: 12px;
             text-align: center;
         }
+
         .forgot-link {
             font-size: 0.9rem;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+
+        .footer .left {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer .left i {
+            background-color: white;
+            color: #4a90e2;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+
+        .footer .right {
+            text-align: right;
+        }
+
+        @media (max-width: 400px) {
+            .login-container {
+                width: 90%;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+                gap: 5px;
+            }
+
+            .footer .right {
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
+<div class="header">
+    <i class="fas fa-graduation-cap text-warning me-2"></i>
+    Welcome TaBi Learning
+</div>
+
+
 <div class="login-container">
-
-
     <form action="login" method="POST" novalidate>
         <div class="mb-3 input-group">
             <span class="input-group-text bg-white border-end-0"><i class="fa fa-user"></i></span>
@@ -100,6 +159,17 @@
             <div class="error-message">${error}</div>
         </c:if>
     </form>
+</div>
+
+<div class="footer">
+    <div class="left">
+        <i>TB</i>
+        <span><strong>TaBi Learning</strong></span>
+    </div>
+    <div class="right">
+        <div><i class="fa fa-envelope"></i> Email: contact@tabilearning.com</div>
+        <div><i class="fa fa-phone"></i> Hotline: 0123-456-789</div>
+    </div>
 </div>
 
 <!-- Bootstrap JS Bundle with Popper -->
