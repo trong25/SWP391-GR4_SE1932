@@ -105,10 +105,7 @@ public class ViewTimeTableClassServlet extends HttpServlet {
         String classId = request.getParameter("class");
          String week = request.getParameter("week");
 
-        //Lấy thông tin người dùng chọn:
-        String classId = request.getParameter("class");
-        String week = request.getParameter("week");
-
+      
         String schoolyear = request.getParameter("schoolyear");
         
         
@@ -116,15 +113,12 @@ public class ViewTimeTableClassServlet extends HttpServlet {
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         Class aclass = new ClassDAO().getClassById(classId);
 
-        
-       //Lấy danh sách lớp học của năm học đó
-        List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
-        if (listClass.isEmpty()) { //Nếu không có lớp thì thông báo lỗi và chuyển hướng về lại trang GET
+     
 
 
         //Lấy danh sách lớp học của năm học đó
         List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
-        if (listClass.isEmpty()) {//Kiểm tra nếu không có lớp nào
+        if (listClass.isEmpty()) {//Nếu không có lớp thì thông báo lỗi và chuyển hướng về lại trang GET
 
             HttpSession session = request.getSession();
             session.setAttribute("toastType", "error");
@@ -169,3 +163,5 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+
+

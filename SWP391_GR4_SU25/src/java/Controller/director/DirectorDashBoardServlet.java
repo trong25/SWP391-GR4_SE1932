@@ -61,45 +61,32 @@ public class DirectorDashBoardServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        //  processRequest(request, response);   StudentDAO studentDAO =  new StudentDAO();
-        //Thanhnthe181132
+   @Override
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        StudentDAO studentDAO = new StudentDAO();
-        ClassDAO classDAO = new ClassDAO();
-        List<Class> listClass = classDAO.getAll();
-        
-        // trả về số lượng học sinh và danh sách tất cả lớp học
-        request.setAttribute("listClass", listClass); 
-        request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+    StudentDAO studentDAO = new StudentDAO();
+    ClassDAO classDAO = new ClassDAO();
+    SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+
+    String schoolYearId = null;
+    List<SchoolYear> schoolYears = schoolYearDAO.getAll();
+    if (!schoolYears.isEmpty()) {
+        schoolYearId = schoolYears.get(0).getId(); // lấy năm học đầu tiên
     }
 
+    List<Class> listClass = classDAO.getAll();
+    List<Class> pendingClasses = new ArrayList<>();
 
-
-        StudentDAO studentDAO = new StudentDAO();
-        ClassDAO classDAO = new ClassDAO();
-        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
-        String schoolYearId = null;
-        List<SchoolYear> schoolYears = schoolYearDAO.getAll();
-        if (!schoolYears.isEmpty()) {
-            schoolYearId = schoolYears.get(0).getId(); // lấy năm học đầu tiên trong danh sách
-        }
-
-        List<Class> listClass = classDAO.getAll();
-        List<Class> pendingClasses = new ArrayList<>();
-
-        if (schoolYearId != null) {
-            pendingClasses = classDAO.getByStatus("đang chờ xử lý", schoolYearId);
-        }
-
-        request.setAttribute("pendingClasses", pendingClasses);
-        request.setAttribute("listClass", listClass);
-        request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+    if (schoolYearId != null) {
+        pendingClasses = classDAO.getByStatus("đang chờ xử lý", schoolYearId);
     }
+
+    request.setAttribute("pendingClasses", pendingClasses);
+    request.setAttribute("listClass", listClass);
+    request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
+    request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+}
 
 
     /**

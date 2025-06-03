@@ -9,45 +9,6 @@
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
-
-   <script>
-            $(document).ready(function () {
-
- <script>
-            $(document).ready(function() {
-
-                $('#dataTable').DataTable({
-                    language: {
-                        sProcessing: "Đang xử lý...",
-                        sLengthMenu: "Xem _MENU_ mục",
-                        sZeroRecords: "Không tìm thấy dòng nào phù hợp",
-                        sInfo: "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
-                        sInfoEmpty: "Đang xem 0 đến 0 trong tổng số 0 mục",
-                        sInfoFiltered: "(được lọc từ _MAX_ mục)",
-                        sInfoPostFix: "",
-                        sSearch: "Tìm:",
-                        sUrl: "",
-                        sEmptyTable: "Không có dữ liệu trong bảng",
-                        sLoadingRecords: "Đang tải...",
-                        sInfoThousands: ",",
-                        oPaginate: {
-                            sFirst: "Đầu",
-                            sLast: "Cuối",
-                            sNext: "Tiếp",
-                            sPrevious: "Trước"
-                        },
-                        oAria: {
-                            sSortAscending: ": Sắp xếp thứ tự tăng dần",
-                            sSortDescending: ": Sắp xếp thứ tự giảm dần"
-                        }
-                    }
-                });
-            });
-        </script>
-
-        
-
-
 <body id="page-top">
 
 <!-- Sidebar -->
@@ -58,17 +19,10 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-
         <div class="sidebar-brand-text mx-3">TABI EDU</div>
-
-        <div class="sidebar-brand-text mx-3">TABI Edu</div>
-
     </a>
 
-    <!-- Divider -->
     <hr class="sidebar-divider my-0">
-
-   
 
     <!-- Quản lý lớp học -->
     <li class="nav-item">
@@ -170,6 +124,38 @@
 <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 <script src="../js/sb-admin-2.min.js"></script>
+
+<!-- DataTable setup -->
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            language: {
+                sProcessing: "Đang xử lý...",
+                sLengthMenu: "Xem _MENU_ mục",
+                sZeroRecords: "Không tìm thấy dòng nào phù hợp",
+                sInfo: "Đang xem _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                sInfoEmpty: "Đang xem 0 đến 0 trong tổng số 0 mục",
+                sInfoFiltered: "(được lọc từ _MAX_ mục)",
+                sInfoPostFix: "",
+                sSearch: "Tìm:",
+                sUrl: "",
+                sEmptyTable: "Không có dữ liệu trong bảng",
+                sLoadingRecords: "Đang tải...",
+                sInfoThousands: ",",
+                oPaginate: {
+                    sFirst: "Đầu",
+                    sLast: "Cuối",
+                    sNext: "Tiếp",
+                    sPrevious: "Trước"
+                },
+                oAria: {
+                    sSortAscending: ": Sắp xếp thứ tự tăng dần",
+                    sSortDescending: ": Sắp xếp thứ tự giảm dần"
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
