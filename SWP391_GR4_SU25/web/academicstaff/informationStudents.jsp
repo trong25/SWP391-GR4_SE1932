@@ -4,7 +4,7 @@
 <html lang="en">
 
     <head>
-        <title>Title</title>
+        <title>Thông Tin chi Tiết</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -176,20 +176,20 @@
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label>Id Trường Học:</label>
-                                            <input class="form-control-sm form-control" type="text" name="school_id" value="${student.school_id}" readonly>
+                                            <label>Mã Trường Học:</label>
+                                            <input class="form-control-sm form-control" type="text" name="school_id" value="${student.school_id.id}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Tên Trường Học:</label>
-                                            <input class="form-control-sm form-control" type="text" name="schoolName" value="${student.schoolName}" readonly>
+                                            <input class="form-control-sm form-control" type="text" name="schoolName" value="${student.school_id.schoolName}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Id Lớp Học:</label>
-                                            <input class="form-control-sm form-control" type="text" name="school_class_id" value="${student.school_class_id}" readonly>
+                                            <input class="form-control-sm form-control" type="text" name="school_class_id" value="${student.school_class_id.id}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Tên Lớp Học:</label>
-                                            <input class="form-control-sm form-control" type="text" name="className" value="${student.className}" readonly>
+                                            <input class="form-control-sm form-control" type="text" name="className" value="${student.school_class_id.className}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Họ Tên Bố:</label>

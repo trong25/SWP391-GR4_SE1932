@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -122,65 +123,101 @@
                             </div>
                         </div>
 
-                        <!-- Event List -->
+
+
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card shadow mb-4">
+                            <!-- Biểu đồ Học sinh -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="card shadow">
                                     <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Danh sách sự kiện</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Học sinh đang chờ xử lý</h6>
                                     </div>
-                                    <c:choose>
-                                        <c:when test="${requestScope.listEvents.size() > 0}">
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>STT</th>
-                                                                <th>Tên sự kiện</th>
-                                                                <th>Ngày</th>
-                                                                <th>Người gửi</th>
-                                                                <th>Chi tiết</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:forEach var="event" items="${requestScope.listEvents}" varStatus="status">
-                                                                <tr>
-                                                                    <th scope="row">${status.index + 1}</th>
-                                                                    <td>${event.heading}</td>
-                                                                    <td><fmt:formatDate value="${event.date}" pattern="yyyy/MM/dd"/></td>
-                                                                    <td>
-                                                                        ${event.createdBy.lastName} ${event.createdBy.firstName}
-                                                                    </td>
-<!--                                                                    <td class="text-center"><a href="eventDetail?id=${event.id}"
-                                                                                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>-->
-                                                                </tr>
-                                                            </c:forEach>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="card-body">
-                                                <div class="alert alert-info text-center" role="alert">
-                                                    <strong>Không có sự kiện nào</strong>
-                                                    <p>Hiện tại không có sự kiện nào được lên lịch.</p>
-                                                    <i class="fas fa-calendar-alt fa-2x"></i>
-                                                </div>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <div class="card-body">
+                                        <canvas id="pendingStudentChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Biểu đồ Giáo viên -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="card shadow">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-warning">Giáo viên đang chờ xử lý</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="pendingTeacherChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-        <jsp:include page="../footer.jsp"/>
             </div>
-
-
         </div>
-    </body>
+        <jsp:include page="../footer.jsp"/>
+    </div>
+
+
+</div>
+</body>
+<script>
+    const labels = ["Đang chờ xử lý"];
+
+    const studentCount = ${studentPendingCount};
+    const teacherCount = ${teacherPendingCount};
+
+    new Chart(document.getElementById('pendingStudentChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Học sinh',
+                    data: [studentCount],
+                    backgroundColor: '#4e73df'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById('pendingTeacherChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Giáo viên',
+                    data: [teacherCount],
+                    backgroundColor: '#f6c23e'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+</script>
+
 
 </html>

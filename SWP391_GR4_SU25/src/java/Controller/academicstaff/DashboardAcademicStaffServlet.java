@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import model.classes.ClassDAO;
 import model.day.DayDAO;
-import model.event.eventDAO;
 import model.personnel.PersonnelAttendanceDAO;
 import model.schoolYear.SchoolYearDAO;
 import model.student.StudentDAO;
@@ -31,7 +30,6 @@ public class DashboardAcademicStaffServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-      eventDAO eventDAO = new eventDAO();
         StudentDAO studentDAO = new StudentDAO();
         ClassDAO classDAO = new ClassDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
@@ -63,10 +61,12 @@ public class DashboardAcademicStaffServlet extends HttpServlet {
         }
 
         //  Sự kiện tương lai và số học sinh đang theo học
-        request.setAttribute("listEvents", eventDAO.getFutureEvent(2));
         request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
 
-       
+        int studentPendingCount = studentDAO.getPendingStudentCount();
+    int teacherPendingCount = new model.personnel.PersonnelDAO().getPendingTeacherCount();
+    request.setAttribute("studentPendingCount", studentPendingCount);
+    request.setAttribute("teacherPendingCount", teacherPendingCount);
 request.getRequestDispatcher("/academicstaff/dashboard.jsp").forward(request, response);
 
 

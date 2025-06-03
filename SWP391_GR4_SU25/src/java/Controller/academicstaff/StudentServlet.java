@@ -15,8 +15,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
+import model.school.SchoolDAO;
+import model.school.Schools;
+import model.schoolclass.SchoolClass;
+import model.schoolclass.SchoolClassDAO;
 import model.student.Student;
 import model.student.StudentDAO;
 import model.user.User;
@@ -29,178 +35,159 @@ import utils.Helper;
 public class StudentServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-        StudentDAO studentDAO = new StudentDAO();
+    String schoolIdParam = request.getParameter("schoolId");
 
-        String status = request.getParameter("status");
-        List<Student> listStudents = studentDAO.getAllStudents();
-        String newStudentId;
-        if (studentDAO.getLatest() != null) {
-            newStudentId = studentDAO.generateId(studentDAO.getLatest().getId());
-        } else {
-            newStudentId = "HS000001";
-        }
-        if (status != null) {
-            switch (status) {
-                case "all":
-                    listStudents = studentDAO.getAllStudents();
-                    break;
-                case "pending":
-                    listStudents = studentDAO.getStudentByStatus("đang chờ xử lý");
-                    break;
-                case "approve":
-                    listStudents = studentDAO.getStudentByStatus("đang theo học");
-                    break;
-                case "decline":
-                    listStudents = studentDAO.getStudentByStatus("không được duyệt");
-                    break;
-                case "stop":
-                    listStudents = studentDAO.getStudentByStatus("đã thôi học");
-                    break;
-                default:
-                    break;
+    // Xử lý khi được gọi từ JS để lấy danh sách lớp theo mã trường (AJAX)
+    if (schoolIdParam != null && request.getHeader("X-Requested-With") != null
+            && request.getHeader("X-Requested-With").equals("XMLHttpRequest")) {
+        response.setContentType("application/json;charset=UTF-8");
+
+        SchoolClassDAO schoolClassDAO = new SchoolClassDAO();
+        List<SchoolClass> classList = schoolClassDAO.getSchoolClassesBySchoolId(schoolIdParam);
+
+        PrintWriter out = response.getWriter();
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("[");
+
+        for (int i = 0; i < classList.size(); i++) {
+            SchoolClass sc = classList.get(i);
+            jsonBuilder.append("{");
+            jsonBuilder.append("\"id\":\"").append(sc.getId()).append("\",");
+            jsonBuilder.append("\"className\":\"").append(sc.getClassName()).append("\"");
+            jsonBuilder.append("}");
+
+            if (i < classList.size() - 1) {
+                jsonBuilder.append(",");
             }
         }
-        request.setAttribute("newStudentId", newStudentId);
-        request.setAttribute("listStudent", listStudents);
-        request.getRequestDispatcher("student.jsp").forward(request, response);
+
+        jsonBuilder.append("]");
+        out.print(jsonBuilder.toString());
+        out.flush();
+        return;
     }
 
+    // Nếu không phải yêu cầu từ AJAX => xử lý hiển thị danh sách học sinh như bình thường
+    StudentDAO studentDAO = new StudentDAO();
+    SchoolDAO schoolDAO = new SchoolDAO();
+
+    List<Schools> schoolList = schoolDAO.getAllSchools();
+    List<Student> listStudents = studentDAO.getAllStudents();
+
+    String newStudentId;
+    if (studentDAO.getLatest() != null) {
+        newStudentId = studentDAO.generateId(studentDAO.getLatest().getId());
+    } else {
+        newStudentId = "HS000001";
+    }
+
+    String status = request.getParameter("status");
+    if (status != null) {
+        switch (status) {
+            case "all":
+                listStudents = studentDAO.getAllStudents();
+                break;
+            case "pending":
+                listStudents = studentDAO.getStudentByStatus("đang chờ xử lý");
+                break;
+            case "approve":
+                listStudents = studentDAO.getStudentByStatus("đang theo học");
+                break;
+            case "decline":
+                listStudents = studentDAO.getStudentByStatus("không được duyệt");
+                break;
+            case "stop":
+                listStudents = studentDAO.getStudentByStatus("đã thôi học");
+                break;
+        }
+    }
+
+    request.setAttribute("schoolList", schoolList);
+    request.setAttribute("newStudentId", newStudentId);
+    request.setAttribute("listStudent", listStudents);
+
+    request.getRequestDispatcher("student.jsp").forward(request, response);
+}
+
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if (action.equals("create")) {
+        if (action != null && action.equals("create")) {
             HttpSession session = request.getSession();
             PersonnelDAO personnelDAO = new PersonnelDAO();
             StudentDAO studentDAO = new StudentDAO();
-            User user = null;
+
+            User user = (User) session.getAttribute("user");
             String toastMessage = "";
             String toastType = "error";
-            if (session.getAttribute("user") != null) {
-                String avatar = request.getParameter("avatar").trim();
-                String firstName = request.getParameter("firstName").trim();
-                String school_id = request.getParameter("school_id").trim();
-                String school_class_id = request.getParameter("school_class_id").trim();
-                String schoolName = request.getParameter("schoolName").trim();
-                String className = request.getParameter("className").trim();
-                String lastName = request.getParameter("lastName").trim();
-                String secondGuardianName = request.getParameter("secondGuardianName").trim();
-                String firstGuardianName = request.getParameter("firstGuardianName").trim();
-                String birth = request.getParameter("birth");
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                Date birthday = null;
+
+            if (user != null) {
                 try {
-                    birthday = formatter.parse(birth);
-                } catch (ParseException e) {
-                    throw new RuntimeException(e);
-                }
-                String genderRaw = request.getParameter("gender");
-                String email = request.getParameter("email").trim();
-                String note = request.getParameter("note").trim();
-                String address = request.getParameter("address").trim();
-                String secondGuardianPhoneNumber = request.getParameter("secondGuardianPhoneNumber").trim();
-                String firstGuardianPhoneNumber = request.getParameter("firstGuardianPhoneNumber").trim();
+                    String avatar = request.getParameter("avatar").trim();
+                    String firstName = request.getParameter("firstName").trim();
+                    String lastName = request.getParameter("lastName").trim();
+                    String secondGuardianName = request.getParameter("secondGuardianName").trim();
+                    String firstGuardianName = request.getParameter("firstGuardianName").trim();
+                    String birth = request.getParameter("birth");
+                    String genderRaw = request.getParameter("gender");
+                    String email = request.getParameter("email").trim();
+                    String note = request.getParameter("note").trim();
+                    String address = request.getParameter("address").trim();
+                    String secondGuardianPhoneNumber = request.getParameter("secondGuardianPhoneNumber").trim();
+                    String firstGuardianPhoneNumber = request.getParameter("firstGuardianPhoneNumber").trim();
+                    String schoolID = request.getParameter("schoolID").trim();
+                    String schoolClassID = request.getParameter("schoolClassId").trim();
+                    String status = "đang chờ xử lý";
+                    Schools school = new Schools();
+                    school.setId(schoolID);
 
-                String status = "đang chờ xử lý";
-                user = (User) session.getAttribute("user");
-                Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
+                    SchoolClass schoolClass = new SchoolClass();
+                    schoolClass.setId(schoolClassID);
 
-//                Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
-//                        Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName), secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy,
-//                        note, Helper.formatName(schoolName));
-//                Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
-//                        Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName),  secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy, 
-//                        note, school_id, school_class_id, Helper.formatName(schoolName),Helper.formatName(className));
-                Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address, email, status, birthday, Integer.parseInt(genderRaw) == 1,
-                        Helper.formatName(firstGuardianName), firstGuardianPhoneNumber, avatar, secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName), secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber, createdBy,
-                        note, school_id, school_class_id, schoolName, className);
+                    // Parse ngày sinh
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                    Date birthday = formatter.parse(birth);
 
-                if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
-                        || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
-                        || Helper.formatName(firstGuardianName).isBlank() || school_id.isBlank() || school_class_id.isBlank()) {
-                    if (address.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường địa chỉ !";
-                    } else if (Helper.formatName(firstName).isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường tên !";
-                    } else if (school_id.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống id trường!";
-                    } else if (Helper.formatName(lastName).isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường họ !";
-                    } else if (Helper.formatName(firstGuardianName).isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường họ tên người giám hộ 1 !";
-                    } else if (firstGuardianPhoneNumber.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường số điện thoại người giám hộ 1 !";
-                    } else if (avatar.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường hình ảnh !";
-                    } else if (genderRaw.equals("-1")) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường giới tính !";
-                    } else if (email.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường email !";
-                    } else if (school_id.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống tên trường";
-                    } else if (school_class_id.isBlank()) {
-                        toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống id lớp";
-                    }else if(schoolName.isBlank()){
-                        toastMessage="Tạo thật bại ! Vui lòng không bỏ trống tên trường";
-                    }else if(className.isBlank()){
-                         toastMessage="Tạo thật bại ! Vui lòng không bỏ trống tên trường";
-                    }
-                    toastType = "error";
-                    session.setAttribute("toastMessage", toastMessage);
-                    session.setAttribute("toastType", toastType);
-                    List<Student> listStudent = studentDAO.getAllStudents();
-                    request.setAttribute("listStudent", listStudent);
-                    request.setAttribute("newStudentId", request.getParameter("id"));
-                    request.getRequestDispatcher("student.jsp").forward(request, response);
-                } else if (!(avatar.endsWith("png") || avatar.endsWith("jpg"))) {
-                    toastMessage = "Tạo thật bại ! Vui lòng chọn đúng tập hình ảnh !";
-                    toastType = "error";
-                    session.setAttribute("toastMessage", toastMessage);
-                    session.setAttribute("toastType", toastType);
-                    List<Student> listStudent = studentDAO.getAllStudents();
-                    request.setAttribute("listStudent", listStudent);
-                    request.setAttribute("newStudentId", request.getParameter("id"));
-                    request.getRequestDispatcher("student.jsp").forward(request, response);
-                } else if (secondGuardianName.isBlank() && !secondGuardianPhoneNumber.isBlank()) {
-                    toastMessage = "Tạo thật bại ! Vui lòng nhập họ và tên người giám hộ thứ 2!";
-                    toastType = "error";
-                    session.setAttribute("toastMessage", toastMessage);
-                    session.setAttribute("toastType", toastType);
-                    List<Student> listStudent = studentDAO.getAllStudents();
-                    request.setAttribute("listStudent", listStudent);
-                    request.setAttribute("newStudentId", request.getParameter("id"));
-                    request.getRequestDispatcher("student.jsp").forward(request, response);
-                } else if (studentDAO.checkFirstGuardianPhoneNumberExists(firstGuardianPhoneNumber) || studentDAO.checkSecondGuardianPhoneNumberExists(secondGuardianPhoneNumber)) {
-                    if (studentDAO.checkFirstGuardianPhoneNumberExists(firstGuardianPhoneNumber)) {
-                        toastMessage = "Số điện thoại người giám hộ đầu tiên đã tồn tại !";
-                    } else if (studentDAO.checkSecondGuardianPhoneNumberExists(secondGuardianPhoneNumber)) {
-                        toastMessage = "Số điện thoại người giám hộ thứ hai đã tồn tại !";
-                    }
-                    session.setAttribute("toastMessage", toastMessage);
-                    session.setAttribute("toastType", toastType);
-                    List<Student> listStudent = studentDAO.getAllStudents();
-                    request.setAttribute("listStudent", listStudent);
-                    request.setAttribute("newStudentId", request.getParameter("id"));
-                    request.getRequestDispatcher("student.jsp").forward(request, response);
-                } else {
-                    if (studentDAO.createStudent(student)) {
-//                        boolean a;
-//                        a = studentDAO.createStudent(student);
-//                        System.out.println("errorA: " + a);
-                        toastMessage = "Xác nhận thành công";
-                        toastType = "success";
-                        session.setAttribute("toastMessage", toastMessage);
-                        session.setAttribute("toastType", toastType);
-                        response.sendRedirect("student");
+                    // Lấy người tạo
+                    Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
 
-                    } else {
-//                        boolean a;
-//                        a = studentDAO.createStudent(student);
-//                        System.out.println("errorB: " + a);
-                        toastMessage = "Tạo thật bại ! Email hoặc số điện thoại đã tồn tại !";
+                    // Tạo đối tượng Student
+                    Student student = new Student(null, user.getId(), Helper.formatName(firstName), Helper.formatName(lastName), address,
+                            email, status, birthday, Integer.parseInt(genderRaw) == 1, Helper.formatName(firstGuardianName),
+                            firstGuardianPhoneNumber, avatar,
+                            secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName),
+                            secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber,
+                            createdBy, note, school, schoolClass);
+
+                    if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
+                            || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
+                            || Helper.formatName(firstGuardianName).isBlank()|| schoolID==null || schoolID.isBlank() || schoolClassID==null || schoolClassID.isBlank()) {
+                        if (address.isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường địa chỉ !";
+                        } else if (schoolID.isBlank() || schoolID== null) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường schoolID !";
+                        } else if (Helper.formatName(firstName).isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường tên !";
+                        } else if (Helper.formatName(schoolClassID).isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường họ !";
+                        } else if (Helper.formatName(lastName).isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường họ !";
+                        } else if (Helper.formatName(firstGuardianName).isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống họ tên bố";
+                        } else if (firstGuardianPhoneNumber.isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường số điện thoại Bố";
+                        } else if (avatar.isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường hình ảnh !";
+                        } else if (genderRaw.equals("-1")) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường giới tính !";
+                        } else if (email.isBlank()) {
+                            toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường email !";
+                        } 
                         toastType = "error";
                         session.setAttribute("toastMessage", toastMessage);
                         session.setAttribute("toastType", toastType);
@@ -208,11 +195,57 @@ public class StudentServlet extends HttpServlet {
                         request.setAttribute("listStudent", listStudent);
                         request.setAttribute("newStudentId", request.getParameter("id"));
                         request.getRequestDispatcher("student.jsp").forward(request, response);
+                    } else if (!(avatar.endsWith("png") || avatar.endsWith("jpg"))) {
+                        toastMessage = "Tạo thật bại ! Vui lòng chọn đúng tập hình ảnh !";
+                        toastType = "error";
+                        session.setAttribute("toastMessage", toastMessage);
+                        session.setAttribute("toastType", toastType);
+                        List<Student> listStudent = studentDAO.getAllStudents();
+                        request.setAttribute("listStudent", listStudent);
+                        request.setAttribute("newStudentId", request.getParameter("id"));
+                        request.getRequestDispatcher("student.jsp").forward(request, response);
+                    } else if (secondGuardianName.isBlank() && !secondGuardianPhoneNumber.isBlank()) {
+                        toastMessage = "Tạo thật bại ! Vui lòng nhập họ và tên Mẹ!";
+                        toastType = "error";
+                        session.setAttribute("toastMessage", toastMessage);
+                        session.setAttribute("toastType", toastType);
+                        List<Student> listStudent = studentDAO.getAllStudents();
+                        request.setAttribute("listStudent", listStudent);
+                        request.setAttribute("newStudentId", request.getParameter("id"));
+                        request.getRequestDispatcher("student.jsp").forward(request, response);
+                    } else if (studentDAO.checkFirstGuardianPhoneNumberExists(firstGuardianPhoneNumber) || studentDAO.checkSecondGuardianPhoneNumberExists(secondGuardianPhoneNumber)) {
+                        if (studentDAO.checkFirstGuardianPhoneNumberExists(firstGuardianPhoneNumber)) {
+                            toastMessage = "Số điện thoại Bố đã tồn tại";
+                        } else if (studentDAO.checkSecondGuardianPhoneNumberExists(secondGuardianPhoneNumber)) {
+                            toastMessage = "Số điện thoại Mẹ đã tồn tại";
+                        }
+                        session.setAttribute("toastMessage", toastMessage);
+                        session.setAttribute("toastType", toastType);
+                        List<Student> listStudent = studentDAO.getAllStudents();
+                        request.setAttribute("listStudent", listStudent);
+                        request.setAttribute("newStudentId", request.getParameter("id"));
+                        request.getRequestDispatcher("student.jsp").forward(request, response);
+                    } else {
+                        if (studentDAO.createStudent(student)) {
+                            toastMessage = "Xác nhận thành công";
+                            toastType = "success";
+                            session.setAttribute("toastMessage", toastMessage);
+                            session.setAttribute("toastType", toastType);
+                            response.sendRedirect("student");
+
+                        } else {
+                            session.setAttribute("toastMessage", toastMessage);
+                            session.setAttribute("toastType", toastType);
+                            List<Student> listStudent = studentDAO.getAllStudents();
+                            request.setAttribute("listStudent", listStudent);
+                            request.setAttribute("newStudentId", request.getParameter("id"));
+                            request.getRequestDispatcher("student.jsp").forward(request, response);
+                        }
                     }
+                } catch (ParseException ex) {
+                    Logger.getLogger(StudentServlet.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-
         }
-
     }
 }

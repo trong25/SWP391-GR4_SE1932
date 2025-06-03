@@ -18,8 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.day.DayDAO;
 import model.evaluation.EvaluationDAO;
-import model.event.Event;
-import model.event.eventDAO;
 import model.notification.NotificationDAO;
 import model.student.StudentAttendanceDAO;
 import model.student.StudentDAO;
@@ -51,8 +49,7 @@ public class DashboardStudentServlet extends HttpServlet {
         WeekDAO weekDAO = new WeekDAO();
         StudentDAO studentDAO = new StudentDAO();
         StudentAttendanceDAO studentAttendanceDAO = new StudentAttendanceDAO();
-        eventDAO eventDAO = new eventDAO();
-        List<Event> events = eventDAO.getFutureEvent(user.getRoleId());
+
         Date currentDate = Date.from(Instant.now());
         String evaluation = "";
         String takeAttendance = "";
@@ -73,7 +70,6 @@ public class DashboardStudentServlet extends HttpServlet {
         if(notificationDAO.getListNotifiByUserId(user.getId()).isEmpty()){
             notifications = 0;
         }
-        request.setAttribute("listEvents", events);
         request.setAttribute("evaluation", evaluation);
         request.setAttribute("takeAttendance", takeAttendance);
         request.setAttribute("notifications", notifications);

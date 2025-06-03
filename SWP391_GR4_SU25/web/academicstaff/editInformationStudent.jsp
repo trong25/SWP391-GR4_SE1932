@@ -189,63 +189,64 @@
             }
         </script>
         <script>
-    function validateForm() {
-        // Lấy các trường cần kiểm tra
-        var firstGuardianName = document.getElementsByName("first_guardian_name")[0].value.trim();
-        var secondGuardianName = document.getElementsByName("second_guardian_name")[0].value.trim();
-        var lastName = document.getElementsByName("lastName")[0].value.trim();
-        var firstName = document.getElementsByName("firstName")[0].value.trim();
-        var birthday = document.getElementsByName("birthday")[0].value;
+            function validateForm() {
+                // Lấy các trường cần kiểm tra
+                var firstGuardianName = document.getElementsByName("first_guardian_name")[0].value.trim();
+                var secondGuardianName = document.getElementsByName("second_guardian_name")[0].value.trim();
+                var lastName = document.getElementsByName("lastName")[0].value.trim();
+                var firstName = document.getElementsByName("firstName")[0].value.trim();
+                var birthday = document.getElementsByName("birthday")[0].value;
 
-        // Validate ngày sinh
-        if (!isOlderThan11Years(birthday)) {
-            toastr.error("Học sinh phải lớn hơn 11 tuổi");
-            return false;
-        }
+                // Validate ngày sinh
+                if (!isOlderThan11Years(birthday)) {
+                    toastr.error("Học sinh phải lớn hơn 11 tuổi");
+                    return false;
+                }
 
-        // Validate tên không chứa số hoặc ký tự đặc biệt
-        if (!isValidPureName(firstGuardianName)) {
-            toastr.error("Họ tên bố không được chứa số hoặc ký tự đặc biệt");
-            return false;
-        }
+                // Validate tên không chứa số hoặc ký tự đặc biệt
+                if (!isValidPureName(firstGuardianName)) {
+                    toastr.error("Họ tên bố không được chứa số hoặc ký tự đặc biệt");
+                    return false;
+                }
 
-        if (secondGuardianName !== "" && !isValidPureName(secondGuardianName)) {
-            toastr.error("Họ tên mẹ không được chứa số hoặc ký tự đặc biệt");
-            return false;
-        }
+                if (secondGuardianName !== "" && !isValidPureName(secondGuardianName)) {
+                    toastr.error("Họ tên mẹ không được chứa số hoặc ký tự đặc biệt");
+                    return false;
+                }
 
-        if (!isValidPureName(firstName)) {
-            toastr.error("Tên học sinh không được chứa số hoặc ký tự đặc biệt");
-            return false;
-        }
+                if (!isValidPureName(firstName)) {
+                    toastr.error("Tên học sinh không được chứa số hoặc ký tự đặc biệt");
+                    return false;
+                }
 
-        if (!isValidPureName(lastName)) {
-            toastr.error("Họ học sinh không được chứa số hoặc ký tự đặc biệt");
-            return false;
-        }
+                if (!isValidPureName(lastName)) {
+                    toastr.error("Họ học sinh không được chứa số hoặc ký tự đặc biệt");
+                    return false;
+                }
 
-        return true;
-    }
+                return true;
+            }
 
-    function isValidPureName(name) {
-        // Chỉ cho phép chữ cái (bao gồm dấu tiếng Việt), khoảng trắng và dấu gạch ngang
-        return /^[A-Za-zÀ-ỹà-ỹ\s\-]+$/.test(name);
-    }
+            function isValidPureName(name) {
+                // Chỉ cho phép chữ cái (bao gồm dấu tiếng Việt), khoảng trắng và dấu gạch ngang
+                return /^[A-Za-zÀ-ỹà-ỹ\s\-]+$/.test(name);
+            }
 
-    function isOlderThan11Years(birthday) {
-        if (!birthday) return false;
-        var birthDate = new Date(birthday);
-        var today = new Date();
-        var age = today.getFullYear() - birthDate.getFullYear();
-        var m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age > 11;
-    }
-</script>
+            function isOlderThan11Years(birthday) {
+                if (!birthday)
+                    return false;
+                var birthDate = new Date(birthday);
+                var today = new Date();
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                return age > 11;
+            }
+        </script>
 
-        
+
 
     </head>
     <body id="page-top">
@@ -283,87 +284,120 @@
                                             <input type="hidden" value="noedit" name="action"/>
                                             <input hidden name="currentAvatar" value="${student.avatar}"/>
                                             <input class="custom-file-input" id="customFile" type="file" name="image"/>
-                                            <table>
+                                            <table class="table table-borderless">
                                                 <tbody>
                                                     <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>ID Người Dùng:</h5><input class="form-control-sm" value="${student.userId!=null?student.userId:"Chưa có tài khoản"}" type="text" name="userId" readonly=""/>
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>ID: </h5> <input class="form-control-sm" value="${student.id}" type="text" name="id" readonly=""/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Bố:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" maxlength="25" title="Nhập tối da 25 kí tự" required=""/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-
-                                                                <h5>Số Điện Thoại Bố<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="[0-9]+" minlength="10" maxlength="10" title="Chỉ nhập số" required=""/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Mẹ<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Số Điện Thoại Mẹ<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" maxlength="10" minlength="10" pattern="[0-9]+" title="Chỉ nhập số"/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Tên Trường<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="schoolName" value="${student.schoolName}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
-                                                            </div></td>
-                                                            <td><div class="form-group col-md-8">
-                                                                <h5>ID Trường<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="school_id" value="${student.school_id}" maxlength="25" title="Nhập tối da 25 kí tự"/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>
-                                                            <div class="form-group col-md-8">
-                                                                <h5>Họ Của Học Sinh<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="lastName" value="${student.lastName}" required="">
+                                                            <div class="form-group">
+                                                                <h5>ID Người Dùng:</h5>
+                                                                <input class="form-control form-control-sm" value="${student.userId!=null?student.userId:"Chưa có tài khoản"}" type="text" name="userId" readonly=""/>
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div class="form-group col-md-8">
-                                                                <h5>Tên Của Học Sinh<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="text" name="firstName" value="${student.firstName}" required="">
+                                                            <div class="form-group">
+                                                                <h5>ID:</h5>
+                                                                <input class="form-control form-control-sm" value="${student.id}" type="text" name="id" readonly=""/>
                                                             </div>
                                                         </td>
-
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Họ Tên Bố:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" maxlength="25" required title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Ngày Sinh <a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="date" name="birthday" value="${student.birthday}" title="Ngày sinh của bé" required=""/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Email<a style="color: red">(*)</a>:</h5> 
-                                                                <input class="form-control form-control-sm" type="email" name="email" value="${student.email}" title="email" required=""/><br />
-                                                            </div></td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>SĐT Bố <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="[0-9]+" minlength="10" maxlength="10" required title="Chỉ nhập số"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Họ Tên Mẹ <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>SĐT Mẹ <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" pattern="[0-9]+" minlength="10" maxlength="10" title="Chỉ nhập số"/>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                     <tr>
-                                                        <td><div class="form-group col-md-6">
-                                                                <h5>Địa Chỉ<a style="color: red">(*)</a>:</h5> 
-                                                                <textarea class="form-control form-control-sm" type="text" name="address" value="${student.address}" style="width: 200%" title="Tối đa 50 kí tự" required="" maxlength="50">${student.address}</textarea><br />
-                                                            </div></td>
-
-
-                                                        <td><div class="form-group col-md-6">
-                                                                <h5>Cam kết của phụ huynh học sinh<a style="color: red">(*)</a>:</h5> 
-                                                                <textarea class="form-control form-control-sm" name="note" style="width: 200%" maxlength="500">${student.parentSpecialNote}</textarea>
-                                                            </div></td>
-
-
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Tên Trường <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="schoolName" value="${student.school_id.schoolName}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>ID Trường <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="school_id" value="${student.school_id.id}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Mã Lớp <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="school_class_id" value="${student.school_class_id.id}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
                                                     </tr>
-                                                <p>Chú ý : Những Tiêu Đề Có Dấu (*) Là Những Tiêu Đề Được Chỉnh Sửa. Nhấn Vào Ảnh Để Thay Đổi.</p>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Tên Lớp <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="className" value="${student.school_class_id.className}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Họ Học Sinh <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="lastName" value="${student.lastName}" required>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Tên Học Sinh <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="firstName" value="${student.firstName}" required>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Ngày Sinh <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="date" name="birthday" value="${student.birthday}" required title="Ngày sinh của học sinh"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Email <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="email" name="email" value="${student.email}" required title="Email"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group">
+                                                                <h5>Địa Chỉ <a style="color: red">*</a>:</h5>
+                                                                <textarea class="form-control form-control-sm" name="address" maxlength="50" required title="Tối đa 50 ký tự">${student.address}</textarea>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <div class="form-group">
+                                                                <h5>Cam kết của phụ huynh học sinh <a style="color: red">*</a>:</h5>
+                                                                <textarea class="form-control form-control-sm" name="note" maxlength="500">${student.parentSpecialNote}</textarea>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
+                                            <p class="text-muted">Chú ý: Những tiêu đề có dấu (*) là những tiêu đề được chỉnh sửa. Nhấn vào ảnh để thay đổi.</p>
+
                                             <div class="d-flex justify-content-end">
                                                 <div class="m-2">
                                                     <button type="button" onclick="redirectToPreviousPage()" class="btn btn-danger">Quay Lại</button></a>

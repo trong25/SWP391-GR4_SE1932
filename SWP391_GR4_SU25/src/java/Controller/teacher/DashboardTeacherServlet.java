@@ -18,7 +18,6 @@ import model.application.ApplicationDAO;
 import model.classes.ClassDAO;
 import model.classes.Class;
 import model.day.DayDAO;
-import model.event.eventDAO;
 import model.notification.NotificationDAO;
 import model.personnel.Personnel;
 import model.personnel.PersonnelAttendanceDAO;
@@ -46,7 +45,6 @@ public class DashboardTeacherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        eventDAO eventDAO = new eventDAO();
         StudentDAO studentDAO = new StudentDAO();
         ClassDAO classDAO = new ClassDAO();
 
@@ -65,7 +63,6 @@ public class DashboardTeacherServlet extends HttpServlet {
 
             NotificationDAO notificationDAO = new NotificationDAO();
             int sumNotification = notificationDAO.getListNotifiByUserId(personnel.getUserId()).size();
-            request.setAttribute("listEvents", eventDAO.getFutureEvent(2));
             request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
             request.setAttribute("listStudentInClass", listStudentInClass);
             request.setAttribute("sumApplication", sumApplication);

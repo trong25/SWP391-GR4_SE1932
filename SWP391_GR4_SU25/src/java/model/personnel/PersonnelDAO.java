@@ -128,4 +128,19 @@ public class PersonnelDAO extends DBContext {
         }
         return person;
     }
+    public int getPendingTeacherCount() {
+    String sql = "SELECT COUNT(*) AS total FROM Personnels WHERE status = ? AND role_id = ?";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setString(1, "đang chờ xử lý");
+        preparedStatement.setInt(2, 3); // role_id của giáo viên
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return resultSet.getInt("total");
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+    return 0;
+}
+
 }
