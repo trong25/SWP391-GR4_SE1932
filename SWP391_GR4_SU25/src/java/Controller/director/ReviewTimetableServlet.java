@@ -14,7 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
+
  */
 public class ReviewTimetableServlet extends HttpServlet {
    

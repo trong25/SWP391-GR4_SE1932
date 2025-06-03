@@ -9,31 +9,34 @@
 
 	
 
-INSERT INTO [Class] VALUES (N'C000001',N'Lớp 6A',N'G000001',N'TEA000010',N'SY000001',N'đã được duyệt',N'AS000010'),
-	(N'C000002',N'Lớp 6B',N'G000001',N'TEA000011',N'SY000001',N'đã được duyệt',N'AS000010'),
-	(N'C000003',N'Lớp 7A',N'G000002',N'TEA000012',N'SY000001',N'đã được duyệt',N'AS000011'),
-	(N'C000004',N'Lớp 7B ',N'G000002',N'TEA000013',N'SY000001',N'đã được duyệt',N'AS000011'),
-	(N'C000005',N'Lớp 8A',N'G000003',N'TEA000014',N'SY000002',N'đã được duyệt',N'AS000012'),
-	(N'C000006',N'Lớp 8B',N'G000003',N'TEA000015',N'SY000002',N'đã được duyệt',N'AS000012'),
-	(N'C000007',N'Lớp 9A',N'G000004',N'TEA000016',N'SY000002',N'đã được duyệt',N'AS000013'),
-	(N'C000008',N'Lớp 9B',N'G000004',N'TEA000017',N'SY000002',N'đang chờ xử lý',N'AS000013'),
-	(N'C000009',N'Lớp 10A',N'G000005',N'TEA000018',N'SY000001',N'đã được duyệt',N'AS000010'),
-	(N'C000010',N'Lớp 10B',N'G000005',N'TEA000019',N'SY000002',N'đã được duyệt',N'AS000013'),
-	(N'C000011',N'Lớp 11A',N'G000006',N'TEA000020',N'SY000002',N'đã được duyệt',N'AS000013'),
-	(N'C000012',N'Lớp 11B',N'G000006',N'TEA000021',N'SY000002',N'đã được duyệt',N'AS000013'),
-	(N'C000013',N'Lớp 12A',N'G000007',N'TEA000019',N'SY000002',N'đã được duyệt',N'AS000013'),
-	(N'C000014',N'Lớp 12B',N'G000007',N'TEA000019',N'SY000002',N'đã được duyệt',N'AS000013');
+INSERT INTO [Class] VALUES 
+('C000001', N'Lớp Toán học 6 - Cơ bản', 'G000001', 'TEA000010', 'SY000001', N'đã được duyệt', 'AS000010'),
+('C000002', N'Lớp Ngữ văn 6 - Cơ bản', 'G000001', 'TEA000011', 'SY000001', N'đã được duyệt', 'AS000010'),
+('C000003', N'Lớp Toán học 7 - Cơ bản', 'G000002', 'TEA000012', 'SY000001', N'đã được duyệt', 'AS000011'),
+('C000004', N'Lớp Tiếng Anh 7 - Cơ bản', 'G000002', 'TEA000013', 'SY000001', N'đã được duyệt', 'AS000011'),
+('C000005', N'Lớp Toán học 8 - Cơ bản', 'G000003', 'TEA000014', 'SY000002', N'đã được duyệt', 'AS000012'),
+('C000006', N'Lớp Ngữ văn 8 - Cơ bản', 'G000003', 'TEA000015', 'SY000002', N'đã được duyệt', 'AS000012'),
+('C000007', N'Lớp Toán học 9 - Nâng cao', 'G000004', 'TEA000016', 'SY000002', N'đã được duyệt', 'AS000013'),
+('C000008', N'Lớp Tiếng Anh 9 - Nâng cao', 'G000004', 'TEA000017', 'SY000002', N'đã được duyệt', 'AS000013'),
+('C000009', N'Lớp Toán học 10 - Cơ bản', 'G000005', 'TEA000018', 'SY000001', N'đã được duyệt', 'AS000010'),
+('C000010', N'Lớp Tiếng Anh 10 - Nâng cao', 'G000005', 'TEA000019', 'SY000002', N'đã được duyệt', 'AS000013'),
+('C000011', N'Lớp Toán học 11 - Cơ bản', 'G000006', 'TEA000020', 'SY000002', N'đã được duyệt', 'AS000013'),
+('C000012', N'Lớp Ngữ văn 11 - Cơ bản', 'G000006', 'TEA000021', 'SY000002', N'đã được duyệt', 'AS000013'),
+('C000013', N'Lớp Toán 12 - Ôn thi THPT', 'G000007', 'TEA000022', 'SY000002', N'đã được duyệt', 'AS000013'),
+('C000014', N'Lớp Ngữ văn 12 - Ôn thi THPT', 'G000007', 'TEA000023', 'SY000002', N'đã được duyệt', 'AS000013');
 
-	INSERT INTO [dbo].[Timeslots] VALUES
-    ('TS001', N'Tiết sáng 1', '07:00', '07:45', '1'),
-    ('TS002', N'Tiết sáng 2', '07:45', '08:30', '2'),
-    ('TS003', N'Tiết sáng 3', '08:30', '09:15', '3'),
-    ('TS004', N'Tiết sáng 4', '09:15', '10:00', '4'),
-	('TS005', N'Tiết chiều 1', '14:30', '15:15', '5'),
-	('TS006', N'Tiết chiều 2', '15:15', '16:00', '6'),
-	('TS07',N'Tiết chiều 3', '16:00', '16:45', '7')
-	
 
+INSERT INTO [Timeslots] VALUES
+    -- Các tiết cuối tuần (thứ 7, CN)
+    ('TS001', N'Tiết sáng 1 (CN)', '08:00', '10:00', '1', 'weekend'),
+    ('TS002', N'Tiết sáng 2 (CN)', '10:00', '12:00', '2', 'weekend'),
+    ('TS003', N'Tiết chiều 1 (CN)', '13:00', '15:00', '3', 'weekend'),
+    ('TS004', N'Tiết chiều 2 (CN)', '15:00', '17:00', '4', 'weekend'),
+    
+    -- Các tiết buổi tối trong tuần (thứ 2-6)
+    ('TS005', N'Tiết tối 1 (19-21h)', '19:00', '21:00', '5', 'weekday'),
+    ('TS006', N'Tiết tối 2 (21-23h)', '21:00', '23:00', '6', 'weekday'),
+    ('TS007', N'Tiết tối 3 (18-20h)', '18:00', '20:00', '7', 'weekday');
 	INSERT INTO [ClassDetails] VALUES (N'HS000001',N'C000001'),
 	(N'HS000002',N'C000001'),
 	(N'HS000003',N'C000001'),
@@ -63,36 +66,37 @@ INSERT INTO [Class] VALUES (N'C000001',N'Lớp 6A',N'G000001',N'TEA000010',N'SY0
 	(N'HS000002',N'C000010'),
 	(N'HS000003',N'C000010');
 
-	INSERT INTO [Subjects] VALUES ('S000001', N'Toán học', 'G000001', N'Toán học lớp 6', N'đã được duyệt'),
-('S000002', N'Ngữ văn','G000001', N'Ngữ văn lớp 6', N'đã được duyệt'),
-('S000003', N'Tiếng Anh','G000001', N'Tiếng Anh cơ bản lớp 6', N'đã được duyệt'),
-('S000004', N'Lịch sử', 'G000001', N'Lịch sử Việt Nam cơ bản lớp 6', N'đang chờ xử lý'),
-('S000005', N'Địa lý', 'G000001', N'Địa lý tự nhiên và xã hội lớp 6', N'đã được duyệt'),
-('S000006', N'Giáo dục công dân', 'G000001', N'Nhận thức xã hội và đạo đức lớp 6', N'đã được duyệt'),
-('S00007', N'Toán học', 'G000002', N'Toán học lớp 7', N'đã được duyệt'),
-('S00008', N'Ngữ văn', 'G000002', N'Ngữ văn lớp 7', N'đã được duyệt'),
-('S00009', N'Tiếng Anh', 'G000002', N'Tiếng Anh lớp 7', N'đang chờ xử lý'),
-('S00010', N'Lịch sử', 'G000002', N'Lịch sử lớp 7', N'đã được duyệt'),
-('S00011', N'Địa lý', 'G000002', N'Địa lý lớp 7', N'đã được duyệt'),
-('S00012', N'Giáo dục công dân', 'G000002', N'GDCD lớp 7', N'đã được duyệt'),
-('S00013', N'Toán học', 'G000005', N'Toán học lớp 10', N'đã được duyệt'),
-('S00014', N'Ngữ văn', 'G000005', N'Ngữ văn lớp 10', N'đã được duyệt'),
-('S00015', N'Tiếng Anh', 'G000005', N'Tiếng Anh nâng cao lớp 10', N'đã được duyệt'),
-('S00016', N'Lịch sử', 'G000005', N'Lịch sử lớp 10', N'đang chờ xử lý'),
-('S00017', N'Địa lý', 'G000005', N'Địa lý lớp 10', N'đã được duyệt'),
-('S00018', N'Giáo dục công dân', 'G000005', N'GDCD lớp 10', N'đã được duyệt'),
-('S00019', N'Tiếng Anh', 'G000003', N'Tiếng Anh lớp 8 ', N'đang chờ xử lý'),
-('S00020', N'Lịch sử', 'G000003', N'Lịch sử lớp 8', N'đã được duyệt'),
-('S00021', N'Địa lý', 'G000003', N'Địa lý lớp 8', N'đã được duyệt'),
-('S00022', N'Giáo dục công dân', 'G000003', N'GDCD lớp 8', N'đã được duyệt'),
-('S00023', N'Toán học', 'G000003', N'Toán học lớp 8', N'đã được duyệt'),
-('S00024', N'Ngữ văn', 'G000004', N'Ngữ văn lớp 9', N'đang chờ xử lý'),
-('S00025', N'Tiếng Anh', 'G000004', N'Tiếng Anh nâng cao lớp 9', N'đang chờ xử lý'),
-('S00026', N'Lịch sử', 'G000006', N'Lịch sử lớp 11', N'đã được duyệt'),
-('S00027', N'Địa lý', 'G000006', N'Địa lý lớp 11', N'đã được duyệt'),
-('S00028', N'Giáo dục công dân', 'G000006', N'GDCD lớp 11', N'đã được duyệt'),
-('S00029', N'Toán Học', 'G000004', N'Ôn Thi THPT', N'đã được duyệt'),
-('S00030', N'Ôn Thi THPTQG Toán Học', 'G000007', N'Ôn Thi THPTQG ', N'đã được duyệt')
+INSERT INTO [Subjects] VALUES 
+('S000001', N'Toán học lớp 6', 'G000001', N'Toán học chương trình cơ bản lớp 6', N'đã được duyệt', N'Cơ bản'),
+('S000002', N'Ngữ văn lớp 6', 'G000001', N'Ngữ văn chương trình cơ bản lớp 6', N'đã được duyệt', N'Cơ bản'),
+('S000003', N'Tiếng Anh lớp 6', 'G000001', N'Tiếng Anh chương trình cơ bản lớp 6', N'đã được duyệt', N'Cơ bản'),
+('S000004', N'Lịch sử lớp 6', 'G000001', N'Lịch sử Việt Nam lớp 6', N'đang chờ xử lý', N'Cơ bản'),
+('S000005', N'Địa lý lớp 6', 'G000001', N'Địa lý tự nhiên và xã hội lớp 6', N'đã được duyệt', N'Cơ bản'),
+('S000006', N'Giáo dục công dân lớp 6', 'G000001', N'GDCD lớp 6', N'đã được duyệt', N'Cơ bản'),
+('S000007', N'Toán học lớp 7', 'G000002', N'Toán học chương trình cơ bản lớp 7', N'đã được duyệt', N'Cơ bản'),
+('S000008', N'Ngữ văn lớp 7', 'G000002', N'Ngữ văn chương trình cơ bản lớp 7', N'đã được duyệt', N'Cơ bản'),
+('S000009', N'Tiếng Anh lớp 7', 'G000002', N'Tiếng Anh chương trình cơ bản lớp 7', N'đang chờ xử lý', N'Cơ bản'),
+('S000010', N'Lịch sử lớp 7', 'G000002', N'Lịch sử chương trình cơ bản lớp 7', N'đã được duyệt', N'Cơ bản'),
+('S000011', N'Địa lý lớp 7', 'G000002', N'Địa lý chương trình cơ bản lớp 7', N'đã được duyệt', N'Cơ bản'),
+('S000012', N'Giáo dục công dân lớp 7', 'G000002', N'GDCD lớp 7', N'đã được duyệt', N'Cơ bản'),
+('S000013', N'Toán học lớp 10', 'G000005', N'Toán học chương trình cơ bản lớp 10', N'đã được duyệt', N'Cơ bản'),
+('S000014', N'Ngữ văn lớp 10', 'G000005', N'Ngữ văn chương trình cơ bản lớp 10', N'đã được duyệt', N'Cơ bản'),
+('S000015', N'Tiếng Anh nâng cao lớp 10', 'G000005', N'Tiếng Anh chương trình nâng cao lớp 10', N'đã được duyệt', N'Nâng cao'),
+('S000016', N'Lịch sử lớp 10', 'G000005', N'Lịch sử chương trình cơ bản lớp 10', N'đang chờ xử lý', N'Cơ bản'),
+('S000017', N'Địa lý lớp 10', 'G000005', N'Địa lý chương trình cơ bản lớp 10', N'đã được duyệt', N'Cơ bản'),
+('S000018', N'Giáo dục công dân lớp 10', 'G000005', N'GDCD lớp 10', N'đã được duyệt', N'Cơ bản'),
+('S000019', N'Tiếng Anh lớp 8', 'G000003', N'Tiếng Anh chương trình cơ bản lớp 8', N'đang chờ xử lý', N'Cơ bản'),
+('S000020', N'Lịch sử lớp 8', 'G000003', N'Lịch sử chương trình cơ bản lớp 8', N'đã được duyệt', N'Cơ bản'),
+('S000021', N'Địa lý lớp 8', 'G000003', N'Địa lý chương trình cơ bản lớp 8', N'đã được duyệt', N'Cơ bản'),
+('S000022', N'Giáo dục công dân lớp 8', 'G000003', N'GDCD lớp 8', N'đã được duyệt', N'Cơ bản'),
+('S000023', N'Toán học nâng cao lớp 8', 'G000003', N'Toán học chương trình nâng cao lớp 8', N'đã được duyệt', N'Nâng cao'),
+('S000024', N'Ngữ văn lớp 9', 'G000004', N'Ngữ văn chương trình cơ bản lớp 9', N'đang chờ xử lý', N'Cơ bản'),
+('S000025', N'Tiếng Anh nâng cao lớp 9', 'G000004', N'Tiếng Anh chương trình nâng cao lớp 9', N'đang chờ xử lý', N'Nâng cao'),
+('S000026', N'Lịch sử lớp 11', 'G000006', N'Lịch sử chương trình cơ bản lớp 11', N'đã được duyệt', N'Cơ bản'),
+('S000027', N'Địa lý lớp 11', 'G000006', N'Địa lý chương trình cơ bản lớp 11', N'đã được duyệt', N'Cơ bản'),
+('S000028', N'Giáo dục công dân lớp 11', 'G000006', N'GDCD lớp 11', N'đã được duyệt', N'Cơ bản'),
+('S000029', N'Toán ôn thi THPT', 'G000004', N'Toán học ôn thi THPT', N'đã được duyệt', N'Ôn thi'),
+('S000030', N'Toán ôn thi THPTQG', 'G000007', N'Toán học ôn thi THPT Quốc gia', N'đã được duyệt', N'Ôn thi');
 
 INSERT INTO [Application_Types] VALUES ('AT000001',N'Đơn xin nghỉ học', N'pupil', N'teacher',N'Học sinh xin nghỉ học sẽ gửi đơn này cho giáo viên chủ nhiệm');
 
@@ -100,19 +104,28 @@ INSERT INTO [Application_Types] VALUES ('AT000001',N'Đơn xin nghỉ học', N'
 INSERT INTO [Applications] VALUES ('APP000001', '2024-01-15', 'AT000001', N'Đơn xin nghỉ học vì lý do sức khỏe', NULL,N'đã được duyệt', 'U000003', '2024-01-10', '2024-01-11', '2024-01-11', 'AS000006');
 GO
 
-INSERT INTO Events
-	VALUES	('E000001', 'HT000001', N'Hội Thảo Phương Pháp Học Tập Hiệu Quả', N'Sự kiện dành cho học sinh từ lớp 6–12 nhằm hướng dẫn các phương pháp học tập chủ động, ghi nhớ hiệu quả và luyện đề thi. Tổ chức vào ngày 10/06/2024 tại hội trường Trung tâm.', '2024-06-10'),
 
-('E000002', 'HT000001', N'Cuộc Thi Học Sinh Giỏi Cấp Trung Tâm', N'Cuộc thi tuyển chọn học sinh giỏi các môn Toán, Văn, Anh, Lý, Hóa. Diễn ra vào ngày 25/06/2024, từ 8:00 AM đến 11:30 AM tại các phòng thi trung tâm.', '2024-06-25'),
+INSERT INTO [Timetables] VALUES
+-- Các lớp cuối tuần (sử dụng TS001-TS004)
+('TT000001', 'C000001', 'TS001', 'D000009', 'S000001', 'TEA000010', N'đã được duyệt', N'Toán lớp 6 cơ bản - CN sáng', 'TEA000010', N'Lớp 6', N'Cơ bản'),
+('TT000002', 'C000001', 'TS002', 'D000009', 'S000002', 'TEA000011', N'đã được duyệt', N'Ngữ văn lớp 6 cơ bản - CN sáng', 'TEA000011', N'Lớp 6', N'Cơ bản'),
+('TT000003', 'C000001', 'TS003', 'D000010', 'S000003', 'TEA000012', N'đã được duyệt', N'Tiếng Anh lớp 6 cơ bản - CN chiều', 'TEA000012', N'Lớp 6', N'Cơ bản'),
 
-('E000003', 'HT000001', N'Buổi Định Hướng Lộ Trình Ôn Thi Vào 10',  N'Chương trình tư vấn và định hướng cho học sinh lớp 9 về lộ trình ôn thi vào lớp 10, bao gồm phân tích cấu trúc đề, phương pháp học và phân bổ thời gian học tập. Tổ chức vào ngày 30/06/2024.', '2024-06-30'),
+-- Toán ôn thi THPT (3 buổi/tuần)
+('TT000008', 'C000008', 'TS005', 'D000242', 'S000029', 'TEA000026', N'đã được duyệt', N'Toán ôn thi THPT', 'TEA000026', N'Lớp 12', N'Ôn thi'),
+('TT000009', 'C000008', 'TS006', 'D000243', 'S000029', 'TEA000026', N'đã được duyệt', N'Toán ôn thi THPT', 'TEA000026', N'Lớp 12', N'Ôn thi'),
+('TT000010', 'C000008', 'TS007', 'D000246', 'S000029', 'TEA000027', N'đã được duyệt', N'Toán ôn thi THPT', 'TEA000027', N'Lớp 12', N'Ôn thi'),
 
-('E000004', 'HT000001', N'Tư Vấn Tuyển Sinh và Giới Thiệu Khóa Học Mới',  N'Sự kiện giới thiệu các lớp học thêm chuẩn bị cho năm học mới, bao gồm các môn học chính và lớp luyện thi. Tổ chức vào ngày 15/07/2024 tại Trung tâm.', '2024-07-15'),
+-- Có thể thêm các môn khác cho lớp 12 nếu cần
+('TT000011', 'C000008', 'TS005', 'D000255', 'S000030', 'TEA000028', N'đã được duyệt', N'Toán ôn thi THPTQG', 'TEA000028', N'Lớp 12', N'Ôn thi');
+								-- Lớp 7 - slot tối thứ 2, 4, 6
+INSERT INTO Timetables VALUES
+('TT000018', 'C000003', 'TS005', 'D000011', 'S000007', 'TEA000012', N'đã được duyệt', N'Toán lớp 7 buổi tối thứ 2', 'TEA000012', N'Lớp 7', N'Cơ bản'),
+('TT000019', 'C000003', 'TS007', 'D000012', 'S000008', 'TEA000013', N'đã được duyệt', N'Ngữ văn lớp 7 buổi tối thứ 4', 'TEA000013', N'Lớp 7', N'Cơ bản'),
+('TT000020', 'C000003', 'TS006', 'D000013', 'S000009', 'TEA000014', N'đã được duyệt', N'Tiếng Anh lớp 7 buổi tối thứ 6', 'TEA000014', N'Lớp 7', N'Cơ bản');
 
-('E000005', 'HT000001', N'Báo Cáo Kết Quả Học Tập Học Kỳ 2', N'Sự kiện tổng kết học kỳ, trao phần thưởng cho học sinh xuất sắc, học sinh tiến bộ và phản hồi phụ huynh. Tổ chức ngày 05/07/2024 tại Hội trường Trung tâm.', '2024-07-05'),
-
-('E000006', 'HT000001', N'Lớp Bồi Dưỡng Giáo Viên Môn Toán và Văn', N'Khóa tập huấn ngắn hạn cho giáo viên trung tâm để nâng cao kỹ năng giảng dạy, cập nhật phương pháp luyện thi và xử lý học sinh yếu kém.', '2024-08-01'),
-
-('E000007', 'HT000001', N'Hội Thảo Tâm Lý Học Đường Cho Phụ Huynh', N'Sự kiện tư vấn cho phụ huynh về các vấn đề tâm lý học đường như áp lực học tập, định hướng nghề nghiệp và giao tiếp với con. Tổ chức vào ngày 12/08/2024.', '2024-08-12');
-Insert into eventDetails values ('E000001',4),('E000002',4),('E000003',4),('E000004',3),('E000005',4),('E000006',3);
-								
+-- Lớp 8 - slot mọi thời gian chủ nhật
+INSERT INTO Timetables VALUES
+('TT000021', 'C000005', 'TS006', 'D000014', 'S000019', 'TEA000015', N'đã được duyệt', N'Tiếng Anh lớp 8 CN sáng', 'TEA000015', N'Lớp 8', N'Cơ bản'),
+('TT000022', 'C000005', 'TS007', 'D000014', 'S000020', 'TEA000016', N'đã được duyệt', N'Lịch sử lớp 8 CN chiều', 'TEA000016', N'Lớp 8', N'Cơ bản'),
+('TT000023', 'C000006', 'TS005', 'D000015', 'S000023', 'TEA000017', N'đã được duyệt', N'Toán nâng cao lớp 8 CN tối', 'TEA000017', N'Lớp 8', N'Nâng cao');

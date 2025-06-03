@@ -28,7 +28,7 @@ import model.week.Week;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
  */
 public class ViewTimeTableClassServlet extends HttpServlet {
 
@@ -100,19 +100,32 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+
         // Lấy thông tin người dùng chọn:
         String classId = request.getParameter("class");
          String week = request.getParameter("week");
+
+        //Lấy thông tin người dùng chọn:
+        String classId = request.getParameter("class");
+        String week = request.getParameter("week");
+
         String schoolyear = request.getParameter("schoolyear");
         
         
         WeekDAO weekDAO = new WeekDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         Class aclass = new ClassDAO().getClassById(classId);
+
         
        //Lấy danh sách lớp học của năm học đó
         List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
         if (listClass.isEmpty()) { //Nếu không có lớp thì thông báo lỗi và chuyển hướng về lại trang GET
+
+
+        //Lấy danh sách lớp học của năm học đó
+        List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
+        if (listClass.isEmpty()) {//Kiểm tra nếu không có lớp nào
+
             HttpSession session = request.getSession();
             session.setAttribute("toastType", "error");
             session.setAttribute("toastMessage", "Năm này không có lớp học");
@@ -120,8 +133,7 @@ public class ViewTimeTableClassServlet extends HttpServlet {
             return;
         }
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();
-            List<Week> weekList = weekDAO.getWeeks(schoolyear);
-
+        List<Week> weekList = weekDAO.getWeeks(schoolyear);
 
         List<Timetable> timetable = new ArrayList<>();
         TimeSlotDAO timeSlotDAO = new TimeSlotDAO();

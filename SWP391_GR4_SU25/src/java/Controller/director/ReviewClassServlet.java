@@ -18,7 +18,8 @@ import model.schoolYear.SchoolYearDAO;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
+
  */
 public class ReviewClassServlet extends HttpServlet {
 
@@ -69,8 +70,13 @@ public class ReviewClassServlet extends HttpServlet {
         
         List<SchoolYear> schoolYears = schoolYearDAO.getFutureSchoolYears();
         request.setAttribute("schoolYears", schoolYears);
+
         try {
             if (schoolYearId == null) {// Nếu chưa có schoolYearId được chọn, thì lấy năm học mới nhất làm mặc định.
+
+        try {//nếu null thì lấy schoolYearId mới nhất 
+            if (schoolYearId == null) {
+
                 schoolYearId = schoolYearDAO.getLatest().getId();
             }
             HttpSession session = request.getSession();

@@ -115,8 +115,9 @@ CREATE TABLE [Timeslots] (
   [name] nvarchar(255),
   [start_time] nvarchar(255),
   [end_time] nvarchar(255),
-  [slot_number] nvarchar(2)
-)
+  [slot_number] nvarchar(2),
+  [day_type] nvarchar(20) -- 'weekday' hoặc 'weekend'
+);
 GO
 --bảng khối lớp 
 CREATE TABLE [Grades] (
@@ -131,8 +132,9 @@ CREATE TABLE [Subjects] (
   [name] nvarchar(255),
   [grade_id] varchar(10),
   [description] nvarchar(255),
-  [status] nvarchar(255)
-)
+  [status] nvarchar(255),
+  [subject_type] nvarchar(50) -- Cơ bản/Nâng cao/Chuyên đề/Ôn thi
+);
 GO
 
 CREATE TABLE [Personnels] (
@@ -162,8 +164,9 @@ GO
 
 CREATE TABLE [Days] (
   [id] varchar(10) PRIMARY KEY,
-  [week_id] varchar(10),
-  [date] date
+  [week_id] varchar(10) NOT NULL,
+  [date] date NOT NULL,
+  [day_of_week] int NOT NULL -- lưu thứ trong tuần, vd: 2 = Thứ hai, 3 = Thứ ba ...
 )
 GO
 
@@ -176,8 +179,10 @@ CREATE TABLE [Timetables] (
   [created_by] varchar(10),
   [status] nvarchar(255),
   [note] nvarchar(max),
-  [teacher_id] varchar(10)
-)
+  [teacher_id] varchar(10),
+  [class_level] nvarchar(20), -- Lớp 6, lớp 7,...
+  [class_type] nvarchar(50) -- Cơ bản/Nâng cao/Chuyên đề
+);
 GO
 
 

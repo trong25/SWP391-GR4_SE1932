@@ -16,7 +16,7 @@ import model.timeslot.TimeSlot;
  */
 public class Timetable {
     private String id;
-    private model.classes.Class aClass;
+    private Class aClass;
     private TimeSlot timeslot;
     private Day day;
     private Subject subject;

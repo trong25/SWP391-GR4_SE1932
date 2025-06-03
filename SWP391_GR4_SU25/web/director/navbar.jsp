@@ -9,8 +9,13 @@
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
+
    <script>
             $(document).ready(function () {
+
+ <script>
+            $(document).ready(function() {
+
                 $('#dataTable').DataTable({
                     language: {
                         sProcessing: "Đang xử lý...",
@@ -39,7 +44,10 @@
                 });
             });
         </script>
+
         
+
+
 <body id="page-top">
 
 <!-- Sidebar -->
@@ -50,7 +58,11 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
+
         <div class="sidebar-brand-text mx-3">TABI EDU</div>
+
+        <div class="sidebar-brand-text mx-3">TABI Edu</div>
+
     </a>
 
     <!-- Divider -->
