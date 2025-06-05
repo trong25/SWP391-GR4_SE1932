@@ -221,22 +221,25 @@ public class StudentDAO extends DBContext {
         return listStudent;
     }
 
-    public Student getStudentByUserId(String userId) {
-        String sql = "SELECT * FROM Students WHERE user_id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Student student = new Student();
-                student = createStudent(resultSet);
-                return student;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+   public Student getStudentByUserId(String userId) {
+    String sql = "SELECT s.*, sc.schoolName, c.class_name " +
+                 "FROM Students s " +
+                 "LEFT JOIN Schools sc ON s.school_id = sc.id " +
+                 "LEFT JOIN SchoolClasses c ON s.school_class_id = c.id " +
+                 "WHERE s.user_id = ?";
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return createStudent(resultSet);
         }
-        return null;
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
     }
+    return null;
+}
+
 
     public boolean checkFirstGuardianPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Students] WHERE first_guardian_phone_number = ?";
@@ -489,8 +492,8 @@ public class StudentDAO extends DBContext {
     public static void main(String[] args) {
     StudentDAO studentDAO = new StudentDAO();
 
-    int a = studentDAO.getPendingStudentCount();  // đúng kiểu trả về
-    System.out.println("Số học sinh đang chờ xử lý: " + a);
+Student a = studentDAO.getStudentByUserId("U000005");
+    System.out.println(a);
 }
 
 }
