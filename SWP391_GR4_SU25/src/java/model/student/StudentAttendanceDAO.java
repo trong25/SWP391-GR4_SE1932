@@ -38,72 +38,158 @@ public class StudentAttendanceDAO extends DBContext {
 
     
     public String addAttendance(StudentAttendance studentAttendance) {
-        String res = "";
-        if (getAttendanceByStudentAndDay(studentAttendance.getStudent().getId(), studentAttendance.getDay().getId()) == null){
-            res = insertAttendance(studentAttendance);
-        } else {
-            res = updateAttendance(studentAttendance);
+        try {
+            // Debug logs
+            System.out.println("Debug - Adding attendance for student: " + studentAttendance.getStudent().getId());
+            System.out.println("Debug - Day: " + studentAttendance.getDay().getId());
+            System.out.println("Debug - Status: " + studentAttendance.getStatus());
+            
+            // Check if attendance already exists
+            StudentAttendance existingAttendance = getAttendanceByStudentAndDay(
+                studentAttendance.getStudent().getId(), 
+                studentAttendance.getDay().getId()
+            );
+            
+            if (existingAttendance == null) {
+                System.out.println("Debug - No existing attendance found, inserting new record");
+                return insertAttendance(studentAttendance);
+            } else {
+                System.out.println("Debug - Existing attendance found, updating record");
+                return updateAttendance(studentAttendance);
+            }
+        } catch (Exception e) {
+            System.out.println("Debug - Error in addAttendance: " + e.getMessage());
+            e.printStackTrace();
+            return "Thao tác thất bại! Vui lòng thử lại sau";
         }
-        return res;
     }
 
-    private String insertAttendance(StudentAttendance studentAttendance){
-        String sql = "insert into StudentsAttendance values (?,?,?,?,?)";
-        try{
+    private String insertAttendance(StudentAttendance studentAttendance) {
+        String sql = "INSERT INTO StudentsAttendance (id, day_id, student_id, status, note) VALUES (?, ?, ?, ?, ?)";
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            String newId = "";
-            if (getLatest()==null){
-                newId = "PUA000001";
-            } else {
-                newId = generateId(getLatest().getId());
-            }
+            
+            // Generate new ID
+            String newId = generateNewId();
+            System.out.println("Debug - Generated new ID: " + newId);
+            
             statement.setString(1, newId);
             statement.setString(2, studentAttendance.getDay().getId());
             statement.setString(3, studentAttendance.getStudent().getId());
             statement.setString(4, studentAttendance.getStatus());
             statement.setString(5, studentAttendance.getNote());
-            statement.executeUpdate();
-        }catch (Exception e) {
+            
+            // Debug log
+            System.out.println("Debug - Inserting attendance with values:");
+            System.out.println("Debug - ID: " + newId);
+            System.out.println("Debug - Day ID: " + studentAttendance.getDay().getId());
+            System.out.println("Debug - Student ID: " + studentAttendance.getStudent().getId());
+            System.out.println("Debug - Status: " + studentAttendance.getStatus());
+            System.out.println("Debug - Note: " + studentAttendance.getNote());
+            
+            int result = statement.executeUpdate();
+            System.out.println("Debug - Insert result: " + result + " rows affected");
+            
+            if (result > 0) {
+                return "success";
+            } else {
+                return "Không thể thêm điểm danh";
+            }
+        } catch (Exception e) {
+            System.out.println("Debug - Error in insertAttendance: " + e.getMessage());
             e.printStackTrace();
             return "Thao tác thất bại! Vui lòng thử lại sau";
         }
-        return "success";
     }
 
-    private String updateAttendance(StudentAttendance studentAttendance){
-        String sql = "update StudentAttendance set status = ?, note = ? where student_id = ? and day_id = ?";
-        try{
+    private String updateAttendance(StudentAttendance studentAttendance) {
+        String sql = "UPDATE StudentsAttendance SET status = ?, note = ? WHERE student_id = ? AND day_id = ?";
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, studentAttendance.getStatus());
             statement.setString(2, studentAttendance.getNote());
             statement.setString(3, studentAttendance.getStudent().getId());
             statement.setString(4, studentAttendance.getDay().getId());
-            statement.executeUpdate();
-        }catch (Exception e) {
+            
+            // Debug log
+            System.out.println("Debug - Updating attendance with values:");
+            System.out.println("Debug - Student ID: " + studentAttendance.getStudent().getId());
+            System.out.println("Debug - Day ID: " + studentAttendance.getDay().getId());
+            System.out.println("Debug - Status: " + studentAttendance.getStatus());
+            System.out.println("Debug - Note: " + studentAttendance.getNote());
+            
+            int result = statement.executeUpdate();
+            System.out.println("Debug - Update result: " + result + " rows affected");
+            
+            if (result > 0) {
+                return "success";
+            } else {
+                return "Không thể cập nhật điểm danh";
+            }
+        } catch (Exception e) {
+            System.out.println("Debug - Error in updateAttendance: " + e.getMessage());
             e.printStackTrace();
             return "Thao tác thất bại! Vui lòng thử lại sau";
         }
-        return "success";
+    }
+
+    private String generateNewId() {
+        String sql = "SELECT TOP 1 id FROM StudentsAttendance ORDER BY id DESC";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            String latestId = "HS000000";
+            
+            if (rs.next()) {
+                latestId = rs.getString("id");
+            }
+            
+            // Extract number and increment
+            String numberStr = latestId.substring(3);
+            int number = Integer.parseInt(numberStr) + 1;
+            
+            // Format with leading zeros
+            String newNumber = String.format("%06d", number);
+            return "HS" + newNumber;
+            
+        } catch (Exception e) {
+            System.out.println("Debug - Error generating new ID: " + e.getMessage());
+            e.printStackTrace();
+            return "HS000001"; // Fallback ID
+        }
     }
 
    
     public StudentAttendance getAttendanceByStudentAndDay(String studentId, String dayId) {
-        String sql = "select * from StudentsAttendance where student_id = ? and day_id = ?";
-        try{
-
+        String sql = "SELECT sa.*, s.first_name, s.last_name, d.date\n"
+                + "FROM StudentsAttendance sa\n"
+                + "JOIN Students s ON sa.student_id = s.id\n"
+                + "JOIN Days d ON sa.day_id = d.id\n"
+                + "WHERE sa.student_id = ? AND sa.day_id = ?";
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, studentId);
             statement.setString(2, dayId);
+            
+            // Debug log
+            System.out.println("Debug - Getting attendance for student: " + studentId);
+            System.out.println("Debug - Day: " + dayId);
+            System.out.println("Debug - SQL: " + sql);
+            
             ResultSet resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
-                return createStudentAttendance(resultSet);
+                StudentAttendance attendance = createStudentAttendance(resultSet);
+                System.out.println("Debug - Found attendance: " + attendance.getStatus());
+                System.out.println("Debug - Attendance ID: " + attendance.getId());
+                System.out.println("Debug - Attendance Note: " + attendance.getNote());
+                System.out.println("Debug - Student: " + attendance.getStudent().getLastName() + " " + attendance.getStudent().getFirstName());
+                System.out.println("Debug - Day: " + attendance.getDay().getDate());
+                return attendance;
+            } else {
+                System.out.println("Debug - No attendance record found for student: " + studentId + " and day: " + dayId);
             }
-
-            if (resultSet.next()){
-                return createStudentAttendance(resultSet);
-            }
-        }catch (Exception e){
+        } catch (Exception e) {
+            System.out.println("Debug - Error getting attendance: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -181,7 +267,7 @@ public class StudentAttendanceDAO extends DBContext {
         }
         DecimalFormat decimalFormat = new DecimalFormat("000000");
         String result = decimalFormat.format(number);
-        return "PUA" + result;
+        return "HS" + result;
     }
 
 }

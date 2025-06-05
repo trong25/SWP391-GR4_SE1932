@@ -34,6 +34,14 @@
             <div class="container-fluid">
                 <h1 class="h3 mb-4 text-gray-800 text-center">Điểm Danh Hôm Nay</h1>
 
+                <!-- Debug information -->
+                <div style="display: none;">
+                    Debug Info:
+                    <p>Current Date: ${requestScope.currentDate}</p>
+                    <p>Class Name: ${requestScope.className}</p>
+                    <p>Number of Students: ${requestScope.students.size()}</p>
+                </div>
+
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Danh sách học sinh</h6>
@@ -55,6 +63,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    <c:if test="${empty requestScope.students}">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Không có học sinh nào trong danh sách</td>
+                                        </tr>
+                                    </c:if>
                                     <c:forEach var="student" items="${requestScope.students}" varStatus="status">
                                         <tr>
                                             <th scope="row">${status.index + 1}</th>
@@ -79,7 +92,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <c:if test="${requestScope.className != null}">
+                            <c:if test="${not empty requestScope.students}">
                                 <div class="form-group float-right">
                                     <button type="submit" class="btn btn-success" style="width: 100px">Lưu</button>
                                 </div>
