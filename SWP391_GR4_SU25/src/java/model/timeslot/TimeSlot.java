@@ -1,29 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.timeslot;
 
-/**
- *
- * @author MSI
- */
 public class TimeSlot {
     private String id;
     private String name;
     private String startTime;
     private String endTime;
     private String slotNumber;
-    
+    private String dayType; // weekday hoặc weekend
+
     public TimeSlot() {
     }
 
-    public TimeSlot(String id, String name, String startTime, String endTime, String slotNumber) {
+    public TimeSlot(String id, String name, String startTime, String endTime, String slotNumber, String dayType) {
         this.id = id;
         this.name = name;
         this.startTime = startTime;
         this.endTime = endTime;
         this.slotNumber = slotNumber;
+        this.dayType = dayType;
     }
 
     public String getId() {
@@ -65,5 +59,12 @@ public class TimeSlot {
     public void setSlotNumber(String slotNumber) {
         this.slotNumber = slotNumber;
     }
-    
+
+    public String getDayType() {
+        return dayType;
+    }
+
+    public void setDayType(String dayType) {
+        this.dayType = dayType;
+    }
 }

@@ -25,11 +25,13 @@ public class Personnel {
     private String userId;
     private String school_id;
     private String school_class_id;
+    private String schoolName;
+    private String className;
 
     public Personnel() {
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String roleName, String schoolName, String className) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,6 +46,8 @@ public class Personnel {
         this.userId = userId;
         this.school_id = school_id;
         this.school_class_id = school_class_id;
+        this.schoolName = schoolName;
+        this.className = className;
     }
 
     public String getSchool_id() {
@@ -86,6 +90,22 @@ public class Personnel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public boolean isGender() {

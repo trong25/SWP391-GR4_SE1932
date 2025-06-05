@@ -33,6 +33,7 @@ public class PersonnelDAO extends DBContext {
         person.setUserId(resultSet.getString("user_id"));
         person.setSchool_id(resultSet.getString("school_id"));
         person.setSchool_class_id(resultSet.getString("school_class_id"));
+        
         return person;
     }
 
@@ -142,5 +143,87 @@ public class PersonnelDAO extends DBContext {
     }
     return 0;
 }
+    
+    
+    
+       
+    public boolean updatePerson(Personnel person) {
+        String sql = "UPDATE Personnels SET first_name = ?, last_name = ?, gender = ?, address = ?, email = ?, phone_number = ? WHERE user_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, person.getFirstName());
+            stmt.setString(2, person.getLastName());
+            stmt.setBoolean(3, person.isGender());
+            stmt.setString(4, person.getAddress());
+            stmt.setString(5, person.getEmail());
+            stmt.setString(6, person.getPhoneNumber());
+            stmt.setString(7, person.getUserId());
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+        public boolean checkPhoneNumberExists(String phoneNumber) {
+        String sql = "SELECT COUNT(*) FROM [Personnels] WHERE phone_number = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, phoneNumber);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+        
+    public Personnel getTeacherInfoByUserId(String userId) {
+    String sql = "SELECT p.*, " +
+                "sc.class_name, sc.grade_level, " +
+                "sch.schoolName " +
+                "FROM Personnels p " +
+                "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id " +
+                "LEFT JOIN Schools sch ON p.school_id = sch.id " +
+                "WHERE p.user_id = ?";
+    Personnel personnel = null;
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, userId);
+        System.out.println("Executing query for userId: " + userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            personnel = new Personnel();
+            personnel.setId(resultSet.getString("id"));
+            personnel.setFirstName(resultSet.getString("first_name"));
+            personnel.setLastName(resultSet.getString("last_name"));
+            personnel.setGender(resultSet.getBoolean("gender"));
+            personnel.setBirthday(resultSet.getDate("birthday"));
+            personnel.setEmail(resultSet.getString("email"));
+            personnel.setAddress(resultSet.getString("address"));
+            personnel.setPhoneNumber(resultSet.getString("phone_number"));
+            personnel.setRoleId(resultSet.getInt("role_id"));
+            personnel.setStatus(resultSet.getString("status"));
+            personnel.setAvatar(resultSet.getString("avatar"));
+            personnel.setUserId(resultSet.getString("user_id"));
+            personnel.setSchool_id(resultSet.getString("school_id"));
+            personnel.setSchool_class_id(resultSet.getString("school_class_id"));
+            personnel.setSchoolName(resultSet.getString("schoolName")); // Khớp với cột schoolName
+            personnel.setClassName(resultSet.getString("class_name"));  // Khớp với cột class_name
+        }
+        resultSet.close();
+        preparedStatement.close();
+    } catch (SQLException e) {
+        System.err.println("SQL Error for userId: " + userId + " - " + e.getMessage());
+        e.printStackTrace();
+    }
+    return personnel;
+}
+        
+        
+ 
+
 
 }
