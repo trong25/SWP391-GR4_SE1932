@@ -48,13 +48,11 @@ public class StudentDAO extends DBContext {
             // Tạo và gán School object
             Schools school = new Schools();
             school.setId(resultSet.getString("school_id"));
-            school.setSchoolName(resultSet.getString("schoolName"));
             student.setSchool_id(school);
 
             // Tạo và gán SchoolClass object
             SchoolClass schoolClass = new SchoolClass();
             schoolClass.setId(resultSet.getString("school_class_id"));
-            schoolClass.setClassName(resultSet.getString("class_name"));
             student.setSchool_class_id(schoolClass);
 
             return student;
