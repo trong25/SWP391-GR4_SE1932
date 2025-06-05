@@ -106,22 +106,34 @@ public String getDateIDbyDay(java.util.Date day) {
         List<Day> days = new ArrayList<>();
         String sql = "SELECT DISTINCT d.*\n"
                 + "FROM Days d\n"
-                + "         JOIN Timetables t ON d.id = t.date_id\n"
-                + "WHERE d.week_id = ? and class_id = ? order by ID asc;";
+                + "JOIN Timetables t ON d.id = t.date_id\n"
+                + "WHERE d.week_id = ? AND t.class_id = ? AND t.status = N'đã được duyệt'\n"
+                + "ORDER BY d.date ASC";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, weekId);
             preparedStatement.setString(2, classId);
+            
+            // Debug logs
+            System.out.println("Debug - Getting days for week: " + weekId);
+            System.out.println("Debug - Class ID: " + classId);
+            System.out.println("Debug - SQL: " + sql);
+            
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                days.add(createDay(resultSet));
-
+                Day day = createDay(resultSet);
+                days.add(day);
+                System.out.println("Debug - Found day: " + day.getId() + " - " + day.getDate());
             }
+            
+            // Debug log for results
+            System.out.println("Debug - Total days found: " + days.size());
+            
         } catch (Exception e) {
+            System.out.println("Debug - Error in getDaysWithTimetableForClass: " + e.getMessage());
             e.printStackTrace();
         }
         return days;
-
     }
 
 

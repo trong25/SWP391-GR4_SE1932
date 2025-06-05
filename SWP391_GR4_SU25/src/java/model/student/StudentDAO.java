@@ -437,18 +437,26 @@ public class StudentDAO extends DBContext {
     }
 
     public List<Student> getStudentsByTeacherAndTimetable(String teacherId, String date) {
-        String sql = "SELECT DISTINCT Students.id, Students.first_name, Students.last_name, Students.avatar\n"
-                + "FROM Students\n"
-                + "JOIN classDetails ON Students.id = classDetails.Students_id\n"
-                + "JOIN Timetables ON classDetails.class_id = Timetables.class_id\n"
-                + "JOIN dbo.Days ON Timetables.date_id = dbo.Days.id\n"
-                + "WHERE Timetables.teacher_id = ?\n"
-                + "AND ? = dbo.Days.date;";
+        String sql = """
+        SELECT DISTINCT s.id, s.first_name, s.last_name, s.avatar
+        FROM Students s
+        INNER JOIN classDetails cd ON s.id = cd.student_id
+        INNER JOIN Timetables t ON cd.class_id = t.class_id
+        INNER JOIN dbo.Days d ON t.date_id = d.id
+        WHERE t.teacher_id = ?
+        AND CONVERT(date, d.date) = CONVERT(date, ?)
+        """;
         List<Student> list = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, teacherId);
             preparedStatement.setString(2, date);
+            
+            // Debug logs
+            System.out.println("Debug - Executing query with:");
+            System.out.println("Debug - Teacher ID: " + teacherId);
+            System.out.println("Debug - Date: " + date);
+            
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Student student = new Student();
@@ -457,8 +465,16 @@ public class StudentDAO extends DBContext {
                 student.setLastName(rs.getString("last_name"));
                 student.setAvatar(rs.getString("avatar"));
                 list.add(student);
+                
+                // Debug log for each student
+                System.out.println("Debug - Found student: " + student.getId() + " - " + student.getLastName() + " " + student.getFirstName());
             }
+            
+            // Debug log for results
+            System.out.println("Debug - Total students found: " + list.size());
+            
         } catch (Exception e) {
+            System.out.println("Debug - Error in getStudentsByTeacherAndTimetable: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -466,22 +482,41 @@ public class StudentDAO extends DBContext {
 
     public List<Student> getListStudentsByClass(String studentId, String classId) {
         List<Student> listStudents = new ArrayList<>();
-
-        String sql = "select * from Students p join classDetails c on p.id = c.student_id \n"
-                + "where class_id= '" + classId + "'";
+        String sql = "SELECT s.*, sch.schoolName, cls.class_name\n"
+                + "FROM Students s\n"
+                + "JOIN classDetails c ON s.id = c.student_id\n"
+                + "LEFT JOIN Schools sch ON s.school_id = sch.id\n"
+                + "LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id\n"
+                + "WHERE c.class_id = ?\n";
         if (studentId != null) {
-            sql += " and student_id != '" + studentId + "'";
+            sql += "AND s.id != ?\n";
         }
+        sql += "ORDER BY s.id";
+        
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, classId);
+            if (studentId != null) {
+                preparedStatement.setString(2, studentId);
+            }
+            
+            // Debug logs
+            System.out.println("Debug - Getting students for class: " + classId);
+            System.out.println("Debug - SQL: " + sql);
+            
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Student student = new Student();
-                student = createStudent(resultSet);
+                Student student = createStudent(resultSet);
                 listStudents.add(student);
+                System.out.println("Debug - Found student: " + student.getId() + " - " + student.getLastName() + " " + student.getFirstName());
             }
+            
+            // Debug log for results
+            System.out.println("Debug - Total students found: " + listStudents.size());
+            
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Debug - Error in getListStudentsByClass: " + e.getMessage());
+            e.printStackTrace();
         }
         return listStudents;
     }
@@ -492,5 +527,46 @@ public class StudentDAO extends DBContext {
     int a = studentDAO.getPendingStudentCount();  // đúng kiểu trả về
     System.out.println("Số học sinh đang chờ xử lý: " + a);
 }
+
+    // Add this method to check data
+    public void checkDataForAttendance(String teacherId, String date) {
+        try {
+            // Check Timetables
+            String timetableSql = "SELECT COUNT(*) as count FROM Timetables WHERE teacher_id = ?";
+            PreparedStatement ps1 = connection.prepareStatement(timetableSql);
+            ps1.setString(1, teacherId);
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) {
+                System.out.println("Debug - Number of timetables for teacher: " + rs1.getInt("count"));
+            }
+
+            // Check Days
+            String daysSql = "SELECT COUNT(*) as count FROM Days WHERE date = ?";
+            PreparedStatement ps2 = connection.prepareStatement(daysSql);
+            ps2.setString(1, date);
+            ResultSet rs2 = ps2.executeQuery();
+            if (rs2.next()) {
+                System.out.println("Debug - Number of days matching date: " + rs2.getInt("count"));
+            }
+
+            // Check classDetails
+            String classDetailsSql = """
+                SELECT COUNT(*) as count 
+                FROM classDetails cd
+                JOIN Timetables t ON cd.class_id = t.class_id
+                WHERE t.teacher_id = ?
+            """;
+            PreparedStatement ps3 = connection.prepareStatement(classDetailsSql);
+            ps3.setString(1, teacherId);
+            ResultSet rs3 = ps3.executeQuery();
+            if (rs3.next()) {
+                System.out.println("Debug - Number of class details for teacher: " + rs3.getInt("count"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Debug - Error checking data: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 }
