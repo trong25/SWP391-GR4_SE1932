@@ -122,7 +122,7 @@
 
             <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="schoolyear">
                     <i class="fas fa-fw fa-school"></i>
                     <span>Quản lý năm học</span></a>
             </li>

@@ -124,6 +124,10 @@
         <servlet-name>ViewInformationStudentServlet</servlet-name>
         <servlet-class>Controller.student.ViewInformationStudentServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SchoolYearServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -215,5 +219,9 @@
     <servlet-mapping>
         <servlet-name>ViewInformationTeacherServlet</servlet-name>
         <url-pattern>/student/view-information</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SchoolYearServlet</servlet-name>
+        <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
 </web-app>
