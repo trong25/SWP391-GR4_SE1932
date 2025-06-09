@@ -16,17 +16,29 @@ public class Subject {
     private Grade grade;
     private String description;
     private String status;
+    private String subjectType;
 
     public Subject() {
     }
 
-    public Subject(String id, String name, Grade grade, String description, String status) {
+    public Subject(String id, String name, Grade grade, String description, String status, String subjectType) {
         this.id = id;
         this.name = name;
         this.grade = grade;
         this.description = description;
         this.status = status;
+        this.subjectType = subjectType;
     }
+
+    public String getSubjectType() {
+        return subjectType;
+    }
+
+    public void setSubjectType(String subjectType) {
+        this.subjectType = subjectType;
+    }
+
+   
 
     public String getId() {
         return id;

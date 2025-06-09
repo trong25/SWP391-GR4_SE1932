@@ -128,6 +128,10 @@
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SubjectServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.SubjectServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -223,5 +227,9 @@
     <servlet-mapping>
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SubjectServlet</servlet-name>
+        <url-pattern>/academicstaff/subject</url-pattern>
     </servlet-mapping>
 </web-app>
