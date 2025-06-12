@@ -124,6 +124,14 @@
         <servlet-name>ViewInformationStudentServlet</servlet-name>
         <servlet-class>Controller.student.ViewInformationStudentServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InformationStudentServlet</servlet-name>
+        <servlet-class>Controller.student.InformationStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateStudentServlet</servlet-name>
+        <servlet-class>Controller.student.UpdateStudentServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -213,7 +221,15 @@
         <url-pattern>/teacher/information</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewInformationTeacherServlet</servlet-name>
+        <servlet-name>ViewInformationStudentServlet</servlet-name>
         <url-pattern>/student/view-information</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InformationStudentServlet</servlet-name>
+        <url-pattern>/student/information</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateStudentServlet</servlet-name>
+        <url-pattern>/student/update</url-pattern>
     </servlet-mapping>
 </web-app>
