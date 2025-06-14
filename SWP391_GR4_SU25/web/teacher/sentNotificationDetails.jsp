@@ -57,9 +57,7 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-3 font-weight-bold">Người nhận:</div>
                                     <div class="col-sm-9" id="createdBy">
-                                        <c:forEach items="${listrole_id}" var="role_id">
-                                            ${roleMap[role_id]}</br>
-                                        </c:forEach>
+                                        Phụ Huynh Học Sinh
                                     </div>
                                 </div>
                                 <div class="row mb-3">
