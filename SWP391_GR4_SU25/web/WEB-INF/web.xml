@@ -132,6 +132,14 @@
         <servlet-name>SubjectServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SubjectServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ClassServlett</servlet-name>
+        <servlet-class>Controller.academicstaff.ClassServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassDetailServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.ClassDetailServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -231,5 +239,13 @@
     <servlet-mapping>
         <servlet-name>SubjectServlet</servlet-name>
         <url-pattern>/academicstaff/subject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassServlett</servlet-name>
+        <url-pattern>/academicstaff/class</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassDetailServlet</servlet-name>
+        <url-pattern>/academicstaff/classdetail</url-pattern>
     </servlet-mapping>
 </web-app>
