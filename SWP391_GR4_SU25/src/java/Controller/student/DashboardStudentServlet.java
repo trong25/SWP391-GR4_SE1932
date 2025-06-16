@@ -6,7 +6,6 @@ package Controller.student;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -15,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import model.day.DayDAO;
 import model.evaluation.EvaluationDAO;
 import model.notification.Notification;
@@ -54,8 +55,13 @@ public class DashboardStudentServlet extends HttpServlet {
         try {
 
             // Gọi DAO để lấy dữ liệu
-            TimetableDAO timetableDAO = new TimetableDAO(connection);
-            List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivot(studentId);
+            TimetableDAO timetableDAO = new TimetableDAO();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            Date mon = calendar.getTime();
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+            Date sun = new Date(mon.getTime()+604800000);
+            List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivotByDateRange(studentId, mon, sun);
 
             // Đưa dữ liệu vào request scope
             request.setAttribute("timetableList", timetableList);
