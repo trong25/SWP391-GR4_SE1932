@@ -32,7 +32,6 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/accountant/*</url-pattern>
     </filter-mapping>
-    
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
@@ -89,7 +88,10 @@
         <servlet-name>DashboardStudentServlet</servlet-name>
         <servlet-class>Controller.student.DashboardStudentServlet</servlet-class>
     </servlet>
-
+    <servlet>
+        <servlet-name>ListPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.ListPersonnelServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -145,5 +147,9 @@
     <servlet-mapping>
         <servlet-name>DashboardStudentServlet</servlet-name>
         <url-pattern>/student/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListPersonnelServlet</servlet-name>
+        <url-pattern>/director/listpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>

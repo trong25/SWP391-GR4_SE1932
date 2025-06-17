@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.role.Role;
 import utils.DBContext;
 
 /**
@@ -128,19 +129,178 @@ public class PersonnelDAO extends DBContext {
         }
         return person;
     }
+
     public int getPendingTeacherCount() {
-    String sql = "SELECT COUNT(*) AS total FROM Personnels WHERE status = ? AND role_id = ?";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        preparedStatement.setString(1, "đang chờ xử lý");
-        preparedStatement.setInt(2, 3); // role_id của giáo viên
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            return resultSet.getInt("total");
+        String sql = "SELECT COUNT(*) AS total FROM Personnels WHERE status = ? AND role_id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, "đang chờ xử lý");
+            preparedStatement.setInt(2, 3); // role_id của giáo viên
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("total");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
+        return 0;
     }
-    return 0;
-}
+
+    public List<Role> getAllPersonnelRole() {
+        String sql = "select DISTINCT r.id, r.description from Roles r where id != 4";
+        List<Role> roles = new ArrayList<>();
+        
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Role role = new Role();
+                role.setId(resultSet.getInt("id")); // ✅ Đúng kiểu int
+                role.setDescription(resultSet.getString("description"));
+                roles.add(role);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return roles;
+    }
+
+    public List<String> getAllStatus() {
+        String sql = "select distinct status from Personnels";
+        List<String> status = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                status.add(resultSet.getString("status"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return status;
+    }
+
+    public List<Personnel> getPersonnelByStatus(String status) {
+        String sql = " Select * from Personnels where [status] = N'" + status + "' order by id desc";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+
+    public List<Personnel> getPersonnelByRole(int role) {
+        String sql = "select * from [Personnels] where role_id = ? order by id desc";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, role);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+
+    public List<Personnel> getPersonnelByIdNameRoleStatus(String status, String role) {
+        String sql = " Select * from Personnels where 1=1";
+
+        if (status != null && !status.isEmpty()) {
+            sql += " AND status = N'" + status + "'";
+        }
+        if (role != null && !role.isEmpty()) {
+            int xrole = Integer.parseInt(role);
+            sql += " AND role_id = " + xrole + "";
+        }
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+
+    public List<Personnel> getPersonnelByNameOrId(String search) {
+        String sql = "select * from [Personnels] where (last_name+' '+ first_name like N'%" + search + "%' or id like '%" + search + "%' ) ";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println("nction");
+        }
+        return persons;
+    }
 
 }

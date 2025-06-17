@@ -94,20 +94,6 @@
         </div>
     </li>
 
-    <!-- Quản lý sự kiện -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEvent">
-            <i class="fas fa-fw fa-calendar-check"></i>
-            <span>Quản lý sự kiện</span>
-        </a>
-        <div id="collapseEvent" class="collapse">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="listevent">Danh Sách Sự Kiện</a>
-                <a class="collapse-item" href="sendevent">Tạo Sự Kiện</a>
-            </div>
-        </div>
-    </li>
-
     <!-- Tổng kết -->
     <li class="nav-item">
         <a class="nav-link" href="schoolyearsummarize">
