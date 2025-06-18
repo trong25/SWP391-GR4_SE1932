@@ -73,7 +73,7 @@
 
             <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="listnotification">
+                <a class="nav-link" href="NotificationStudent">
                     <i class="fas fa-fw fa-solid fa-bell"></i>
                     <span>Thông Báo</span></a>
             </li>
@@ -94,7 +94,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                <a class="nav-link collapsed" href="sentapplications" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Đơn Từ</span>

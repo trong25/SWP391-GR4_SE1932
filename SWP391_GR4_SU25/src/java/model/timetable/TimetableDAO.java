@@ -118,4 +118,67 @@ public class TimetableDAO extends DBContext {
         }
         return timetables;
     }
+
+    public List<Timetable> getTimetableByStudentIdAndWeekId(String studentID, String weekId) {
+        List<Timetable> timetables = new ArrayList<>();
+        String sql = """
+                     SELECT t.id AS id,
+                            c.id AS class_id,
+                            ts.id AS timeslot_id,
+                            d.id AS date_id,
+                            s.id AS subject_id,
+                            t.created_by,
+                            t.status,
+                            t.note,
+                            p.id AS teacher_id,
+                            -- Thêm các thông tin bổ sung hữu ích
+                            c.name AS class_name,
+                            ts.name AS timeslot_name,
+                            ts.start_time,
+                            ts.end_time,
+                            d.date AS class_date,
+                            d.day_of_week,
+                            s.name AS subject_name,
+                            CONCAT(p.first_name, ' ', p.last_name) AS teacher_name
+                     FROM Timetables t
+                     INNER JOIN Class c ON t.class_id = c.id
+                     INNER JOIN classDetails cd ON c.id = cd.class_id
+                     INNER JOIN Students st ON cd.student_id = st.id
+                     INNER JOIN Timeslots ts ON t.timeslot_id = ts.id
+                     INNER JOIN Days d ON t.date_id = d.id
+                     INNER JOIN Weeks w ON d.week_id = w.id
+                     INNER JOIN Subjects s ON t.subject_id = s.id
+                     LEFT JOIN Personnels p ON t.teacher_id = p.id
+                     WHERE st.id = ?
+                       AND w.id = ?
+                     ORDER BY d.date, ts.slot_number;
+                     """;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, studentID);
+            statement.setString(2, weekId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                timetables.add(createTimetable(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
+        }
+        return timetables;
+    }
+    public String getTeacherByDayId(String dayId) {
+        String sql = "select teacher_id from Timetables where date_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, dayId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("teacher_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

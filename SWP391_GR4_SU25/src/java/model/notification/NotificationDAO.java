@@ -26,6 +26,7 @@ import utils.DBContext;
 
 public class NotificationDAO extends DBContext  {
 
+    
 
 
     public Notification createNotifi(ResultSet resultSet) throws SQLException {
@@ -105,8 +106,6 @@ public class NotificationDAO extends DBContext  {
 
     public Notification getNotificationById(String id) {
         String sql = "select * from [Notifications] where id = ?";
-        Notification notifi = new Notification();
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, id);
             try (ResultSet rs = ps.executeQuery()) {

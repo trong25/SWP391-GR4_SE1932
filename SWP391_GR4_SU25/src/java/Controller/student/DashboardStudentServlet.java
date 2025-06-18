@@ -29,10 +29,6 @@ import model.user.User;
 import model.week.WeekDAO;
 import utils.DBContext;
 
-/**
- *
- * @author Admin
- */
 public class DashboardStudentServlet extends HttpServlet {
 
     @Override
@@ -51,7 +47,7 @@ public class DashboardStudentServlet extends HttpServlet {
         StudentDAO studentDAO = new StudentDAO();
         StudentAttendanceDAO studentAttendanceDAO = new StudentAttendanceDAO();
         Date currentDate = Date.from(Instant.now());// Lấy ngày hiện tại
-        Connection connection = new DBContext().getConnection();
+//        Connection connection = new DBContext().getConnection();
         try {
 
             // Gọi DAO để lấy dữ liệu
@@ -59,8 +55,10 @@ public class DashboardStudentServlet extends HttpServlet {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             Date mon = calendar.getTime();
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-            Date sun = new Date(mon.getTime()+604800000);
+            mon = new Date(125, 9, 8);
+            Date sun = new Date(mon.getTime()+518400000);
+            System.out.println(mon.toString());
+            System.out.println(sun.toString());
             List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivotByDateRange(studentId, mon, sun);
 
             // Đưa dữ liệu vào request scope
@@ -69,15 +67,6 @@ public class DashboardStudentServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // Đóng kết nối
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    System.err.println("Error closing connection: " + e.getMessage());
-                }
-            }
         }
 
         //Xử lý đánh giá và điểm danh

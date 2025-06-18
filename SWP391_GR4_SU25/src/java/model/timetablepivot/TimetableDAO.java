@@ -87,9 +87,9 @@ public class TimetableDAO extends DBContext {
      */
     public List<TimetablePivot> getStudentTimetablePivotByDateRange(String studentId, Date startDate, Date endDate) {
         List<TimetablePivot> timetableList = new ArrayList<>();
-        System.out.println(" '"+(startDate.getYear()+1900) + "-" + (startDate.getMonth()+1) + "-" + startDate.getDate()+"' ");
-        String sd = " '"+(startDate.getYear()+1900) + "-" + (startDate.getMonth()+1) + "-" + startDate.getDate()+"' ";
-        String ed = " '"+(endDate.getYear()+1900) + "-" + (endDate.getMonth()+1) + "-" + endDate.getDate()+"' ";
+        System.out.println(" '"+(startDate.getYear()+1900) + "-" + (startDate.getMonth()) + "-" + (endDate.getDate())+"' ");
+        String sd = " '"+(startDate.getYear()+1900) + "-" + (startDate.getMonth()) + "-" + (startDate.getDate())+"' ";
+        String ed = " '"+(endDate.getYear()+1900) + "-" + (endDate.getMonth()) + "-" + (endDate.getDate())+"' ";
         String sql = """
                         SELECT 
                             ts.slot_number, 
