@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.classes.ClassDAO;
 import model.classes.Class;
+
 import model.day.Day;
 import model.day.DayDAO;
 import model.personnel.Personnel;
@@ -117,33 +118,6 @@ public class TimetableDAO extends DBContext {
         }
         return timetables;
     }
-
-    public int getTodayClassesCount(String teacherId, String dayId) {
-        String sql = "SELECT COUNT(*) as count " +
-                "FROM Timetables t " +
-                "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
-        
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, teacherId);
-            statement.setString(2, dayId);
-            
-            // Debug logs
-            System.out.println("Debug - Teacher ID: " + teacherId);
-            System.out.println("Debug - Day ID: " + dayId);
-            System.out.println("Debug - SQL: " + sql);
-            
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                int count = resultSet.getInt("count");
-                System.out.println("Debug - Classes found: " + count);
-                return count;
-            }
-        } catch (SQLException e) {
-            System.out.println("Debug - Error in getTodayClassesCount: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return 0;
-    }
     public List<Timetable> getTeacherTimetable(String teacherId, String weekId) {
         List<Timetable> timetables = new ArrayList<>();
         String sql = "SELECT t.id AS timetable_id,\n" +
@@ -205,6 +179,22 @@ public class TimetableDAO extends DBContext {
             throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
         }
         return timetables;
+    }
+
+    public int getTodayClassesCount(String teacherId, String dateId) {
+        String sql = "SELECT COUNT(*) as count FROM Timetables t "
+                + "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, teacherId);
+            statement.setString(2, dateId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

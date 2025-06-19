@@ -51,22 +51,12 @@ public class DayDAO extends DBContext{
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, date);
-            
-            // Debug logs
-            System.out.println("Debug - Looking for date: " + date);
-            System.out.println("Debug - SQL: " + sql);
-            
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Day day = createDay(resultSet);
-                System.out.println("Debug - Found day: " + day.getId() + " - " + day.getDate());
-                return day;
-            } else {
-                System.out.println("Debug - No day found for date: " + date);
+                return createDay(resultSet);
             }
         } catch (SQLException e) {
-            System.out.println("Debug - Error in getDayByDate: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return null;
     }
