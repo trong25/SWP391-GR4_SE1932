@@ -152,6 +152,10 @@
         <servlet-name>EditUserServlet</servlet-name>
         <servlet-class>Controller.admin.EditUserServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ResetPassword</servlet-name>
+        <servlet-class>Controller.admin.ResetPassword</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -271,5 +275,9 @@
     <servlet-mapping>
         <servlet-name>EditUserServlet</servlet-name>
         <url-pattern>/admin/edituser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResetPassword</servlet-name>
+        <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
 </web-app>

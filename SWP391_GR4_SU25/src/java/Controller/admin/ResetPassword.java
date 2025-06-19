@@ -11,37 +11,35 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.user.UserDAO;
 
 /**
  *
  * @author ASUS VIVOBOOK
  */
-public class DashboardAdminServlet extends HttpServlet {
+public class ResetPassword extends HttpServlet {
    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-      UserDAO userDAO = new UserDAO();
-
-        try {
-            int totalAccounts = userDAO.countTotalUsers();
-            int blockedAccounts = userDAO.countBlockedUsers();
-
-            request.setAttribute("totalAccounts", totalAccounts);
-            request.setAttribute("blockedAccounts", blockedAccounts);
-        } catch (Exception e) {
-            e.printStackTrace();
-            
-        } 
-        request.getRequestDispatcher("../admin/dashboard.jsp").forward(request, response);
-    }
+      
+    } 
 
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-      request.getRequestDispatcher("../dashboard.jsp").forward(request, response);
+       String email = request.getParameter("email");
+        UserDAO dao = new UserDAO();
+        boolean a = dao.resetPassword(email);
+        HttpSession session = request.getSession();
+        if (a == true) {
+            session.setAttribute("success", "success");
+        } else {
+            session.setAttribute("error", "error");
+        }
+        request.getRequestDispatcher("manageruser").forward(request, response);
     }
 
 

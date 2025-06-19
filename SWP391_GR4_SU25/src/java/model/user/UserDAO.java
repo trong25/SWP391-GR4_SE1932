@@ -420,6 +420,52 @@ public class UserDAO extends DBContext {
     }
     
     
+    
+            public List<User> getUserByRole(int id) {
+        List<User> list = new ArrayList<>();
+        String sql = "Select * from dbo.[User] where role_id=?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User u = createUser(rs);
+                list.add(u);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+            
+       public int countTotalUsers() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM [User]";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    // Lấy số tài khoản bị khóa (isDisabled = 1)
+    public int countBlockedUsers() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM [User] WHERE isDisabled = 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }      
+            
+            
+            
+            
+    
+    
 
 
 }
