@@ -566,5 +566,29 @@ public class StudentDAO extends DBContext {
             e.printStackTrace();
         }
     }
+    
+    
+    
+        public List<Student> getStudentNonUserId() {
+        List<Student> list = new ArrayList<>();
+        String sql = "SELECT * FROM Students WHERE user_id IS NULL AND status = N'đang theo học' order by id desc";
 
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Student student = createStudent(rs);
+                list.add(student);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        
+        
+  
 }
+
+
+

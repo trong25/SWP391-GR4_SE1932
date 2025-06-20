@@ -276,5 +276,71 @@ public class PersonnelDAO extends DBContext {
         }
         return persons;
     }
+    
+    
+        public List<Personnel> getPersonnelNonUserId() {
+        List<Personnel> list = new ArrayList<>();
+        String sql = "SELECT * \n"
+                + "FROM Personnels \n"
+                + "WHERE user_id IS NULL \n"
+                + "  AND status = N'đang làm việc';";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Personnel p = new Personnel();
+                p.setId(rs.getString(1));
+                p.setFirstName(rs.getString(2));
+                p.setLastName(rs.getString(3));
+                p.setGender(rs.getBoolean(4));
+                p.setBirthday(rs.getDate(5));
+                p.setAddress(rs.getString(6));
+                p.setEmail(rs.getString(7));
+                p.setPhoneNumber(rs.getString(8));
+                p.setRoleId(rs.getInt(9));
+                p.setStatus(rs.getString(10));
+                p.setAvatar(rs.getString(11));
+                p.setUserId(rs.getString(12));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        
+        
+        
+                    public List<Personnel> getPersonnelByRoleAndNonUserId(int id) {
+        List<Personnel> list = new ArrayList<>();
+        String sql = "SELECT * FROM Personnels where role_id=? and user_id is null and status = N'đang làm việc'";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Personnel p = new Personnel();
+                p.setId(rs.getString(1));
+                p.setFirstName(rs.getString(2));
+                p.setLastName(rs.getString(3));
+                p.setGender(rs.getBoolean(4));
+                p.setBirthday(rs.getDate(5));
+                p.setAddress(rs.getString(6));
+                p.setEmail(rs.getString(7));
+                p.setPhoneNumber(rs.getString(8));
+                p.setRoleId(rs.getInt(9));
+                p.setStatus(rs.getString(10));
+                p.setAvatar(rs.getString(11));
+                p.setUserId(rs.getString(12));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        
+        
+
 
 }
