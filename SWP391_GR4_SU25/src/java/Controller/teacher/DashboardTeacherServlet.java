@@ -26,6 +26,8 @@ import model.student.StudentDAO;
 import model.role.RoleDAO;
 import model.schoolYear.SchoolYearDAO;
 import model.user.User;
+import model.timetable.TimetableDAO;
+import model.day.Day;
 
 /**
  *
@@ -67,6 +69,24 @@ public class DashboardTeacherServlet extends HttpServlet {
             request.setAttribute("listStudentInClass", listStudentInClass);
             request.setAttribute("sumApplication", sumApplication);
             request.setAttribute("sumNotification", sumNotification);
+
+            // Get today's classes count using TimetableDAO
+            TimetableDAO timetableDAO = new TimetableDAO();
+            DayDAO dayDAO = new DayDAO();
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String today = sdf.format(new Date());
+                Day todayDay = dayDAO.getDayByDate(today);
+                if (todayDay != null) {
+                    int todayClasses = timetableDAO.getTodayClassesCount(personnel.getId(), todayDay.getId());
+                    request.setAttribute("todayClasses", todayClasses);
+                } else {
+                    request.setAttribute("todayClasses", 0);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("todayClasses", 0);
+            }
         }
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }

@@ -8,6 +8,7 @@ import model.classes.ClassDAO;
 import model.day.Day;
 import model.day.DayDAO;
 import model.personnel.PersonnelDAO;
+import model.student.Student;
 import model.student.StudentDAO;
 import model.schoolYear.SchoolYearDAO;
 import model.user.User;
@@ -43,14 +44,13 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
             request.setAttribute("schoolYearId", schoolYearId);
 
             String weekId = request.getParameter("weekId");
-             if (weekId == null){
+            if (weekId == null){
                 weekId = weekDAO.getCurrentWeek(new Date());
             }
             if (weekId == null){
                 weekId = weekDAO.getfirstWeekOfClosestSchoolYear(schoolYearId).getId();
             }
             request.setAttribute("weekId", weekId);
-
 
             //send list of students
             HttpSession session = request.getSession();
@@ -62,12 +62,24 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
             if (classes != null){
                 //get day list
                 DayDAO dayDAO = new DayDAO();
-                request.setAttribute("days", dayDAO.getDaysWithTimetableForClass(weekId, classes.getId()));
+                List<Day> days = dayDAO.getDaysWithTimetableForClass(weekId, classes.getId());
+                request.setAttribute("days", days);
                 request.setAttribute("classes", classes);
 
                 //get student list
                 StudentDAO studentDAO = new StudentDAO();
-                request.setAttribute("students", studentDAO.getListStudentsByClass(null, classes.getId()));
+                List<Student> students = studentDAO.getListStudentsByClass(null, classes.getId());
+                request.setAttribute("students", students);
+
+                // Debug logs
+                System.out.println("Debug - Number of days: " + (days != null ? days.size() : 0));
+                System.out.println("Debug - Number of students: " + (students != null ? students.size() : 0));
+                if (days != null && !days.isEmpty()) {
+                    System.out.println("Debug - First day ID: " + days.get(0).getId());
+                }
+                if (students != null && !students.isEmpty()) {
+                    System.out.println("Debug - First student ID: " + students.get(0).getId());
+                }
             }
         }
         request.getRequestDispatcher("viewStudentsAttendance.jsp").forward(request, response);
