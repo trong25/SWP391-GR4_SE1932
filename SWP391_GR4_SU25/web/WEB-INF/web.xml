@@ -88,10 +88,14 @@
         <servlet-name>DashboardStudentServlet</servlet-name>
         <servlet-class>Controller.student.DashboardStudentServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>ViewProfileServlet</servlet-name>
-        <servlet-class>Controller.academicstaff.ViewProfileServlet</servlet-class>
-    </servlet>
+   <servlet>
+    <servlet-name>ListPersonnelServlet</servlet-name>
+    <servlet-class>Controller.director.ListPersonnelServlet</servlet-class>
+</servlet>
+<servlet>
+    <servlet-name>ViewProfileServlet</servlet-name>
+    <servlet-class>Controller.academicstaff.ViewProfileServlet</servlet-class>
+</servlet>
     <servlet>
         <servlet-name>InformationStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.InformationStaffServlet</servlet-class>
@@ -157,6 +161,7 @@
         <servlet-name>ResetPassword</servlet-name>
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
 
+
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
@@ -179,6 +184,7 @@
     <servlet>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <servlet-class>Controller.academicstaff.UpdateStudentsClassServlet</servlet-class>
+
 
     </servlet>
     <servlet-mapping>
@@ -238,9 +244,13 @@
         <url-pattern>/student/dashboard</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewProfileServlet</servlet-name>
-        <url-pattern>/academicstaff/view-information</url-pattern>
-    </servlet-mapping>
+    <servlet-name>ListPersonnelServlet</servlet-name>
+    <url-pattern>/director/listpersonnel</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>ViewProfileServlet</servlet-name>
+    <url-pattern>/academicstaff/view-information</url-pattern>
+</servlet-mapping>
     <servlet-mapping>
         <servlet-name>InformationStaffServlet</servlet-name>
         <url-pattern>/academicstaff/information</url-pattern>
@@ -306,6 +316,7 @@
         <servlet-name>ResetPassword</servlet-name>
         <url-pattern>/admin/resetpassword</url-pattern>
 
+
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
@@ -328,6 +339,7 @@
     <servlet-mapping>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
+
 
     </servlet-mapping>
 </web-app>
