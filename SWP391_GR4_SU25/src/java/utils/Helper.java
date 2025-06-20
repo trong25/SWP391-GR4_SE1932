@@ -46,8 +46,7 @@ public class Helper {
         return result.toString();
     }
 
-
-    public static LocalDate convertDateToLocalDate(Date date) {
+  public static LocalDate convertDateToLocalDate(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);

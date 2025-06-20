@@ -156,13 +156,14 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     // Lấy người tạo
                     Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
 
-                    // Tạo đối tượng Student
+                  //   Tạo đối tượng Student
                     Student student = new Student(null, user.getId(), Helper.formatName(firstName), Helper.formatName(lastName), address,
                             email, status, birthday, Integer.parseInt(genderRaw) == 1, Helper.formatName(firstGuardianName),
                             firstGuardianPhoneNumber, avatar,
                             secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName),
                             secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber,
                             createdBy, note, school, schoolClass);
+
 
                     if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
                             || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()

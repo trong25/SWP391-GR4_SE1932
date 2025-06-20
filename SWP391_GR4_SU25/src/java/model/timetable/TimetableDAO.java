@@ -119,6 +119,7 @@ public class TimetableDAO extends DBContext {
         return timetables;
     }
 
+
     public List<Timetable> getTimetableByStudentIdAndWeekId(String studentID, String weekId) {
         List<Timetable> timetables = new ArrayList<>();
         String sql = """
@@ -180,5 +181,32 @@ public class TimetableDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+
+    public int getTodayClassesCount(String teacherId, String dayId) {
+        String sql = "SELECT COUNT(*) as count " +
+                "FROM Timetables t " +
+                "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
+        
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, teacherId);
+            statement.setString(2, dayId);
+            
+            // Debug logs
+            System.out.println("Debug - Teacher ID: " + teacherId);
+            System.out.println("Debug - Day ID: " + dayId);
+            System.out.println("Debug - SQL: " + sql);
+            
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt("count");
+                System.out.println("Debug - Classes found: " + count);
+                return count;
+            }
+        } catch (SQLException e) {
+            System.out.println("Debug - Error in getTodayClassesCount: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
+
     }
 }

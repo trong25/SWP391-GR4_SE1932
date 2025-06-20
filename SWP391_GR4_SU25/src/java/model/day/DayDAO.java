@@ -11,7 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import model.week.WeekDAO;
 import java.sql.Date;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import model.week.Week;
 import utils.DBContext;
+
+import utils.Helper;
 /**
  *
  * @author MSI
@@ -50,12 +59,22 @@ public class DayDAO extends DBContext{
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, date);
+            
+            // Debug logs
+            System.out.println("Debug - Looking for date: " + date);
+            System.out.println("Debug - SQL: " + sql);
+            
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return createDay(resultSet);
+                Day day = createDay(resultSet);
+                System.out.println("Debug - Found day: " + day.getId() + " - " + day.getDate());
+                return day;
+            } else {
+                System.out.println("Debug - No day found for date: " + date);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Debug - Error in getDayByDate: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
@@ -134,7 +153,66 @@ public String getDateIDbyDay(java.util.Date day) {
         }
         return days;
     }
+  private Day getLatest() {
+        String sql = "SELECT TOP 1 * FROM Days ORDER BY ID DESC";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                Day day = new Day();
+                day.setId(rs.getString("id"));
+                WeekDAO weekDAO = new WeekDAO();
+                day.setWeek(weekDAO.getWeek(rs.getString("week_id")));
+                day.setDate(rs.getDate("date"));
+                return day;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "D" + result;
+    }
+
+   
+    public void generateDays(List<Week> weeks) {
+        try {
+            StringBuilder sql = new StringBuilder("insert into Days values ");
+            String newDayId = "";
+            if (getLatest() != null) {
+                newDayId = generateId(Objects.requireNonNull(getLatest()).getId());
+            } else {
+                newDayId = "D000001";
+            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            for (Week week : weeks) {
+                LocalDate currentDate = Helper.convertDateToLocalDate(week.getStartDate());
+                LocalDate endDate = Helper.convertDateToLocalDate(week.getEndDate());
+                while (!currentDate.isAfter(endDate)) {
+                    sql.append("('").append(newDayId).append("','").append(week.getId()).append("','")
+                            .append(dateFormat.format(Helper.convertLocalDateToDate(currentDate))).append("'),");
+                    newDayId = generateId(newDayId);
+                    currentDate = currentDate.plusDays(1);
+                }
+            }
+            sql.deleteCharAt(sql.length() - 1);
+
+            PreparedStatement statement = connection.prepareStatement(sql.toString());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     }     
 
