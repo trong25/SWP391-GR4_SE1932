@@ -140,6 +140,14 @@
         <servlet-name>ClassDetailServlet</servlet-name>
         <servlet-class>Controller.academicstaff.ClassDetailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentProfileClassServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.StudentProfileClassServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateStudentsClassServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.UpdateStudentsClassServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -247,5 +255,13 @@
     <servlet-mapping>
         <servlet-name>ClassDetailServlet</servlet-name>
         <url-pattern>/academicstaff/classdetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentProfileClassServlet</servlet-name>
+        <url-pattern>/academicstaff/studentprofileclass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateStudentsClassServlet</servlet-name>
+        <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
     </servlet-mapping>
 </web-app>

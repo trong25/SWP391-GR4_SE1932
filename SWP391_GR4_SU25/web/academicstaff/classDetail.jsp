@@ -226,6 +226,7 @@
                                                 <th>Họ và tên</th>
                                                 <th>Ngày sinh</th>
                                                 <th>Địa chỉ</th>
+                                                <th>Mã Trường Học</th>
                                                 <th>Tên Trường Học</th>
                                                 <th>Tên Lớp Học</th>
                                                 <th>Địa Chỉ Trường Học</th>
@@ -244,12 +245,13 @@
                                                     <td>${student.lastName} ${student.firstName}</td>
                                                     <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd"/></td>
                                                     <td>${student.address}</td>
+                                                    <td>"${student.school_id.id}" </td>
                                                     <td>${student.school_id.schoolName}</td>
                                                     <td>${student.school_class_id.className}</td>
                                                     <td>${student.school_id.addressSchool}</td>
                                                     <td class="d-flex justify-content-center align-items-center"
                                                         style="height: 150px;">
-                                                        <form method="post" action="pupilprofileclass">
+                                                        <form method="post" action="studentprofileclass">
                                                             <input hidden="" value="${student.id}" name="id"/>
                                                             <input hidden="" value="${sessionScope.classId}" name="classId"/>
                                                             <input hidden="" value="view" name="action"/>

@@ -444,6 +444,107 @@ public class StudentDAO extends DBContext {
         }
     }
 }
+public boolean updateStudentClass(Student student) {
+    String updateStudentSQL = """
+        UPDATE dbo.Students 
+        SET first_guardian_name = ?, 
+            first_guardian_phone_number = ?, 
+            second_guardian_name = ?, 
+            second_guardian_phone_number = ?, 
+            address = ?, 
+            school_id = ?, 
+            school_class_id = ?, 
+            parent_special_note = ?, 
+            first_name = ?, 
+            last_name = ?, 
+            birthday = ?, 
+            email = ?, 
+            avatar = ? 
+        WHERE id = ?
+    """;
+
+    String updateSchoolSQL = """
+        UPDATE dbo.Schools
+        SET schoolName = ?, addressSchool = ?
+        WHERE id = ?
+    """;
+
+    String updateClassSQL = """
+        UPDATE dbo.SchoolClass
+        SET class_name = ?
+        WHERE id = ?
+    """;
+
+    try {
+        connection.setAutoCommit(false); // Transaction
+
+        // 1. Cập nhật thông tin học sinh
+        try (PreparedStatement ps = connection.prepareStatement(updateStudentSQL)) {
+            ps.setString(1, student.getFirstGuardianName());
+            ps.setString(2, student.getFirstGuardianPhoneNumber());
+            ps.setString(3, student.getSecondGuardianName());
+            ps.setString(4, student.getSecondGuardianPhoneNumber());
+            ps.setString(5, student.getAddress());
+            ps.setString(6, student.getSchool_id() != null ? student.getSchool_id().getId() : null);
+            ps.setString(7, student.getSchool_class_id() != null ? student.getSchool_class_id().getId() : null);
+            ps.setString(8, student.getParentSpecialNote());
+            ps.setString(9, student.getFirstName());
+            ps.setString(10, student.getLastName());
+            if (student.getBirthday() != null) {
+                ps.setDate(11, new java.sql.Date(student.getBirthday().getTime()));
+            } else {
+                ps.setNull(11, java.sql.Types.DATE);
+            }
+            ps.setString(12, student.getEmail());
+            ps.setString(13, student.getAvatar());
+            ps.setString(14, student.getId());
+            ps.executeUpdate();
+        }
+
+        // 2. Cập nhật tên và địa chỉ trường học nếu có
+        if (student.getSchool_id() != null &&
+            student.getSchool_id().getId() != null &&
+            (student.getSchool_id().getSchoolName() != null || student.getSchool_id().getAddressSchool() != null)) {
+
+            try (PreparedStatement psSchool = connection.prepareStatement(updateSchoolSQL)) {
+                psSchool.setString(1, student.getSchool_id().getSchoolName());
+                psSchool.setString(2, student.getSchool_id().getAddressSchool());
+                psSchool.setString(3, student.getSchool_id().getId());
+                psSchool.executeUpdate();
+            }
+        }
+
+        // 3. Cập nhật tên lớp học nếu có
+        if (student.getSchool_class_id() != null &&
+            student.getSchool_class_id().getId() != null &&
+            student.getSchool_class_id().getClassName() != null) {
+
+            try (PreparedStatement psClass = connection.prepareStatement(updateClassSQL)) {
+                psClass.setString(1, student.getSchool_class_id().getClassName());
+                psClass.setString(2, student.getSchool_class_id().getId());
+                psClass.executeUpdate();
+            }
+        }
+
+        connection.commit();
+        return true;
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        try {
+            connection.rollback();
+        } catch (Exception rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        return false;
+    } finally {
+        try {
+            connection.setAutoCommit(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
 
 
     public Student getStudentById(String id) {
