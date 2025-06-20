@@ -150,7 +150,7 @@ public class PersonnelDAO extends DBContext {
     public List<Role> getAllPersonnelRole() {
         String sql = "select DISTINCT r.id, r.description from Roles r where id != 4";
         List<Role> roles = new ArrayList<>();
-        
+
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
@@ -305,9 +305,9 @@ public class PersonnelDAO extends DBContext {
         return persons;
     }
 
-    }
 
-    public boolean updatePerson(Personnel person) {
+
+public boolean updatePerson(Personnel person) {
         String sql = "UPDATE Personnels SET first_name = ?, last_name = ?, gender = ?, address = ?, email = ?, phone_number = ? WHERE user_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, person.getFirstName());
@@ -501,9 +501,4 @@ public class PersonnelDAO extends DBContext {
         }
         return list;
     }
-        
-        
-
-
-
 }
