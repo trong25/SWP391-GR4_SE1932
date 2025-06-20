@@ -29,6 +29,23 @@ import model.user.User;
 import model.week.WeekDAO;
 import utils.DBContext;
 
+/**
+ * Servlet DashboardStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điều khiển của học sinh.
+ * 
+ * URL Mapping: /student/dashboard
+ * 
+ * Chức năng:
+ * - Lấy thông tin học sinh từ session
+ * - Truy xuất các dữ liệu liên quan như: thời khóa biểu, đánh giá, điểm danh, thông báo
+ * - Tính toán tuần hiện tại, lọc thông tin tương ứng trong CSDL
+ * - Chuyển tiếp dữ liệu sang trang dashboard.jsp để hiển thị
+ * 
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được truy cập trang bảng điều khiển này
+ * 
+ * @author KienPN
+ * @version 1.0
+ */
+
 public class DashboardStudentServlet extends HttpServlet {
 
     @Override

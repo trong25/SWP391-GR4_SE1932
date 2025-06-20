@@ -13,19 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
-import model.classes.ClassDAO;
 import model.day.Day;
 import model.day.DayDAO;
-import model.school.SchoolDAO;
 import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
-import model.schoolclass.SchoolClass;
-import model.schoolclass.SchoolClassDAO;
 import model.student.Student;
-import model.timeslot.TimeSlot;
-import model.timeslot.TimeSlotDAO;
-import model.timetable.Timetable;
-import model.timetable.TimetableDAO;
 import model.user.User;
 import model.week.Week;
 import model.week.WeekDAO;
@@ -34,9 +26,18 @@ import model.week.WeekDAO;
  *
  * @author admin
  */
-@WebServlet(name = "ViewTimetable", urlPatterns = {"/student/view-timetable"})
-public class ViewTimetable extends HttpServlet {
+@WebServlet(name = "ViewAttendanceStudent", urlPatterns = {"/student/attendance"})
+public class ViewAttendanceStudentServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -51,53 +52,41 @@ public class ViewTimetable extends HttpServlet {
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         Student student = (Student) request.getSession().getAttribute("student");
-        
+        request.setAttribute("studentFullname", student.getFirstName() +" "+student.getLastName());
+
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();
-        request.setAttribute("schoolYearList", schoolYearList);
-        String schoolyear = request.getParameter("schoolyear");
+        request.setAttribute("schoolYears", schoolYearList);
+        String schoolyear = request.getParameter("schoolYearId");
 
         if (schoolyear == null) {
             schoolyear = schoolYearList.get(schoolYearList.size() - 1).getId();
         }
-        request.setAttribute("sltedsy", schoolyear);
+        request.setAttribute("schoolYearId", schoolyear);
 
         WeekDAO weekDAO = new WeekDAO();
         List<Week> weekList = weekDAO.getWeeks(schoolyear);
-        request.setAttribute("weekList", weekList);
-        
-        String week = request.getParameter("week");
-        if(week == null) {
+        request.setAttribute("weeks", weekList);
+
+        String week = request.getParameter("weekId");
+        if (week == null) {
             Date crDate = new Date();
             for (Week week1 : weekList) {
-                if(crDate.after(week1.getStartDate()) && crDate.before(week1.getEndDate())){
+                if (crDate.after(week1.getStartDate()) && crDate.before(week1.getEndDate())) {
                     week = week1.getId();
                     break;
                 }
             }
         }
-        
-        request.setAttribute("sltedw", week);
-        
+
+        request.setAttribute("weekId", week);
+
         DayDAO dayDAO = new DayDAO();
         List<Day> dayList = dayDAO.getDayByWeek(week);
-        request.setAttribute("dayList", dayList);
+        request.setAttribute("days", dayList);
         
-        TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
-        List<TimeSlot> timeslotList = timeSlotDAO.getTimeslotsForTimetable();
-        request.setAttribute("timeslotList", timeslotList);
-        
-        
-        
-        SchoolClassDAO schoolClassDAO = new SchoolClassDAO();
-        SchoolClass aClass = schoolClassDAO.getSchoolClassesById(student.getSchool_class_id().getId());
-        request.setAttribute("aClass", aClass);
-        
-        TimetableDAO timetableDAO = new TimetableDAO();
-        List<Timetable> timetables = timetableDAO.getTimetableByStudentIdAndWeekId(student.getId(), week);
-        request.setAttribute("timetables", timetables);
-        System.out.println(timetables.size());
-        request.getRequestDispatcher("viewTimetable.jsp").forward(request, response);
+        request.getRequestDispatcher("viewAttendance.jsp").forward(request, response);
+
     }
 
     /**

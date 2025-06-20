@@ -21,7 +21,7 @@ import model.user.User;
  * @author admin
  */
 @WebServlet(name="Notificationdetails", urlPatterns={"/student/notificationdetails"})
-public class Notificationdetails extends HttpServlet {
+public class NotificationdetailsServlet extends HttpServlet {
    
     
     @Override

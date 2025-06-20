@@ -56,7 +56,7 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-3 font-weight-bold">Người gửi:</div>
                                     <div class="col-sm-9" id="createdBy">
-                                        ${notifi.createdBy.lastName} ${notifi.createdBy.firstName} - ${roleMap[notifi.createdBy.roleId]}
+                                        ${notifi.createdBy.lastName} ${notifi.createdBy.firstName}  ${roleMap[notifi.createdBy.roleId]}
                                     </div>
                                 </div>
                                 <div class="row mb-3">

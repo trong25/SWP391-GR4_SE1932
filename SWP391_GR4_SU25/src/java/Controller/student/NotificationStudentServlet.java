@@ -17,11 +17,23 @@ import model.notification.NotificationDAO;
 import model.user.User;
 
 /**
- *
- * @author admin
+ * Servlet NotificationStudentServlet xử lý các yêu cầu HTTP để hiển thị danh sách thông báo của học sinh.
+ * 
+ * URL Mapping: /student/NotificationStudent
+ * 
+ * Chức năng:
+ * - Kiểm tra người dùng đã đăng nhập hay chưa (lấy từ session)
+ * - Nếu chưa đăng nhập, chuyển hướng sang trang đăng nhập
+ * - Nếu đã đăng nhập, gọi NotificationDAO để lấy danh sách thông báo dựa trên user ID
+ * - Chuyển tiếp dữ liệu thông báo đến trang listNotification.jsp để hiển thị
+ * 
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới có thể xem danh sách thông báo
+ * 
+ * @author KienPN
+ * @version 1.0
  */
 @WebServlet(name = "NotificationStudent", urlPatterns = {"/student/NotificationStudent"})
-public class NotificationStudent extends HttpServlet {
+public class NotificationStudentServlet extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
