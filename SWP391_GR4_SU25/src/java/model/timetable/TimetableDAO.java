@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import model.classes.ClassDAO;
 import model.classes.Class;
-
 import model.day.Day;
 import model.day.DayDAO;
 import model.personnel.Personnel;

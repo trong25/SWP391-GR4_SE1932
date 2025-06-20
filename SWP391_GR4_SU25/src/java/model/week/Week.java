@@ -21,9 +21,9 @@ public class Week {
     public Week() {
     }
 
-     public Week(Date startDate, String id, Date endDate, SchoolYear schoolYear) {
-        this.startDate = startDate;
+    public Week(String id, Date startDate, Date endDate, SchoolYear schoolYear) {
         this.id = id;
+        this.startDate = startDate;
         this.endDate = endDate;
         this.schoolYear = schoolYear;
     }

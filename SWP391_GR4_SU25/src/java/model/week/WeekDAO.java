@@ -7,11 +7,6 @@ package model.week;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 
 
 import java.util.Date;
@@ -25,13 +20,7 @@ import java.util.Date;
 import model.schoolYear.SchoolYearDAO;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import model.day.DayDAO;
-import model.schoolYear.SchoolYear;
 import utils.DBContext;
-import utils.Helper;
 
 /**
  *
@@ -62,71 +51,7 @@ public class WeekDAO extends DBContext{
         return null;
     }
 
-  public void generateWeeks(SchoolYear schoolYear) {
-        try {
-            Date startDate = schoolYear.getStartDate();
-            Date endDate = schoolYear.getEndDate();
-            LocalDate schoolYearStartDate = Helper.convertDateToLocalDate(startDate);
-            LocalDate schoolYearEndDate = Helper.convertDateToLocalDate(endDate);
-            LocalDate currentStartDate = schoolYearStartDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-            StringBuilder sql = new StringBuilder("insert into Weeks values ");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String newWeekId = "";
-            if (getLatest()!=null) {
-                newWeekId = generateId(Objects.requireNonNull(getLatest()).getId());
-            } else {
-                newWeekId = "W000001";
-            }
-            ArrayList<Week> weekList = new ArrayList<>();
-            while (!currentStartDate.isAfter(schoolYearEndDate)) {
-                LocalDate currentEndDate = currentStartDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-                if (currentEndDate.isAfter(schoolYearEndDate)) {
-                    currentEndDate = schoolYearEndDate;
-                }
-                weekList.add(new Week(Helper.convertLocalDateToDate(currentStartDate),
-                        newWeekId, Helper.convertLocalDateToDate(currentEndDate), schoolYear));
-                sql.append("('").append(newWeekId).append("','").
-                        append(dateFormat.format(Helper.convertLocalDateToDate(currentStartDate))).
-                        append("','").append(dateFormat.format(Helper.convertLocalDateToDate(currentEndDate))).
-                        append("','").append(schoolYear.getId()).append("')").append(",");
-                newWeekId = generateId(newWeekId);
-                currentStartDate = currentStartDate.plusWeeks(1);
-            }
-            sql.deleteCharAt(sql.length() - 1);
 
-            PreparedStatement statement = connection.prepareStatement(sql.toString());
-            statement.executeUpdate();
-            DayDAO dayDAO = new DayDAO();
-            dayDAO.generateDays(weekList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
- 
-  private Week getLatest() {
-        String sql = "SELECT TOP 1 * FROM Weeks ORDER BY ID DESC";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                return createWeek(rs);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-   private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "W" + result;
-    }
       public String getCurrentWeek(Date date){
         String sql="SELECT id FROM Weeks WHERE ? BETWEEN start_date AND end_date";
         try {

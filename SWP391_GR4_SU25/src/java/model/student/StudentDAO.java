@@ -72,7 +72,6 @@ public class StudentDAO extends DBContext {
             LEFT JOIN SchoolClasses c ON s.school_class_id = c.id 
             ORDER BY s.id DESC
         """;
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -204,7 +203,6 @@ public class StudentDAO extends DBContext {
             LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
             ORDER BY s.id DESC
         """;
-
         List<Student> listStudent = new ArrayList<>();
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -328,10 +326,8 @@ public class StudentDAO extends DBContext {
                 avatar = ? 
             WHERE id = ?
         """;
-
         try {
             connection.setAutoCommit(false);
-
             try (PreparedStatement ps = connection.prepareStatement(updateStudentSQL)) {
                 ps.setString(1, student.getFirstGuardianName());
                 ps.setString(2, student.getFirstGuardianPhoneNumber());
@@ -353,7 +349,6 @@ public class StudentDAO extends DBContext {
                 ps.setString(14, student.getId());
                 ps.executeUpdate();
             }
-
             connection.commit();
             return true;
         } catch (Exception ex) {
@@ -487,7 +482,6 @@ public class StudentDAO extends DBContext {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, teacherId);
             preparedStatement.setString(2, date);
-
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Student student = new Student();
@@ -498,6 +492,7 @@ public class StudentDAO extends DBContext {
                 list.add(student);
             }
         } catch (Exception e) {
+            System.out.println("Debug - Error in getStudentsByTeacherAndTimetable: " + e.getMessage());
             e.printStackTrace();
         }
         return list;
@@ -515,21 +510,17 @@ public class StudentDAO extends DBContext {
             LEFT JOIN Schools sch ON s.school_id = sch.id
             LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
             WHERE c.class_id = ?
-            """;
-
+        """;
         if (studentId != null) {
             sql += "AND s.id != ?\n";
         }
-
         sql += "ORDER BY s.id";
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, classId);
             if (studentId != null) {
                 preparedStatement.setString(2, studentId);
             }
-
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 listStudents.add(createStudent(resultSet));
@@ -540,6 +531,14 @@ public class StudentDAO extends DBContext {
         return listStudents;
     }
 
+    public static void main(String[] args) {
+    StudentDAO studentDAO = new StudentDAO();
+
+    int a = studentDAO.getPendingStudentCount();  // đúng kiểu trả về
+    System.out.println("Số học sinh đang chờ xử lý: " + a);
+}
+
+    // Add this method to check data
     public void checkDataForAttendance(String teacherId, String date) {
         try {
             // Check Timetables
@@ -650,3 +649,6 @@ public class StudentDAO extends DBContext {
         return null;
     }
 }
+
+
+

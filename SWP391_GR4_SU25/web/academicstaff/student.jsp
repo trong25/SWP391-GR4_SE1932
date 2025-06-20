@@ -110,7 +110,6 @@
                                                 <th>Mã Trường</th>
                                                 <th>Tên Trường Học</th>
                                                 <th>Tên Lớp Học</th>
-                                                <th>Địa chỉ Trường Học</th>
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -125,7 +124,6 @@
                                                     <td>${student.school_id.id}</td>
                                                     <td>${student.school_id.schoolName}</td>
                                                     <td>${student.school_class_id.className}</td>
-                                                    <td>${student.school_id.addressSchool}</td>
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
                                                         <td><span class="badge badge-success">${status}</span></td>

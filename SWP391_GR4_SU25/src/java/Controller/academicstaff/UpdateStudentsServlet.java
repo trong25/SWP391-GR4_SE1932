@@ -93,13 +93,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     // Chuyển school_id thành Schools object
     String schoolIdParam = request.getParameter("school_id");
-    String addressSchool = request.getParameter("addressSchool");
-    if (schoolIdParam != null && !schoolIdParam.trim().isEmpty() && addressSchool != null && !addressSchool.isEmpty()) {
+    if (schoolIdParam != null && !schoolIdParam.trim().isEmpty()) {
         Schools school = new Schools();
         school.setId(schoolIdParam.trim());
         student.setSchool_id(school);
-        school.setAddressSchool(addressSchool);
-       
     }
 
     // Chuyển school_class_id thành SchoolClass object
