@@ -288,7 +288,7 @@
         <url-pattern>/teacher/information</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewInformationTeacherServlet</servlet-name>
+        <servlet-name>ViewInformationStudentServlet</servlet-name>
         <url-pattern>/student/view-information</url-pattern>
     </servlet-mapping>
 
@@ -350,4 +350,3 @@
     </servlet-mapping>
 </web-app>
 
-</web-app>
