@@ -1,7 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="model.timetable.TimetableDAO" %>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,7 +61,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/academicstaff/dashboard">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${pageContext.request.contextPath}/admin/dashboard">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -72,8 +70,8 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
+
             <!-- Nav Item -->
-            <!-- Nav Item - Timekeeping -->
             <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="fas fa-fw fa-clock"></i>
@@ -81,75 +79,21 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="fas fa-fw fa-calendar-check"></i>
-                    <span>Xem Điểm Danh Học Sinh</span>
-                </a>
-            </li>
 
-            <!-- Nav Item -->
+
             <li class="nav-item">
-                <a class="nav-link" href="student">
-                    <i class="fas fa-fw fa-solid fa-graduation-cap"></i>
-                    <span>Quản lý học sinh</span></a>
+                <a class="nav-link" href="manageruser">
+                    <i class="fas fa-fw fa-solid fa-user-friends"></i>
+                    <span>Quản lý tài khoản</span></a>
             </li>
 
 
-            <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="class">
-                    <i class="fas fa-fw fa-graduation-cap"></i>
-                    <span>Quản lý lớp học</span></a>
+                <a class="nav-link" href="listpersonnel">
+                    <i class="fas fa-fw fa-user-friends"></i>
+                    <span>Quản lý nhân sự</span></a>
             </li>
 
-            <!-- Nav Item -->
-            <li class="nav-item">
-
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsetime"
-                   aria-expanded="true" aria-controls="collapsetime">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Quản lý thời khóa biểu</span>
-                </a>
-                <div id="collapsetime" class="collapse" aria-labelledby="headingtime" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="listtimetable?id=${sessionScope.personnel.id}">Danh sách thời khóa biểu</a>
-                        <a class="collapse-item" href="timetable">Tạo thời khóa biểu</a>
-                        <a class="collapse-item" href="viewtimetableclass">Xem thời khóa biểu</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item -->
-            <li class="nav-item">
-                <a class="nav-link" href="schoolyear">
-                    <i class="fas fa-fw fa-school"></i>
-                    <span>Quản lý năm học</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="subject">
-                    <i class="fas fa-fw fa-book"></i>
-                    <span>Quản lý môn học</span></a>
-            </li>
-
-<!--            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
-                    <span>Danh Sách Sự Kiện</span></a>
-            </li>-->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNoti"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-solid fa-bell"></i>
-                    <span>Thông Báo</span>
-                </a>
-                <div id="collapseNoti" class="collapse" aria-labelledby="headingNoti" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Tạo Thông Báo</a>
-                        <a class="collapse-item" href="">Thông Báo Đã Gửi</a>
-                    </div>
-                </div>
-            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
