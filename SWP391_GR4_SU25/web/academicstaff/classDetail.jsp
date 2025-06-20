@@ -228,7 +228,7 @@
                                                 <th>Địa chỉ</th>
                                                 <th>Mã Trường Học</th>
                                                 <th>Tên Trường Học</th>
-                                                <th>Tên Lớp Học</th>
+                                                
                                                 <th>Địa Chỉ Trường Học</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -247,7 +247,7 @@
                                                     <td>${student.address}</td>
                                                     <td>"${student.school_id.id}" </td>
                                                     <td>${student.school_id.schoolName}</td>
-                                                    <td>${student.school_class_id.className}</td>
+                                                    
                                                     <td>${student.school_id.addressSchool}</td>
                                                     <td class="d-flex justify-content-center align-items-center"
                                                         style="height: 150px;">

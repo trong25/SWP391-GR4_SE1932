@@ -106,7 +106,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                                 addAtLeastOne = true;
                             }
                         } else {
-                            System.out.println("❌ Không thêm: Trùng tên và địa chỉ trường với giáo viên chủ nhiệm");
+                            System.out.println("❌ Không thêm: Trùng tên và địa chỉ trường với giáo viên chủ nhiệm hoặc học sinh đã tồn tại trong lớp");
                         }
                     }
                 }
@@ -118,7 +118,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             toastMessage = "Thêm học sinh vào lớp thành công";
             toastType = "success";
         } else {
-            toastMessage = "Không thể thêm học sinh do trùng tên và địa chỉ trường với giáo viên chủ nhiệm";
+            toastMessage = "Không thể thêm học sinh do trùng tên và địa chỉ trường với giáo viên chủ nhiệm hoặc học sinh đã tồn tại trong lớp";
             toastType = "error";
         }
 
