@@ -4,7 +4,7 @@
 <jsp:useBean id="personnelAttendanceBean" class="model.personnel.PersonnelAttendanceDAO"/>
 <html>
     <head>
-        <title>Tình Hình Chấm Công</title>
+        <title>Tình Hình Điểm Danh</title>
         <script>
             function submitForm(formId) {
                 document.getElementById(formId).submit();

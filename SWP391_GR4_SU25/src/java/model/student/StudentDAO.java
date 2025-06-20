@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import model.school.Schools;
 import model.schoolclass.SchoolClass;
@@ -63,6 +62,7 @@ public class StudentDAO extends DBContext {
 
     public Student getLatest() {
         String sql = """
+
     SELECT TOP 1 
         s.*, 
         sc.schoolName , 
@@ -73,8 +73,6 @@ public class StudentDAO extends DBContext {
     LEFT JOIN SchoolClasses c ON s.school_class_id = c.id 
     ORDER BY s.id DESC
 """;
-
-
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -155,12 +153,13 @@ public class StudentDAO extends DBContext {
         }
     }
 
+
    public List<Student> getStudentByStatus(String status) {
     String sql = """
         SELECT s.*, 
-               sch.schoolName, 
-               sch.addressSchool, 
-               cls.class_name
+               sch.schoolName AS schoolName, 
+               sch.addressSchool AS addressSchool, 
+               cls.class_name AS class_name
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -181,6 +180,7 @@ public class StudentDAO extends DBContext {
     }
     return listStudents;
 }
+
 
 
     public int getPendingStudentCount() {
