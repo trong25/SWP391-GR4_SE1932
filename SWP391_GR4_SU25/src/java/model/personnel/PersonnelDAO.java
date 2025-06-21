@@ -305,9 +305,7 @@ public class PersonnelDAO extends DBContext {
         return persons;
     }
 
-
-
-public boolean updatePerson(Personnel person) {
+    public boolean updatePerson(Personnel person) {
         String sql = "UPDATE Personnels SET first_name = ?, last_name = ?, gender = ?, address = ?, email = ?, phone_number = ? WHERE user_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, person.getFirstName());
@@ -438,9 +436,8 @@ public boolean updatePerson(Personnel person) {
         }
         return persons;
     }
-    
-    
-        public List<Personnel> getPersonnelNonUserId() {
+
+    public List<Personnel> getPersonnelNonUserId() {
         List<Personnel> list = new ArrayList<>();
         String sql = "SELECT * \n"
                 + "FROM Personnels \n"
@@ -470,10 +467,8 @@ public boolean updatePerson(Personnel person) {
         }
         return list;
     }
-        
-        
-        
-                    public List<Personnel> getPersonnelByRoleAndNonUserId(int id) {
+
+    public List<Personnel> getPersonnelByRoleAndNonUserId(int id) {
         List<Personnel> list = new ArrayList<>();
         String sql = "SELECT * FROM Personnels where role_id=? and user_id is null and status = N'đang làm việc'";
         try {
@@ -500,5 +495,21 @@ public boolean updatePerson(Personnel person) {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public boolean updatePersonnelStatus(String pId, String status) {
+        String sql = "UPDATE [dbo].[Personnels]\n"
+                + "   SET [status] = ? \n"
+                + " WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, pId);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
     }
 }

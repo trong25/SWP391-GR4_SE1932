@@ -88,14 +88,14 @@
         <servlet-name>DashboardStudentServlet</servlet-name>
         <servlet-class>Controller.student.DashboardStudentServlet</servlet-class>
     </servlet>
-   <servlet>
-    <servlet-name>ListPersonnelServlet</servlet-name>
-    <servlet-class>Controller.director.ListPersonnelServlet</servlet-class>
-</servlet>
-<servlet>
-    <servlet-name>ViewProfileServlet</servlet-name>
-    <servlet-class>Controller.academicstaff.ViewProfileServlet</servlet-class>
-</servlet>
+    <servlet>
+        <servlet-name>ListPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.ListPersonnelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewProfileServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.ViewProfileServlet</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>InformationStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.InformationStaffServlet</servlet-class>
@@ -159,7 +159,14 @@
     <servlet>
         <servlet-name>ResetPassword</servlet-name>
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
-
+    </servlet>
+    <servlet>
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.WaitlistPersonnelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.ViewPersonnelServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -218,13 +225,13 @@
         <url-pattern>/student/dashboard</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-    <servlet-name>ListPersonnelServlet</servlet-name>
-    <url-pattern>/director/listpersonnel</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-    <servlet-name>ViewProfileServlet</servlet-name>
-    <url-pattern>/academicstaff/view-information</url-pattern>
-</servlet-mapping>
+        <servlet-name>ListPersonnelServlet</servlet-name>
+        <url-pattern>/director/listpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewProfileServlet</servlet-name>
+        <url-pattern>/academicstaff/view-information</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>InformationStaffServlet</servlet-name>
         <url-pattern>/academicstaff/information</url-pattern>
@@ -288,6 +295,13 @@
     <servlet-mapping>
         <servlet-name>ResetPassword</servlet-name>
         <url-pattern>/admin/resetpassword</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <url-pattern>/director/waitlistpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <url-pattern>/director/viewpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>

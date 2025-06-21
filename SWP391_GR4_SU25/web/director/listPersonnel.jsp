@@ -200,10 +200,7 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>
-                                                    <!--                                                    <form action="viewpersonnel" method="get">
-                                                                                                            <input type="hidden" value="${p.getId()}" name="id">
-                                                                                                            <button class="btn btn-dark" type="submit">Xem thông tin chi tiết</button>
-                                                                                                        </form>-->
+
 
                                                     <a href="viewpersonnel?id=${p.getId()}&page=list"
                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Thông
