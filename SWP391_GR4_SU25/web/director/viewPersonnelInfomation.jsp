@@ -31,7 +31,7 @@
         </script>
         <!-- Custom styles for this page -->
         <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-        <style >
+        <style>
             #style-span{
                 padding: 11px 150px;
                 margin-top: 10px;
@@ -85,9 +85,12 @@
                 font-weight: bold;
             }
             .profile_img {
-                object-fit: cover;
-                width: 191px;
-                height: 263px;
+                 width: 220px; 
+                height: 280px; 
+                object-fit: cover; 
+                border-radius: 10px; 
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+                border: 1px solid #ccc; 
             }
 
         </style>
@@ -280,7 +283,7 @@
     <!--===============================================================================================-->
     <script>
                                                                             function redirect() {
-                                                                               var xpage = "${page}";
+                                                                                var xpage = "${page}";
                                                                                 if (xpage === "list") {
                                                                                     window.location.href = "listpersonnel";
                                                                                 } else {
