@@ -181,7 +181,7 @@ public class TimetableDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
-
+    }
     public int getTodayClassesCount(String teacherId, String dayId) {
         String sql = "SELECT COUNT(*) as count " +
                 "FROM Timetables t " +

@@ -46,21 +46,13 @@ public class StudentDAO extends DBContext {
         student.setParentSpecialNote(resultSet.getString("parent_special_note"));
 
 
-            // Tạo và gán School object
-            Schools school = new Schools();
-            school.setId(resultSet.getString("school_id"));
-            student.setSchool_id(school);
-
-            // Tạo và gán SchoolClass object
-            SchoolClass schoolClass = new SchoolClass();
-            schoolClass.setId(resultSet.getString("school_class_id"));
-            student.setSchool_class_id(schoolClass);
+           
 
         // Tạo và gán School object
         Schools school = new Schools();
         school.setId(resultSet.getString("school_id"));
         school.setSchoolName(resultSet.getString("schoolName"));
-        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
         student.setSchool_id(school);
 
         // Tạo và gán SchoolClass object
@@ -724,7 +716,18 @@ public boolean updateStudentClass(Student student) {
         public List<Student> getStudentNonUserId() {
         List<Student> list = new ArrayList<>();
         String sql = "SELECT * FROM Students WHERE user_id IS NULL AND status = N'đang theo học' order by id desc";
-
+      try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Student student = createStudent(rs);
+                list.add(student);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
      public boolean addStudentToClass(String pupilId, String classId) {
         String sql = "INSERT INTO [dbo].[classDetails]\n"
                 + "           ([student_id]\n"
@@ -806,18 +809,7 @@ public boolean updateStudentClass(Student student) {
 //    }
 
 
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Student student = createStudent(rs);
-                list.add(student);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
+  
 }
 
 

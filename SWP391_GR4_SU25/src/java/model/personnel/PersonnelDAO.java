@@ -18,25 +18,6 @@ import utils.DBContext;
 public class PersonnelDAO extends DBContext {
 
 
-    private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
-        Personnel person = new Personnel();
-        person.setId(resultSet.getString("id"));
-        person.setFirstName(resultSet.getString("first_name"));
-        person.setLastName(resultSet.getString("last_name"));
-        person.setGender(resultSet.getBoolean("gender"));
-        person.setBirthday(resultSet.getDate("birthday"));
-        person.setEmail(resultSet.getString("email"));
-        person.setAddress(resultSet.getString("address"));
-        person.setPhoneNumber(resultSet.getString("phone_number"));
-        person.setRoleId(resultSet.getInt("role_id"));
-        person.setStatus(resultSet.getString("status"));
-        person.setAvatar(resultSet.getString("avatar"));
-        person.setUserId(resultSet.getString("user_id"));
-        person.setSchool_id(resultSet.getString("school_id"));
-        person.setSchool_class_id(resultSet.getString("school_class_id"));
-
-        return person;
-
   private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
     Personnel person = new Personnel();
     person.setId(resultSet.getString("id"));
@@ -252,41 +233,10 @@ public class PersonnelDAO extends DBContext {
         } catch (SQLException e) {
             System.err.println("SQL Error for userId: " + userId + " - " + e.getMessage());
             e.printStackTrace();
-
-    String sql = "SELECT p.*, " +
-                "sc.class_name, sc.grade_level, " +
-                "sch.schoolName " +
-                "FROM Personnels p " +
-                "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id " +
-                "LEFT JOIN Schools sch ON p.school_id = sch.id " +
-                "WHERE p.user_id = ?";
-    Personnel personnel = null;
-    try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, userId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            personnel = new Personnel();
-            personnel.setId(resultSet.getString("id"));
-            personnel.setFirstName(resultSet.getString("first_name"));
-            personnel.setLastName(resultSet.getString("last_name"));
-            personnel.setGender(resultSet.getBoolean("gender"));
-            personnel.setBirthday(resultSet.getDate("birthday"));
-            personnel.setEmail(resultSet.getString("email"));
-            personnel.setAddress(resultSet.getString("address"));
-            personnel.setPhoneNumber(resultSet.getString("phone_number"));
-            personnel.setRoleId(resultSet.getInt("role_id"));
-            personnel.setStatus(resultSet.getString("status"));
-            personnel.setAvatar(resultSet.getString("avatar"));
-            personnel.setUserId(resultSet.getString("user_id"));
-            personnel.setSchool_id(resultSet.getString("school_id"));
-            personnel.setSchool_class_id(resultSet.getString("school_class_id"));
-            personnel.setSchoolName(resultSet.getString("schoolName")); // Khớp với cột schoolName
-            personnel.setClassName(resultSet.getString("class_name"));  // Khớp với cột class_name
-
         }
         return personnel;
     }
+    
 
     public List<Personnel> getByStudentId(String studentId) {
         String sql = """
@@ -408,8 +358,8 @@ public class PersonnelDAO extends DBContext {
         return list;
     }
 
-    return personnel;
-}
+  
+
         public List<Personnel> getAvailableTeachers(String schoolYearId) {
     String sql = "SELECT t.*, s.schoolName, s.addressSchool " +
                  "FROM Personnels t " +
