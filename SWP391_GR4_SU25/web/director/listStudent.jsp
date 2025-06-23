@@ -143,7 +143,12 @@
                                                 <td style="width: 20%;">
                                                     <img src="../images/${pupil.avatar}"
                                                          class="mx-auto d-block"
-                                                         style="width:100px; height:100px; object-fit: cover;">
+                                                         style=" width: 220px;
+                                                         height: 280px;
+                                                         object-fit: cover;
+                                                         border-radius: 10px;
+                                                         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                                                         border: 1px solid #ccc; ">
                                                 </td>
                                                 <td>${pupil.lastName} ${pupil.firstName}</td>
                                                 <td><fmt:formatDate value="${pupil.birthday}" pattern="yyyy/MM/dd" /></td>
