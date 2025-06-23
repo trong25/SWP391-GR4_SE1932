@@ -53,12 +53,7 @@ public class StudentDAO extends DBContext {
             return null;
         }
     }
-        // Tạo và gán School object
-        Schools school = new Schools();
-        school.setId(resultSet.getString("school_id"));
-        school.setSchoolName(resultSet.getString("schoolName"));
-//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
-        student.setSchool_id(school);
+
 
     public Student getLatest() {
         String sql = "SELECT TOP 1 s.*, sc.schoolName, c.class_name "
@@ -571,7 +566,7 @@ public class StudentDAO extends DBContext {
         List<Student> list = new ArrayList<>();
         String sql = "SELECT * FROM Students WHERE user_id IS NULL AND status = N'đang theo học' order by id desc";
 
-        try {
+       
       try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

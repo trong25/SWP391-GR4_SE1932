@@ -17,7 +17,7 @@ import utils.DBContext;
  */
 public class PersonnelDAO extends DBContext {
 
-    private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
+private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
         Personnel person = new Personnel();
         person.setId(resultSet.getString("id"));
         person.setFirstName(resultSet.getString("first_name"));
@@ -35,31 +35,8 @@ public class PersonnelDAO extends DBContext {
         person.setSchool_class_id(resultSet.getString("school_class_id"));
 
         return person;
-
-  private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
-    Personnel person = new Personnel();
-    person.setId(resultSet.getString("id"));
-    person.setFirstName(resultSet.getString("first_name"));
-    person.setLastName(resultSet.getString("last_name"));
-    person.setGender(resultSet.getBoolean("gender"));
-    person.setBirthday(resultSet.getDate("birthday"));
-    person.setEmail(resultSet.getString("email"));
-    person.setAddress(resultSet.getString("address"));
-    person.setPhoneNumber(resultSet.getString("phone_number"));
-    person.setRoleId(resultSet.getInt("role_id"));
-    person.setStatus(resultSet.getString("status"));
-    person.setAvatar(resultSet.getString("avatar"));
-    person.setUserId(resultSet.getString("user_id"));
-    person.setSchool_id(resultSet.getString("school_id"));
-    person.setSchool_class_id(resultSet.getString("school_class_id"));
-
-    // ✅ Lấy thêm thông tin từ bảng Schools (nếu có trong câu truy vấn)
-    try {
-        person.setSchoolName(resultSet.getString("schoolName"));
-    } catch (SQLException e) {
-        // Trường hợp không có cột schoolName trong ResultSet
-
     }
+
 
     public List<Personnel> getAllPersonnels() {
         String sql = "select * from [Personnels] order by id desc";
