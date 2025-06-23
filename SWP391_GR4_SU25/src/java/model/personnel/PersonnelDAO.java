@@ -171,7 +171,7 @@ public class PersonnelDAO extends DBContext {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Role role = new Role();
-                role.setId(resultSet.getInt("id")); // ✅ Đúng kiểu int
+                role.setId(resultSet.getString("id")); // ✅ Đúng kiểu int
                 role.setDescription(resultSet.getString("description"));
                 roles.add(role);
             }
