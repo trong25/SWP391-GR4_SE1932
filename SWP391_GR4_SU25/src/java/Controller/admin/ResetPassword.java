@@ -15,9 +15,16 @@ import jakarta.servlet.http.HttpSession;
 import model.user.UserDAO;
 
 /**
- *
+ * Lớp ResetPassword dùng để xử lý yêu cầu đặt lại mật khẩu cho người dùng theo email.
+ * 
+ * Chịu trách nhiệm nhận email từ form, gọi phương thức reset mật khẩu trong UserDAO,
+ * và chuyển hướng kết quả (thành công hoặc thất bại) về trang quản lý người dùng.
+ * 
+ * 
  * @author ASUS VIVOBOOK
+ * @version 1.0
  */
+
 public class ResetPassword extends HttpServlet {
    
     @Override

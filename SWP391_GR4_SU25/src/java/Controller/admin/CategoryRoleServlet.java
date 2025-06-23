@@ -22,9 +22,31 @@ import model.student.Student;
 import model.student.StudentDAO;
 
 /**
- *
+ * Lớp CategoryRoleServlet dùng để xử lý các yêu cầu lấy danh sách nhân sự hoặc học sinh
+ * theo vai trò (role) chưa có tài khoản người dùng trong hệ thống.
+ * 
+ * Chịu trách nhiệm truy vấn danh sách nhân sự hoặc học sinh dựa trên role được truyền qua tham số,
+ * đồng thời cung cấp thông tin bản đồ vai trò để hiển thị tên vai trò tương ứng.
+ * 
+ * Dữ liệu sau đó được chuyển tiếp tới trang tạo tài khoản người dùng (adminCreateUser.jsp)
+ * để thực hiện việc tạo tài khoản cho nhân sự hoặc học sinh được chọn.
+ * 
+ * Các roleId được hỗ trợ:
+ * - 0: NHÂN VIÊN IT
+ * - 1: HIỆU TRƯỞNG
+ * - 2: GIÁO VỤ
+ * - 3: GIÁO VIÊN
+ * - 4: HỌC SINH
+ * - 5: KẾ TOÁN
+ * - 6: Chuyển hướng tới trang tạo người dùng chung (createuser)
+ * 
+ * Được sử dụng trong tầng Controller theo mô hình MVC,
+ * tương tác với PersonnelDAO và StudentDAO để truy xuất dữ liệu.
+ * 
  * @author ASUS VIVOBOOK
+ * @version 1.0
  */
+
 @WebServlet(name="CategoryRoleServlet", urlPatterns={"/admin/categoryRole"})
 public class CategoryRoleServlet extends HttpServlet {
    
