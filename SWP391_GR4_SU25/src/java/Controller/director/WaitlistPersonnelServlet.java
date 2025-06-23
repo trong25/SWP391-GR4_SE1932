@@ -11,6 +11,22 @@ import java.util.List;
 import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 
+/**
+ * Servlet WaitlistPersonnelServlet xử lý các yêu cầu HTTP liên quan đến việc duyệt hoặc từ chối nhân sự trong danh sách chờ.
+ * 
+ * URL Mapping: /director/waitlistpersonnel
+ * 
+ * Chức năng:
+ * - Nhận dữ liệu từ client (JSP/HTML form hoặc URL parameters)
+ * - Gọi PersonnelDAO để cập nhật trạng thái nhân sự
+ * - Lấy danh sách nhân sự đang chờ phê duyệt từ cơ sở dữ liệu
+ * - Chuyển tiếp đến trang waitlistPersonnel.jsp hoặc chuyển hướng sang trang chi tiết nhân sự
+ * 
+ * Phân quyền: Chỉ người dùng có vai trò Giám đốc (Director) mới được phép truy cập
+ * 
+ * @author ThanhNT
+ * @version 1.0
+ */
 
 public class WaitlistPersonnelServlet extends HttpServlet {
 

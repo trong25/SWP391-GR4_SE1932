@@ -15,20 +15,24 @@ import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 
 /**
- *
- * @author admin
+ * Servlet ViewPersonnelServlet xử lý các yêu cầu HTTP liên quan đến việc xem chi tiết thông tin của một nhân sự cụ thể.
+ * 
+ * URL Mapping: Không dùng @WebServlet mà cấu hình qua web.xml hoặc mapping Servlet mặc định trong project.
+ * 
+ * Chức năng:
+ * - Nhận ID nhân sự từ client (thông qua URL param)
+ * - Gọi PersonnelDAO để lấy thông tin chi tiết nhân sự
+ * - Hiển thị thông tin nhân sự trên trang viewPersonnelInfomation.jsp
+ * - Xử lý lỗi khi nhân sự không tồn tại hoặc lỗi hệ thống
+ * 
+ * Phân quyền: Chỉ người dùng có vai trò Giám đốc (Director) được phép xem thông tin chi tiết nhân sự
+ * 
+ * @author ThanhNT
+ * @version 1.0
  */
+
 public class ViewPersonnelServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -46,15 +50,7 @@ public class ViewPersonnelServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+ 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -87,14 +83,7 @@ public class ViewPersonnelServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+  
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
