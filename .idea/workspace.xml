@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,17 +35,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;KienPN&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -61,6 +64,7 @@
       <workItem from="1750685582211" duration="5000" />
       <workItem from="1750687050614" duration="100000" />
       <workItem from="1750690004955" duration="13000" />
+      <workItem from="1750695408450" duration="11000" />
     </task>
     <servers />
   </component>
