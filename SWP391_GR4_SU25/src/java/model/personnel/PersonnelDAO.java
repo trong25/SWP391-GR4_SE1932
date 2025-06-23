@@ -636,5 +636,24 @@ public List<Personnel> getFreeTeacherByDate(String dayId){
         }
         return null;
     }
+    public Personnel getHomeroomTeacherByClassId(String classId) {
+        String sql = "SELECT p.*, s.schoolName, s.addressSchool, sc.id AS school_class_id " +
+                 "FROM Class c " +
+                 "JOIN Personnels p ON c.teacher_id = p.id " +
+                 "LEFT JOIN Schools s ON p.school_id = s.id " +
+                 "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id " +
+                 "WHERE c.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, classId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return createPersonnel(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getHomeroomTeacherByClassId: " + e.getMessage());
+        }
+        return null;
+    }
 
 }

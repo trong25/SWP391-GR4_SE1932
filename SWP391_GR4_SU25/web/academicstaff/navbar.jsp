@@ -98,7 +98,7 @@
 
             <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="class">
                     <i class="fas fa-fw fa-graduation-cap"></i>
                     <span>Quản lý lớp học</span></a>
             </li>
