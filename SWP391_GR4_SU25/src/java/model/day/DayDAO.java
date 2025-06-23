@@ -54,6 +54,37 @@ public class DayDAO extends DBContext{
         }
         return day;
     }
+    private Day getLatest() {
+        String sql = "SELECT TOP 1 * FROM Days ORDER BY ID DESC";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                Day day = new Day();
+                day.setId(rs.getString("id"));
+                WeekDAO weekDAO = new WeekDAO();
+                day.setWeek(weekDAO.getWeek(rs.getString("week_id")));
+                day.setDate(rs.getDate("date"));
+                return day;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "D" + result;
+    }
+
      public Day getDayByDate(String date) {
         String sql = "select * from days where date = ?";
         try {
@@ -145,17 +176,7 @@ public String getDateIDbyDay(java.util.Date day) {
     }
 
 
-    private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "D" + result;
-    }
+  
 
    
     public void generateDays(List<Week> weeks) {
