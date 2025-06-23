@@ -227,6 +227,8 @@ public class StudentServlet extends HttpServlet {
                             response.sendRedirect("student");
 
                         } else {
+                            toastMessage = "Tạo học sinh thất bại! Vui lòng kiểm tra lại dữ liệu nhập vào hoặc hệ thống.";
+                            toastType = "error";
                             session.setAttribute("toastMessage", toastMessage);
                             session.setAttribute("toastType", toastType);
                             List<Student> listStudent = studentDAO.getAllStudents();

@@ -96,7 +96,7 @@ public class StudentDAO extends DBContext {
     }
 
   public boolean createStudent(Student student) {
-        String insertSql = """
+    String insertSql = """
         INSERT INTO [dbo].[Students]
         ([id], [user_id], [first_name], [last_name], [address], [email], [status],
          [birthday], [gender], [first_guardian_name], [first_guardian_phone_number], [avatar],
@@ -105,56 +105,83 @@ public class StudentDAO extends DBContext {
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """;
 
-        try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
-            // Sinh ID mới
-            String newId = "HS000001";
-            Student latest = getLatest();
-            if (latest != null) {
-                newId = generateId(latest.getId());
-            }
-            student.setId(newId);
-
-            // Gán giá trị
-            stmt.setString(1, student.getId());
-            stmt.setString(2, student.getUserId());
-            stmt.setString(3, student.getFirstName());
-            stmt.setString(4, student.getLastName());
-            stmt.setString(5, student.getAddress());
-            stmt.setString(6, student.getEmail());
-            stmt.setString(7, student.getStatus());
-
-            if (student.getBirthday() != null) {
-                stmt.setDate(8, new java.sql.Date(student.getBirthday().getTime()));
-            } else {
-                stmt.setNull(8, java.sql.Types.DATE);
-            }
-
-            stmt.setBoolean(9, student.getGender());
-            stmt.setString(10, student.getFirstGuardianName());
-            stmt.setString(11, student.getFirstGuardianPhoneNumber());
-            stmt.setString(12, student.getAvatar());
-            stmt.setString(13, student.getSecondGuardianName());
-            stmt.setString(14, student.getSecondGuardianPhoneNumber());
-
-            if (student.getCreatedBy() != null) {
-                stmt.setString(15, student.getCreatedBy().getId());
-            } else {
-                stmt.setNull(15, java.sql.Types.VARCHAR);
-            }
-
-            stmt.setString(16, student.getParentSpecialNote());
-            stmt.setString(17, student.getSchool_id() != null ? student.getSchool_id().getId() : null);
-            stmt.setString(18, student.getSchool_class_id() != null ? student.getSchool_class_id().getId() : null);
-
-            // Thực thi
-            int result = stmt.executeUpdate();
-            return result > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+    try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
+        // Sinh mã ID mới
+        String newId = "HS000001";
+        Student latest = getLatest();
+        if (latest != null && latest.getId() != null) {
+            newId = generateId(latest.getId());
         }
+        student.setId(newId);
+
+        // Gán giá trị
+        stmt.setString(1, student.getId());
+        stmt.setString(2, student.getUserId());
+        stmt.setString(3, student.getFirstName());
+        stmt.setString(4, student.getLastName());
+        stmt.setString(5, student.getAddress());
+        stmt.setString(6, student.getEmail());
+        stmt.setString(7, student.getStatus());
+
+        if (student.getBirthday() != null) {
+            stmt.setDate(8, new java.sql.Date(student.getBirthday().getTime()));
+        } else {
+            stmt.setNull(8, java.sql.Types.DATE);
+        }
+
+        // DB là INTEGER → setInt thay vì setBoolean
+        stmt.setInt(9, student.getGender() ? 1 : 0);
+
+        stmt.setString(10, student.getFirstGuardianName());
+        stmt.setString(11, student.getFirstGuardianPhoneNumber());
+        stmt.setString(12, student.getAvatar());
+
+        if (student.getSecondGuardianName() != null && !student.getSecondGuardianName().isBlank()) {
+            stmt.setString(13, student.getSecondGuardianName());
+        } else {
+            stmt.setNull(13, java.sql.Types.NVARCHAR);
+        }
+
+        if (student.getSecondGuardianPhoneNumber() != null && !student.getSecondGuardianPhoneNumber().isBlank()) {
+            stmt.setString(14, student.getSecondGuardianPhoneNumber());
+        } else {
+            stmt.setNull(14, java.sql.Types.NVARCHAR);
+        }
+
+        if (student.getCreatedBy() != null && student.getCreatedBy().getId() != null) {
+            stmt.setString(15, student.getCreatedBy().getId());
+        } else {
+            stmt.setNull(15, java.sql.Types.VARCHAR);
+        }
+
+        if (student.getParentSpecialNote() != null) {
+            stmt.setString(16, student.getParentSpecialNote());
+        } else {
+            stmt.setNull(16, java.sql.Types.NVARCHAR);
+        }
+
+        if (student.getSchool_id() != null && student.getSchool_id().getId() != null) {
+            stmt.setString(17, student.getSchool_id().getId());
+        } else {
+            stmt.setNull(17, java.sql.Types.NVARCHAR);
+        }
+
+        if (student.getSchool_class_id() != null && student.getSchool_class_id().getId() != null) {
+            stmt.setString(18, student.getSchool_class_id().getId());
+        } else {
+            stmt.setNull(18, java.sql.Types.NVARCHAR);
+        }
+
+        // Thực thi SQL
+        int result = stmt.executeUpdate();
+        return result > 0;
+
+    } catch (SQLException e) {
+        System.err.println("Lỗi khi tạo học sinh: " + e.getMessage());
+        e.printStackTrace();
+        return false;
     }
+}
 
 
 
@@ -659,4 +686,56 @@ public class StudentDAO extends DBContext {
         }
         return null;
     }
+   public List<Student> getStudentsByClassId(String classId) {
+    List<Student> students = new ArrayList<>();
+
+    String sql = """
+        SELECT s.*, sch.schoolName, sch.addressSchool
+        FROM classDetails cd
+        JOIN Students s ON cd.student_id = s.id
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        WHERE cd.class_id = ?
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, classId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Student student = new Student();
+
+            student.setId(rs.getString("id"));
+            student.setUserId(rs.getString("user_id"));
+            student.setFirstName(rs.getString("first_name"));
+            student.setLastName(rs.getString("last_name"));
+            student.setAddress(rs.getString("address"));
+            student.setEmail(rs.getString("email"));
+            student.setStatus(rs.getString("status"));
+            student.setBirthday(rs.getDate("birthday"));
+            student.setGender(rs.getInt("gender") == 1); // 1 = Nam, 0 = Nữ
+            student.setFirstGuardianName(rs.getString("first_guardian_name"));
+            student.setFirstGuardianPhoneNumber(rs.getString("first_guardian_phone_number"));
+            student.setAvatar(rs.getString("avatar"));
+            student.setSecondGuardianName(rs.getString("second_guardian_name"));
+            student.setSecondGuardianPhoneNumber(rs.getString("second_guardian_phone_number"));
+            student.setParentSpecialNote(rs.getString("parent_special_note"));
+
+            // Gán thông tin trường học
+            Schools school = new Schools();
+            school.setId(rs.getString("school_id"));
+            school.setSchoolName(rs.getString("schoolName"));
+            school.setAddressSchool(rs.getString("addressSchool"));
+            student.setSchool_id(school);
+
+            students.add(student);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return students;
+}
+
+
 }

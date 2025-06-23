@@ -227,8 +227,7 @@
                                                 <th>Ngày sinh</th>
                                                 <th>Địa chỉ</th>
                                                 <th>Mã Trường Học</th>
-                                                <th>Tên Trường Học</th>
-                                                
+                                                <th>Tên Trường Học</th>                                               
                                                 <th>Địa Chỉ Trường Học</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -355,7 +354,7 @@
 
                         <%-- Begin modal for move out class for pupil--%>
                         <div class="modal fade" id="moveOutPupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                            <form action="classdetail?action=moveOutClassForPupil" method="POST" id="moveOutForm">
+                            <form action="classdetail?action=moveOutClassForStudent" method="POST" id="moveOutForm">
                                 <input hidden="" name="classId" value="${requestScope.classes.id}">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -371,11 +370,11 @@
                                                 <p style="margin-left: 11px;font-weight: bold">Ghi chú: <a style="font-weight: normal">Các thông tin có dấu</a><a style="color: red"> (*) </a><a style="font-weight: normal">là thông tin bắt buộc phải nhập</a></p>
                                                 <div class="col-md-7">
                                                     <div class="form-group">
-                                                        <label class="control-label" for="pupil">Mã - Tên học sinh<a style="color: red">(*)</a></label>
-                                                        <select class="form-control" id="pupil" name="pupil" required>
+                                                        <label class="control-label" for="student">Mã - Tên học sinh<a style="color: red">(*)</a></label>
+                                                        <select class="form-control" id="student" name="student" required>
                                                             <option value="">-- Chọn Học Sinh --</option>
-                                                            <c:forEach var="pupil" items="${requestScope.listPupil}">
-                                                                <option value="${pupil.id}" ${param.pupil eq pupil.id ? "selected":""}>${pupil.id} - ${pupil.lastName} ${pupil.firstName}</option>
+                                                            <c:forEach var="student" items="${requestScope.listStudent}">
+                                                                <option value="${student.id}" ${param.student eq student.id ? "selected":""}>${student.id} - ${student.lastName} ${student.firstName}</option>
                                                             </c:forEach>
                                                         </select>
                                                     </div>
@@ -432,7 +431,7 @@
                                                         <select class="form-control" id="teacher" name="teacher" required>
                                                             <option value="">-- Chọn Giáo Viên --</option>
                                                             <c:forEach var="teacher" items="${requestScope.teachers}">
-                                                                <option value="${teacher.id}" ${param.teacher eq teacher.id ? "selected":""}>${teacher.id} - ${teacher.lastName} ${teacher.firstName}</option>
+                                                                <option value="${teacher.id}" ${param.teacher eq teacher.id ? "selected":""}>${teacher.id} - ${teacher.lastName} ${teacher.firstName}- ${teacher.schoolName} - ${teacher.addressSchool}</option>
                                                             </c:forEach>
                                                         </select>
                                                         <%--                                                        class id--%>
@@ -446,7 +445,7 @@
                                                     </div>
                                                     <div class="form-group" id="substituteTeacherDiv" style="display:none;">
                                                         <label class="control-label mt-2" for="days">Chọn ngày<a style="color: red">*</a></label>
-                                                        <select class="form-control" id="days" name="day" onchange="submit('assignTeacher')">
+                                                        <select class="form-control" id="days" name="day" onchange="submit('assignSubTeacher')">
                                                             <option value="">-- Chọn Ngày --</option>
                                                             <c:forEach var="day" items="${dayBean.getDaysInFutureWithTimetableForClass(requestScope.classes.id)}">
                                                                 <option value="${day.id}" ${requestScope.dayId eq day.id ? "selected":""}>${day.date}</option>

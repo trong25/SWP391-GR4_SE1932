@@ -297,12 +297,7 @@
                                                                 <input class="form-control form-control-sm" type="text" name="schoolName" value="${student.school_id.schoolName}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
                                                             </div>
                                                         </td>
-                                                         <td>
-                                                            <div class="form-group">
-                                                                <h5>Tên Lớp <a style="color: red">*</a>:</h5>
-                                                                <input class="form-control form-control-sm" type="text" name="className" value="${student.school_class_id.className}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
-                                                            </div>
-                                                        </td>
+                                                         
                                                           <td>
                                                             <div class="form-group">
                                                                 <h5>Địa Chỉ Trường Học <a style="color: red">*</a>:</h5>

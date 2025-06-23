@@ -448,6 +448,62 @@ public boolean updatePerson(Personnel person) {
         }
         return null;
     }
+    public Personnel getPersonnelById(String id) {
+    String sql = """
+        SELECT p.*, s.schoolName, s.addressSchool
+        FROM Personnels p
+        LEFT JOIN Schools s ON p.school_id = s.id
+        WHERE p.id = ?
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Personnel personnel = new Personnel();
+            personnel.setId(rs.getString("id"));
+            personnel.setFirstName(rs.getString("first_name"));
+            personnel.setLastName(rs.getString("last_name"));
+            personnel.setGender(rs.getBoolean("gender"));
+            personnel.setBirthday(rs.getDate("birthday"));
+            personnel.setAddress(rs.getString("address"));
+            personnel.setEmail(rs.getString("email"));
+            personnel.setPhoneNumber(rs.getString("phone_number"));
+            personnel.setRoleId(rs.getInt("role_id"));
+            personnel.setStatus(rs.getString("status"));
+            personnel.setAvatar(rs.getString("avatar"));
+            personnel.setUserId(rs.getString("user_id"));
+            personnel.setSchool_id(rs.getString("school_id"));
+            personnel.setSchool_class_id(rs.getString("school_class_id"));
+            personnel.setSchoolName(rs.getString("schoolName"));
+            personnel.setAddressSchool(rs.getString("addressSchool"));
+            return personnel;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+public List<Personnel> getFreeTeacherByDate(String dayId){
+        String sql = "SELECT p.* FROM Personnels p WHERE p.id NOT IN (\n" +
+                "    SELECT t.teacher_id\n" +
+                "    FROM Timetables t\n" +
+                "    WHERE t.date_id = ?\n" +
+                ") and p.id like 'TEA%';";
+        List<Personnel> teacherList = new ArrayList<>();
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, dayId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                teacherList.add(createPersonnel(resultSet));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return teacherList;
+    }
+
 }
 
 

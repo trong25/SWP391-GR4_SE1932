@@ -207,5 +207,29 @@ public class TimetableDAO extends DBContext {
         }
         return timetables;
     }
-
+     public void updateTeacherOfTimetable(String classId, String teacherId) {
+        String sql = "update Timetables set teacher_id = ? where class_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, teacherId);
+            statement.setString(2, classId);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+public String updateTimetableOfClass(String teacherId, String classId, String dayId) {
+        String sql = "update Timetables set teacher_id = ? where class_id = ? and date_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, teacherId);
+            statement.setString(2, classId);
+            statement.setString(3, dayId);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Thao tác thất bại!";
+        }
+        return "success";
+    }
 }

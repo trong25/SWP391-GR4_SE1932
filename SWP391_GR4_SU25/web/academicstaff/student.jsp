@@ -109,8 +109,7 @@
                                                 <th>Ngày sinh</th>
                                                 <th>Mã Trường</th>
                                                 <th>Tên Trường Học</th>
-                                                <th>Tên Lớp Học</th>
-<!--                                                <th>Địa chỉ Trường Học</th>-->
+                                                <th>Tên Lớp Học</th>                                         
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -124,8 +123,7 @@
                                                     <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd"/></td>
                                                     <td>${student.school_id.id}</td>
                                                     <td>${student.school_id.schoolName}</td>
-                                                    <td>${student.school_class_id.className}</td>
-<!--                                                    <td>${student.school_id.addressSchool}</td>-->
+                                                    <td>${student.school_class_id.className}</td>                                                   
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
                                                         <td><span class="badge badge-success">${status}</span></td>
@@ -234,8 +232,6 @@
                                                                     <input type="text" class="form-control" id="firstName" style="width: 70%"
                                                                            name="firstName" value="${param.firstName}">
                                                                 </div>
-
-
                                                                <div class="form-group col-md-6">
                                                                     <label for="schoolID">Mã Trường Học<a style="color: red">(*)</a></label>
                                                                     <select class="form-control" id="schoolID" name="schoolID" style="width: 70%" onchange="loadSchoolClasses(this.value)">
@@ -254,9 +250,6 @@
                                                                         <option value="">-- Chọn lớp học --</option>
                                                                     </select>
                                                                 </div>
-
-
-
                                                                 <div class="form-group col-md-6">
                                                                     <label for="firstGuardianName">Họ tên Bố<a
                                                                             style="color: red">(*)</a></label>
