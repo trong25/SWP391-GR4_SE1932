@@ -18,22 +18,25 @@ import model.schoolYear.SchoolYearDAO;
 import model.student.Student;
 import model.student.StudentDAO;
 import model.classes.Class;
-
 /**
- *
- * @author admin
+ * Servlet ListStudentServlet xử lý các yêu cầu HTTP liên quan đến hiển thị danh sách học sinh theo lớp và năm học.
+ * 
+ * URL Mapping: /director/liststudent (được cấu hình trong web.xml hoặc Annotation nếu có)
+ * 
+ * Chức năng:
+ * - Nhận dữ liệu từ client (tham số lớp và năm học)
+ * - Gọi DAO để truy xuất danh sách học sinh, lớp học, giáo viên và năm học
+ * - Chuyển tiếp dữ liệu đến trang JSP để hiển thị thông tin học sinh
+ * 
+ * Phân quyền: Chỉ vai trò Director (Giám đốc trung tâm) được phép truy cập chức năng này
+ * 
+ * @author ThanhNT
+ * @version 1.0
  */
+
 public class ListStudentServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+ 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -51,15 +54,6 @@ public class ListStudentServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
