@@ -168,6 +168,10 @@
         <servlet-name>ViewPersonnelServlet</servlet-name>
         <servlet-class>Controller.director.ViewPersonnelServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListStudentServlet</servlet-name>
+        <servlet-class>Controller.director.ListStudentServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -303,5 +307,9 @@
     <servlet-mapping>
         <servlet-name>ViewPersonnelServlet</servlet-name>
         <url-pattern>/director/viewpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListStudentServlet</servlet-name>
+        <url-pattern>/director/liststudent</url-pattern>
     </servlet-mapping>
 </web-app>

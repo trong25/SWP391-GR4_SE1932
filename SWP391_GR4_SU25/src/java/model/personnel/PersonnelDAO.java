@@ -512,4 +512,20 @@ public class PersonnelDAO extends DBContext {
         }
         return false;
     }
+
+    public Personnel getTeacherByClassAndSchoolYear(String classId, String schoolYearId) {
+        String sql = "Select teacher_id from class where id= ? and school_year_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, classId);
+            preparedStatement.setString(2, schoolYearId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return getPersonnel(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
 }
