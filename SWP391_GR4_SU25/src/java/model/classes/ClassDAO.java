@@ -109,7 +109,7 @@ public class ClassDAO extends DBContext {
         }
         return null;
     }
-
+//hàm gennerate
     private String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
