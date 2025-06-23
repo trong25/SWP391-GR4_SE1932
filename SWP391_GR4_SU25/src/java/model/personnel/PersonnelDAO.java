@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.role.Role;
 import utils.DBContext;
 
 /**
@@ -156,7 +157,7 @@ private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Role role = new Role();
-                role.setId(resultSet.getInt("id")); // ✅ Đúng kiểu int
+                role.setId(resultSet.getString("id")); // ✅ Đúng kiểu int
                 role.setDescription(resultSet.getString("description"));
                 roles.add(role);
             }

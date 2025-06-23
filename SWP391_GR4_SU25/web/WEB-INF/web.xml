@@ -372,8 +372,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListStudentServlet</servlet-name>
-        <url-pattern>/director/liststudent</url-pattern>
-
+        <url-pattern>/director/listpupil</url-pattern>
     </servlet-mapping>
 </web-app>
 
