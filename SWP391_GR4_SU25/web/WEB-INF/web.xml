@@ -168,6 +168,20 @@
     <servlet>
         <servlet-name>ResetPassword</servlet-name>
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
+
+    </servlet>
+    <servlet>
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.WaitlistPersonnelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.ViewPersonnelServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListStudentServlet</servlet-name>
+        <servlet-class>Controller.director.ListStudentServlet</servlet-class>
+
     </servlet>
     <servlet>
         <servlet-name>SchoolYearServlet</servlet-name>
@@ -325,6 +339,7 @@
         <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
@@ -347,6 +362,18 @@
     <servlet-mapping>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
+
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <url-pattern>/director/waitlistpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <url-pattern>/director/viewpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListStudentServlet</servlet-name>
+        <url-pattern>/director/liststudent</url-pattern>
+
     </servlet-mapping>
 </web-app>
 
