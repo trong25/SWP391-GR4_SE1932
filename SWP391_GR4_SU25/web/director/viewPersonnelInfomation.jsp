@@ -85,12 +85,12 @@
                 font-weight: bold;
             }
             .profile_img {
-                 width: 220px; 
-                height: 280px; 
-                object-fit: cover; 
-                border-radius: 10px; 
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
-                border: 1px solid #ccc; 
+                width: 220px;
+                height: 280px;
+                object-fit: cover;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                border: 1px solid #ccc;
             }
 
         </style>
@@ -225,19 +225,36 @@
                                                                 <div class="row text-center align-content-center my-3">
                                                                     <c:if test="${p.getStatus() == 'đang chờ xử lý'}">
                                                                         <div class="col-lg-4">
-                                                                            <button class="btn btn-success w-100" onclick="submitForm('accept', '${p.getId()}')">Chấp nhận</button>
+                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('accept', '${p.getId()}')">Chấp nhận</button>
                                                                         </div>
                                                                         <div class="col-lg-4">
-                                                                            <button class="btn btn-danger w-100" onclick="submitForm('decline', '${p.getId()}')">Từ chối</button>
+                                                                            <button class="btn btn-danger w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Từ chối</button>
                                                                         </div>
+                                                                    
 
                                                                     </c:if>
-                                                                    <c:if test="${p.getStatus() != 'đang chờ xử lý'}">
-                                                                        <div class="col-lg-4"></div>
-                                                                        <div class="col-lg-4"></div>
+                                                                    <c:if test="${p.getStatus() == 'đang làm việc'}">
+                                                                        <div class="col-lg-4">
+                                                                            <button class="btn btn-danger w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Nghỉ việc</button>
+                                                                        </div>
+                                                                       
+                                                                    </c:if>
+                                                                    <c:if test="${p.getStatus() == 'đã nghỉ việc'}">
+                                                                        <div class="col-lg-4">
+                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Đi làm trở lại</button>
+                                                                        </div>
+                                                                       
+                                                                    </c:if>
+                                                                    <c:if test="${p.getStatus() == 'không được duyệt'}">
+                                                                        <div class="col-lg-4">
+                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('accept', '${p.getId()}')">Chấp nhận</button>
+                                                                        </div>
+                                                                        
                                                                     </c:if>
                                                                     <div class="col-lg-4">
                                                                         <button class="btn btn-info w-100" onclick="redirect()">Quay Lại </button>
+
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -316,6 +333,24 @@
             document.body.appendChild(form);
             form.submit();
         }
+        function confirmAndSubmit(action, id) {
+            let message = '';
+            switch (action) {
+                case 'accept':
+                    message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
+                    break;
+                case 'decline':
+                    message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
+                    break;
+                default:
+                    message = 'Bạn có chắc muốn thực hiện hành động này không?';
+            }
+
+            if (confirm(message)) {
+                submitForm(action, id);
+            }
+        }
+
     </script>
 
 
