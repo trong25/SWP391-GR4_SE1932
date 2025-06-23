@@ -95,15 +95,15 @@ public class StudentDAO extends DBContext {
         return "HS" + decimalFormat.format(number);
     }
 
-    public boolean createStudent(Student student) {
+  public boolean createStudent(Student student) {
         String insertSql = """
-            INSERT INTO [dbo].[Students]
-            ([id], [user_id], [first_name], [last_name], [address], [email], [status],
-             [birthday], [gender], [first_guardian_name], [first_guardian_phone_number], [avatar],
-             [second_guardian_name], [second_guardian_phone_number], [created_by], 
-             [parent_special_note], [school_id], [school_class_id])
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
+        INSERT INTO [dbo].[Students]
+        ([id], [user_id], [first_name], [last_name], [address], [email], [status],
+         [birthday], [gender], [first_guardian_name], [first_guardian_phone_number], [avatar],
+         [second_guardian_name], [second_guardian_phone_number], [created_by], 
+         [parent_special_note], [school_id], [school_class_id])
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """;
 
         try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
             // Sinh ID mới
@@ -146,12 +146,18 @@ public class StudentDAO extends DBContext {
             stmt.setString(17, student.getSchool_id() != null ? student.getSchool_id().getId() : null);
             stmt.setString(18, student.getSchool_class_id() != null ? student.getSchool_class_id().getId() : null);
 
-            return stmt.executeUpdate() > 0;
+            // Thực thi
+            int result = stmt.executeUpdate();
+            return result > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
+
+
 
 
    public List<Student> getStudentByStatus(String status) {

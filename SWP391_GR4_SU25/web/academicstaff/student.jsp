@@ -110,7 +110,7 @@
                                                 <th>Mã Trường</th>
                                                 <th>Tên Trường Học</th>
                                                 <th>Tên Lớp Học</th>
-                                                <th>Địa chỉ Trường Học</th>
+<!--                                                <th>Địa chỉ Trường Học</th>-->
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -125,7 +125,7 @@
                                                     <td>${student.school_id.id}</td>
                                                     <td>${student.school_id.schoolName}</td>
                                                     <td>${student.school_class_id.className}</td>
-                                                    <td>${student.school_id.addressSchool}</td>
+<!--                                                    <td>${student.school_id.addressSchool}</td>-->
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
                                                         <td><span class="badge badge-success">${status}</span></td>
@@ -156,7 +156,7 @@
                         </div>
 
 
-                        <!-- New School Pupil Modal -->
+                        <!-- New School Student Modal -->
                         <div class="modal fade create-pupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                              aria-hidden="true" >
                             <div class="modal-dialog modal-lg">
@@ -236,7 +236,7 @@
                                                                 </div>
 
 
-                                                                <div class="form-group col-md-6">
+                                                               <div class="form-group col-md-6">
                                                                     <label for="schoolID">Mã Trường Học<a style="color: red">(*)</a></label>
                                                                     <select class="form-control" id="schoolID" name="schoolID" style="width: 70%" onchange="loadSchoolClasses(this.value)">
                                                                         <option value="">-- Chọn trường học --</option>
@@ -254,7 +254,6 @@
                                                                         <option value="">-- Chọn lớp học --</option>
                                                                     </select>
                                                                 </div>
-                                                                
 
 
 
@@ -348,7 +347,9 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-           <script>
+
+
+        <script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form"); // điều chỉnh selector nếu cần
         form.addEventListener("submit", function (event) {

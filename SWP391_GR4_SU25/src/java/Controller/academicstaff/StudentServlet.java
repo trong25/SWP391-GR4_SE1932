@@ -35,84 +35,77 @@ import utils.Helper;
 public class StudentServlet extends HttpServlet {
 
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    String schoolIdParam = request.getParameter("schoolId");
+        String schoolIdParam = request.getParameter("schoolId");
 
-    // Xử lý khi được gọi từ JS để lấy danh sách lớp theo mã trường (AJAX)
-    if (schoolIdParam != null && request.getHeader("X-Requested-With") != null
-            && request.getHeader("X-Requested-With").equals("XMLHttpRequest")) {
-        response.setContentType("application/json;charset=UTF-8");
+        // Nếu là request AJAX (load lớp học và địa chỉ trường)
+        if (schoolIdParam != null && request.getHeader("X-Requested-With") != null
+                && request.getHeader("X-Requested-With").equals("XMLHttpRequest")) {
+            response.setContentType("application/json;charset=UTF-8");
 
-        SchoolClassDAO schoolClassDAO = new SchoolClassDAO();
-        List<SchoolClass> classList = schoolClassDAO.getSchoolClassesBySchoolId(schoolIdParam);
+            SchoolClassDAO schoolClassDAO = new SchoolClassDAO();
+            List<SchoolClass> classList = schoolClassDAO.getSchoolClassesBySchoolId(schoolIdParam);
 
-        PrintWriter out = response.getWriter();
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("[");
+            PrintWriter out = response.getWriter();
+            StringBuilder jsonBuilder = new StringBuilder();
+            jsonBuilder.append("[");
 
-        for (int i = 0; i < classList.size(); i++) {
-            SchoolClass sc = classList.get(i);
-            jsonBuilder.append("{");
-            jsonBuilder.append("\"id\":\"").append(sc.getId()).append("\",");
-            jsonBuilder.append("\"className\":\"").append(sc.getClassName()).append("\"");
-            jsonBuilder.append("}");
+            for (int i = 0; i < classList.size(); i++) {
+                SchoolClass sc = classList.get(i);
+                jsonBuilder.append("{");
+                jsonBuilder.append("\"id\":\"").append(sc.getId()).append("\",");
+                jsonBuilder.append("\"className\":\"").append(sc.getClassName()).append("\"");
+                jsonBuilder.append("}");
 
-            if (i < classList.size() - 1) {
-                jsonBuilder.append(",");
+                if (i < classList.size() - 1) {
+                    jsonBuilder.append(",");
+                }
+            }
+
+            jsonBuilder.append("]");
+            out.print(jsonBuilder.toString());
+            out.flush();
+            return;
+        }
+
+        // Nếu không phải AJAX => hiển thị danh sách học sinh
+        StudentDAO studentDAO = new StudentDAO();
+        SchoolDAO schoolDAO = new SchoolDAO();
+
+        List<Schools> schoolList = schoolDAO.getAllSchools();
+        List<Student> listStudents = studentDAO.getAllStudents();
+
+        String newStudentId;
+        if (studentDAO.getLatest() != null) {
+            newStudentId = studentDAO.generateId(studentDAO.getLatest().getId());
+        } else {
+            newStudentId = "HS000001";
+        }
+
+        String status = request.getParameter("status");
+        if (status != null) {
+            switch (status) {
+                case "all" ->
+                    listStudents = studentDAO.getAllStudents();
+                case "pending" ->
+                    listStudents = studentDAO.getStudentByStatus("đang chờ xử lý");
+                case "approve" ->
+                    listStudents = studentDAO.getStudentByStatus("đang theo học");
+                case "decline" ->
+                    listStudents = studentDAO.getStudentByStatus("không được duyệt");
+                case "stop" ->
+                    listStudents = studentDAO.getStudentByStatus("đã thôi học");
             }
         }
 
-        jsonBuilder.append("]");
-        out.print(jsonBuilder.toString());
-        out.flush();
-        return;
+        request.setAttribute("schoolList", schoolList);
+        request.setAttribute("newStudentId", newStudentId);
+        request.setAttribute("listStudent", listStudents);
+        request.getRequestDispatcher("student.jsp").forward(request, response);
     }
 
-    // Nếu không phải yêu cầu từ AJAX => xử lý hiển thị danh sách học sinh như bình thường
-    StudentDAO studentDAO = new StudentDAO();
-    SchoolDAO schoolDAO = new SchoolDAO();
-
-    List<Schools> schoolList = schoolDAO.getAllSchools();
-    List<Student> listStudents = studentDAO.getAllStudents();
-
-    String newStudentId;
-    if (studentDAO.getLatest() != null) {
-        newStudentId = studentDAO.generateId(studentDAO.getLatest().getId());
-    } else {
-        newStudentId = "HS000001";
-    }
-
-    String status = request.getParameter("status");
-    if (status != null) {
-        switch (status) {
-            case "all":
-                listStudents = studentDAO.getAllStudents();
-                break;
-            case "pending":
-                listStudents = studentDAO.getStudentByStatus("đang chờ xử lý");
-                break;
-            case "approve":
-                listStudents = studentDAO.getStudentByStatus("đang theo học");
-                break;
-            case "decline":
-                listStudents = studentDAO.getStudentByStatus("không được duyệt");
-                break;
-            case "stop":
-                listStudents = studentDAO.getStudentByStatus("đã thôi học");
-                break;
-        }
-    }
-
-    request.setAttribute("schoolList", schoolList);
-    request.setAttribute("newStudentId", newStudentId);
-    request.setAttribute("listStudent", listStudents);
-
-    request.getRequestDispatcher("student.jsp").forward(request, response);
-}
-
-    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -156,7 +149,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     // Lấy người tạo
                     Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
 
-                  //   Tạo đối tượng Student
+                    // Tạo đối tượng Student
                     Student student = new Student(null, user.getId(), Helper.formatName(firstName), Helper.formatName(lastName), address,
                             email, status, birthday, Integer.parseInt(genderRaw) == 1, Helper.formatName(firstGuardianName),
                             firstGuardianPhoneNumber, avatar,
@@ -164,13 +157,12 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                             secondGuardianPhoneNumber.isBlank() ? null : secondGuardianPhoneNumber,
                             createdBy, note, school, schoolClass);
 
-
                     if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
                             || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
-                            || Helper.formatName(firstGuardianName).isBlank()|| schoolID==null || schoolID.isBlank() || schoolClassID==null || schoolClassID.isBlank()) {
+                            || Helper.formatName(firstGuardianName).isBlank() || schoolID == null || schoolID.isBlank() || schoolClassID == null || schoolClassID.isBlank()) {
                         if (address.isBlank()) {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường địa chỉ !";
-                        } else if (schoolID.isBlank() || schoolID== null) {
+                        } else if (schoolID.isBlank() || schoolID == null) {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường schoolID !";
                         } else if (Helper.formatName(firstName).isBlank()) {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường tên !";
@@ -188,7 +180,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường giới tính !";
                         } else if (email.isBlank()) {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường email !";
-                        } 
+                        }
                         toastType = "error";
                         session.setAttribute("toastMessage", toastMessage);
                         session.setAttribute("toastType", toastType);
