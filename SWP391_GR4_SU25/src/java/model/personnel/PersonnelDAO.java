@@ -35,6 +35,30 @@ public class PersonnelDAO extends DBContext {
         person.setSchool_class_id(resultSet.getString("school_class_id"));
 
         return person;
+
+  private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
+    Personnel person = new Personnel();
+    person.setId(resultSet.getString("id"));
+    person.setFirstName(resultSet.getString("first_name"));
+    person.setLastName(resultSet.getString("last_name"));
+    person.setGender(resultSet.getBoolean("gender"));
+    person.setBirthday(resultSet.getDate("birthday"));
+    person.setEmail(resultSet.getString("email"));
+    person.setAddress(resultSet.getString("address"));
+    person.setPhoneNumber(resultSet.getString("phone_number"));
+    person.setRoleId(resultSet.getInt("role_id"));
+    person.setStatus(resultSet.getString("status"));
+    person.setAvatar(resultSet.getString("avatar"));
+    person.setUserId(resultSet.getString("user_id"));
+    person.setSchool_id(resultSet.getString("school_id"));
+    person.setSchool_class_id(resultSet.getString("school_class_id"));
+
+    // ✅ Lấy thêm thông tin từ bảng Schools (nếu có trong câu truy vấn)
+    try {
+        person.setSchoolName(resultSet.getString("schoolName"));
+    } catch (SQLException e) {
+        // Trường hợp không có cột schoolName trong ResultSet
+
     }
 
     public List<Personnel> getAllPersonnels() {
@@ -219,6 +243,7 @@ public class PersonnelDAO extends DBContext {
         }
         return personnel;
     }
+    
 
     public List<Personnel> getByStudentId(String studentId) {
         String sql = """
@@ -339,7 +364,34 @@ public class PersonnelDAO extends DBContext {
         }
         return list;
     }
-        
+
+  
+
+        public List<Personnel> getAvailableTeachers(String schoolYearId) {
+    String sql = "SELECT t.*, s.schoolName, s.addressSchool " +
+                 "FROM Personnels t " +
+                 "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? " +
+                 "LEFT JOIN Schools s ON t.school_id = s.id " +
+                 "WHERE c.teacher_id IS NULL " +
+                 "AND t.id LIKE 'TEA%' " +
+                 "AND t.status LIKE N'đang làm việc%';";
+
+    List<Personnel> teachers = new ArrayList<>();
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, schoolYearId);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            Personnel teacher = createPersonnel(resultSet);
+            teachers.add(teacher);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return teachers;
+}
+
+
         
 
 

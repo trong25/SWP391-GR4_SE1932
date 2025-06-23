@@ -6,7 +6,6 @@ package Controller.student;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -15,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import model.day.DayDAO;
 import model.evaluation.EvaluationDAO;
 import model.notification.Notification;
@@ -29,9 +30,22 @@ import model.week.WeekDAO;
 import utils.DBContext;
 
 /**
- *
- * @author Admin
+ * Servlet DashboardStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điều khiển của học sinh.
+ * 
+ * URL Mapping: /student/dashboard
+ * 
+ * Chức năng:
+ * - Lấy thông tin học sinh từ session
+ * - Truy xuất các dữ liệu liên quan như: thời khóa biểu, đánh giá, điểm danh, thông báo
+ * - Tính toán tuần hiện tại, lọc thông tin tương ứng trong CSDL
+ * - Chuyển tiếp dữ liệu sang trang dashboard.jsp để hiển thị
+ * 
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được truy cập trang bảng điều khiển này
+ * 
+ * @author KienPN
+ * @version 1.0
  */
+
 public class DashboardStudentServlet extends HttpServlet {
 
     @Override
@@ -50,12 +64,19 @@ public class DashboardStudentServlet extends HttpServlet {
         StudentDAO studentDAO = new StudentDAO();
         StudentAttendanceDAO studentAttendanceDAO = new StudentAttendanceDAO();
         Date currentDate = Date.from(Instant.now());// Lấy ngày hiện tại
-        Connection connection = new DBContext().getConnection();
+//        Connection connection = new DBContext().getConnection();
         try {
 
             // Gọi DAO để lấy dữ liệu
-            TimetableDAO timetableDAO = new TimetableDAO(connection);
-            List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivot(studentId);
+            TimetableDAO timetableDAO = new TimetableDAO();
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+            Date mon = calendar.getTime();
+            mon = new Date(125, 9, 8);
+            Date sun = new Date(mon.getTime()+518400000);
+            System.out.println(mon.toString());
+            System.out.println(sun.toString());
+            List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivotByDateRange(studentId, mon, sun);
 
             // Đưa dữ liệu vào request scope
             request.setAttribute("timetableList", timetableList);
@@ -63,15 +84,6 @@ public class DashboardStudentServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // Đóng kết nối
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    System.err.println("Error closing connection: " + e.getMessage());
-                }
-            }
         }
 
         //Xử lý đánh giá và điểm danh

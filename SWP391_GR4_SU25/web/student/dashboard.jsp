@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -139,7 +139,7 @@
                                                     <table class="table table-bordered table-striped" width="100%" cellspacing="0">
                                                         <thead class="thead-light">
                                                             <tr>
-                                                                <th class="text-center" style="width: 8%;">Tiết</th>
+                                                                <th class="text-center" style="width: 8%;">Ca học</th>
                                                                 <th class="text-center" style="width: 12%;">Thời gian</th>
                                                                 <th class="text-center" style="width: 11.5%;">Thứ 2</th>
                                                                 <th class="text-center" style="width: 11.5%;">Thứ 3</th>

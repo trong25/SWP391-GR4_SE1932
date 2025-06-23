@@ -45,15 +45,7 @@ public class StudentDAO extends DBContext {
             student.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
             student.setParentSpecialNote(resultSet.getString("parent_special_note"));
 
-            // Tạo và gán School object
-            Schools school = new Schools();
-            school.setId(resultSet.getString("school_id"));
-            student.setSchool_id(school);
-
-            // Tạo và gán SchoolClass object
-            SchoolClass schoolClass = new SchoolClass();
-            schoolClass.setId(resultSet.getString("school_class_id"));
-            student.setSchool_class_id(schoolClass);
+           
 
             return student;
         } catch (Exception e) {
@@ -61,6 +53,12 @@ public class StudentDAO extends DBContext {
             return null;
         }
     }
+        // Tạo và gán School object
+        Schools school = new Schools();
+        school.setId(resultSet.getString("school_id"));
+        school.setSchoolName(resultSet.getString("schoolName"));
+//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+        student.setSchool_id(school);
 
     public Student getLatest() {
         String sql = "SELECT TOP 1 s.*, sc.schoolName, c.class_name "
@@ -574,6 +572,7 @@ public class StudentDAO extends DBContext {
         String sql = "SELECT * FROM Students WHERE user_id IS NULL AND status = N'đang theo học' order by id desc";
 
         try {
+      try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -585,9 +584,90 @@ public class StudentDAO extends DBContext {
         }
         return list;
     }
+
         
-        
-  
+     public boolean addStudentToClass(String pupilId, String classId) {
+        String sql = "INSERT INTO [dbo].[classDetails]\n"
+                + "           ([student_id]\n"
+                + "           ,[class_id])\n"
+                + "     VALUES\n"
+                + "           (?,?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, pupilId);
+            preparedStatement.setString(2, classId);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+  public Student getStudentById2(String studentId) {
+    String sql = "SELECT s.id AS student_id, " +
+                 "       s.school_id, sch.schoolName AS school_name, " +
+                 "       s.school_class_id, sc.class_name AS class_name " +
+                 "FROM Students s " +
+                 "LEFT JOIN Schools sch ON s.school_id = sch.id " +
+                 "LEFT JOIN SchoolClasses sc ON s.school_class_id = sc.id " +
+                 "WHERE s.id = ?";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, studentId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                Student student = new Student();
+                student.setId(rs.getString("student_id"));
+
+                // Gán trường học
+                Schools school = new Schools();
+                school.setId(rs.getString("school_id"));
+                school.setSchoolName(rs.getString("school_name"));
+                student.setSchool_id(school);
+
+                // Gán lớp học
+                SchoolClass schoolClass = new SchoolClass();
+                schoolClass.setId(rs.getString("school_class_id"));
+                schoolClass.setClassName(rs.getString("class_name"));
+                student.setSchool_class_id(schoolClass);
+
+                return student;
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in getStudentById2: " + e.getMessage());
+    }
+    return null;
+}
+//     public List<Student> getStudentsWithoutClass(String schoolYearId) {
+//        List<Student> listStudent = new ArrayList<>();
+//        String sql = "Select  Students.id    FROM  Students left  JOIN\n"
+//                + "                 classDetails ON Students.id = classDetails.student_id  left  JOIN\n"
+//                + "                Class ON Class.id = classDetails.class_id\n"
+//                + "               where  Students.status= N'đang theo học' and class_id is null \n"
+//                + "\t\t\t  union  \n"
+//                + "\t\t\t  Select  distinct student_id  from \n"
+//                + "\t\t\t  classDetails join Class on classDetails.class_id = Class.id\n"
+//                + "               where   pupil_id not in (Select pupil_id\n"
+//                + "\t\t\t   from classDetails  join Class on classDetails.class_id = Class.id\n"
+//                + "\t\t\t   where school_year_id = ? )";
+//
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, schoolYearId);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                listStudent.add(getStudentsById(resultSet.getString(1)));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return listStudent;
+//    }
+
+
+
 }
 
 
