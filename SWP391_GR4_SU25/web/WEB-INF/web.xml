@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    
+
     <!-- Filter Configuration -->
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -136,7 +136,6 @@
         <servlet-name>ViewInformationStudentServlet</servlet-name>
         <servlet-class>Controller.student.ViewInformationStudentServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>InformationStudentServlet</servlet-name>
         <servlet-class>Controller.student.InformationStudentServlet</servlet-class>
@@ -168,7 +167,6 @@
     <servlet>
         <servlet-name>ResetPassword</servlet-name>
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
-
     </servlet>
     <servlet>
         <servlet-name>WaitlistPersonnelServlet</servlet-name>
@@ -181,7 +179,6 @@
     <servlet>
         <servlet-name>ListStudentServlet</servlet-name>
         <servlet-class>Controller.director.ListStudentServlet</servlet-class>
-
     </servlet>
     <servlet>
         <servlet-name>SchoolYearServlet</servlet-name>
@@ -305,7 +302,6 @@
         <servlet-name>ViewInformationStudentServlet</servlet-name>
         <url-pattern>/student/view-information</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>InformationStudentServlet</servlet-name>
         <url-pattern>/student/information</url-pattern>
@@ -339,7 +335,6 @@
         <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
@@ -362,7 +357,8 @@
     <servlet-mapping>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>WaitlistPersonnelServlet</servlet-name>
         <url-pattern>/director/waitlistpersonnel</url-pattern>
     </servlet-mapping>
@@ -375,4 +371,3 @@
         <url-pattern>/director/listpupil</url-pattern>
     </servlet-mapping>
 </web-app>
-
