@@ -7,12 +7,18 @@ package model.classes;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import model.grade.GradeDAO;
 import model.personnel.PersonnelDAO;
+import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
 import utils.DBContext;
+import utils.Helper;
 
 /**
  Lớp ClassDAO chịu trách nhiệm thao tác dữ liệu với bảng ClassDAO trong Database
@@ -40,6 +46,83 @@ public class ClassDAO extends DBContext {
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
         return c;
     }
+
+
+    public String createNewClass(Class c) {
+        String sql = "insert into [Class] values (?,?,?,?,?,?,?)";
+        try {
+            if (!isSchoolYearValid(c.getSchoolYear())) {
+                return "Lớp phải được tạo trước khi năm học bắt đầu 7 ngày";
+            }
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            String newClassId;
+            if (getLatest() != null) {
+                newClassId = generateId(getLatest().getId());
+            } else {
+                newClassId = "C000001";
+            }
+            preparedStatement.setString(1, newClassId);
+            if (c.getName().isBlank()) {
+                return "Tên lớp không được để trống";
+            }
+            preparedStatement.setString(2, c.getName());
+            preparedStatement.setString(3, c.getGrade().getId());
+            if (c.getTeacher() != null) {
+                preparedStatement.setString(4, c.getTeacher().getId());
+            } else {
+                preparedStatement.setNull(4, java.sql.Types.VARCHAR);
+            }
+            preparedStatement.setString(5, c.getSchoolYear().getId());
+            preparedStatement.setString(6, "đang chờ xử lý");
+            preparedStatement.setString(7, c.getCreatedBy().getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            return "Thao tác thất bại. Lớp đã tồn tại";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Vui lòng tạo năm học trước khi tạo lớp";
+        }
+        return "success";
+    }
+
+    private boolean isSchoolYearValid(SchoolYear schoolYear) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate schoolYearEndDate = Helper.convertDateToLocalDate(schoolYear.getEndDate());
+        LocalDate schoolYearStartDate = Helper.convertDateToLocalDate(schoolYear.getStartDate());
+        LocalDate todayPlus7 = LocalDate.now().plusDays(7);
+        if (schoolYearEndDate.isBefore(currentDate) || !schoolYearStartDate.isAfter(todayPlus7)) {
+            return false;
+        }
+        return true;
+    }
+
+    private Class getLatest() {
+        String sql = "select TOP 1 * from Class order by id desc";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createClass(resultSet);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+//hàm gennerate
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "C" + result;
+    }
+
 
     public List<Class> getByStatus(String status, String schoolYearId) {
     String sql = "SELECT * FROM Class WHERE [status] = ? AND school_year_id = ? ORDER BY id DESC";
