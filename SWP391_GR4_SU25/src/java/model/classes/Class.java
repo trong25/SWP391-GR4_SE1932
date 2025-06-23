@@ -9,8 +9,11 @@ import model.personnel.Personnel;
 import model.schoolYear.SchoolYear;
 
 /**
- *
- * @author MSI
+ * Lớp Class khai báo các thuộc tính của một lớp học trong hệ thống.
+ * Được sử dụng để quản lý thông tin về lớp học như: mã, tên, khối, giáo viên,năm học, trạng thái,
+ * mô tả và người tạo.
+ * @author TrongNV
+ * @version1.0
  */
 public class Class {
     private String id;
