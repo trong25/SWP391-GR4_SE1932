@@ -213,7 +213,7 @@ public String getDateIDbyDay(java.util.Date day) {
             e.printStackTrace();
         }
     }
-     public List<Day> getDaysInFutureWithTimetableForClass(String classId) {
+   public List<Day> getDaysInFutureWithTimetableForClass(String classId) {
         List<Day> days = new ArrayList<>();
         String sql = "SELECT DISTINCT d.*\n" +
                 "                FROM Days d\n" +
@@ -230,6 +230,28 @@ public String getDateIDbyDay(java.util.Date day) {
             e.printStackTrace();
         }
         return days;
+    }
+ public static void main(String[] args) {
+        // Tạo DAO
+        DayDAO dao = new DayDAO();
+
+        // Nhập classId bạn muốn test (có dữ liệu)
+        String classId = "C000001"; // thay bằng mã lớp thật
+
+        // Gọi hàm
+        List<Day> days = dao.getDaysInFutureWithTimetableForClass(classId);
+
+        // In ra kết quả
+        if (days.isEmpty()) {
+            System.out.println("Không có ngày nào phù hợp.");
+        } else {
+            for (Day d : days) {
+                System.out.println("ID: " + d.getId());
+                System.out.println("Date: " + d.getDate());
+                System.out.println("Week ID: " + (d.getWeek() != null ? d.getWeek().getId() : "null"));
+                System.out.println("-----------");
+            }
+        }
     }
 
     }     

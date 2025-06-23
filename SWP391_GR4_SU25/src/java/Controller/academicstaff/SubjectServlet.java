@@ -13,6 +13,20 @@ import model.subject.Subject;
 import model.subject.SubjectDAO;
 import utils.Helper;
 
+
+/**
+*Servlet SubjectServlet xử lý các yêu cầu HTTP để hiển thị danh sách môn học
+ * và chỉnh sửa thông tin môn học , tạo môn học  mới,
+ * 
+ * URL Mapping: /academicstaff/subject
+ * Chức năng:
+ * -Nhận dữ liệu từ form
+ * - gọi SubjectDAO để tạo năm học mới và lưu vào cơ sở dữ liệu
+ * Phân quyền: chỉ Giáo Vụ mới được phép tạo môn học mới.
+ * @author TrongNV
+ * @version 1.0
+ */
+
 public class SubjectServlet extends HttpServlet {
 
     @Override

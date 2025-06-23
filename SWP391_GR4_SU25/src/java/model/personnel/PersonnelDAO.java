@@ -9,11 +9,20 @@ import model.role.Role;
 import utils.DBContext;
 
 /**
- *
- * @author MSI
+ * Lớp PersonnelDAO dùng để thao tác với bảng Personnel trong cơ sở dữ liệu
+ * 
+ * Chịu trách nhiệm xử lý công việc tạo nhân viên, lấy trạng thái, lấy tất cả nhân viên, cập nhật trong hệ thống.
+ * Được gọi bởi servlet liên quan đến người dùng
+ * 
+ * Ví dụ: createPersonnel, getAllPersonnels, getPersonnelByUserId, getAllStatus,...
+ * 
+ * @author TrongNV
+ * @version 1.0
  */
-public class PersonnelDAO extends DBContext {
 
+public class PersonnelDAO extends DBContext {
+    
+    //hàm tạo nhân viên
     private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
         Personnel person = new Personnel();
         person.setId(resultSet.getString("id"));
@@ -46,7 +55,7 @@ public class PersonnelDAO extends DBContext {
 
         return person;
     }
-
+//Hàm lấy tất cả nhân viên trong cơ sở dữ liệu
     public List<Personnel> getAllPersonnels() {
         String sql = "select * from [Personnels] order by id desc";
         List<Personnel> persons = new ArrayList<>();

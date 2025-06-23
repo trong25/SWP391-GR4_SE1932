@@ -16,8 +16,16 @@ import model.student.Student;
 import model.student.StudentDAO;
 
 /**
- *
- * @author MSI
+*Servlet StudentProfileClassServlet xử lý các yêu cầu HTTP để cập nhật thông tin học sinh trong lớp học
+ * và chỉnh sửa thông tin học sinh 
+ * 
+ * URL Mapping: /academicstaff/studentprofileclass
+ * Chức năng:
+ * -Nhận dữ liệu từ form
+ * - gọi StudentDAO để lấy học sinh thông qua id để cập nhật và chỉnh sửa thông tin học snh và lưu vào cơ sở dữ liệu
+ * Phân quyền: chỉ Giáo Vụ và giáo viên được phép chỉnh sửa thông tin học sinh trong lớp học.
+ * @author TrongNV
+ * @version 1.0
  */
 public class StudentProfileClassServlet extends HttpServlet {
    

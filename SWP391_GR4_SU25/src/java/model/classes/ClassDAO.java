@@ -21,8 +21,14 @@ import utils.DBContext;
 import utils.Helper;
 
 /**
- *
- * @author MSI
+ Lớp ClassDAO chịu trách nhiệm thao tác dữ liệu với bảng ClassDAO trong Database
+ * Lấy dữ liệu từ database liên quan đến bảng ClassDAO
+ * Thức hiên các chức năng như tạo lớp học, lấy lớp học qua id, cập nhật và chỉnh sửa lớp học, chuyển lớp cho học sinh, phân công giáo viên,..
+ * Ví dụ: createNewClass(Class c),getAll, getByStatus(String status, String schoolYearId),
+ * moveOutClassForStudent(String oldClassId, String newClassId, String studentId),assignTeacherToClass(String teacherId, String classId)
+ * 
+ * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ * @author TrongNV
  */
 public class ClassDAO extends DBContext {
 

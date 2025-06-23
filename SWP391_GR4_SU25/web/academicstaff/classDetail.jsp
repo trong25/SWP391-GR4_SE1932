@@ -7,7 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--<jsp:useBean id="dayBean" class="model.day.DayDAO"/>--%>
+<jsp:useBean id="dayBean" class="model.day.DayDAO"/>
 <jsp:useBean id="personnelBean" class="model.personnel.PersonnelDAO"/>
 <html>
 
@@ -246,7 +246,7 @@
                                                     <td>${student.address}</td>
                                                     <td>"${student.school_id.id}" </td>
                                                     <td>${student.school_id.schoolName}</td>
-                                                    
+
                                                     <td>${student.school_id.addressSchool}</td>
                                                     <td class="d-flex justify-content-center align-items-center"
                                                         style="height: 150px;">
@@ -439,13 +439,13 @@
                                                     </div>
 
                                                     <%--                                                        sub teacher--%>
-                                                    <div class="form-group">
+<!--                                                    <div class="form-group">
                                                         <input type="checkbox" id="substituteCheckbox" name="substituteCheckbox">
                                                         <label for="substituteCheckbox">Phân công giáo viên dạy thay</label>
                                                     </div>
                                                     <div class="form-group" id="substituteTeacherDiv" style="display:none;">
                                                         <label class="control-label mt-2" for="days">Chọn ngày<a style="color: red">*</a></label>
-                                                        <select class="form-control" id="days" name="day" onchange="submit('assignSubTeacher')">
+                                                        <select class="form-control" id="days" name="day" onchange="submit('assignTeacher')">
                                                             <option value="">-- Chọn Ngày --</option>
                                                             <c:forEach var="day" items="${dayBean.getDaysInFutureWithTimetableForClass(requestScope.classes.id)}">
                                                                 <option value="${day.id}" ${requestScope.dayId eq day.id ? "selected":""}>${day.date}</option>
@@ -454,11 +454,13 @@
                                                         <label class="control-label" for="substituteTeacher">Mã - Tên giáo viên Dạy Thay<a style="color: red">*</a></label>
                                                         <select class="form-control" id="substituteTeacher" name="substituteTeacher">
                                                             <option value="null">-- Chọn Giáo Viên --</option>
+
                                                             <c:forEach var="teacher" items="${requestScope.freeTeachers}">
                                                                 <option value="${teacher.id}" ${param.substituteTeacher eq teacher.id ? "selected":""}>${teacher.id} - ${teacher.lastName} ${teacher.firstName}</option>
                                                             </c:forEach>
+
                                                         </select>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                             <br>
@@ -543,7 +545,7 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-        <script>
+          <script>
             // Variable to track the current state (true: checked, false: unchecked)
             var areChecked = false;
 

@@ -14,8 +14,14 @@ import model.schoolclass.SchoolClass;
 import utils.DBContext;
 
 /**
- *
- * @author MSI
+ Lớp StudentDAO chịu trách nhiệm thao tác dữ liệu với bảng StudentDAO trong Database
+ * Lấy dữ liệu từ database liên quan đến bảng SubjectDAO
+ * Thức hiên các chức năng như tạo học sinh, lấy học sinh qua id, cập nhật và chỉnh sửa thông tin học sinh,
+ * Ví dụ: createStudent(Student student),getStudentByStatus(String status),
+ * getListStudentsByClass(String studentId, String classId), updateStudent(Student student),...
+ * 
+ * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ * @author TrongNV
  */
 public class StudentDAO extends DBContext {
 

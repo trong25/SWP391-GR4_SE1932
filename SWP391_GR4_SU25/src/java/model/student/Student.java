@@ -10,7 +10,10 @@ import model.school.Schools;
 import model.schoolclass.SchoolClass;
 
 /**
- *
+ *Lớp Student khai báo các thuộc tính của  học sinh trong hệ thống.
+ * Được sử dụng để quản lý thông tin về lớp học như: mã, tên,  trạng thái,địa chỉ, ngày sinh
+ *,tên bố, tên mẹ, sdt bố và mẹ, trường học và lớp học mô tả , kiểu môn học và người tạo.
+ * @author TrongNV
  * @author MSI
  */
 public class Student {

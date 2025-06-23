@@ -17,8 +17,14 @@ import model.grade.GradeDAO;
 import utils.DBContext;
 
 /**
- *
- * @author MSI
+Lớp SubjectDAO chịu trách nhiệm thao tác dữ liệu với bảng SubjectDAO trong Database
+ * Lấy dữ liệu từ database liên quan đến bảng SubjectDAO
+ * Thức hiên các chức năng như tạo môn học, lấy môn học qua id, cập nhật và chỉnh sửa môn học,
+ * Ví dụ: createSubject(Subject subject),getSubjectBySubjectId(String subjectId),
+ * getSubjectsByStatus(String status), editSubject(Subject subject)
+ * 
+ * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ * @author TrongNV
  */
 public class SubjectDAO extends DBContext {
 

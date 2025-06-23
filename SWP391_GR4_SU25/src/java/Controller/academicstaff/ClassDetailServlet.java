@@ -18,14 +18,24 @@ import model.personnel.PersonnelDAO;
 import model.student.Student;
 import model.student.StudentDAO;
 import model.classes.Class;
+import model.day.Day;
+import model.day.DayDAO;
 import model.personnel.Personnel;
 import model.school.Schools;
 import model.schoolYear.SchoolYear;
 import model.timetable.TimetableDAO;
 
 /**
- *
- * @author MSI
+ *Servlet ClassDetailServlet xử lý các yêu cầu HTTP để hiển thị danh sách học sinh trong một lớp học
+ * và chỉnh sửa thông tin học sinh trong lớp học đó, thêm học sinh mới vào lớp học,
+ * phân công giáo viên mới, đổi lớp cho học sinh
+ * URL Mapping: /academicstaff/classdetail
+ * Chức năng:
+ * -Nhận dữ liệu từ form
+ * - gọi ClassDAO để thêm hoc sinh, phân công giáo viên, đổi lớp cho học và lưu vào cơ sở dữ liệu
+ * Phân quyền: chỉ Giáo Vụ mới được phép làm thêm học sinh vào lớp, phân công giáo viên, đổi lớp cho hoc sinh.
+ * @author TrongNV
+ * @version 1.0
  */
 public class ClassDetailServlet extends HttpServlet {
 
@@ -206,30 +216,31 @@ public class ClassDetailServlet extends HttpServlet {
             session.setAttribute("toastType", toastType);
             session.setAttribute("toastMessage", toastMessage);
             response.sendRedirect("classdetail?classId=" + classId);
-        } else if (action.equals("assignSubTeacher")) {
-            String substituteTeacher = request.getParameter("substituteTeacher");
-            String classId = request.getParameter("classId");
-            String dayId = request.getParameter("day");
-            if (substituteTeacher.equals("null")) {
-                PersonnelDAO personnelDAO = new PersonnelDAO();
-                session.setAttribute("freeTeachers", personnelDAO.getFreeTeacherByDate(dayId));
-                session.setAttribute("popUpModal", "true");
-                session.setAttribute("dayId", dayId);
-                response.sendRedirect("classdetail?classId=" + classId);
-            }else{
-                TimetableDAO timetableDAO = new TimetableDAO();
-                String result = timetableDAO.updateTimetableOfClass(dayId, classId, dayId);
-                if(result.equals("success")){
-                    session.setAttribute("toastType", "success");
-                    session.setAttribute("toastMessage", "Thao tác thành công");
-                }else{
-                    session.setAttribute("toastType", "error");
-                    session.setAttribute("toastMessage", result);
-                }
-                 response.sendRedirect("classdetail?classId=" + classId);
-            }
+//        } else if (action.equals("assignSubTeacher")) {
+//            String substituteTeacher = request.getParameter("substituteTeacher");
+//            String classId = request.getParameter("classId");
+//            String dayId= request.getParameter("day");
+//            if (substituteTeacher.equals("null")){
+//                PersonnelDAO personnelDAO = new PersonnelDAO();
+//                session.setAttribute("freeTeachers",personnelDAO.getFreeTeacherByDate(dayId));
+//                session.setAttribute("popUpModal", "true");
+//                session.setAttribute("dayId", dayId);
+//                response.sendRedirect("classdetail?classId=" + classId);
+//            } else {
+//                TimetableDAO timetableDAO = new TimetableDAO();
+//                String result = timetableDAO.updateTimetableOfClass(substituteTeacher, classId, dayId);
+//                if (result.equals("success")) {
+//                    session.setAttribute("toastType", "success");
+//                    session.setAttribute("toastMessage", "Thao tác thành công");
+//                } else {
+//                    session.setAttribute("toastType", "error");
+//                    session.setAttribute("toastMessage", result);
+//                }
+//                response.sendRedirect("classdetail?classId=" + classId);
+//            }
+//        }
+    
         }
-
     }
 
     private boolean isSchoolYearInThePast(SchoolYear schoolYear) {
