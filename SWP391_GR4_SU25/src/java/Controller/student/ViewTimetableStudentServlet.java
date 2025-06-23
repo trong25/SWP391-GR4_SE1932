@@ -31,9 +31,22 @@ import model.week.Week;
 import model.week.WeekDAO;
 
 /**
+ * Servlet ViewTimetableStudentServlet xử lý các yêu cầu HTTP để hiển thị thời khóa biểu của học sinh.
  *
- * @author admin
+ * URL Mapping: /student/view-timetable
+ *
+ * Chức năng:
+ * - [GET] Lấy thông tin năm học, tuần, ngày học, khung giờ và lớp học của học sinh
+ * - Nếu không có tuần được chọn, tự động xác định tuần hiện tại dựa trên ngày hiện tại
+ * - Truy xuất dữ liệu thời khóa biểu từ cơ sở dữ liệu theo học sinh và tuần đã chọn
+ * - Chuyển tiếp dữ liệu sang viewTimetable.jsp để hiển thị thời khóa biểu
+ *
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được phép truy cập chức năng này
+ *
+ * @author KienPN
+ * @version 1.0
  */
+
 @WebServlet(name = "ViewTimetable", urlPatterns = {"/student/view-timetable"})
 public class ViewTimetableStudentServlet extends HttpServlet {
 

@@ -23,9 +23,22 @@ import model.week.Week;
 import model.week.WeekDAO;
 
 /**
+ * Servlet ViewAttendanceStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điểm danh của học sinh.
  *
- * @author admin
+ * URL Mapping: /student/attendance
+ *
+ * Chức năng:
+ * - [GET] Lấy thông tin học sinh hiện tại từ session
+ * - Truy xuất danh sách năm học, tuần và ngày học tương ứng từ cơ sở dữ liệu
+ * - Xác định tuần hiện tại nếu không có tham số tuần được chọn
+ * - Gửi dữ liệu điểm danh đến trang viewAttendance.jsp để hiển thị
+ *
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được phép truy cập
+ *
+ * @author KienPN
+ * @version 1.0
  */
+
 @WebServlet(name = "ViewAttendanceStudent", urlPatterns = {"/student/attendance"})
 public class ViewAttendanceStudentServlet extends HttpServlet {
 

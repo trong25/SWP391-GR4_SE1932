@@ -17,9 +17,22 @@ import model.notification.NotificationDAO;
 import model.user.User;
 
 /**
- *
- * @author admin
+ * Servlet NotificationdetailsServlet xử lý các yêu cầu HTTP để hiển thị chi tiết một thông báo cụ thể cho học sinh.
+ * 
+ * URL Mapping: /student/notificationdetails
+ * 
+ * Chức năng:
+ * - Kiểm tra người dùng đã đăng nhập chưa (qua session)
+ * - Nhận ID của thông báo từ request parameter (?id=...)
+ * - Gọi NotificationDAO để lấy chi tiết thông báo từ CSDL
+ * - Chuyển tiếp dữ liệu sang trang notificationDetails.jsp để hiển thị chi tiết
+ * 
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được phép xem chi tiết thông báo
+ * 
+ * @author KIenPN
+ * @version 1.0
  */
+
 @WebServlet(name="Notificationdetails", urlPatterns={"/student/notificationdetails"})
 public class NotificationdetailsServlet extends HttpServlet {
    
