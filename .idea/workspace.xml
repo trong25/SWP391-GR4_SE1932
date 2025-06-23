@@ -2,67 +2,47 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/admin/CategoryRoleManagerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/admin/CategoryRoleManagerServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/admin/CategoryRoleServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/admin/CategoryRoleServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/admin/ResetPassword.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/admin/ResetPassword.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ListPersonnelServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/DashboardStudentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/DashboardStudentServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/SendApplicationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/SendApplicationServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/SentApplicationsServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/SentApplicationsServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/UpdateStudentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/UpdateStudentServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/teacher/ApplicationDetailsServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/teacher/ApplicationServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/teacher/ViewTimetableServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/controllerr/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/controllerr/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/controllerr/UpdatePersonnelServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/controllerr/UpdatePersonnelServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/day/DayDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/day/DayDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/notification/NotificationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/notification/NotificationDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/personnel/PersonnelDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/personnel/PersonnelDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/role/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/role/Role.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/schoolclass/SchoolClassDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/schoolclass/SchoolClassDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetablepivot/TimetableDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetablepivot/TimetableDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/utils/DBContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/utils/DBContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/WEB-INF/web.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/listPersonnel.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/dashboard.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/informationStudent.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/informationStudent.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/applicationDetails.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/applications.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/informationTeacher.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/informationTeacher.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/sentNotificationDetails.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/sentNotificationDetails.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/viewAttendance.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/viewAttendance.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/viewStudentsAttendance.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/viewStudentsAttendance.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/viewTimetable.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;phngkien&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/trong25/SWP391-GR4_SE1932.git&quot;,
+    &quot;accountId&quot;: &quot;81701c38-39c1-46a8-b282-c38c888bacdb&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2yuXl2q4Y0FLO3MvDWYfK1S3vkF" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "nodejs_package_manager_path": "npm"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;KienPN&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -79,7 +59,12 @@
       <option name="presentableId" value="Default" />
       <updated>1750685580519</updated>
       <workItem from="1750685582211" duration="5000" />
+      <workItem from="1750687050614" duration="100000" />
+      <workItem from="1750690004955" duration="13000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
