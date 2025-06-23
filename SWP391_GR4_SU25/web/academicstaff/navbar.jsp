@@ -122,21 +122,21 @@
 
             <!-- Nav Item -->
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="schoolyear">
                     <i class="fas fa-fw fa-school"></i>
                     <span>Quản lý năm học</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="subject">
                     <i class="fas fa-fw fa-book"></i>
                     <span>Quản lý môn học</span></a>
             </li>
 
-            <li class="nav-item">
+<!--            <li class="nav-item">
                 <a class="nav-link" href="">
                     <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
                     <span>Danh Sách Sự Kiện</span></a>
-            </li>
+            </li>-->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNoti"
                    aria-expanded="true" aria-controls="collapseTwo">
