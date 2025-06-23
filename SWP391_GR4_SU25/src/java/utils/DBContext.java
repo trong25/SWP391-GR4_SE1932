@@ -1,15 +1,16 @@
 package utils;
+
 import java.sql.*;
 
 /**
  *
  * @author datng
  */
-
 public class DBContext {
+
     protected Connection connection;
-    public DBContext()
-    {
+
+    public DBContext() {
         try {
             // Edit URL , username, password to authenticate with your MS SQL Server
             String url = "jdbc:sqlserver://localhost:1433;databaseName= Cultural_Tutoring_Center_HN;encrypt=true;trustServerCertificate=true;";
@@ -21,9 +22,11 @@ public class DBContext {
             System.out.println(ex);
         }
     }
- public Connection getConnection() {
+
+    public Connection getConnection() {
         return connection;
     }
+
     public void closeConnection() {
         if (connection != null) {
             try {
@@ -56,9 +59,9 @@ public class DBContext {
             }
         }
     }
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         DBContext conn = new DBContext();
         System.out.println(conn.connection);
     }
 }
-

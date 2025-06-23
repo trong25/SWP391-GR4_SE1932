@@ -1,9 +1,8 @@
-<%@ page import="model.application.Application" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<jsp:useBean id="bean" class="model.student.StudentDAO"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -36,14 +35,14 @@
 </script>
 <html>
     <head>
-        <title>Trung tâm dạy thêm TaBi</title>
+        <title>TaBi Learning Center</title>
     </head>
     <body>
         <div id="wrapper">
             <jsp:include page="navbar.jsp"/>
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
-                    <jsp:include page="../header.jsp"/>
+                    <jsp:include page="header-student.jsp"/>
                     <div class="container-fluid">
                         <h1 class="h3 mb-4 text-gray-800 text-center">Chi Tiết Thông Báo</h1>
                         <div class="card mb-4">
@@ -55,11 +54,9 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-3 font-weight-bold">Người nhận:</div>
+                                    <div class="col-sm-3 font-weight-bold">Người gửi:</div>
                                     <div class="col-sm-9" id="createdBy">
-                                        <c:forEach items="${listrole_id}" var="role_id">
-                                            ${roleMap[role_id]}</br>
-                                        </c:forEach>
+                                        ${notifi.createdBy.lastName} ${notifi.createdBy.firstName}  ${roleMap[notifi.createdBy.roleId]}
                                     </div>
                                 </div>
                                 <div class="row mb-3">

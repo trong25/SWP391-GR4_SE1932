@@ -19,19 +19,9 @@ import model.user.User;
 import model.user.UserDAO;
 
 /**
- * Lớp UpdateStudentServlet dùng để xử lý việc cập nhật thông tin học sinh.
- * 
- * Chịu trách nhiệm nhận dữ liệu cập nhật từ form, kiểm tra tính hợp lệ 
- * và tính duy nhất của email, số điện thoại người giám hộ, 
- * sau đó cập nhật thông tin học sinh và người dùng trong hệ thống.
- * Được sử dụng bởi tầng Controller (Servlet) trong mô hình MVC.
- * 
- * Ví dụ: xử lý cập nhật thông tin cha mẹ, email, địa chỉ, ghi chú đặc biệt của học sinh.
- * 
- * @author HuyDV
- * @version 1.0
+ *
+ * @author ASUS VIVOBOOK
  */
-
 public class UpdateStudentServlet extends HttpServlet {
    
     @Override

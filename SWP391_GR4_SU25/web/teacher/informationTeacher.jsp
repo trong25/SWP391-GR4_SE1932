@@ -136,19 +136,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row gutters">
+                                                         <div class="row gutters">
                                                 <!-- Trường -->
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
                                                         <label for="schoolName">Trường</label>
-                                                        <input style="width: 60%;" type="text" class="form-control" placeholder="Trường" name="schoolName" value="${personnel.schoolName}" readonly />
+                                                        <input style="width: 60%;" type="text" class="form-control" placeholder="Trường" name="schoolName" value="${personnel.schoolName}" />
                                                     </div>
                                                 </div>
                                                 <!-- Lớp -->
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
                                                         <label for="className">Lớp</label>
-                                                        <input style="width: 40%;" type="text" class="form-control" placeholder="Lớp" name="className" value="${personnel.className}" readonly />
+                                                        <input style="width: 40%;" type="text" class="form-control" placeholder="Lớp" name="className" value="${personnel.className}" />
                                                     </div>
                                                 </div>
                                             </div>     
@@ -179,7 +179,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-
+                                             
                                             <div class="row gutters">
                                                 <div class="button-container">
                                                     <div>

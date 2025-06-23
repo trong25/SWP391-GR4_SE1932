@@ -19,33 +19,9 @@ import model.user.User;
 import model.user.UserDAO;
 
 /**
- * Lớp CategoryRoleManagerServlet dùng để xử lý các yêu cầu quản lý danh sách người dùng theo vai trò (role).
- * 
- * Chịu trách nhiệm lấy danh sách người dùng theo role được truyền vào qua tham số request,
- * thiết lập các dữ liệu cần thiết (map vai trò và trạng thái hoạt động),
- * và chuyển hướng tới trang quản lý người dùng với dữ liệu đã lấy được.
- * 
- * Nếu role truyền vào là "6" (có thể là tất cả hoặc role đặc biệt), servlet sẽ chuyển hướng về trang tổng quản lý người dùng.
- * 
- * Được sử dụng trong tầng Controller theo mô hình MVC,
- * tương tác với lớp UserDAO để truy xuất dữ liệu người dùng từ cơ sở dữ liệu.
- * 
- * Các role được quản lý:
- * - 0: NHÂN VIÊN IT
- * - 1: HIỆU TRƯỞNG
- * - 2: GIÁO VỤ
- * - 3: GIÁO VIÊN
- * - 4: HỌC SINH
- * - 5: KẾ TOÁN
- * 
- * Trạng thái hoạt động:
- * - 0: HOẠT ĐỘNG
- * - 1: KHÔNG HOẠT ĐỘNG
- * 
+ *
  * @author ASUS VIVOBOOK
- * @version 1.0
  */
-
 @WebServlet(name="CategoryRoleManagerServlet", urlPatterns={"/admin/categoryRoleManager"})
 public class CategoryRoleManagerServlet extends HttpServlet {
    

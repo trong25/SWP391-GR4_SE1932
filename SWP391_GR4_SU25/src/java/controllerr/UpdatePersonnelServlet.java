@@ -13,33 +13,6 @@ import model.student.StudentDAO;
 import model.user.User;
 import model.user.UserDAO;
 
-/**
- * Lớp UpdatePersonnelServlet dùng để xử lý việc cập nhật thông tin cá nhân của nhân sự trong hệ thống.
- * 
- * Chịu trách nhiệm nhận dữ liệu cập nhật từ form, kiểm tra tính duy nhất của email và số điện thoại,
- * cập nhật thông tin nhân sự và người dùng tương ứng trong cơ sở dữ liệu.
- * 
- * Dựa vào vai trò (roleId) của nhân sự, servlet sẽ chuyển hướng (redirect) đến trang thông tin phù hợp
- * sau khi cập nhật thành công hoặc thất bại.
- * 
- * Được sử dụng trong tầng Controller của mô hình MVC,
- * tương tác với các DAO: PersonnelDAO, UserDAO và StudentDAO để thực hiện nghiệp vụ.
- * 
- * Ví dụ cập nhật: tên, giới tính, địa chỉ, email, số điện thoại nhân sự.
- * 
- * Các roleId:
- * - 0: Admin
- * - 1: Director
- * - 2: Academic Staff
- * - 3: Teacher
- * - 5: Accountant
- * 
- * @author HuyDV
- * @version 1.0
- */
-
-
-
 public class UpdatePersonnelServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
