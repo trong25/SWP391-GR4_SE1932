@@ -74,7 +74,6 @@ public class ListPersonnelServlet extends HttpServlet {
             List<Personnel> persons = personnelDAO.getAllPersonnels();
             List<Role> roles = personnelDAO.getAllPersonnelRole();
             List<String> statuss = personnelDAO.getAllStatus();
-            List<Personnel> waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
 
             request.setAttribute("selectedstatus", "all");
             request.setAttribute("selectedrole", "all");
@@ -82,11 +81,9 @@ public class ListPersonnelServlet extends HttpServlet {
             request.setAttribute("type", type);
             request.setAttribute("persons", persons);
             request.setAttribute("roles", roles);
-            request.setAttribute("waitlist", waitlist);
             request.setAttribute("statuss", statuss);
 
             request.getRequestDispatcher("listPersonnel.jsp").forward(request, response);
-
             session.removeAttribute("message");
             session.removeAttribute("type");
         } catch (Exception e) {
