@@ -57,7 +57,7 @@ public class StudentDAO extends DBContext {
         Schools school = new Schools();
         school.setId(resultSet.getString("school_id"));
         school.setSchoolName(resultSet.getString("schoolName"));
-        //school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
         student.setSchool_id(school);
 
 
@@ -563,18 +563,32 @@ return student;
     }
 
     public Student getStudentById(String id) {
-        String sql = "SELECT * FROM Students WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
+    String sql = """
+        SELECT 
+            s.*, 
+            sc.schoolName, 
+            sc.addressSchool, 
+            c.class_name
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.id = ?
+    """;
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, id);
+        try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return createStudent(rs);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
+    } catch (SQLException e) {
+        System.err.println("Lỗi khi lấy học sinh theo ID: " + e.getMessage());
+        e.printStackTrace();
     }
+    return null;
+}
+
 
     public int getSumStudentInClass(String classId) {
         String sql = "SELECT COUNT(*) AS total_students\n"
