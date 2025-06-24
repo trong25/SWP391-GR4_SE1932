@@ -29,9 +29,8 @@ import utils.DBContext;
 
 public class PersonnelDAO extends DBContext {
     
-    //hàm tạo nhân viên
+     //hàm tạo nhân viên
     private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
-
         Personnel person = new Personnel();
         person.setId(resultSet.getString("id"));
         person.setFirstName(resultSet.getString("first_name"));
@@ -47,6 +46,19 @@ public class PersonnelDAO extends DBContext {
         person.setUserId(resultSet.getString("user_id"));
         person.setSchool_id(resultSet.getString("school_id"));
         person.setSchool_class_id(resultSet.getString("school_class_id"));
+
+        // Lấy thêm thông tin từ bảng Schools (nếu có trong câu truy vấn)
+        try {
+            person.setSchoolName(resultSet.getString("schoolName"));
+        } catch (SQLException e) {
+            // Trường hợp không có cột schoolName trong ResultSet
+        }
+
+        try {
+            person.setAddressSchool(resultSet.getString("addressSchool"));
+        } catch (SQLException e) {
+            // Trường hợp không có cột addressSchool trong ResultSet
+        }
 
         return person;
     }
