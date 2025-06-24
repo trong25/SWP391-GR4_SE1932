@@ -151,7 +151,7 @@ public class ListPersonnelServlet extends HttpServlet {
         request.setAttribute("statuss", statuss);
         List<Personnel> waitlist = new ArrayList<>();
         waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-        request.setAttribute("searchdata", search);
+       // request.setAttribute("searchdata", search);
         request.setAttribute("selectedstatus", status);
         request.setAttribute("selectedrole", role);
         request.setAttribute("message", message);
