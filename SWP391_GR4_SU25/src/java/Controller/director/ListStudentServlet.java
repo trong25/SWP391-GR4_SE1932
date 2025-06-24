@@ -30,7 +30,11 @@ import model.classes.Class;
  * 
  * Phân quyền: Chỉ vai trò Director (Giám đốc trung tâm) được phép truy cập chức năng này
  * 
+
  * @author ThanhNT
+
+ * @author Hachithanh
+
  * @version 1.0
  */
 
@@ -53,6 +57,9 @@ public class ListStudentServlet extends HttpServlet {
             out.println("</html>");
         }
     }
+
+
+  
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -91,11 +98,7 @@ public class ListStudentServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+  
     @Override
     public String getServletInfo() {
         return "Short description";
