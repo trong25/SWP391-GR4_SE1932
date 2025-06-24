@@ -381,12 +381,12 @@ public class UserDAO extends DBContext {
         }
     }
 
-    private void updateStudentsUserId(String PupilsId, String userId) {
-        String sql = "update Pupils set user_id = ? where id = ?";
+    private void updateStudentsUserId(String StudentsId, String userId) {
+        String sql = "update Students set user_id = ? where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, userId);
-            statement.setString(2, PupilsId);
+            statement.setString(2, StudentsId);
             statement.executeUpdate();
         } catch (Exception ex) {
             System.out.println(ex);
