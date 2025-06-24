@@ -818,20 +818,33 @@ return student;
 
     public List<Student> getStudentNonUserId() {
 
-        List<Student> list = new ArrayList<>();
-        String sql = "SELECT * FROM Students WHERE user_id IS NULL AND status = N'đang theo học' order by id desc";
-      try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Student student = createStudent(rs);
-                list.add(student);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    List<Student> list = new ArrayList<>();
+    String sql = """
+        SELECT s.*, 
+               sc.schoolName, 
+               sc.addressSchool, 
+               c.class_name 
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.user_id IS NULL AND s.status = N'đang theo học'
+        ORDER BY s.id DESC
+    """;
+
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Student student = createStudent(rs);
+            list.add(student);
         }
-        return list;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return list;
+}
+
 
  
 //     public List<Student> getStudentsWithoutClass(String schoolYearId) {
