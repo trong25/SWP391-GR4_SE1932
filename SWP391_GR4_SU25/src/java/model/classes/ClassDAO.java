@@ -109,7 +109,7 @@ public class ClassDAO extends DBContext {
         }
         return null;
     }
-//hàm gennerate
+
     private String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -304,6 +304,8 @@ public class ClassDAO extends DBContext {
         }
         return list;
     }
+
+
  public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
         String sql = "update classDetails set class_id = ? where student_id= ? and class_id= ?";
         try {
