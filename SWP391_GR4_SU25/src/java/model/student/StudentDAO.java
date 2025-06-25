@@ -337,23 +337,29 @@ public class StudentDAO extends DBContext {
     }
 
     public Student getStudentByUserId(String userId) {
-        String sql = "SELECT s.*, sc.schoolName, c.class_name "
-                + "FROM Students s "
-                + "LEFT JOIN Schools sc ON s.school_id = sc.id "
-                + "LEFT JOIN SchoolClasses c ON s.school_class_id = c.id "
-                + "WHERE s.user_id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return createStudent(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+    String sql = """
+        SELECT s.*, 
+               sc.schoolName, 
+               sc.addressSchool, 
+               c.class_name
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.user_id = ?
+    """;
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, userId);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        if (resultSet.next()) {
+            return createStudent(resultSet);
         }
-        return null;
+    } catch (SQLException e) {
+        throw new RuntimeException("Error retrieving student by userId: " + userId, e);
     }
+    return null;
+}
+
 
     public boolean checkFirstGuardianPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Students] WHERE first_guardian_phone_number = ?";
