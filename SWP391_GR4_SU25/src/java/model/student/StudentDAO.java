@@ -19,13 +19,15 @@ import model.schoolclass.SchoolClass;
 import utils.DBContext;
 
 /**
- Lớp StudentDAO chịu trách nhiệm thao tác dữ liệu với bảng StudentDAO trong Database
- * Lấy dữ liệu từ database liên quan đến bảng SubjectDAO
- * Thức hiên các chức năng như tạo học sinh, lấy học sinh qua id, cập nhật và chỉnh sửa thông tin học sinh,
- * Ví dụ: createStudent(Student student),getStudentByStatus(String status),
- * getListStudentsByClass(String studentId, String classId), updateStudent(Student student),...
- * 
+ * Lớp StudentDAO chịu trách nhiệm thao tác dữ liệu với bảng StudentDAO trong
+ * Database Lấy dữ liệu từ database liên quan đến bảng SubjectDAO Thức hiên các
+ * chức năng như tạo học sinh, lấy học sinh qua id, cập nhật và chỉnh sửa thông
+ * tin học sinh, Ví dụ: createStudent(Student student),getStudentByStatus(String
+ * status), getListStudentsByClass(String studentId, String classId),
+ * updateStudent(Student student),...
+ *
  * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ *
  * @author TrongNV
  */
 public class StudentDAO extends DBContext {
@@ -51,32 +53,26 @@ public class StudentDAO extends DBContext {
             student.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
             student.setParentSpecialNote(resultSet.getString("parent_special_note"));
 
-           
+            // Tạo và gán School object
+            Schools school = new Schools();
+            school.setId(resultSet.getString("school_id"));
+            school.setSchoolName(resultSet.getString("schoolName"));
+            school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+            student.setSchool_id(school);
 
-        // Tạo và gán School object
-        Schools school = new Schools();
-        school.setId(resultSet.getString("school_id"));
-        school.setSchoolName(resultSet.getString("schoolName"));
-//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
-        student.setSchool_id(school);
+            // Tạo và gán SchoolClass object
+            SchoolClass schoolClass = new SchoolClass();
+            schoolClass.setId(resultSet.getString("school_class_id"));
+            schoolClass.setClassName(resultSet.getString("class_name"));
+            student.setSchool_class_id(schoolClass);
 
+            return student;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
 
-        // Tạo và gán SchoolClass object
-        SchoolClass schoolClass = new SchoolClass();
-        schoolClass.setId(resultSet.getString("school_class_id"));
-        schoolClass.setClassName(resultSet.getString("class_name"));
-        student.setSchool_class_id(schoolClass);
-
-return student;
-    } catch (Exception e) {
-        e.printStackTrace();
     }
-       return null;
-    
-        
-   }
-    
-
 
     public Student getLatest() {
         String sql = """
@@ -101,7 +97,6 @@ return student;
         return null;
     }
 
-
     public String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -114,10 +109,7 @@ return student;
         return "HS" + result;
     }
 
-
-   
-
-  public boolean createStudent(Student student) {
+    public boolean createStudent(Student student) {
         String insertSql = """
         INSERT INTO [dbo].[Students]
         ([id], [user_id], [first_name], [last_name], [address], [email], [status],
@@ -178,9 +170,8 @@ return student;
         }
     }
 
-
-   public List<Student> getStudentByStatus(String status) {
-    String sql = """
+    public List<Student> getStudentByStatus(String status) {
+        String sql = """
         SELECT s.*, 
                sch.schoolName AS schoolName, 
                sch.addressSchool AS addressSchool, 
@@ -192,21 +183,19 @@ return student;
         ORDER BY s.id DESC
     """;
 
-    List<Student> listStudents = new ArrayList<>();
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        preparedStatement.setString(1, status);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()) {
-            listStudents.add(createStudent(resultSet));
+        List<Student> listStudents = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                listStudents.add(createStudent(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving students by status", e);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        throw new RuntimeException("Error retrieving students by status", e);
+        return listStudents;
     }
-    return listStudents;
-}
-
-
 
     public int getPendingStudentCount() {
         String sql = "SELECT COUNT(*) AS total FROM Students WHERE status = ?";
@@ -249,11 +238,11 @@ return student;
     }
 
     public Student getStudentByUserId(String userId) {
-        String sql = "SELECT s.*, sc.schoolName, c.class_name " +
-                     "FROM Students s " +
-                     "LEFT JOIN Schools sc ON s.school_id = sc.id " +
-                     "LEFT JOIN SchoolClasses c ON s.school_class_id = c.id " +
-                     "WHERE s.user_id = ?";
+        String sql = "SELECT s.*, sc.schoolName, c.class_name "
+                + "FROM Students s "
+                + "LEFT JOIN Schools sc ON s.school_id = sc.id "
+                + "LEFT JOIN SchoolClasses c ON s.school_class_id = c.id "
+                + "WHERE s.user_id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, userId);
@@ -518,9 +507,9 @@ return student;
             }
 
             // 2. Cập nhật tên và địa chỉ trường học nếu có
-            if (student.getSchool_id() != null &&
-                student.getSchool_id().getId() != null &&
-                (student.getSchool_id().getSchoolName() != null || student.getSchool_id().getAddressSchool() != null)) {
+            if (student.getSchool_id() != null
+                    && student.getSchool_id().getId() != null
+                    && (student.getSchool_id().getSchoolName() != null || student.getSchool_id().getAddressSchool() != null)) {
 
                 try (PreparedStatement psSchool = connection.prepareStatement(updateSchoolSQL)) {
                     psSchool.setString(1, student.getSchool_id().getSchoolName());
@@ -531,9 +520,9 @@ return student;
             }
 
             // 3. Cập nhật tên lớp học nếu có
-            if (student.getSchool_class_id() != null &&
-                student.getSchool_class_id().getId() != null &&
-                student.getSchool_class_id().getClassName() != null) {
+            if (student.getSchool_class_id() != null
+                    && student.getSchool_class_id().getId() != null
+                    && student.getSchool_class_id().getClassName() != null) {
 
                 try (PreparedStatement psClass = connection.prepareStatement(updateClassSQL)) {
                     psClass.setString(1, student.getSchool_class_id().getClassName());
@@ -563,7 +552,7 @@ return student;
     }
 
     public Student getStudentById(String id) {
-    String sql = """
+        String sql = """
         SELECT 
             s.*, 
             sc.schoolName, 
@@ -575,20 +564,19 @@ return student;
         WHERE s.id = ?
     """;
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, id);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                return createStudent(rs);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return createStudent(rs);
+                }
             }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy học sinh theo ID: " + e.getMessage());
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        System.err.println("Lỗi khi lấy học sinh theo ID: " + e.getMessage());
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
-
 
     public int getSumStudentInClass(String classId) {
         String sql = "SELECT COUNT(*) AS total_students\n"
@@ -646,9 +634,9 @@ return student;
 
     public List<Student> getListStudentsByClass(String studentId, String classId) {
 
-    List<Student> listStudents = new ArrayList<>();
+        List<Student> listStudents = new ArrayList<>();
 
-    String sql = """
+        String sql = """
         SELECT s.*, 
                sch.schoolName, 
                sch.addressSchool AS addressSchool, 
@@ -660,31 +648,31 @@ return student;
         WHERE c.class_id = ?
         """;
 
-    if (studentId != null) {
-        sql += "AND s.id != ?\n";
-    }
-
-    sql += "ORDER BY s.id";
-
-    try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, classId);
         if (studentId != null) {
-            preparedStatement.setString(2, studentId);
+            sql += "AND s.id != ?\n";
         }
 
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()) {
-            Student student = createStudent(resultSet); // đã có addressSchool trong createStudent
-            listStudents.add(student);
+        sql += "ORDER BY s.id";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, classId);
+            if (studentId != null) {
+                preparedStatement.setString(2, studentId);
+            }
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = createStudent(resultSet); // đã có addressSchool trong createStudent
+                listStudents.add(student);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return listStudents;
     }
-
-    return listStudents;
-}
 
     public boolean addStudentToClass(String pupilId, String classId) {
         String sql = "INSERT INTO [dbo].[classDetails]\n"
@@ -705,13 +693,13 @@ return student;
     }
 
     public Student getStudentById2(String studentId) {
-        String sql = "SELECT s.id AS student_id, " +
-                     "       s.school_id, sch.schoolName AS school_name, " +
-                     "       s.school_class_id, sc.class_name AS class_name " +
-                     "FROM Students s " +
-                     "LEFT JOIN Schools sch ON s.school_id = sch.id " +
-                     "LEFT JOIN SchoolClasses sc ON s.school_class_id = sc.id " +
-                     "WHERE s.id = ?";
+        String sql = "SELECT s.id AS student_id, "
+                + "       s.school_id, sch.schoolName AS school_name, "
+                + "       s.school_class_id, sc.class_name AS class_name "
+                + "FROM Students s "
+                + "LEFT JOIN Schools sch ON s.school_id = sch.id "
+                + "LEFT JOIN SchoolClasses sc ON s.school_class_id = sc.id "
+                + "WHERE s.id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, studentId);
@@ -781,7 +769,6 @@ return student;
         return listStudents;
     }
 
-
     public static void main(String[] args) {
         StudentDAO studentDAO = new StudentDAO();
         int a = studentDAO.getPendingStudentCount();
@@ -828,12 +815,10 @@ return student;
         }
     }
 
-
-
     public List<Student> getStudentNonUserId() {
 
-    List<Student> list = new ArrayList<>();
-    String sql = """
+        List<Student> list = new ArrayList<>();
+        String sql = """
         SELECT s.*, 
                sc.schoolName, 
                sc.addressSchool, 
@@ -845,22 +830,20 @@ return student;
         ORDER BY s.id DESC
     """;
 
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Student student = createStudent(rs);
-            list.add(student);
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Student student = createStudent(rs);
+                list.add(student);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        return list;
     }
 
-    return list;
-}
-
-
- 
 //     public List<Student> getStudentsWithoutClass(String schoolYearId) {
 //        List<Student> listStudent = new ArrayList<>();
 //        String sql = "Select  Students.id    FROM  Students left  JOIN\n"
@@ -886,19 +869,10 @@ return student;
 //        }
 //        return listStudent;
 //    }
+    public List<Student> getStudentsByClassId(String classId) {
+        List<Student> students = new ArrayList<>();
 
-
-  
-
-
-   
-
-
-
-   public List<Student> getStudentsByClassId(String classId) {
-    List<Student> students = new ArrayList<>();
-
-    String sql = """
+        String sql = """
         SELECT s.*, sch.schoolName, sch.addressSchool
         FROM classDetails cd
         JOIN Students s ON cd.student_id = s.id
@@ -906,46 +880,43 @@ return student;
         WHERE cd.class_id = ?
     """;
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, classId);
-        ResultSet rs = ps.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, classId);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            Student student = new Student();
+            while (rs.next()) {
+                Student student = new Student();
 
-            student.setId(rs.getString("id"));
-            student.setUserId(rs.getString("user_id"));
-            student.setFirstName(rs.getString("first_name"));
-            student.setLastName(rs.getString("last_name"));
-            student.setAddress(rs.getString("address"));
-            student.setEmail(rs.getString("email"));
-            student.setStatus(rs.getString("status"));
-            student.setBirthday(rs.getDate("birthday"));
-            student.setGender(rs.getInt("gender") == 1); // 1 = Nam, 0 = Nữ
-            student.setFirstGuardianName(rs.getString("first_guardian_name"));
-            student.setFirstGuardianPhoneNumber(rs.getString("first_guardian_phone_number"));
-            student.setAvatar(rs.getString("avatar"));
-            student.setSecondGuardianName(rs.getString("second_guardian_name"));
-            student.setSecondGuardianPhoneNumber(rs.getString("second_guardian_phone_number"));
-            student.setParentSpecialNote(rs.getString("parent_special_note"));
+                student.setId(rs.getString("id"));
+                student.setUserId(rs.getString("user_id"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setLastName(rs.getString("last_name"));
+                student.setAddress(rs.getString("address"));
+                student.setEmail(rs.getString("email"));
+                student.setStatus(rs.getString("status"));
+                student.setBirthday(rs.getDate("birthday"));
+                student.setGender(rs.getInt("gender") == 1); // 1 = Nam, 0 = Nữ
+                student.setFirstGuardianName(rs.getString("first_guardian_name"));
+                student.setFirstGuardianPhoneNumber(rs.getString("first_guardian_phone_number"));
+                student.setAvatar(rs.getString("avatar"));
+                student.setSecondGuardianName(rs.getString("second_guardian_name"));
+                student.setSecondGuardianPhoneNumber(rs.getString("second_guardian_phone_number"));
+                student.setParentSpecialNote(rs.getString("parent_special_note"));
 
-            // Gán thông tin trường học
-            Schools school = new Schools();
-            school.setId(rs.getString("school_id"));
-            school.setSchoolName(rs.getString("schoolName"));
-            school.setAddressSchool(rs.getString("addressSchool"));
-            student.setSchool_id(school);
+                // Gán thông tin trường học
+                Schools school = new Schools();
+                school.setId(rs.getString("school_id"));
+                school.setSchoolName(rs.getString("schoolName"));
+                school.setAddressSchool(rs.getString("addressSchool"));
+                student.setSchool_id(school);
 
-            students.add(student);
+                students.add(student);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return students;
     }
-
-    return students;
 }
-}
-
-
-
