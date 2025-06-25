@@ -31,7 +31,6 @@ public class PersonnelDAO extends DBContext {
     
     //hàm tạo nhân viên
     private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
-
         Personnel person = new Personnel();
         person.setId(resultSet.getString("id"));
         person.setFirstName(resultSet.getString("first_name"));
@@ -47,6 +46,19 @@ public class PersonnelDAO extends DBContext {
         person.setUserId(resultSet.getString("user_id"));
         person.setSchool_id(resultSet.getString("school_id"));
         person.setSchool_class_id(resultSet.getString("school_class_id"));
+
+        // Lấy thêm thông tin từ bảng Schools (nếu có trong câu truy vấn)
+        try {
+            person.setSchoolName(resultSet.getString("schoolName"));
+        } catch (SQLException e) {
+            // Trường hợp không có cột schoolName trong ResultSet
+        }
+
+        try {
+            person.setAddressSchool(resultSet.getString("addressSchool"));
+        } catch (SQLException e) {
+            // Trường hợp không có cột addressSchool trong ResultSet
+        }
 
         return person;
     }
@@ -517,7 +529,7 @@ public class PersonnelDAO extends DBContext {
 
   
 
-        public List<Personnel> getAvailableTeachers(String schoolYearId) {
+           public List<Personnel> getAvailableTeachers(String schoolYearId) {
     String sql = "SELECT t.*, s.schoolName, s.addressSchool " +
                  "FROM Personnels t " +
                  "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? " +
@@ -538,9 +550,8 @@ public class PersonnelDAO extends DBContext {
     } catch (Exception e) {
         e.printStackTrace();
     }
-
     return teachers;
-        }
+}
     public Personnel getPersonnelById(String id) {
     String sql = """
         SELECT p.*, s.schoolName, s.addressSchool
@@ -637,23 +648,40 @@ public List<Personnel> getFreeTeacherByDate(String dayId){
         return null;
     }
     public Personnel getHomeroomTeacherByClassId(String classId) {
-        String sql = "SELECT p.*, s.schoolName, s.addressSchool, sc.id AS school_class_id " +
+    String sql = "SELECT p.*, s.schoolName, s.addressSchool, sc.id AS school_class_id " +
                  "FROM Class c " +
                  "JOIN Personnels p ON c.teacher_id = p.id " +
                  "LEFT JOIN Schools s ON p.school_id = s.id " +
                  "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id " +
                  "WHERE c.id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, classId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return createPersonnel(rs);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in getHomeroomTeacherByClassId: " + e.getMessage());
-        }
-        return null;
-    }
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, classId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                Personnel teacher = new Personnel();
+                teacher.setId(rs.getString("id"));
+                teacher.setFirstName(rs.getString("first_name"));
+                teacher.setLastName(rs.getString("last_name"));
+                teacher.setGender(rs.getInt("gender") == 1);
+                teacher.setBirthday(rs.getDate("birthday"));
+                teacher.setAddress(rs.getString("address"));
+                teacher.setEmail(rs.getString("email"));
+                teacher.setPhoneNumber(rs.getString("phone_number"));
+                teacher.setRoleId(rs.getInt("role_id"));
+                teacher.setStatus(rs.getString("status"));
+                teacher.setAvatar(rs.getString("avatar"));
+                teacher.setUserId(rs.getString("user_id"));
+                teacher.setSchool_id(rs.getString("school_id"));
+                teacher.setSchool_class_id(rs.getString("school_class_id"));
+                teacher.setSchoolName(rs.getString("schoolName")); // ✅ Thêm trường tên trường
+                teacher.setAddressSchool(rs.getString("addressSchool")); // ✅ Thêm trường địa chỉ trường
 
+                return teacher;
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in getHomeroomTeacherByClassId: " + e.getMessage());
+    }
+    return null;
+}
 }
