@@ -31,7 +31,7 @@ import model.day.Day;
 
 /**
  *
- * @author Admin
+ * @author PC
  */
 public class DashboardTeacherServlet extends HttpServlet {
 

@@ -170,8 +170,8 @@
                                                     <c:when test="${status.index == 2}">Thứ tư</c:when>
                                                     <c:when test="${status.index == 3}">Thứ năm</c:when>
                                                     <c:when test="${status.index == 4}">Thứ sáu</c:when>
-                                                    <c:when test="${status.index == 4}">Thứ bảy</c:when>
-                                                    <c:when test="${status.index == 4}">Chủ nhật</c:when>
+                                                    <c:when test="${status.index == 5}">Thứ bảy</c:when>
+                                                    <c:when test="${status.index == 6}">Chủ nhật</c:when>
                                                 </c:choose>
                                                 <br>
                                                 ( <fmt:formatDate value="${day.date}" pattern="dd-MM-yyyy"/>)
