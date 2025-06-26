@@ -15,17 +15,21 @@ import utils.Helper;
 
 public class ClassDAO extends DBContext {
 
-    private Class createClass(ResultSet resultSet) throws SQLException {
+   private Class createClass(ResultSet resultSet) throws SQLException {
         Class c = new Class();
         c.setId(resultSet.getString("id"));
         c.setName(resultSet.getString("name"));
-        c.setGrade(new GradeDAO().getGrade(resultSet.getString("grade_id")));
-        c.setTeacher(new PersonnelDAO().getPersonnel(resultSet.getString("teacher_id")));
-        c.setSchoolYear(new SchoolYearDAO().getSchoolYear(resultSet.getString("school_year_id")));
+        GradeDAO gradeDAO = new GradeDAO();
+        c.setGrade(gradeDAO.getGrade(resultSet.getString("grade_id")));
+        PersonnelDAO personnelDAO = new PersonnelDAO();
+        c.setTeacher(personnelDAO.getPersonnel(resultSet.getString("teacher_id")));
+        SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
+        c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
         c.setStatus(resultSet.getString("status"));
-        c.setCreatedBy(new PersonnelDAO().getPersonnel(resultSet.getString("created_by")));
+        c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
         return c;
     }
+
 
     public String createNewClass(Class c) {
         String sql = "INSERT INTO [Class] VALUES (?,?,?,?,?,?,?)";
