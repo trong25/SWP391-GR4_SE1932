@@ -100,6 +100,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
+                                    
                                     <table class="table table-bordered" id="dataTable">
                                         <thead>
                                             <tr class="table">
@@ -109,11 +110,7 @@
                                                 <th>Ngày sinh</th>
                                                 <th>Mã Trường</th>
                                                 <th>Tên Trường Học</th>
-
                                                 <th>Tên Lớp Học</th>
-
-                                                <th>Tên Lớp Học</th>                                         
-
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -130,7 +127,7 @@
 
                                                     <td>${student.school_class_id.className}</td>
 
-                                                    <td>${student.school_class_id.className}</td>                                                   
+                                                                                       
 
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
@@ -145,7 +142,7 @@
                                                         <c:if test="${status eq 'không được duyệt'}">
                                                         <td><span class="badge badge-danger">${status}</span></td>
                                                         </c:if>
-
+                                                   
                                                     <td class="text-center">
                                                         <form method="post" action="studentprofile">
                                                             <input hidden="" value="${student.id}" name="id"/>
@@ -240,7 +237,7 @@
                                                                     <input type="text" class="form-control" id="firstName" style="width: 70%"
                                                                            name="firstName" value="${param.firstName}">
                                                                 </div>
-                                                               <div class="form-group col-md-6">
+                                                                <div class="form-group col-md-6">
                                                                     <label for="schoolID">Mã Trường Học<a style="color: red">(*)</a></label>
                                                                     <select class="form-control" id="schoolID" name="schoolID" style="width: 70%" onchange="loadSchoolClasses(this.value)">
                                                                         <option value="">-- Chọn trường học --</option>
@@ -351,56 +348,56 @@
 
 
         <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form"); // điều chỉnh selector nếu cần
-        form.addEventListener("submit", function (event) {
-            const schoolSelect = document.getElementById("schoolID");
-            const classSelect = document.getElementById("schoolClassID");
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form"); // điều chỉnh selector nếu cần
+                form.addEventListener("submit", function (event) {
+                    const schoolSelect = document.getElementById("schoolID");
+                    const classSelect = document.getElementById("schoolClassID");
 
-            let isValid = true;
-            let message = "";
+                    let isValid = true;
+                    let message = "";
 
-            if (schoolSelect.value.trim() === "") {
-                isValid = false;
-                message += "Vui lòng chọn trường học.\n";
-            }
+                    if (schoolSelect.value.trim() === "") {
+                        isValid = false;
+                        message += "Vui lòng chọn trường học.\n";
+                    }
 
-            if (classSelect.value.trim() === "") {
-                isValid = false;
-                message += "Vui lòng chọn lớp học.\n";
-            }
+                    if (classSelect.value.trim() === "") {
+                        isValid = false;
+                        message += "Vui lòng chọn lớp học.\n";
+                    }
 
-            if (!isValid) {
-                event.preventDefault(); // Ngăn không cho submit form
-                alert(message); // hoặc thay bằng toast nếu bạn đang dùng thư viện thông báo
-            }
-        });
-    });
-
-    function loadSchoolClasses(schoolId) {
-        const classSelect = document.getElementById("schoolClassID");
-        classSelect.innerHTML = '<option value="">-- Đang tải lớp học --</option>';
-
-        fetch('student?schoolId=' + schoolId, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                classSelect.innerHTML = '<option value="">-- Chọn lớp học --</option>';
-                data.forEach(function (schoolClass) {
-                    const option = document.createElement("option");
-                    option.value = schoolClass.id;
-                    option.text = schoolClass.className;
-                    classSelect.appendChild(option);
+                    if (!isValid) {
+                        event.preventDefault(); // Ngăn không cho submit form
+                        alert(message); // hoặc thay bằng toast nếu bạn đang dùng thư viện thông báo
+                    }
                 });
-            })
-            .catch(error => {
-                classSelect.innerHTML = '<option value="">-- Không thể tải lớp học --</option>';
             });
-    }
-</script>
+
+            function loadSchoolClasses(schoolId) {
+                const classSelect = document.getElementById("schoolClassID");
+                classSelect.innerHTML = '<option value="">-- Đang tải lớp học --</option>';
+
+                fetch('student?schoolId=' + schoolId, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            classSelect.innerHTML = '<option value="">-- Chọn lớp học --</option>';
+                            data.forEach(function (schoolClass) {
+                                const option = document.createElement("option");
+                                option.value = schoolClass.id;
+                                option.text = schoolClass.className;
+                                classSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            classSelect.innerHTML = '<option value="">-- Không thể tải lớp học --</option>';
+                        });
+            }
+        </script>
 
         <script>
             function validateForm() {
