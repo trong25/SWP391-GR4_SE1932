@@ -81,7 +81,7 @@ public class WeekDAO extends DBContext{
             while (!currentStartDate.isAfter(schoolYearEndDate)) {
                 LocalDate currentEndDate = currentStartDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
                 if (currentEndDate.isAfter(schoolYearEndDate)) {
-                    currentEndDate = schoolYearEndDate;
+currentEndDate = schoolYearEndDate;
                 }
                 weekList.add(new Week(Helper.convertLocalDateToDate(currentStartDate),
                         newWeekId, Helper.convertLocalDateToDate(currentEndDate), schoolYear));
@@ -155,7 +155,7 @@ public class WeekDAO extends DBContext{
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 Week week = createWeek(rs);
-                weeks.add(week);
+weeks.add(week);
             }
         } catch (Exception e) {
             e.printStackTrace();

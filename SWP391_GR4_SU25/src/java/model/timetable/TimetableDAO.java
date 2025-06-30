@@ -9,9 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.classes.ClassDAO;
 import model.classes.Class;
-
+import model.classes.ClassDAO;
 import model.day.Day;
 import model.day.DayDAO;
 import model.personnel.Personnel;
@@ -118,34 +117,7 @@ public class TimetableDAO extends DBContext {
         }
         return timetables;
     }
-
-    public int getTodayClassesCount(String teacherId, String dayId) {
-        String sql = "SELECT COUNT(*) as count " +
-                "FROM Timetables t " +
-                "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
-        
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, teacherId);
-            statement.setString(2, dayId);
-            
-            // Debug logs
-            System.out.println("Debug - Teacher ID: " + teacherId);
-            System.out.println("Debug - Day ID: " + dayId);
-            System.out.println("Debug - SQL: " + sql);
-            
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                int count = resultSet.getInt("count");
-                System.out.println("Debug - Classes found: " + count);
-                return count;
-            }
-        } catch (SQLException e) {
-            System.out.println("Debug - Error in getTodayClassesCount: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return 0;
-    }
-    public List<Timetable> getTeacherTimetable(String teacherId, String weekId) {
+   public List<Timetable> getTeacherTimetable(String teacherId, String weekId) {
         List<Timetable> timetables = new ArrayList<>();
         String sql = "SELECT t.id AS timetable_id,\n" +
                 "c.id AS class_id,\n" +
@@ -197,8 +169,7 @@ public class TimetableDAO extends DBContext {
                 Subject subject = subjectDAO.getSubjectBySubjectId(subjectId);
                 Personnel createdByObj = personnelDAO.getPersonnel(createdBy);
                 Personnel teacher = personnelDAO.getPersonnel(teacherId);
-
-                // Create Timetable object
+// Create Timetable object
                 Timetable timetable = new Timetable(timetableId, classs, timeslot, day, subject, createdByObj, statusResult, note, teacher);
                 timetables.add(timetable);
             }
@@ -207,6 +178,91 @@ public class TimetableDAO extends DBContext {
         }
         return timetables;
     }
+
+
+   public List<Timetable> getTimetableByStudentIdAndWeekId(String studentID, String weekId) {
+    List<Timetable> timetables = new ArrayList<>();
+    String sql = """
+                 SELECT t.id AS id,
+                        c.id AS class_id,
+                        ts.id AS timeslot_id,
+                        d.id AS date_id,
+                        s.id AS subject_id,
+                        t.created_by,
+                        t.status,
+                        t.note,
+                        p.id AS teacher_id,
+                        -- Thêm các thông tin bổ sung hữu ích
+                        c.name AS class_name,
+                        ts.name AS timeslot_name,
+                        ts.start_time,
+                        ts.end_time,
+                        d.date AS class_date,
+                        d.day_of_week,
+                        s.name AS subject_name,
+                        CONCAT(p.first_name, ' ', p.last_name) AS teacher_name
+                 FROM Timetables t
+                 INNER JOIN Class c ON t.class_id = c.id
+                 INNER JOIN classDetails cd ON c.id = cd.class_id
+                 INNER JOIN Students st ON cd.student_id = st.id
+                 INNER JOIN Timeslots ts ON t.timeslot_id = ts.id
+                 INNER JOIN Days d ON t.date_id = d.id
+                 INNER JOIN Weeks w ON d.week_id = w.id
+                 INNER JOIN Subjects s ON t.subject_id = s.id
+                 LEFT JOIN Personnels p ON t.teacher_id = p.id
+                 WHERE st.id = ?
+                   AND w.id = ?
+                 ORDER BY d.date, ts.slot_number;
+                 """;
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setString(1, studentID);
+        statement.setString(2, weekId);
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            timetables.add(createTimetable(resultSet));
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
+    }
+    return timetables;
+}
+   
+   
+   
+    public String getTeacherByDayId(String dayId) {
+        String sql = "select teacher_id from Timetables where date_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, dayId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("teacher_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getTodayClassesCount(String teacherId, String dateId) {
+        String sql = "SELECT COUNT(*) as count FROM Timetables t "
+                + "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, teacherId);
+            statement.setString(2, dateId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
      public void updateTeacherOfTimetable(String classId, String teacherId) {
         String sql = "update Timetables set teacher_id = ? where class_id = ?";
         try {
@@ -232,4 +288,5 @@ public String updateTimetableOfClass(String teacherId, String classId, String da
         }
         return "success";
     }
+
 }

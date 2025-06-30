@@ -19,33 +19,23 @@ import model.role.Role;
 import utils.Helper;
 
 /**
- * Servlet ListPersonnelServlet xử lý các yêu cầu HTTP để hiển thị danh sách nhân sự theo chức vụ và trạng thái.
+ * Servlet ListPersonnelServlet xử lý các yêu cầu HTTP để hiển thị danh sách
+ * nhân sự theo chức vụ và trạng thái.
  *
  * URL Mapping: /director/listpersonnel
  *
- * Chức năng:
- * - Nhận tham số từ form lọc chức vụ và trạng thái nhân sự (GET hoặc POST)
- * - Gọi RoleDAO và PersonnelDAO để lấy danh sách vai trò và nhân sự từ cơ sở dữ liệu
- * - Gửi dữ liệu danh sách về trang JSP để hiển thị
- * - Hỗ trợ lọc nhân sự theo từng vai trò hoặc xem toàn bộ
+ * Chức năng: - Nhận tham số từ form lọc chức vụ và trạng thái nhân sự (GET hoặc
+ * POST) - Gọi RoleDAO và PersonnelDAO để lấy danh sách vai trò và nhân sự từ cơ
+ * sở dữ liệu - Gửi dữ liệu danh sách về trang JSP để hiển thị - Hỗ trợ lọc nhân
+ * sự theo từng vai trò hoặc xem toàn bộ
  *
  * Phân quyền: Chỉ Giám đốc (Director) được phép truy cập chức năng này.
  *
  * @author ThanhNT
  * @version 1.0
  */
-
 public class ListPersonnelServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -76,34 +66,30 @@ public class ListPersonnelServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-        HttpSession session = request.getSession(true);
-        String message = (String) session.getAttribute("message");
-        String type = (String) session.getAttribute("type");
+            HttpSession session = request.getSession(true);
+            String message = (String) session.getAttribute("message");
+            String type = (String) session.getAttribute("type");
 
-        PersonnelDAO personnelDAO = new PersonnelDAO();
-        List<Personnel> persons = personnelDAO.getAllPersonnels();
-        List<Role> roles = personnelDAO.getAllPersonnelRole();
-        List<String> statuss = personnelDAO.getAllStatus();
-        List<Personnel> waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
+            PersonnelDAO personnelDAO = new PersonnelDAO();
+            List<Personnel> persons = personnelDAO.getAllPersonnels();
+            List<Role> roles = personnelDAO.getAllPersonnelRole();
+            List<String> statuss = personnelDAO.getAllStatus();
 
-        request.setAttribute("selectedstatus", "all");
-        request.setAttribute("selectedrole", "all");
-        request.setAttribute("message", message);
-        request.setAttribute("type", type);
-        request.setAttribute("persons", persons);
-        request.setAttribute("roles", roles);
-        request.setAttribute("waitlist", waitlist);
-        request.setAttribute("statuss", statuss);
+            request.setAttribute("selectedstatus", "all");
+            request.setAttribute("selectedrole", "all");
+            request.setAttribute("message", message);
+            request.setAttribute("type", type);
+            request.setAttribute("persons", persons);
+            request.setAttribute("roles", roles);
+            request.setAttribute("statuss", statuss);
 
-        request.getRequestDispatcher("listPersonnel.jsp").forward(request, response);
-
-        session.removeAttribute("message");
-        session.removeAttribute("type");
-    } catch (Exception e) {
-        e.printStackTrace(); // log lỗi ra console
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra: " + e.getMessage());
-    }
- 
+            request.getRequestDispatcher("listPersonnel.jsp").forward(request, response);
+            session.removeAttribute("message");
+            session.removeAttribute("type");
+        } catch (Exception e) {
+            e.printStackTrace(); // log lỗi ra console
+//        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra: " + e.getMessage());
+        }
 
     }
 
@@ -125,46 +111,37 @@ public class ListPersonnelServlet extends HttpServlet {
         String role = request.getParameter("role");
         String status = request.getParameter("status");
         String search = request.getParameter("search");
-        System.out.println(role);
-        System.out.println(status);
-        System.out.println(search);
+//        System.out.println(role);
+//        System.out.println(status);
+
         List<Personnel> persons = new ArrayList<Personnel>();
         List<Role> roles = new ArrayList<>();
         PersonnelDAO personnelDAO = new PersonnelDAO();
         roles = personnelDAO.getAllPersonnelRole();
-        if ((role != null || status != null)&& search == null) {
-            if(status.equalsIgnoreCase("all")&& role.equalsIgnoreCase("all")){
-                 persons = personnelDAO.getAllPersonnels();
-             }
-            else if(!status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")){
-                  persons =personnelDAO.getPersonnelByStatus(status);
-                 
-             }else if(!role.equalsIgnoreCase("all") && status.equalsIgnoreCase("all")){
-                 try{
-                 int xrole = Integer.parseInt(role);
-                 persons = personnelDAO.getPersonnelByRole(xrole);
-                 }catch (NumberFormatException e){
-                     persons = personnelDAO.getPersonnelByRole(-1);
-                 }
-                 
-                
-             } else{
-            persons = personnelDAO.getPersonnelByIdNameRoleStatus(status, role);
-             }
-        }else if(search != null){
-            persons = personnelDAO.getPersonnelByNameOrId(Helper.formatString(search));
-        } 
+        if ((role != null || status != null) && search == null) {
+            if (status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
+                persons = personnelDAO.getAllPersonnels();
+            } else if (!status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
+                persons = personnelDAO.getPersonnelByStatus(status);
+
+            } else if (!role.equalsIgnoreCase("all") && status.equalsIgnoreCase("all")) {
+                try {
+                    int xrole = Integer.parseInt(role);
+                    persons = personnelDAO.getPersonnelByRole(xrole);
+                } catch (NumberFormatException e) {
+                    persons = personnelDAO.getPersonnelByRole(-1);
+                }
+            } else {
+                persons = personnelDAO.getPersonnelByIdNameRoleStatus(status, role);
+            }
+        }
         List<String> statuss = new ArrayList<>();
         statuss = personnelDAO.getAllStatus();
         request.setAttribute("statuss", statuss);
-        List<Personnel> waitlist = new ArrayList<>();
-        waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-        request.setAttribute("searchdata", search);
         request.setAttribute("selectedstatus", status);
         request.setAttribute("selectedrole", role);
         request.setAttribute("message", message);
         request.setAttribute("type", type);
-        request.setAttribute("waitlist", waitlist);
         request.setAttribute("roles", roles);
         request.setAttribute("persons", persons);
         request.getRequestDispatcher("listPersonnel.jsp").forward(request, response);

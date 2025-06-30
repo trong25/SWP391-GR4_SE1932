@@ -86,9 +86,9 @@ public class SentNotificationServlet extends HttpServlet {
         roleMap.put(0, "QUẢN TRỊ VIÊN");
         roleMap.put(1, "HIỆU TRƯỞNG");
         roleMap.put(2, "GIÁO VỤ");
-        //roleMap.put(3, "KẾ TOÁN");
-        roleMap.put(3, "GIÁO VIÊN");
-       roleMap.put(4, "PHỤ HUYNH");
+        roleMap.put(3, "KẾ TOÁN");
+        roleMap.put(4, "GIÁO VIÊN");
+        roleMap.put(5, "PHỤ HUYNH");
         request.setAttribute("roleMap", roleMap);
         request.setAttribute("listrole_id", role_id);
         request.setAttribute("notifi", notifi);

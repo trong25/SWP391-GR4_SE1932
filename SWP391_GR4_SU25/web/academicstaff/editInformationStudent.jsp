@@ -385,12 +385,6 @@
                                                                 <textarea class="form-control form-control-sm" name="address" maxlength="50" required title="Tối đa 50 ký tự">${student.address}</textarea>
                                                             </div>
                                                         </td>
-                                                         <td>
-                                                            <div class="form-group">
-                                                                <h5>Địa Chỉ Trường Học <a style="color: red">*</a>:</h5>
-                                                                <textarea class="form-control form-control-sm" name="addressSchool" maxlength="50" required title="Tối đa 50 ký tự">${student.school_id.addressSchool}</textarea>
-                                                            </div>
-                                                        </td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3">

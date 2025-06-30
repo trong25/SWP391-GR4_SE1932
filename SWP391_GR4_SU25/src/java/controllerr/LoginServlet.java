@@ -66,6 +66,7 @@ public class LoginServlet extends HttpServlet {
             StudentDAO studentDAO = new StudentDAO();
             Student student = studentDAO.getStudentByUserId(user.getId());
 
+            System.out.println(student);
             if (student != null) {
                 // Lưu thông tin student vào session
                 HttpSession session = request.getSession();

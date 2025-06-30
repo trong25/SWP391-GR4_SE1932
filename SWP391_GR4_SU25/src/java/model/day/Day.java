@@ -50,4 +50,27 @@ public class Day {
         this.date = date;
     }
     
+    public String convertToWeekDay()
+        {
+            // Create a Calendar object and set the date
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(this.date);
+
+            // Get the day of the week (1 = Sunday, 7 = Saturday)
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+            // Print the day of the week
+            String dayString = "";
+            switch (dayOfWeek) {
+                case Calendar.SUNDAY:    dayString = "Chủ Nhật"; break;
+                case Calendar.MONDAY:    dayString = "Thứ Hai"; break;
+                case Calendar.TUESDAY:   dayString = "Thứ Ba"; break;
+                case Calendar.WEDNESDAY: dayString = "Thứ Tư"; break;
+                case Calendar.THURSDAY:  dayString = "Thứ Năm"; break;
+                case Calendar.FRIDAY:    dayString = "Thứ Sáu"; break;
+                case Calendar.SATURDAY:  dayString = "Thứ Bảy"; break;
+            }
+
+           return dayString;
+        }
 }

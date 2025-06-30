@@ -24,7 +24,7 @@ import model.week.WeekDAO;
 
 /**
  *
- * @author Admin
+ * @author PC
  */
 @WebServlet(name = "/teacher/ViewTimetableServlet", urlPatterns = {"/teacher/view-timetable"})
 public class ViewTimetableServlet extends HttpServlet {
@@ -59,11 +59,11 @@ public class ViewTimetableServlet extends HttpServlet {
             List<Week> weekList = weekDAO.getWeeks(schoolyear);
             List<Timetable> timetable;
             TimeSlotDAO timeslotDAO = new TimeSlotDAO();
-            List<TimeSlot> timeSlotList = timeslotDAO.getTimeslotsForTimetable();
+            List<TimeSlot> timeslotList = timeslotDAO.getTimeslotsForTimetable();
             DayDAO dayDAO = new DayDAO();
             List<Day> dayList = dayDAO.getDayByWeek(week);
             if (dayList.size() > 0) {
-                request.setAttribute("timeslotList", timeSlotList);
+                request.setAttribute("timeslotList", timeslotList);
             }
             User user = (User) session.getAttribute("user");
             timetable = new TimetableDAO().getTeacherTimetable(user.getUsername(), week);

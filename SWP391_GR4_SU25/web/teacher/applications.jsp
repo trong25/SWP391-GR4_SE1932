@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -44,7 +43,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                             <jsp:useBean id="studentBean" class="model.student.StudentDAO"/>
+                            <jsp:useBean id="StudentBean" class="model.student.StudentDAO"/>
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -62,7 +61,7 @@
                                     <tr>
                                         <th scope="row">${status.index + 1}</th>
                                         <td>${application.type.name}</td>
-                                        <td>${studentBean.getStudentByUserId(application.createdBy).lastName} ${studentBean.getStudentByUserId(application.createdBy).firstName}</td>
+                                        <td>${studentBean.getStudentByUserId(application.createdBy).lastName} ${studentBean.getByUserId(application.createdBy).firstName}</td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${application.startDate eq application.endDate}">

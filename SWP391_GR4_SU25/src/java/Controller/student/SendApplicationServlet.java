@@ -18,6 +18,23 @@ import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import model.student.Student;
 
+/**
+ * Servlet SendApplicationServlet xử lý các yêu cầu HTTP liên quan đến chức năng gửi đơn của học sinh.
+ *
+ * URL Mapping: /student/sendapplication
+ *
+ * Chức năng:
+ * - [GET] Hiển thị form gửi đơn, danh sách loại đơn và người xử lý (giáo viên)
+ * - [POST] Xử lý dữ liệu đơn từ form gửi lên: validate, lưu đơn vào cơ sở dữ liệu
+ * - Hiển thị thông báo (toast) sau khi xử lý gửi đơn thành công hoặc thất bại
+ *
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được sử dụng chức năng gửi đơn
+ *
+ * @author KienPN
+ * @version 1.0
+ */
+
+
 @WebServlet(name = "student/SendApplicationServlet", value = "/student/sendapplication")
 public class SendApplicationServlet extends HttpServlet {
     @Override

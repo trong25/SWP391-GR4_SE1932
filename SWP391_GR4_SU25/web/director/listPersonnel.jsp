@@ -33,6 +33,18 @@
         </script>
         <!-- Custom styles for this page -->
         <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+        <style>
+            .profile_img {
+                width: 220px; 
+                height: 280px; 
+                object-fit: cover; 
+                border-radius: 10px; 
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+                border: 1px solid #ccc; 
+            }
+
+
+        </style>
     </head>
     <body>
         <div id="wrapper">
@@ -131,7 +143,7 @@
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Danh Sách Nhân Viên</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Danh1 Sách Nhân Viên</h6>
                             </div>
 
                             <div class="card-body">
@@ -200,10 +212,7 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>
-                                                    <!--                                                    <form action="viewpersonnel" method="get">
-                                                                                                            <input type="hidden" value="${p.getId()}" name="id">
-                                                                                                            <button class="btn btn-dark" type="submit">Xem thông tin chi tiết</button>
-                                                                                                        </form>-->
+
 
                                                     <a href="viewpersonnel?id=${p.getId()}&page=list"
                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Thông

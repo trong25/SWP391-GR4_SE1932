@@ -27,15 +27,9 @@ public class Personnel {
     private String school_class_id;
     private String schoolName;
     private String className;
-    private String addressSchool;
+private String addressSchool;
 
-    public String getAddressSchool() {
-        return addressSchool;
-    }
-
-    public void setAddressSchool(String addressSchool) {
-        this.addressSchool = addressSchool;
-    }
+   
 
     public Personnel() {
     }
@@ -60,7 +54,7 @@ public class Personnel {
         this.addressSchool = addressSchool;
     }
 
-   
+    
 
     public String getSchool_id() {
         return school_id;
@@ -191,7 +185,13 @@ public class Personnel {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+ public String getAddressSchool() {
+        return addressSchool;
+    }
 
+    public void setAddressSchool(String addressSchool) {
+        this.addressSchool = addressSchool;
+    }
  
     
 }
