@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,6 +25,15 @@
         <script>
             function submitForm() {
                 document.getElementById("myForm").submit();
+            }
+            
+            // Function to format ID - remove U and leading zeros
+            function formatId(id) {
+                if (id && id.startsWith('U')) {
+                    var result = id.replace(/^U0+/, '');
+                    return result === '' ? '0' : result;
+                }
+                return id;
             }
         </script>
         <!-- Custom styles for this page -->
@@ -77,7 +87,11 @@
                                                 <tr>
                                                     <td>${status.index + 1}</td>
                                                     <td>${u.getUsername()}</td>
-                                                    <td>${u.getId()}</td>
+                                                    <td>
+                                                        <c:set var="displayId" value="${fn:replace(u.getId(), 'U', '')}" />
+                                                        <c:set var="displayId" value="${fn:replace(displayId, '0', '')}" />
+                                                        ${empty displayId ? '0' : displayId}
+                                                    </td>
                                                     <td>${u.getEmail()}</td>
                                                     <td>${roleMap[u.getRoleId()]}</td>
                                                     <td>
@@ -124,25 +138,25 @@
         <!-- Page level custom scripts -->
         <script src="../js/demo/datatables-demo.js"></script>
         <script>
-                                        function redirectToServlet() {
-                                            var selectedRole = document.getElementById("roleSelect").value;
-                                            if (selectedRole !== "") {
-                                                window.location.href = "categoryRoleManager?role=" + selectedRole;
-                                            }
-                                        }
-                                        // Function to get query parameter value
-                                        function getQueryParam(param) {
-                                            var urlParams = new URLSearchParams(window.location.search);
-                                            return urlParams.get(param);
-                                        }
+            function redirectToServlet() {
+                var selectedRole = document.getElementById("roleSelect").value;
+                if (selectedRole !== "") {
+                    window.location.href = "categoryRoleManager?role=" + selectedRole;
+                }
+            }
+            // Function to get query parameter value
+            function getQueryParam(param) {
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
 
-                                        // Set the selected value on page load
-                                        document.addEventListener('DOMContentLoaded', (event) => {
-                                            var selectedRole = getQueryParam('role');
-                                            if (selectedRole) {
-                                                document.getElementById('roleSelect').value = selectedRole;
-                                            }
-                                        });
+            // Set the selected value on page load
+            document.addEventListener('DOMContentLoaded', (event) => {
+                var selectedRole = getQueryParam('role');
+                if (selectedRole) {
+                    document.getElementById('roleSelect').value = selectedRole;
+                }
+            });
         </script>
     </body>
 </html>

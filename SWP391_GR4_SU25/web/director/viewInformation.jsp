@@ -21,48 +21,84 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/information-style.css">
 
 
-        <style>
-            .profile-card {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                background: #f8f9fa;
-                border-radius: 10px;
-                padding: 20px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .profile-card img {
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                object-fit: cover;
-                margin-bottom: 15px;
-            }
+               <style>
             .profile-info {
-                text-align: center;
-            }
-            .profile-info h3 {
-                margin-bottom: 10px;
+                text-align: left;
+                max-width: 500px;
+                margin: 0 auto;
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
                 color: #333;
             }
+            .profile-info h3 {
+                text-align: center;
+                width: 100%;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+
             .profile-info p {
-                margin: 5px 0;
-                color: #666;
+                margin: 8px 0;
+                line-height: 1.5;
+                font-size: 16px;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 6px;
+            }
+
+            .profile-info strong {
+                color: #007bff;
+                min-width: 150px;
+                display: inline-block;
+            }
+
+            .profile-info a {
+                color: #007bff;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            .profile-info a:hover {
+                text-decoration: underline;
+            }
+
+            .profile-card {
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+                padding: 25px 30px;
+                max-width: 600px;
+                margin: 30px auto;
+            }
+
+            .profile-card img {
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin: 0 auto 20px auto;
+                display: block;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
             }
             .profile-actions {
                 margin-top: 20px;
+                text-align: center; /* căn giữa nội dung bên trong */
             }
+
             .profile-actions a {
-                text-decoration: none;
-                padding: 10px 20px;
-                background: #007bff;
+                display: inline-block;
+                margin-top: 25px;
+                padding: 12px 28px;
+                background-color: #007bff;
                 color: white;
-                border-radius: 5px;
-                transition: background 0.3s ease;
+                border-radius: 8px;
+                font-weight: 600;
+                transition: background-color 0.3s ease;
             }
+
             .profile-actions a:hover {
-                background: #0056b3;
+                background-color: #0056b3;
             }
+
         </style>
     </head>
 

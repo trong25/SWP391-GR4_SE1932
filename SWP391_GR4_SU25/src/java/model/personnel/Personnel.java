@@ -28,13 +28,18 @@ public class Personnel {
     private String schoolName;
     private String className;
 private String addressSchool;
+private String specialization;
+private String qualification;
+private int teaching_years;
+private String achievements;
+private String cv_file;
 
    
 
     public Personnel() {
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,7 +57,14 @@ private String addressSchool;
         this.schoolName = schoolName;
         this.className = className;
         this.addressSchool = addressSchool;
+        this.specialization = specialization;
+        this.qualification = qualification;
+        this.teaching_years = teaching_years;
+        this.achievements = achievements;
+        this.cv_file = cv_file;
     }
+
+
 
     
 
@@ -192,6 +204,48 @@ private String addressSchool;
     public void setAddressSchool(String addressSchool) {
         this.addressSchool = addressSchool;
     }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public int getTeaching_years() {
+        return teaching_years;
+    }
+
+    public void setTeaching_years(int teaching_years) {
+        this.teaching_years = teaching_years;
+    }
+
+    public String getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(String achievements) {
+        this.achievements = achievements;
+    }
+
+    public String getCv_file() {
+        return cv_file;
+    }
+
+    public void setCv_file(String cv_file) {
+        this.cv_file = cv_file;
+    }
+    
+    
  
     
 }

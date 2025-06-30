@@ -75,6 +75,7 @@
                                         <th>HỌ VÀ TÊN</th>
                                         <th hidden>ID</th>
                                         <th>EMAIL</th>
+                                        <th>SỐ ĐIỆN THOẠI</th>
                                         <th>VAI TRÒ</th>
                                         <th>TRẠNG THÁI</th>
                                         <th>HÀNH ĐỘNG</th>
@@ -88,6 +89,7 @@
                                                 <td>${personnel.getLastName()} ${personnel.getFirstName()}</td>
                                                 <td hidden="">${personnel.getId()}</td>
                                                 <td>${personnel.getEmail()}</td>
+                                                <td>${personnel.getPhoneNumber()}</td>
                                                 <td>${roleMap[personnel.getRoleId()]}</td>
                                                 <td style="color: #0f6848" >
                                                     <label class="badge btn-success text-uppercase">${personnel.getStatus()}</label>
@@ -105,6 +107,7 @@
                                                 <td>${student.getLastName()} ${student.getFirstName()}</td>
                                                 <td hidden>${student.getId()}</td>
                                                 <td>${student.getEmail()}</td>
+                                                <td>${student.getFirstGuardianPhoneNumber()}</td>
                                                 <td>HỌC SINH</td>
                                                 <td style="color: #0f6848">
                                                     <label class="badge badge-success text-uppercase">${student.getStatus()}</label>
