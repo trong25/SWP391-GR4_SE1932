@@ -1,17 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model.personnel;
 
 import java.util.Date;
 
-/**
- *
- * @author MSI
- */
 public class Personnel {
-      private String id;
+
+    private String id;
     private String firstName;
     private String lastName;
     private boolean gender;
@@ -25,13 +18,19 @@ public class Personnel {
     private String userId;
     private String school_id;
     private String school_class_id;
+    private String specialization;
+    private String qualification;
+    private int teaching_years;
+    private String achievements;
+    private String cv_file;
     private String schoolName;
     private String className;
 
+    // Constructors
     public Personnel() {
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String roleName, String schoolName, String className) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String specialization, String qualification, int teaching_years, String achievements, String cv_file, String schoolName, String className) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,28 +45,32 @@ public class Personnel {
         this.userId = userId;
         this.school_id = school_id;
         this.school_class_id = school_class_id;
+        this.specialization = specialization;
+        this.qualification = qualification;
+        this.teaching_years = teaching_years;
+        this.achievements = achievements;
+        this.cv_file = cv_file;
         this.schoolName = schoolName;
         this.className = className;
     }
 
-    public String getSchool_id() {
-        return school_id;
+    public String getSchoolName() {
+        return schoolName;
     }
 
-    public void setSchool_id(String school_id) {
-        this.school_id = school_id;
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 
-    public String getSchool_class_id() {
-        return school_class_id;
+    public String getClassName() {
+        return className;
     }
 
-    public void setSchool_class_id(String school_class_id) {
-        this.school_class_id = school_class_id;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    
-
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -90,22 +93,6 @@ public class Personnel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
     }
 
     public boolean isGender() {
@@ -180,6 +167,59 @@ public class Personnel {
         this.userId = userId;
     }
 
- 
-    
+    public String getSchool_id() {
+        return school_id;
+    }
+
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
+    }
+
+    public String getSchool_class_id() {
+        return school_class_id;
+    }
+
+    public void setSchool_class_id(String school_class_id) {
+        this.school_class_id = school_class_id;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public int getTeaching_years() {
+        return teaching_years;
+    }
+
+    public void setTeaching_years(int teaching_years) {
+        this.teaching_years = teaching_years;
+    }
+
+    public String getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(String achievements) {
+        this.achievements = achievements;
+    }
+
+    public String getCv_file() {
+        return cv_file;
+    }
+
+    public void setCv_file(String cv_file) {
+        this.cv_file = cv_file;
+    }
 }

@@ -165,75 +165,82 @@
 
 
                             <!-- Bảng doanh thu -->
-                            <h3 class="h3 mb-0 text-gray-800">Bảng doanh thu</h3>
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Thời gian</th>
-                                        <th>Doanh thu</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:choose>
-                                        <c:when test="${not empty revenueData}">
-                                            <c:forEach var="entry" items="${revenueData}">
-                                                <tr>
-                                                    <td>${entry.key}</td>
-                                                    <td>${entry.value}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </c:when>
-                                        <c:otherwise>
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h3 class="h3 mb-3 text-gray-800">Bảng doanh thu</h3>
+                                    <table class="table table-bordered">
+                                        <thead>
                                             <tr>
-                                                <td colspan="2" class="text-center text-muted">Chưa có dữ liệu doanh thu</td>
+                                                <th>Thời gian</th>
+                                                <th>Doanh thu</th>
                                             </tr>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </tbody>
-                            </table>
+                                        </thead>
+                                        <tbody>
+                                            <c:choose>
+                                                <c:when test="${not empty revenueData}">
+                                                    <c:forEach var="entry" items="${revenueData}">
+                                                        <tr>
+                                                            <td>${entry.key}</td>
+                                                            <td>${entry.value}</td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <tr>
+                                                        <td colspan="2" class="text-center text-muted">Chưa có dữ liệu doanh thu</td>
+                                                    </tr>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
 
                             <!-- Biểu đồ doanh thu -->
-                            <h3 class="h3 mb-0 text-gray-800">Biểu đồ doanh thu</h3>
-                            <div style="width: 600px; height: 400px;">
-                                <canvas id="revenueChart"></canvas>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h3 class="h3 mb-3 text-gray-800">Biểu đồ doanh thu</h3>
+                                    <div style="width: 100%; max-width: 600px; height: 400px;">
+                                        <canvas id="revenueChart"></canvas>
+                                    </div>
+                                </div>
                             </div>
+
+                            <jsp:include page="../footer.jsp"/>
                         </div>
                     </div>
-                    <jsp:include page="../footer.jsp"/>
-                </div>
-            </div>
 
-            <!-- Chart.js -->
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                var labels = [];
-                var data = [];
-                <c:if test="${not empty revenueData}">
-                    <c:forEach var="entry" items="${revenueData}">
-                labels.push("${entry.key}");
-                data.push(${entry.value});
-                    </c:forEach>
-                </c:if>
+                    <!-- Chart.js -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        var labels = [];
+                        var data = [];
+                        <c:if test="${not empty revenueData}">
+                            <c:forEach var="entry" items="${revenueData}">
+                        labels.push("${entry.key}");
+                        data.push(${entry.value});
+                            </c:forEach>
+                        </c:if>
 
-                const ctx = document.getElementById('revenueChart').getContext('2d');
-                const revenueChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                                label: 'Doanh thu',
-                                data: data,
-                                backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }]
-                    },
-                    options: {
-                        scales: {
-                            y: {beginAtZero: true}
-                        }
-                    }
-                });
-            </script>
-    </body>
-</html>
+                        const ctx = document.getElementById('revenueChart').getContext('2d');
+                        const revenueChart = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                        label: 'Doanh thu',
+                                        data: data,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+                                    }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {beginAtZero: true}
+                                }
+                            }
+                        });
+                    </script>
+                    </body>
+                    </html>

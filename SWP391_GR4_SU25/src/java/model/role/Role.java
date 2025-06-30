@@ -49,8 +49,9 @@ public class Role {
                 return "Giáo vụ";
             case 3:
                 return "Giáo viên";
-            default:
-                return "";
+//            default:
+//                return "";
         }
+        return null;
     }
 }
