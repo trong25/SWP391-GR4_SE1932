@@ -449,7 +449,7 @@
                 return true;
             }
         </script>
-        <script>
+        <script>  
             document.addEventListener('DOMContentLoaded', function () {
                 const today = new Date();
                 const minDate = new Date(today.setFullYear(today.getFullYear() - 11));
