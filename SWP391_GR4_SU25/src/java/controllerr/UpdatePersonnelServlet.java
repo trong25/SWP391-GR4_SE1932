@@ -54,7 +54,25 @@ public class UpdatePersonnelServlet extends HttpServlet {
         String address = request.getParameter("address").trim();
         String email = request.getParameter("email").trim();
         String phoneNumber = request.getParameter("phone_number").trim();
+   // Các trường riêng cho giáo viên (roleId == 3)
+        String specialization = request.getParameter("specialization");
+        specialization = (specialization != null) ? specialization.trim() : null;
 
+        String qualification = request.getParameter("qualification");
+        qualification = (qualification != null) ? qualification.trim() : null;
+
+        String achievements = request.getParameter("achievements");
+        achievements = (achievements != null) ? achievements.trim() : null;
+
+        String teachingYearsStr = request.getParameter("teaching_years");
+        int teachingYears = 0;
+        if (teachingYearsStr != null && !teachingYearsStr.trim().isEmpty()) {
+            try {
+                teachingYears = Integer.parseInt(teachingYearsStr.trim());
+            } catch (NumberFormatException e) {
+                teachingYears = 0;
+            }
+        }
         boolean emailExists = userDAO.checkEmailExists(email) && !email.equals(user.getEmail());
         boolean phoneNumberExists = (personnelDAO.checkPhoneNumberExists(phoneNumber)
                 || studentDAO.checkFirstGuardianPhoneNumberExists(phoneNumber)
@@ -78,6 +96,12 @@ public class UpdatePersonnelServlet extends HttpServlet {
             person.setAddress(address);
             person.setEmail(email);
             person.setPhoneNumber(phoneNumber);
+            if (person.getRoleId() == 3) {
+                person.setSpecialization(specialization);
+                person.setQualification(qualification);
+                person.setTeaching_years(teachingYears);
+                person.setAchievements(achievements);
+            }
             user.setEmail(email);
             boolean successUser = userDAO.updateUserById(user);
             boolean successPerson = personnelDAO.updatePerson(person);
@@ -99,10 +123,10 @@ public class UpdatePersonnelServlet extends HttpServlet {
                 break;
             case 2:
                 response.sendRedirect("academicstaff/information");
-                break; 
+                break;
             case 3:
                 response.sendRedirect("teacher/information");
-                break;     
+                break;
             case 5:
                 response.sendRedirect("accountant/information");
                 break;

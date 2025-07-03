@@ -96,7 +96,7 @@ public class ClassServlett extends HttpServlet {
     throws ServletException, IOException {
      String action = request.getParameter("action");
         if (action != null){
-            //so sánh vơí jsp nếu trung tên thì thực hiên việc tạo lớp học mới
+            //create new class
             if (action.equals("create")) {
                 String name = request.getParameter("name");
                 name = Helper.formatName(name);
