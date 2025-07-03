@@ -708,4 +708,43 @@ public List<Personnel> getFreeTeacherByDate(String dayId){
     }
     return null;
 }
+    
+    
+       public List<Personnel> getPersonnelAttendance() {
+        List<Personnel> list = new ArrayList<>();
+        String sql = "SELECT * \n"
+                + "FROM Personnels \n"
+                + "WHERE status = N'đang làm việc' \n"
+                + "AND (role_id = 0 OR role_id = 2 OR role_id = 3 OR role_id = 5);";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Personnel p = new Personnel();
+                p.setId(rs.getString(1));
+                p.setFirstName(rs.getString(2));
+                p.setLastName(rs.getString(3));
+                p.setGender(rs.getBoolean(4));
+                p.setBirthday(rs.getDate(5));
+                p.setAddress(rs.getString(6));
+                p.setEmail(rs.getString(7));
+                p.setPhoneNumber(rs.getString(8));
+                p.setRoleId(rs.getInt(9));
+                p.setStatus(rs.getString(10));
+                p.setAvatar(rs.getString(11));
+                p.setUserId(rs.getString(12));
+                p.setSchool_id(rs.getString(13));
+                p.setSchool_class_id(rs.getString(14));
+                p.setSpecialization(rs.getString(15));
+                p.setQualification(rs.getString(16));
+                p.setTeaching_years(rs.getInt(17));
+                p.setAchievements(rs.getString(18));
+                p.setCv_file(rs.getString(19));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
