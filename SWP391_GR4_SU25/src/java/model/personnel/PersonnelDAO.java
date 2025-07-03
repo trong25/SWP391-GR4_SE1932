@@ -538,7 +538,7 @@ public class PersonnelDAO extends DBContext {
                  "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? " +
                  "LEFT JOIN Schools s ON t.school_id = s.id " +
                  "WHERE c.teacher_id IS NULL " +
-                 "AND t.id LIKE 'TEA%' " +
+                 "AND t.id LIKE 'GV%' " +
                  "AND t.status LIKE N'đang làm việc%';";
 
     List<Personnel> teachers = new ArrayList<>();
