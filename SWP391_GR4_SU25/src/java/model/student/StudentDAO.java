@@ -396,6 +396,20 @@ public class StudentDAO extends DBContext {
             return false;
         }
     }
+     public boolean updateStudentStatus(String studentID, String status) {
+         String sql = "UPDATE Students SET [status] = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, studentID);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
 
     public Student getStudentById(String id) {
         String sql = "SELECT * FROM Students WHERE id = ?";

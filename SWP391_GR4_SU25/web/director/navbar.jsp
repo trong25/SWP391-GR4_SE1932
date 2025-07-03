@@ -75,7 +75,7 @@
         <div id="collapsePupil" class="collapse">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="listpupil">Danh Sách Học Sinh</a>
-                <a class="collapse-item" href="reviewpupil">Học Sinh Cần Phê Duyệt</a>
+                <a class="collapse-item" href="reviewstudent">Học Sinh Cần Phê Duyệt</a>
             </div>
         </div>
     </li>
