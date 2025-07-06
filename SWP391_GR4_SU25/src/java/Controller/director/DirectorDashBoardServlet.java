@@ -17,6 +17,7 @@ import model.personnel.PersonnelDAO;
 import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
 import model.student.StudentDAO;
+import model.subject.SubjectDAO;
 
 /**
  * Servlet DirectorDashBoardServlet xử lý hiển thị trang dashboard dành cho Giám
@@ -41,7 +42,7 @@ import model.student.StudentDAO;
  * sách nhân sự đang chờ phê duyệt. - `listStudent`: Số học sinh có trạng thái
  * "đang chờ xử lý".
  *
-
+ *
  * @author ThanhNT
  * @version 5.0
  */
@@ -55,7 +56,7 @@ public class DirectorDashBoardServlet extends HttpServlet {
         ClassDAO classDAO = new ClassDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         PersonnelDAO personnelDAO = new PersonnelDAO();
-
+        SubjectDAO subjectDAO = new SubjectDAO();
         String schoolYearId = null;
         List<SchoolYear> schoolYears = schoolYearDAO.getAll();
         if (!schoolYears.isEmpty()) {
@@ -72,6 +73,8 @@ public class DirectorDashBoardServlet extends HttpServlet {
         List<Personnel> waitlistPersonnel = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
 
         // Gửi dữ liệu sang dashboard.jsp
+        request.setAttribute("listSubjectPending", subjectDAO.getSubjectsByStatus("đang chờ xử lý"));
+
         request.setAttribute("pendingClasses", pendingClasses);
         request.setAttribute("listClass", listClass);
         request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());

@@ -93,6 +93,42 @@
                                 </div>
                             </div>
 
+                                            
+                            <!-- Số môn học đang chờ duyệt -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <c:choose>
+                                                    <c:when test="${not empty requestScope.listSubjectPending}">
+                                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                            Môn học đang chờ duyệt
+                                                        </div>
+                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                            ${requestScope.listSubjectPending.size()}
+                                                        </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                            Không có môn học chờ duyệt
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-book fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer text-center">
+                                        <a href="${pageContext.request.contextPath}/director/reviewsubject" class="btn btn-sm btn-outline-warning">
+                                            Xem chi tiết
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Lớp học chờ phê duyệt -->
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <div class="card border-left-warning shadow h-100 py-2">
