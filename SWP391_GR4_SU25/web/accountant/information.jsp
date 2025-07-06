@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="../css/information-css.css">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script>
@@ -33,10 +34,15 @@
 
         <script>
             function submitForm() {
+                var oldPassword = document.getElementById("oldPassword").value;
                 var newPassword = document.getElementById("newPassword").value;
                 var confirmPassword = document.getElementById("confirmPassword").value;
 
-                if (newPassword !== confirmPassword) {
+                if (!oldPassword || !newPassword || !confirmPassword) {
+                    toastr.error('Vui lòng điền tất cả các trường.');
+                } else if (newPassword.length < 8 || newPassword.length > 12) {
+                    toastr.error('Mật khẩu mới phải từ 8 đến 12 ký tự.');
+                } else if (newPassword !== confirmPassword) {
                     toastr.error('Mật khẩu không trùng khớp.');
                 } else {
                     document.getElementById("changePasswordForm").submit();
@@ -84,14 +90,15 @@
                             </div>
                         </div>
                         <div class="row gutters">
+                            
                             <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <div class="account-settings">
                                             <div class="user-profile">
                                                 <div class="user-avatar">
-                                                    <c:set var="personnel" value="${personnelBean.getTeacherInfoByUserId(sessionScope.personnel.userId)}"/>
-                                                    <img src="${pageContext.request.contextPath}/images/${personnel.avatar}" alt="Maxwell Admin">
+                                                    <c:set var="personnel" value="${personnelBean.getPersonnelByUserId(sessionScope.personnel.userId)}"/>
+                                                    <img src="${pageContext.request.contextPath}/images/${personnel.avatar}" alt="User Avatar">
                                                 </div>
                                                 <h5 class="user-name">${personnel.lastName} ${personnel.firstName}</h5>
                                                 <button type="button" id="submit" name="submit" class="btn btn-primary" data-toggle="modal" data-target="#changePasswordModal">Đổi mật khẩu</button>
@@ -135,41 +142,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="specialization">Chuyên môn <a style="color: red">(*)</a></label>
-                                                        <input style="width: 40%;" class="form-control" placeholder="Chuyên môn" type="text"
-                                                               name="specialization" value="${personnel.specialization}" pattern="^[a-zA-Z0-9${vietnamesePattern}\s]{1,100}$"
-                                                               title="Chuyên môn không được quá 100 ký tự và không chứa ký tự đặc biệt"/>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="qualification">Trình độ <a style="color: red">(*)</a></label>
-                                                        <input style="width: 40%;" class="form-control" placeholder="Trình độ" type="text"
-                                                               name="qualification" value="${personnel.qualification}" pattern="^[a-zA-Z0-9${vietnamesePattern}\s]{1,100}$"
-                                                               title="Trình độ không được quá 100 ký tự và không chứa ký tự đặc biệt"/>
-                                                    </div>
-                                                </div>
-
                                             </div>
-                                            <div class="row gutters">
-                                                <!-- Trường -->
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="schoolName">Trường</label>
-                                                        <input style="width: 60%;" type="text" class="form-control" placeholder="Trường" name="schoolName" value="${personnel.schoolName}" readonly />
-                                                    </div>
-                                                </div>
-                                                <!-- Lớp -->
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="className">Lớp</label>
-                                                        <input style="width: 40%;" type="text" class="form-control" placeholder="Lớp" name="className" value="${personnel.className}" readonly />
-                                                    </div>
-                                                </div>
-                                            </div>     
                                             <div class="row gutters">
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
@@ -196,29 +169,7 @@
                                                         <textarea class="form-control" placeholder="Địa chỉ" name="address" rows="2" pattern="^[A-Za-z1-9,${vietnamesePattern}\s]{1,100}$" title="Địa chỉ không được quá 100 kí tự">${personnel.address}</textarea>
                                                     </div>
                                                 </div>
-                                                             
                                             </div>
-                                                    <div class="row gutters">
-                                                           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
-                                                    <div class="form-group">
-                                                        <label for="teaching_years">Số năm giảng dạy <a style="color: red">(*)</a></label>
-                                                        <input style="width: 40%;" class="form-control" placeholder="Số năm giảng dạy" type="number" min="0" max="99"
-                                                               name="teaching_years" value="${personnel.teaching_years}" title="Vui lòng nhập số năm giảng dạy hợp lệ (0–99)"/>
-                                                    </div>
-                                                </div>
-                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                    <div class="form-group">
-                                                        <label for="achievements">Thành tích nổi bật <a style="color: red">(*)</a></label>
-                                                        <textarea class="form-control" placeholder="Thành tích nổi bật" name="achievements"
-                                                                  rows="3" style="width: 50%;" maxlength="300"
-                                                                  title="Không được vượt quá 300 ký tự">${personnel.achievements}</textarea>
-                                                    </div>
-                                                </div>
-                                                    </div>
-
-
-                                            
-
                                             <div class="row gutters">
                                                 <div class="button-container">
                                                     <div>
