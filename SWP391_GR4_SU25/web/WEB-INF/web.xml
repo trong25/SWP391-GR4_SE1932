@@ -180,6 +180,14 @@
         <servlet-name>StudentProfile</servlet-name>
         <servlet-class>Controller.director.StudentProfile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListSubjectServlet</servlet-name>
+        <servlet-class>Controller.director.ListSubjectServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReviewSubjectServlet</servlet-name>
+        <servlet-class>Controller.director.ReviewSubjectServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -327,5 +335,13 @@
     <servlet-mapping>
         <servlet-name>StudentProfile</servlet-name>
         <url-pattern>/director/studentsprofile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSubjectServlet</servlet-name>
+        <url-pattern>/director/listsubject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewSubjectServlet</servlet-name>
+        <url-pattern>/director/reviewsubject</url-pattern>
     </servlet-mapping>
 </web-app>

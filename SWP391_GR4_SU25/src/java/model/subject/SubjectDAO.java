@@ -7,6 +7,8 @@ package model.subject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import model.grade.Grade;
 import model.grade.GradeDAO;
 import utils.DBContext;
@@ -15,8 +17,9 @@ import utils.DBContext;
  *
  * @author MSI
  */
-public class SubjectDAO extends DBContext{
-     private Subject createSubject(ResultSet resultSet) throws SQLException{
+public class SubjectDAO extends DBContext {
+
+    private Subject createSubject(ResultSet resultSet) throws SQLException {
         GradeDAO gradeDAO = new GradeDAO();
         Subject subject = new Subject();
         subject.setId(resultSet.getString("id"));
@@ -27,7 +30,8 @@ public class SubjectDAO extends DBContext{
         subject.setDescription(resultSet.getString("description"));
         return subject;
     }
-      public Subject getSubjectBySubjectId(String subjectId) {
+
+    public Subject getSubjectBySubjectId(String subjectId) {
         String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
                 + "FROM Subjects s "
                 + "JOIN Grades g ON s.grade_id = g.id "
@@ -54,4 +58,36 @@ public class SubjectDAO extends DBContext{
         }
         return subject;
     }
+
+    public List<Subject> getSubjectsByStatus(String status) {
+        List<Subject> subjectList = new ArrayList<>();
+        String sql = "select * from Subjects where status = ? order by id desc";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Subject subject = createSubject(resultSet);
+                subjectList.add(subject);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return subjectList;
+    }
+
+    public boolean updateStatusById(String id, String status) {
+        String sql = "update Subjects set status =? where id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
 }
