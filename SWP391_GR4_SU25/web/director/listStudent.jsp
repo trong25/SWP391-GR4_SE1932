@@ -154,7 +154,7 @@
                                                 <td><fmt:formatDate value="${pupil.birthday}" pattern="yyyy/MM/dd" /></td>
                                                 <td>${pupil.address}</td>
                                                 <td>
-                                                    <form action="pupilprofile" method="post">
+                                                    <form action="studentsprofile" method="post">
                                                         <input name="id" value="${pupil.id}" hidden/>
                                                         <button type="submit" class="btn btn-primary">Thông tin chi tiết</button>
                                                     </form>
