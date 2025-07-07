@@ -72,7 +72,7 @@ public class RegisterAccountServlet extends HttpServlet {
                             session.setAttribute("errors", "errors");
                         }
                         break;
-                    case "AC":
+                    case "KT":
                         u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 5, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
@@ -80,7 +80,7 @@ public class RegisterAccountServlet extends HttpServlet {
                             session.setAttribute("errors", "errors");
                         }
                         break;
-                    case "HT":
+                    case "GD":
                         u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 1, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
@@ -88,7 +88,7 @@ public class RegisterAccountServlet extends HttpServlet {
                             session.setAttribute("errors", "errors");
                         }
                         break;
-                    case "TE":
+                    case "GV":
                         u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 3, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
@@ -96,7 +96,7 @@ public class RegisterAccountServlet extends HttpServlet {
                             session.setAttribute("errors", "errors");
                         }
                         break;
-                    case "AS":
+                    case "NV":
                         u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 2, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");

@@ -7,6 +7,9 @@ package model.personnel;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import model.day.DayDAO;
 import utils.DBContext;
 
@@ -41,4 +44,80 @@ public class PersonnelAttendanceDAO extends DBContext{
         }
         return null;
     }
+      
+          public String addAttendance(PersonnelAttendance personnelAttendance) {
+        String res = "";
+        if (getAttendanceByPersonnelAndDay(personnelAttendance.getPersonnel().getId(), personnelAttendance.getDay().getId()) == null) {
+            res = insertAttendance(personnelAttendance);
+        } else {
+            res = updateAttendance(personnelAttendance);
+        }
+        return res;
+    }
+          
+            private String insertAttendance(PersonnelAttendance personnelAttendance) {
+        String sql = "insert into PersonnelsAttendance values (?,?,?,?,?)";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            String newId = "";
+            if (getLatest() == null) {
+                newId = "PEA000001";
+            } else {
+                newId = generateId(getLatest().getId());
+            }
+            statement.setString(1, newId);
+            statement.setString(2, personnelAttendance.getDay().getId());
+            statement.setString(3, personnelAttendance.getPersonnel().getId());
+            statement.setString(4, personnelAttendance.getStatus());
+            statement.setString(5, personnelAttendance.getNote());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Thao tác thất bại! Vui lòng thử lại sau";
+        }
+        return "success";
+    }
+
+    private String updateAttendance(PersonnelAttendance personnelAttendance) {
+        String sql = "update PersonnelsAttendance set status = ?, note = ? where personnel_id = ? and day_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, personnelAttendance.getStatus());
+            statement.setString(2, personnelAttendance.getNote());
+            statement.setString(3, personnelAttendance.getPersonnel().getId());
+            statement.setString(4, personnelAttendance.getDay().getId());
+            statement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Thao tác thất bại! Vui lòng thử lại sau";
+        }
+        return "success";
+    }
+    
+        private PersonnelAttendance getLatest() {
+        String sql = "SELECT TOP 1 * FROM PersonnelsAttendance ORDER BY ID DESC";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                return createPersonnelAttendance(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+        
+            private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "PEA" + result;
+    }
+      
 }
