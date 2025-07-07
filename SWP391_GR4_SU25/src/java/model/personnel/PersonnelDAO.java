@@ -115,11 +115,11 @@ public class PersonnelDAO extends DBContext {
     }
 
     public Personnel getPersonnel(String id) {
-        String sql = "select * from [Personnels] where id like ? ";
+        String sql = "select * from [Personnels] where id = ? ";
         Personnel person = new Personnel();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, "%" + id + "%");
+            statement.setString(1,  id);
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

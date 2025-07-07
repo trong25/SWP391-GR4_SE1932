@@ -106,23 +106,12 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="listevent">
-                    <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
-                    <span>Danh Sách Sự Kiện</span></a>
-            </li>
+           
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport"
-                   aria-expanded="true" aria-controls="collapseReport" >
+                <a class="nav-link" href="attendance">
                     <i class="fas fa-fw fa-bars"></i>
-                    <span>Báo Cáo</span></a>
-                <div id="collapseReport" class="collapse" aria-labelledby="headingReport" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-
-                        <a class="collapse-item" href="viewdailyevaluationreport">Báo cáo đánh giá trên lớp</a>
-                    </div>
-                </div>
+                    <span>Báo cáo đánh giá trên lớp</span></a>
             </li>
 
 

@@ -87,20 +87,34 @@ public class TimetableDAO extends DBContext {
      */
     public List<TimetablePivot> getStudentTimetablePivotByDateRange(String studentId, Date startDate, Date endDate) {
         List<TimetablePivot> timetableList = new ArrayList<>();
-        System.out.println(" '"+(startDate.getYear()+1900) + "-" + (startDate.getMonth()) + "-" + (endDate.getDate())+"' ");
-        String sd = " '"+(startDate.getYear()+1900) + "-" + (startDate.getMonth()) + "-" + (startDate.getDate())+"' ";
-        String ed = " '"+(endDate.getYear()+1900) + "-" + (endDate.getMonth()) + "-" + (endDate.getDate())+"' ";
+        String sd = " '" + (startDate.getYear() + 1900) + "-" + (startDate.getMonth() + 1) + "-" + (startDate.getDate()) + "' ";
+        String ed = " '" + (endDate.getYear() + 1900) + "-" + (endDate.getMonth() + 1) + "-" + (endDate.getDate()) + "' ";
         String sql = """
                         SELECT 
                             ts.slot_number, 
                             ts.start_time + ' - ' + ts.end_time AS time_slot, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Monday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Monday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Tuesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Tuesday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Wednesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Wednesday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Thursday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Thursday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Friday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Friday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Saturday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Saturday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Sunday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Sunday 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Monday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Monday, 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Tuesday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Tuesday, 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Wednesday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Wednesday, 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Thursday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Thursday, 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Friday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Friday, 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Saturday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Saturday, 
+                        
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Sunday' 
+                                THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Sunday 
+                        
                         FROM Students s 
                         INNER JOIN classDetails cd ON s.id = cd.student_id 
                         INNER JOIN Class c ON cd.class_id = c.id 
@@ -109,42 +123,18 @@ public class TimetableDAO extends DBContext {
                         INNER JOIN Timeslots ts ON t.timeslot_id = ts.id 
                         INNER JOIN Subjects sub ON t.subject_id = sub.id 
                         INNER JOIN Personnels p ON t.teacher_id = p.id 
+                        LEFT JOIN StudentsAttendance sa 
+                            ON sa.student_id = s.id AND sa.day_id = d.id AND sa.teacher_id = p.id 
+                        
                         WHERE s.id = ? 
-                        AND d.date BETWEEN """+sd+""" 
-                                                AND """+ed+"""
+                          AND d.date BETWEEN """ + sd + " AND " + ed + """ 
                         GROUP BY ts.slot_number, ts.start_time, ts.end_time 
-                        ORDER BY ts.slot_number
+                        ORDER BY ts.slot_number;
                         """;
-        
-//        sql = """
-//                        SELECT 
-//                            ts.slot_number, 
-//                            ts.start_time + ' - ' + ts.end_time AS time_slot, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Monday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Monday, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Tuesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Tuesday, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Wednesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Wednesday, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Thursday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Thursday, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Friday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Friday, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Saturday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Saturday, 
-//                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Sunday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Sunday 
-//                        FROM Students s 
-//                        INNER JOIN classDetails cd ON s.id = cd.student_id 
-//                        INNER JOIN Class c ON cd.class_id = c.id 
-//                        INNER JOIN Timetables t ON c.id = t.class_id 
-//                        INNER JOIN Days d ON t.date_id = d.id 
-//                        INNER JOIN Timeslots ts ON t.timeslot_id = ts.id 
-//                        INNER JOIN Subjects sub ON t.subject_id = sub.id 
-//                        INNER JOIN Personnels p ON t.teacher_id = p.id 
-//                        WHERE s.id = ? 
-//                        AND d.date BETWEEN ? AND ?
-//                        GROUP BY ts.slot_number, ts.start_time, ts.end_time 
-//                        ORDER BY ts.slot_number
-//                        """;
+
         System.out.println(sql);
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, studentId);
-//            stmt.setObject(2, startDate);
-//            stmt.setObject(3, endDate);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     TimetablePivot timetable = new TimetablePivot();

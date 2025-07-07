@@ -38,7 +38,7 @@
                     }
                 }
             });
-
+            
             function resetWeekAndSubmitForm() {
                 document.getElementById("week").selectedIndex = 0;
                 document.getElementById("schoolYearForm").submit();
@@ -153,9 +153,16 @@
                                                     <td>
                                                         <fmt:formatDate value="${day.date}" pattern="EEEE" /> - <fmt:formatDate value="${day.date}" pattern="yyyy/MM/dd" />
                                                     </td>
-                                                    <td>
-                                                        ${personneBean.getPersonnel(timetableBean.getTeacherByDayId(day.id)).lastName} ${personneBean.getPersonnel(timetableBean.getTeacherByDayId(day.id)).firstName}
-                                                    </td>
+                                                    <c:if test="${timetableBean.getTeacherByDayId(day.id,sessionScope.student.id) != null}">
+                                                        <td>
+                                                            ${personneBean.getPersonnel(timetableBean.getTeacherByDayId(day.id,sessionScope.student.id)).lastName} ${personneBean.getPersonnel(timetableBean.getTeacherByDayId(day.id,sessionScope.student.id)).firstName}
+                                                        </td>
+                                                    </c:if>
+
+                                                    <c:if test="${timetableBean.getTeacherByDayId(day.id,sessionScope.student.id) == null}">
+                                                        <td>-</td>
+                                                    </c:if>
+
                                                     <c:set var="attendance" value="${studentAttendanceBean.getAttendanceByStudentAndDay(requestScope.studentId, day.id)}"/>
                                                     <c:set value="${attendance.status}" var="s"/>
                                                     <c:if test="${s eq 'present'}">

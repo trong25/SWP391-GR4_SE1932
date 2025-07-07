@@ -119,28 +119,33 @@ public class TimetableDAO extends DBContext {
         return timetables;
     }
 
-
     public List<Timetable> getTimetableByStudentIdAndWeekId(String studentID, String weekId) {
         List<Timetable> timetables = new ArrayList<>();
         String sql = """
-                     SELECT t.id AS id,
-                            c.id AS class_id,
-                            ts.id AS timeslot_id,
-                            d.id AS date_id,
-                            s.id AS subject_id,
-                            t.created_by,
-                            t.status,
-                            t.note,
-                            p.id AS teacher_id,
-                            -- Thêm các thông tin bổ sung hữu ích
-                            c.name AS class_name,
-                            ts.name AS timeslot_name,
-                            ts.start_time,
-                            ts.end_time,
-                            d.date AS class_date,
-                            d.day_of_week,
-                            s.name AS subject_name,
-                            CONCAT(p.first_name, ' ', p.last_name) AS teacher_name
+                     SELECT 
+                         t.id AS id,
+                         c.id AS class_id,
+                         ts.id AS timeslot_id,
+                         d.id AS date_id,
+                         s.id AS subject_id,
+                         t.created_by,
+                         t.status,
+                         t.note,
+                         p.id AS teacher_id,
+                     
+                         -- Thông tin bổ sung
+                         c.name AS class_name,
+                         ts.name AS timeslot_name,
+                         ts.start_time,
+                         ts.end_time,
+                         d.date AS class_date,
+                         d.day_of_week,
+                         s.name AS subject_name,
+                         CONCAT(p.first_name, ' ', p.last_name) AS teacher_name,
+                     
+                         -- Thêm trạng thái điểm danh
+                         ISNULL(sa.status, N'Not yet') AS attendance_status
+                     
                      FROM Timetables t
                      INNER JOIN Class c ON t.class_id = c.id
                      INNER JOIN classDetails cd ON c.id = cd.class_id
@@ -150,8 +155,13 @@ public class TimetableDAO extends DBContext {
                      INNER JOIN Weeks w ON d.week_id = w.id
                      INNER JOIN Subjects s ON t.subject_id = s.id
                      LEFT JOIN Personnels p ON t.teacher_id = p.id
+                     LEFT JOIN StudentsAttendance sa 
+                            ON sa.student_id = st.id 
+                           AND sa.day_id = d.id 
+                           AND sa.teacher_id = p.id
+                     
                      WHERE st.id = ?
-                       AND w.id = ?
+                       AND w.id = ? 
                      ORDER BY d.date, ts.slot_number;
                      """;
 
@@ -161,18 +171,32 @@ public class TimetableDAO extends DBContext {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                timetables.add(createTimetable(resultSet));
+                Timetable timetable = createTimetable(resultSet);
+                timetable.setAttendanceStatus(resultSet.getString("attendance_status"));
+                timetables.add(timetable);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
         }
         return timetables;
     }
-    public String getTeacherByDayId(String dayId) {
-        String sql = "select teacher_id from Timetables where date_id = ?";
+
+    public String getTeacherByDayId(String dayId, String studentId) {
+        String sql = """
+                     SELECT DISTINCT t.teacher_id
+                     FROM Timetables t
+                     INNER JOIN Class c ON t.class_id = c.id
+                     INNER JOIN classDetails cd ON c.id = cd.class_id
+                     INNER JOIN Students s ON cd.student_id = s.id
+                     WHERE t.date_id = ?
+                       AND s.id = ?;
+                     """;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, dayId);
+            statement.setObject(1, dayId);
+            statement.setObject(2, studentId);
+            System.out.println(dayId);
+            System.out.println(studentId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getString("teacher_id");
@@ -182,20 +206,21 @@ public class TimetableDAO extends DBContext {
         }
         return null;
     }
+
     public int getTodayClassesCount(String teacherId, String dayId) {
-        String sql = "SELECT COUNT(*) as count " +
-                "FROM Timetables t " +
-                "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
-        
+        String sql = "SELECT COUNT(*) as count "
+                + "FROM Timetables t "
+                + "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, teacherId);
             statement.setString(2, dayId);
-            
+
             // Debug logs
             System.out.println("Debug - Teacher ID: " + teacherId);
             System.out.println("Debug - Day ID: " + dayId);
             System.out.println("Debug - SQL: " + sql);
-            
+
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 int count = resultSet.getInt("count");
