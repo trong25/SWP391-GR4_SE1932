@@ -219,6 +219,10 @@
         <servlet-name>TakeTimeKeepServlet</servlet-name>
         <servlet-class>accountant.TakeTimeKeepServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ListPersonnelAdminServlet</servlet-name>
+        <servlet-class>Controller.admin.ListPersonnelAdminServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -402,5 +406,9 @@
     <servlet-mapping>
         <servlet-name>TakeTimeKeepServlet</servlet-name>
         <url-pattern>/accountant/taketimekeep</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListPersonnelAdminServlet</servlet-name>
+        <url-pattern>/admin/listpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>
