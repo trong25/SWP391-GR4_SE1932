@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
+import model.school.SchoolDAO;
 import model.school.Schools;
 import model.schoolclass.SchoolClass;
 import utils.DBContext;
@@ -48,18 +49,17 @@ public class StudentDAO extends DBContext {
 
            
 
+        SchoolDAO schoolDAO = new SchoolDAO();
         // Tạo và gán School object
-        Schools school = new Schools();
-        school.setId(resultSet.getString("school_id"));
-        school.setSchoolName(resultSet.getString("schoolName"));
+        Schools school = schoolDAO.getSchoolsById(resultSet.getString("school_id"));
 //        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
         student.setSchool_id(school);
 
         // Tạo và gán SchoolClass object
-        SchoolClass schoolClass = new SchoolClass();
-        schoolClass.setId(resultSet.getString("school_class_id"));
-        schoolClass.setClassName(resultSet.getString("class_name"));
-        student.setSchool_class_id(schoolClass);
+//        SchoolClass schoolClass = new SchoolClass();
+//        schoolClass.setId(resultSet.getString("school_class_id"));
+//        schoolClass.setClassName(resultSet.getString("class_name"));
+//        student.setSchool_class_id(schoolClass);
 
 
         return student;

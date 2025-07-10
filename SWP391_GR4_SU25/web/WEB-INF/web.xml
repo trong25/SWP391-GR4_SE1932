@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee           https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>utils.LoginFilter</filter-class>
@@ -125,7 +125,6 @@
         <servlet-class>Controller.student.ViewInformationStudentServlet</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>InformationStudentServlet</servlet-name>
         <servlet-class>Controller.student.InformationStudentServlet</servlet-class>
     </servlet>
@@ -156,10 +155,13 @@
     <servlet>
         <servlet-name>ResetPassword</servlet-name>
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
+    </servlet>
 
+    <servlet>
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>SubjectServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SubjectServlet</servlet-class>
@@ -305,10 +307,13 @@
     <servlet-mapping>
         <servlet-name>ResetPassword</servlet-name>
         <url-pattern>/admin/resetpassword</url-pattern>
+    </servlet-mapping>
 
+    <servlet-mapping>
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>SubjectServlet</servlet-name>
         <url-pattern>/academicstaff/subject</url-pattern>

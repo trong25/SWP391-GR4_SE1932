@@ -41,10 +41,10 @@ public class SchoolYearDAO extends DBContext {
         return schoolYear;
     }
 
-     public String createNewSchoolYear(SchoolYear schoolYear) {
+    public String createNewSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
         try {
-            if (getLatest()!=null){
+            if (getLatest() != null) {
                 Date lastEndDate = getLatest().getEndDate();
                 if (!schoolYear.getStartDate().after(lastEndDate)) {
                     return "Ngày bắt đầu năm học mới phải sau ngày kết thúc năm học cũ";
@@ -53,7 +53,7 @@ public class SchoolYearDAO extends DBContext {
             if (validateSchoolYear(schoolYear).equals("success")) {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 String newSchoolYearId;
-                if (getLatest()!=null){
+                if (getLatest() != null) {
                     newSchoolYearId = generateId(getLatest().getId());
                 } else {
                     newSchoolYearId = "SY000001";
@@ -81,7 +81,8 @@ public class SchoolYearDAO extends DBContext {
         }
         return "success";
     }
-       private String validateSchoolYear(SchoolYear schoolYear) {
+
+    private String validateSchoolYear(SchoolYear schoolYear) {
         if (!schoolYear.getEndDate().after(schoolYear.getStartDate())) {
             return "Ngày kết thúc không thể trước ngày bắt đầu";
         }
@@ -100,6 +101,7 @@ public class SchoolYearDAO extends DBContext {
         }
         return "success";
     }
+
     public List<SchoolYear> getAll() {
         List<SchoolYear> schoolYears = new ArrayList<SchoolYear>();
         String sql = "select * from schoolYears order by id desc";
@@ -194,6 +196,7 @@ public class SchoolYearDAO extends DBContext {
         }
         return null;
     }
+
     private String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -207,13 +210,13 @@ public class SchoolYearDAO extends DBContext {
     }
 
     //Thanhnthe181132
-    public List<SchoolYear> getFutureSchoolYears(){
-          String sql = "select * from schoolYears where start_date > CAST(GETDATE() AS DATE)";
+    public List<SchoolYear> getFutureSchoolYears() {
+        String sql = "select * from schoolYears where start_date > CAST(GETDATE() AS DATE)";
         List<SchoolYear> schoolYears = new ArrayList<>();
         try {
-           PreparedStatement statement = connection.prepareStatement(sql);
-           ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {                
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
                 SchoolYear schoolYear = createNewSchoolYear(resultSet);
                 schoolYears.add(schoolYear);
             }
@@ -223,7 +226,7 @@ public class SchoolYearDAO extends DBContext {
         return schoolYears;
     }
 
-public String editSchoolYear(SchoolYear schoolYear) {
+    public String editSchoolYear(SchoolYear schoolYear) {
         SchoolYear oldSchoolYear = getSchoolYear(schoolYear.getId());
         if (!new Date().before(oldSchoolYear.getStartDate())) {
             return "Năm học chỉ có thể được chỉnh sửa trước khi bắt đầu";
@@ -238,41 +241,42 @@ public String editSchoolYear(SchoolYear schoolYear) {
                 return "Ngày bắt đầu năm học mới phải sau ngày kết thúc năm học cũ";
             }
         }
-        if (validateSchoolYear(schoolYear).equals("success")){
-            String sql = "DELETE FROM Days WHERE week_id IN (SELECT id FROM Weeks\n" +
-                    "                                    WHERE school_year_id = ?\n" +
-                    "                                    ); DELETE FROM Weeks WHERE school_year_id = ?; DELETE FROM SchoolYears where id = ?;";
-            try{
+        if (validateSchoolYear(schoolYear).equals("success")) {
+            String sql = "DELETE FROM Days WHERE week_id IN (SELECT id FROM Weeks\n"
+                    + "                                    WHERE school_year_id = ?\n"
+                    + "                                    ); DELETE FROM Weeks WHERE school_year_id = ?; DELETE FROM SchoolYears where id = ?;";
+            try {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, schoolYear.getId());
                 statement.setString(2, schoolYear.getId());
                 statement.setString(3, schoolYear.getId());
                 statement.executeUpdate();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return "Thao tác thất bại";
             }
-        }else {
+        } else {
             return "Thao tác thất bại! " + validateSchoolYear(schoolYear);
         }
         return updateSchoolYear(schoolYear);
     }
-  private String updateSchoolYear(SchoolYear schoolYear){
+
+    private String updateSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
         try {
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, schoolYear.getId());
-                statement.setString(2, schoolYear.getName());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String sqlStartDate = dateFormat.format(schoolYear.getStartDate());
-                statement.setString(3, sqlStartDate);
-                String sqlEndDate = dateFormat.format(schoolYear.getEndDate());
-                statement.setString(4, sqlEndDate);
-                statement.setString(5, schoolYear.getDescription());
-                statement.setString(6, schoolYear.getCreatedBy().getId());
-                statement.execute();
-                WeekDAO weekDAO = new WeekDAO();
-                weekDAO.generateWeeks(getLatest());
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYear.getId());
+            statement.setString(2, schoolYear.getName());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String sqlStartDate = dateFormat.format(schoolYear.getStartDate());
+            statement.setString(3, sqlStartDate);
+            String sqlEndDate = dateFormat.format(schoolYear.getEndDate());
+            statement.setString(4, sqlEndDate);
+            statement.setString(5, schoolYear.getDescription());
+            statement.setString(6, schoolYear.getCreatedBy().getId());
+            statement.execute();
+            WeekDAO weekDAO = new WeekDAO();
+            weekDAO.generateWeeks(getLatest());
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
             return "Thao tác thất bại! " + sqlException.getMessage();
@@ -280,5 +284,49 @@ public String editSchoolYear(SchoolYear schoolYear) {
             return "Thao tác thất bại! " + e.getMessage();
         }
         return "success";
+    }
+
+    public List<SchoolYear> getListSchoolYearsByPupilID(String id) {
+        List<SchoolYear> schoolYears = new ArrayList<>();
+        String sql = "select sy.* from Students p join classDetails cd on p.id = cd.student_id\n"
+                + "JOIN dbo.Class C on C.id = cd.class_id\n"
+                + "join dbo.SchoolYears SY on C.school_year_id = SY.id\n"
+                + "where p.id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                SchoolYear schoolYear = new SchoolYear();
+                schoolYear.setId(resultSet.getString("id"));
+                schoolYear.setName(resultSet.getString("name"));
+                schoolYear.setStartDate(resultSet.getDate("start_date"));
+                schoolYear.setEndDate(resultSet.getDate("end_date"));
+                schoolYear.setDescription(resultSet.getString("description"));
+                schoolYears.add(schoolYear);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return schoolYears;
+    }
+    
+    public boolean checkPupilInClassOfSchoolYear(String pupil_id, String school_year_id) {
+        String sql = "select * from Pupils p join classDetails cd on p.id = cd.pupil_id\n" +
+                "join dbo.Class C on cd.class_id = C.id\n" +
+                "where p.id =? and c.school_year_id =?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, pupil_id);
+            statement.setString(2, school_year_id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }

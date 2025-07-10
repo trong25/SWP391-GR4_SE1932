@@ -109,7 +109,7 @@
            
 
             <li class="nav-item">
-                <a class="nav-link" href="attendance">
+                <a class="nav-link" href="viewdailyevaluationreport">
                     <i class="fas fa-fw fa-bars"></i>
                     <span>Báo cáo đánh giá trên lớp</span></a>
             </li>

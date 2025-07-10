@@ -23,24 +23,23 @@ import utils.DBContext;
 public class SubjectDAO extends DBContext {
 
     private Subject createSubject(ResultSet resultSet) throws SQLException {
-    GradeDAO gradeDAO = new GradeDAO();
-    Subject subject = new Subject();
-    
-    subject.setId(resultSet.getString("id"));
-    subject.setName(resultSet.getString("name"));
+        GradeDAO gradeDAO = new GradeDAO();
+        Subject subject = new Subject();
 
-    Grade grade = gradeDAO.getGrade(resultSet.getString("grade_id"));
-    subject.setGrade(grade);
+        subject.setId(resultSet.getString("id"));
+        subject.setName(resultSet.getString("name"));
 
-    subject.setStatus(resultSet.getString("status"));
-    subject.setDescription(resultSet.getString("description"));
+        Grade grade = gradeDAO.getGrade(resultSet.getString("grade_id"));
+        subject.setGrade(grade);
 
-    // Thêm dòng này để lấy subject_type từ DB
-    subject.setSubjectType(resultSet.getString("subject_type"));
+        subject.setStatus(resultSet.getString("status"));
+        subject.setDescription(resultSet.getString("description"));
 
-    return subject;
-}
+        // Thêm dòng này để lấy subject_type từ DB
+        subject.setSubjectType(resultSet.getString("subject_type"));
 
+        return subject;
+    }
 
     public String createSubject(Subject subject) {
         String sql = "INSERT INTO [dbo].[Subjects] ([id], [name], [grade_id], [description], [status], [subject_type]) VALUES (?, ?, ?, ?, ?, ?)";
@@ -217,5 +216,34 @@ public class SubjectDAO extends DBContext {
             throw new RuntimeException(e);
         }
         return false;
+    }
+    
+    public List<Subject> getSubjectsByGradeId(String gradeId) {
+        List<Subject> subjects = new ArrayList<>();
+        String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
+                + "FROM Subjects s "
+                + "JOIN Grades g ON s.grade_id = g.id "
+                + "WHERE g.id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, gradeId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Subject subject = new Subject();
+                subject.setId(rs.getString("subject_id"));
+                subject.setName(rs.getString("subject_name"));
+
+                Grade grade = new Grade();
+                grade.setId(rs.getString("grade_id"));
+                grade.setName(rs.getString("grade_name"));
+
+                subject.setGrade(grade);
+                subject.setDescription(rs.getString("description"));
+                subjects.add(subject);
+            }
+    } catch (Exception e) {
+        e.printStackTrace();
+        }
+        return subjects;
     }
 }
