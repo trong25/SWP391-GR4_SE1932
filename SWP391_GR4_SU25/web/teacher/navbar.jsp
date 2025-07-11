@@ -148,8 +148,8 @@
                 </a>
             </li>-->
 
-            <!-- Nav Item - Đánh giá học sinh hằng ngày -->
-<!--            <li class="nav-item">
+<!--             Nav Item - Đánh giá học sinh hằng ngày -->
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEvaluate"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-solid fa-bell"></i>
@@ -161,7 +161,7 @@
                         <a class="collapse-item" href="schoolyearsummarize">Tổng kết năm học</a>
                     </div>
                 </div>
-            </li>-->
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link" href="application">
