@@ -11,7 +11,8 @@ import java.util.Date;
  * @author MSI
  */
 public class Personnel {
-      private String id;
+
+    private String id;
     private String firstName;
     private String lastName;
     private boolean gender;
@@ -27,14 +28,14 @@ public class Personnel {
     private String school_class_id;
     private String schoolName;
     private String className;
-private String addressSchool;
-private String specialization;
-private String qualification;
-private int teaching_years;
-private String achievements;
-private String cv_file;
-
-   
+    private String addressSchool;
+    private String specialization;
+    private String qualification;
+    private int teaching_years;
+    private String achievements;
+    private String cv_file;
+    private int baseSalary;
+private int totalSalary;
 
     public Personnel() {
     }
@@ -64,9 +65,21 @@ private String cv_file;
         this.cv_file = cv_file;
     }
 
+    public int getBaseSalary() {
+        return baseSalary;
+    }
 
+    public void setBaseSalary(int baseSalary) {
+        this.baseSalary = baseSalary;
+    }
 
-    
+    public int getTotalSalary() {
+        return totalSalary;
+    }
+
+    public void setTotalSalary(int totalSalary) {
+        this.totalSalary = totalSalary;
+    }
 
     public String getSchool_id() {
         return school_id;
@@ -83,8 +96,6 @@ private String cv_file;
     public void setSchool_class_id(String school_class_id) {
         this.school_class_id = school_class_id;
     }
-
-    
 
     public String getId() {
         return id;
@@ -126,7 +137,7 @@ private String cv_file;
         this.className = className;
     }
 
-    public boolean isGender() {
+    public boolean getGender() {
         return gender;
     }
 
@@ -197,7 +208,8 @@ private String cv_file;
     public void setUserId(String userId) {
         this.userId = userId;
     }
- public String getAddressSchool() {
+
+    public String getAddressSchool() {
         return addressSchool;
     }
 
@@ -244,8 +256,32 @@ private String cv_file;
     public void setCv_file(String cv_file) {
         this.cv_file = cv_file;
     }
-    
-    
- 
-    
+public void calculateSalary() {
+    int base = 0;
+    switch (this.getQualification()) {
+        case "Cử nhân":
+            base = 6000000;
+            break;
+        case "Thạc Sĩ":
+            base = 8000000;
+            break;
+        case "Tiến Sĩ":
+            base = 10000000;
+            break;
+        default:
+            base = 5000000;
+            break;
+    }
+
+    int bonus = 0;
+    int years = this.getTeaching_years();
+    if (years >= 1 && years <= 3) bonus = 500000;
+    else if (years >= 4 && years <= 6) bonus = 1000000;
+    else if (years > 6) bonus = 2000000;
+
+    this.setBaseSalary(base);
+    this.setTotalSalary(base + bonus);
+}
+
+
 }

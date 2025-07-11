@@ -14,22 +14,20 @@ import utils.DBContext;
 
 /**
  * Lớp PersonnelDAO dùng để thao tác với bảng Personnel trong cơ sở dữ liệu
- * 
- * Chịu trách nhiệm xử lý công việc tạo nhân viên, lấy trạng thái, lấy tất cả nhân viên, cập nhật trong hệ thống.
- * Được gọi bởi servlet liên quan đến người dùng
- * 
- * Ví dụ: createPersonnel, getAllPersonnels, getPersonnelByUserId, getAllStatus,...
- * 
+ *
+ * Chịu trách nhiệm xử lý công việc tạo nhân viên, lấy trạng thái, lấy tất cả
+ * nhân viên, cập nhật trong hệ thống. Được gọi bởi servlet liên quan đến người
+ * dùng
+ *
+ * Ví dụ: createPersonnel, getAllPersonnels, getPersonnelByUserId,
+ * getAllStatus,...
+ *
  * @author TrongNV
  * @version 1.0
  */
-
-
-
-
 public class PersonnelDAO extends DBContext {
-    
-     //hàm tạo nhân viên
+
+    //hàm tạo nhân viên
     private Personnel createPersonnel(ResultSet resultSet) throws SQLException {
         Personnel person = new Personnel();
         person.setId(resultSet.getString("id"));
@@ -64,14 +62,13 @@ public class PersonnelDAO extends DBContext {
     }
 
 //Hàm lấy tất cả nhân viên trong cơ sở dữ liệu
-
     public List<Personnel> getAllPersonnels() {
-        String sql = "select * from [Personnels] order by id desc";
+        String sql = "SELECT * FROM [Personnels] ORDER BY id DESC";
         List<Personnel> persons = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
-
             ResultSet resultSet = statement.executeQuery();
+
             while (resultSet.next()) {
                 Personnel person = new Personnel();
                 person.setId(resultSet.getString("id"));
@@ -86,12 +83,16 @@ public class PersonnelDAO extends DBContext {
                 person.setStatus(resultSet.getString("status"));
                 person.setAvatar(resultSet.getString("avatar"));
                 person.setUserId(resultSet.getString("user_id"));
-                person.setSchool_id(resultSet.getString("school_id"));
-                person.setSchool_class_id(resultSet.getString("school_class_id"));
+
+                // Thêm các trường mới:
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
+
                 persons.add(person);
             }
+
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Lỗi khi lấy danh sách Personnel: " + e.getMessage());
         }
         return persons;
     }
@@ -173,7 +174,6 @@ public class PersonnelDAO extends DBContext {
         return 0;
     }
 
-
     public List<Role> getAllPersonnelRole() {
         String sql = "select DISTINCT r.id, r.description from Roles r where id != 4";
         List<Role> roles = new ArrayList<>();
@@ -194,19 +194,20 @@ public class PersonnelDAO extends DBContext {
     }
 
     public List<String> getAllStatus() {
-        String sql = "select distinct status from Personnels";
-        List<String> status = new ArrayList<>();
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                status.add(resultSet.getString("status"));
-            }
-        } catch (Exception e) {
-            System.out.println(e);
+    String sql = "SELECT DISTINCT status FROM Personnels WHERE status = N'đang làm việc'";
+    List<String> status = new ArrayList<>();
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            status.add(resultSet.getString("status"));
         }
-        return status;
+    } catch (Exception e) {
+        System.out.println(e);
     }
+    return status;
+}
+
 
     public List<Personnel> getPersonnelByStatus(String status) {
         String sql = " Select * from Personnels where [status] = N'" + status + "' order by id desc";
@@ -229,6 +230,8 @@ public class PersonnelDAO extends DBContext {
                 person.setStatus(resultSet.getString("status"));
                 person.setAvatar(resultSet.getString("avatar"));
                 person.setUserId(resultSet.getString("user_id"));
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
                 persons.add(person);
             }
         } catch (Exception e) {
@@ -258,6 +261,8 @@ public class PersonnelDAO extends DBContext {
                 person.setStatus(resultSet.getString("status"));
                 person.setAvatar(resultSet.getString("avatar"));
                 person.setUserId(resultSet.getString("user_id"));
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
                 persons.add(person);
             }
         } catch (Exception e) {
@@ -295,6 +300,8 @@ public class PersonnelDAO extends DBContext {
                 person.setStatus(resultSet.getString("status"));
                 person.setAvatar(resultSet.getString("avatar"));
                 person.setUserId(resultSet.getString("user_id"));
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
                 persons.add(person);
             }
         } catch (Exception e) {
@@ -332,41 +339,39 @@ public class PersonnelDAO extends DBContext {
         return persons;
     }
 
+    public boolean updatePerson(Personnel person) {
+        String sql = "UPDATE Personnels SET "
+                + "first_name = ?, "
+                + "last_name = ?, "
+                + "gender = ?, "
+                + "address = ?, "
+                + "email = ?, "
+                + "phone_number = ?, "
+                + "specialization = ?, "
+                + "qualification = ?, "
+                + "teaching_years = ?, "
+                + "achievements = ? "
+                + "WHERE user_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, person.getFirstName());
+            stmt.setString(2, person.getLastName());
+            stmt.setBoolean(3, person.getGender());
+            stmt.setString(4, person.getAddress());
+            stmt.setString(5, person.getEmail());
+            stmt.setString(6, person.getPhoneNumber());
+            stmt.setString(7, person.getSpecialization());
+            stmt.setString(8, person.getQualification());
+            stmt.setInt(9, person.getTeaching_years());
+            stmt.setString(10, person.getAchievements());
+            stmt.setString(11, person.getUserId());
 
-public boolean updatePerson(Personnel person) {
-    String sql = "UPDATE Personnels SET "
-               + "first_name = ?, "
-               + "last_name = ?, "
-               + "gender = ?, "
-               + "address = ?, "
-               + "email = ?, "
-               + "phone_number = ?, "
-               + "specialization = ?, "
-               + "qualification = ?, "
-               + "teaching_years = ?, "
-               + "achievements = ? "
-               + "WHERE user_id = ?";
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setString(1, person.getFirstName());
-        stmt.setString(2, person.getLastName());
-        stmt.setBoolean(3, person.isGender());
-        stmt.setString(4, person.getAddress());
-        stmt.setString(5, person.getEmail());
-        stmt.setString(6, person.getPhoneNumber());
-        stmt.setString(7, person.getSpecialization());
-        stmt.setString(8, person.getQualification());
-        stmt.setInt(9, person.getTeaching_years());
-        stmt.setString(10, person.getAchievements());
-        stmt.setString(11, person.getUserId());
-
-        int rowsAffected = stmt.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
-
 
     public boolean checkPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Personnels] WHERE phone_number = ?";
@@ -383,55 +388,54 @@ public boolean updatePerson(Personnel person) {
         return false;
     }
 
-   public Personnel getTeacherInfoByUserId(String userId) {
-    String sql = "SELECT p.*, "
-            + "sc.class_name, sc.grade_level, "
-            + "sch.schoolName "
-            + "FROM Personnels p "
-            + "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id "
-            + "LEFT JOIN Schools sch ON p.school_id = sch.id "
-            + "WHERE p.user_id = ?";
-    Personnel personnel = null;
-    try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, userId);
-        System.out.println("Executing query for userId: " + userId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            personnel = new Personnel();
-            personnel.setId(resultSet.getString("id"));
-            personnel.setFirstName(resultSet.getString("first_name"));
-            personnel.setLastName(resultSet.getString("last_name"));
-            personnel.setGender(resultSet.getBoolean("gender"));
-            personnel.setBirthday(resultSet.getDate("birthday"));
-            personnel.setEmail(resultSet.getString("email"));
-            personnel.setAddress(resultSet.getString("address"));
-            personnel.setPhoneNumber(resultSet.getString("phone_number"));
-            personnel.setRoleId(resultSet.getInt("role_id"));
-            personnel.setStatus(resultSet.getString("status"));
-            personnel.setAvatar(resultSet.getString("avatar"));
-            personnel.setUserId(resultSet.getString("user_id"));
-            personnel.setSchool_id(resultSet.getString("school_id"));
-            personnel.setSchool_class_id(resultSet.getString("school_class_id"));
-            personnel.setSchoolName(resultSet.getString("schoolName"));
-            personnel.setClassName(resultSet.getString("class_name"));
+    public Personnel getTeacherInfoByUserId(String userId) {
+        String sql = "SELECT p.*, "
+                + "sc.class_name, sc.grade_level, "
+                + "sch.schoolName "
+                + "FROM Personnels p "
+                + "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id "
+                + "LEFT JOIN Schools sch ON p.school_id = sch.id "
+                + "WHERE p.user_id = ?";
+        Personnel personnel = null;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, userId);
+            System.out.println("Executing query for userId: " + userId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                personnel = new Personnel();
+                personnel.setId(resultSet.getString("id"));
+                personnel.setFirstName(resultSet.getString("first_name"));
+                personnel.setLastName(resultSet.getString("last_name"));
+                personnel.setGender(resultSet.getBoolean("gender"));
+                personnel.setBirthday(resultSet.getDate("birthday"));
+                personnel.setEmail(resultSet.getString("email"));
+                personnel.setAddress(resultSet.getString("address"));
+                personnel.setPhoneNumber(resultSet.getString("phone_number"));
+                personnel.setRoleId(resultSet.getInt("role_id"));
+                personnel.setStatus(resultSet.getString("status"));
+                personnel.setAvatar(resultSet.getString("avatar"));
+                personnel.setUserId(resultSet.getString("user_id"));
+                personnel.setSchool_id(resultSet.getString("school_id"));
+                personnel.setSchool_class_id(resultSet.getString("school_class_id"));
+                personnel.setSchoolName(resultSet.getString("schoolName"));
+                personnel.setClassName(resultSet.getString("class_name"));
 
-            // Các trường mở rộng dành cho giáo viên
-            personnel.setSpecialization(resultSet.getString("specialization"));
-            personnel.setQualification(resultSet.getString("qualification"));
-            personnel.setTeaching_years(resultSet.getInt("teaching_years"));
-            personnel.setAchievements(resultSet.getString("achievements"));
-            personnel.setCv_file(resultSet.getString("cv_file"));
+                // Các trường mở rộng dành cho giáo viên
+                personnel.setSpecialization(resultSet.getString("specialization"));
+                personnel.setQualification(resultSet.getString("qualification"));
+                personnel.setTeaching_years(resultSet.getInt("teaching_years"));
+                personnel.setAchievements(resultSet.getString("achievements"));
+                personnel.setCv_file(resultSet.getString("cv_file"));
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            System.err.println("SQL Error for userId: " + userId + " - " + e.getMessage());
+            e.printStackTrace();
         }
-        resultSet.close();
-        preparedStatement.close();
-    } catch (SQLException e) {
-        System.err.println("SQL Error for userId: " + userId + " - " + e.getMessage());
-        e.printStackTrace();
+        return personnel;
     }
-    return personnel;
-}
-
 
     public List<Personnel> getByStudentId(String studentId) {
         String sql = """
@@ -550,98 +554,87 @@ public boolean updatePerson(Personnel person) {
         return list;
     }
 
+    public List<Personnel> getAvailableTeachers(String schoolYearId) {
 
-  
+        String sql = "SELECT t.*, s.schoolName, s.addressSchool "
+                + "FROM Personnels t "
+                + "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? "
+                + "LEFT JOIN Schools s ON t.school_id = s.id "
+                + "WHERE c.teacher_id IS NULL "
+                + "AND t.id LIKE 'GV%' "
+                + "AND t.status LIKE N'đang làm việc%';";
 
-
-           public List<Personnel> getAvailableTeachers(String schoolYearId) {
-
-    String sql = "SELECT t.*, s.schoolName, s.addressSchool " +
-                 "FROM Personnels t " +
-                 "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? " +
-                 "LEFT JOIN Schools s ON t.school_id = s.id " +
-                 "WHERE c.teacher_id IS NULL " +
-                 "AND t.id LIKE 'GV%' " +
-                 "AND t.status LIKE N'đang làm việc%';";
-
-    List<Personnel> teachers = new ArrayList<>();
-    try {
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, schoolYearId);
-        ResultSet resultSet = statement.executeQuery();
-        while (resultSet.next()) {
-            Personnel teacher = createPersonnel(resultSet);
-            teachers.add(teacher);
+        List<Personnel> teachers = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel teacher = createPersonnel(resultSet);
+                teachers.add(teacher);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+        return teachers;
     }
-    return teachers;
-}
 
     public Personnel getPersonnelById(String id) {
-    String sql = """
+        String sql = """
         SELECT p.*, s.schoolName, s.addressSchool
         FROM Personnels p
         LEFT JOIN Schools s ON p.school_id = s.id
         WHERE p.id = ?
     """;
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, id);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            Personnel personnel = new Personnel();
-            personnel.setId(rs.getString("id"));
-            personnel.setFirstName(rs.getString("first_name"));
-            personnel.setLastName(rs.getString("last_name"));
-            personnel.setGender(rs.getBoolean("gender"));
-            personnel.setBirthday(rs.getDate("birthday"));
-            personnel.setAddress(rs.getString("address"));
-            personnel.setEmail(rs.getString("email"));
-            personnel.setPhoneNumber(rs.getString("phone_number"));
-            personnel.setRoleId(rs.getInt("role_id"));
-            personnel.setStatus(rs.getString("status"));
-            personnel.setAvatar(rs.getString("avatar"));
-            personnel.setUserId(rs.getString("user_id"));
-            personnel.setSchool_id(rs.getString("school_id"));
-            personnel.setSchool_class_id(rs.getString("school_class_id"));
-            personnel.setSchoolName(rs.getString("schoolName"));
-            personnel.setAddressSchool(rs.getString("addressSchool"));
-            return personnel;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Personnel personnel = new Personnel();
+                personnel.setId(rs.getString("id"));
+                personnel.setFirstName(rs.getString("first_name"));
+                personnel.setLastName(rs.getString("last_name"));
+                personnel.setGender(rs.getBoolean("gender"));
+                personnel.setBirthday(rs.getDate("birthday"));
+                personnel.setAddress(rs.getString("address"));
+                personnel.setEmail(rs.getString("email"));
+                personnel.setPhoneNumber(rs.getString("phone_number"));
+                personnel.setRoleId(rs.getInt("role_id"));
+                personnel.setStatus(rs.getString("status"));
+                personnel.setAvatar(rs.getString("avatar"));
+                personnel.setUserId(rs.getString("user_id"));
+                personnel.setSchool_id(rs.getString("school_id"));
+                personnel.setSchool_class_id(rs.getString("school_class_id"));
+                personnel.setSchoolName(rs.getString("schoolName"));
+                personnel.setAddressSchool(rs.getString("addressSchool"));
+                return personnel;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
-public List<Personnel> getFreeTeacherByDate(String dayId){
-        String sql = "SELECT p.* FROM Personnels p WHERE p.id NOT IN (\n" +
-                "    SELECT t.teacher_id\n" +
-                "    FROM Timetables t\n" +
-                "    WHERE t.date_id = ?\n" +
-                ") and p.id like 'TEA%';";
+
+    public List<Personnel> getFreeTeacherByDate(String dayId) {
+        String sql = "SELECT p.* FROM Personnels p WHERE p.id NOT IN (\n"
+                + "    SELECT t.teacher_id\n"
+                + "    FROM Timetables t\n"
+                + "    WHERE t.date_id = ?\n"
+                + ") and p.id like 'TEA%';";
         List<Personnel> teacherList = new ArrayList<>();
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, dayId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 teacherList.add(createPersonnel(resultSet));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return teacherList;
     }
-
-
-
-
-
-        
-
-
 
     public boolean updatePersonnelStatus(String pId, String status) {
         String sql = "UPDATE [dbo].[Personnels]\n"
@@ -674,50 +667,49 @@ public List<Personnel> getFreeTeacherByDate(String dayId){
         }
         return null;
     }
+
     public Personnel getHomeroomTeacherByClassId(String classId) {
 
-    String sql = "SELECT p.*, s.schoolName, s.addressSchool, sc.id AS school_class_id " +
+        String sql = "SELECT p.*, s.schoolName, s.addressSchool, sc.id AS school_class_id "
+                + "FROM Class c "
+                + "JOIN Personnels p ON c.teacher_id = p.id "
+                + "LEFT JOIN Schools s ON p.school_id = s.id "
+                + "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id "
+                + "WHERE c.id = ?";
 
-                 "FROM Class c " +
-                 "JOIN Personnels p ON c.teacher_id = p.id " +
-                 "LEFT JOIN Schools s ON p.school_id = s.id " +
-                 "LEFT JOIN SchoolClasses sc ON p.school_class_id = sc.id " +
-                 "WHERE c.id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, classId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Personnel teacher = new Personnel();
+                    teacher.setId(rs.getString("id"));
+                    teacher.setFirstName(rs.getString("first_name"));
+                    teacher.setLastName(rs.getString("last_name"));
+                    teacher.setGender(rs.getInt("gender") == 1);
+                    teacher.setBirthday(rs.getDate("birthday"));
+                    teacher.setAddress(rs.getString("address"));
+                    teacher.setEmail(rs.getString("email"));
+                    teacher.setPhoneNumber(rs.getString("phone_number"));
+                    teacher.setRoleId(rs.getInt("role_id"));
+                    teacher.setStatus(rs.getString("status"));
+                    teacher.setAvatar(rs.getString("avatar"));
+                    teacher.setUserId(rs.getString("user_id"));
+                    teacher.setSchool_id(rs.getString("school_id"));
+                    teacher.setSchool_class_id(rs.getString("school_class_id"));
+                    teacher.setSchoolName(rs.getString("schoolName")); // ✅ Thêm trường tên trường
+                    teacher.setAddressSchool(rs.getString("addressSchool")); // ✅ Thêm trường địa chỉ trường
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, classId);
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                Personnel teacher = new Personnel();
-                teacher.setId(rs.getString("id"));
-                teacher.setFirstName(rs.getString("first_name"));
-                teacher.setLastName(rs.getString("last_name"));
-                teacher.setGender(rs.getInt("gender") == 1);
-                teacher.setBirthday(rs.getDate("birthday"));
-                teacher.setAddress(rs.getString("address"));
-                teacher.setEmail(rs.getString("email"));
-                teacher.setPhoneNumber(rs.getString("phone_number"));
-                teacher.setRoleId(rs.getInt("role_id"));
-                teacher.setStatus(rs.getString("status"));
-                teacher.setAvatar(rs.getString("avatar"));
-                teacher.setUserId(rs.getString("user_id"));
-                teacher.setSchool_id(rs.getString("school_id"));
-                teacher.setSchool_class_id(rs.getString("school_class_id"));
-                teacher.setSchoolName(rs.getString("schoolName")); // ✅ Thêm trường tên trường
-                teacher.setAddressSchool(rs.getString("addressSchool")); // ✅ Thêm trường địa chỉ trường
-
-                return teacher;
+                    return teacher;
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error in getHomeroomTeacherByClassId: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error in getHomeroomTeacherByClassId: " + e.getMessage());
-    }
-    return null;
+        return null;
 
-}
-    
-    
-       public List<Personnel> getPersonnelAttendance() {
+    }
+
+    public List<Personnel> getPersonnelAttendance() {
         List<Personnel> list = new ArrayList<>();
         String sql = "SELECT * \n"
                 + "FROM Personnels \n"
@@ -756,6 +748,3 @@ public List<Personnel> getFreeTeacherByDate(String dayId){
     }
 
 }
-
-
-       

@@ -309,12 +309,7 @@ public class ClassDAO extends DBContext {
 
  public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
 
-        String sql = "UPDATE classDetails SET class_id = ? WHERE student_id = ? AND class_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, newClassId);
-            ps.setString(2, studentId);
-            ps.setString(3, oldClassId);
-            ps.executeUpdate();
+       
 
         String sql = "update classDetails set class_id = ? where student_id= ? and class_id= ?";
         try {
