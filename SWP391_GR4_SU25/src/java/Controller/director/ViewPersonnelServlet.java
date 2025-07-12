@@ -18,8 +18,7 @@ import model.personnel.PersonnelDAO;
  * Servlet ViewPersonnelServlet xử lý các yêu cầu HTTP liên quan đến việc xem
  * chi tiết thông tin của một nhân sự cụ thể.
  *
- * URL Mapping: Không dùng @WebServlet mà cấu hình qua web.xml hoặc mapping
- * Servlet mặc định trong project.
+ * URL Mapping: /director/viewpersonnel
  *
  * Chức năng: - Nhận ID nhân sự từ client (thông qua URL param) - Gọi
  * PersonnelDAO để lấy thông tin chi tiết nhân sự - Hiển thị thông tin nhân sự
