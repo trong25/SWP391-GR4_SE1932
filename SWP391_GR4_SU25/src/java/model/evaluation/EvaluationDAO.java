@@ -4,6 +4,7 @@ import model.day.Day;
 import model.day.DayDAO;
 import model.student.Student;
 import model.student.StudentDAO;
+import model.personnel.PersonnelDAO;
 import utils.DBContext;
 
 import java.sql.*;
@@ -40,11 +41,11 @@ public class EvaluationDAO extends DBContext {
     }
 
     
-        public boolean checkEvaluationExist(String pupilId, String dateId) {
+        public boolean checkEvaluationExist(String studentId, String dateId) {
         String sql = "select * from Evaluations where student_id=? and date_id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, pupilId);
+            preparedStatement.setString(1, studentId);
             preparedStatement.setString(2, dateId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -132,6 +133,75 @@ public class EvaluationDAO extends DBContext {
         return null;
     }
 
+    
+        public SchoolYearSummarize getSchoolYearSummarize(String studentId, String schoolYearId) {
+        String sql = "select * from [SchoolYearSummarizeReport] where student_id = ? and schoolyear_id = ?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, studentId);
+            statement.setString(2, schoolYearId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()){
+                SchoolYearSummarize schoolYearSummarize = new SchoolYearSummarize();
+                StudentDAO studentDAO = new StudentDAO();
+                PersonnelDAO personnelDAO = new PersonnelDAO();
+                schoolYearSummarize.setStudent(studentDAO.getStudentsById(resultSet.getString("student_id")));
+                schoolYearSummarize.setSchoolYearId(resultSet.getString("schoolyear_id"));
+                schoolYearSummarize.setTitle(resultSet.getString("title"));
+                schoolYearSummarize.setGoodTicket(resultSet.getString("good_ticket"));
+                schoolYearSummarize.setTeacherNote(resultSet.getString("teacher_note"));
+                schoolYearSummarize.setTeacher(personnelDAO.getPersonnel(resultSet.getString("teacher_id")));
+                return schoolYearSummarize;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+        public String updateSchoolYearSummarize(SchoolYearSummarize schoolYearSummarize) {
+        String res;
+        if (getSchoolYearSummarize(schoolYearSummarize.getStudent().getId(), schoolYearSummarize.getSchoolYearId())!=null){
+            res = editSchoolYearSummarize(schoolYearSummarize);
+        } else {
+            res = addSchoolYearSummarize(schoolYearSummarize);
+        }
+        return res;
+    }
+
+    private String addSchoolYearSummarize(SchoolYearSummarize schoolYearSummarize){
+        String sql = "insert into [SchoolYearSummarizeReport] values (?, ?, ?, ?, ? ,?)";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearSummarize.getStudent().getId());
+            statement.setString(2, schoolYearSummarize.getSchoolYearId());
+            statement.setString(3, schoolYearSummarize.getTeacher().getId());
+            statement.setString(4, schoolYearSummarize.getGoodTicket());
+            statement.setString(5, schoolYearSummarize.getTitle());
+            statement.setString(6, schoolYearSummarize.getTeacherNote());
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Thao tác thất bại!";
+        }
+        return "success";
+    }
+
+    private String editSchoolYearSummarize(SchoolYearSummarize schoolYearSummarize){
+        String sql = "update [SchoolYearSummarizeReport] set title = ?, teacher_note = ? where student_id = ? and schoolyear_id = ?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, schoolYearSummarize.getTitle());
+            statement.setString(2, schoolYearSummarize.getTeacherNote());
+            statement.setString(3, schoolYearSummarize.getStudent().getId());
+            statement.setString(4, schoolYearSummarize.getSchoolYearId());
+            statement.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "Thao tác thất bại!";
+        }
+        return "success";
+    }
 
 }
 

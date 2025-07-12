@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-@WebServlet(name = "teacher/StudentSchoolYearSummarizeServlet", value = "/teacher/schoolyearsummarize")
-public class StudentSchoolYearSummarizeServlet extends HttpServlet {
+@WebServlet(name = "teacher/SchoolYearSummarizeServlet", value = "/teacher/schoolyearsummarize")
+public class SchoolYearSummarizeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String schoolYearId = request.getParameter("schoolYearId");
