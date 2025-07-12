@@ -216,7 +216,7 @@
                                                                         <td style="text-align: left;">${p.getQualification()}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Số năm giảng dạy</th>
+                                                                        <th style="text-align: left;">Số năm kinh nghiệm</th>
                                                                         <td style="text-align: left;">${p.getTeaching_years()}</td>
                                                                     </tr>
                                                                     <tr>
