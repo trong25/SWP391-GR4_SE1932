@@ -62,7 +62,8 @@ public class PersonnelDAO extends DBContext {
     }
 
 //Hàm lấy tất cả nhân viên trong cơ sở dữ liệu
-    public List<Personnel> getAllPersonnels() {
+    
+public List<Personnel> getAllPersonnels() {
         String sql = "SELECT * FROM [Personnels] ORDER BY id DESC";
         List<Personnel> persons = new ArrayList<>();
         try {
@@ -97,6 +98,7 @@ public class PersonnelDAO extends DBContext {
         return persons;
     }
 
+
     public Personnel getPersonnelByUserId(String userId) {
         String sql = "select * from [User] u join Personnels p on u.id=p.user_id \n"
                 + "where u.id = ?";
@@ -120,6 +122,7 @@ public class PersonnelDAO extends DBContext {
                 personnel.setUserId(resultSet.getString("user_id"));
                 personnel.setSchool_id(resultSet.getString("school_id"));
                 personnel.setSchool_class_id(resultSet.getString("school_class_id"));
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -127,37 +130,49 @@ public class PersonnelDAO extends DBContext {
         return personnel;
     }
 
-    public Personnel getPersonnel(String id) {
-        String sql = "select * from [Personnels] where id like ? ";
-        Personnel person = new Personnel();
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, "%" + id + "%");
+   public Personnel getPersonnel(String id) {
+    String sql = "SELECT * FROM [Personnels] WHERE id = ?";
+    Personnel person = null;
 
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, id); // KHÔNG dùng LIKE, dùng id chính xác
 
-                person.setId(resultSet.getString("id"));
-                person.setFirstName(resultSet.getString("first_name"));
-                person.setLastName(resultSet.getString("last_name"));
-                person.setGender(resultSet.getBoolean("gender"));
-                person.setBirthday(resultSet.getDate("birthday"));
-                person.setEmail(resultSet.getString("email"));
-                person.setAddress(resultSet.getString("address"));
-                person.setPhoneNumber(resultSet.getString("phone_number"));
-                person.setRoleId(resultSet.getInt("role_id"));
-                person.setStatus(resultSet.getString("status"));
-                person.setAvatar(resultSet.getString("avatar"));
-                person.setUserId(resultSet.getString("user_id"));
-                person.setSchool_id(resultSet.getString("school_id"));
-                person.setSchool_class_id(resultSet.getString("school_class_id"));
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            person = new Personnel();
 
-            }
-        } catch (Exception e) {
-            System.out.println(e);
+            person.setId(resultSet.getString("id"));
+            person.setFirstName(resultSet.getString("first_name"));
+            person.setLastName(resultSet.getString("last_name"));
+            person.setGender(resultSet.getBoolean("gender"));
+            person.setBirthday(resultSet.getDate("birthday"));
+            person.setEmail(resultSet.getString("email"));
+            person.setAddress(resultSet.getString("address"));
+            person.setPhoneNumber(resultSet.getString("phone_number"));
+            person.setRoleId(resultSet.getInt("role_id"));
+            person.setStatus(resultSet.getString("status"));
+            person.setAvatar(resultSet.getString("avatar"));
+            person.setUserId(resultSet.getString("user_id"));
+            person.setSchool_id(resultSet.getString("school_id"));
+            person.setSchool_class_id(resultSet.getString("school_class_id"));
+            person.setQualification(resultSet.getString("qualification"));
+            person.setTeaching_years(resultSet.getInt("teaching_years"));
+            person.setSpecialization(resultSet.getString("specialization"));
+            person.setAchievements(resultSet.getString("achievements"));
+            person.setCv_file(resultSet.getString("cv_file"));
+
+            // 👉 TÍNH lương sau khi load dữ liệu
+            person.calculateSalary();
         }
-        return person;
+
+    } catch (Exception e) {
+        System.out.println("Lỗi khi lấy Personnel theo id: " + e.getMessage());
     }
+
+    return person;
+}
+
 
     public int getPendingTeacherCount() {
         String sql = "SELECT COUNT(*) AS total FROM Personnels WHERE status = ? AND role_id = ?";
@@ -193,21 +208,20 @@ public class PersonnelDAO extends DBContext {
         return roles;
     }
 
-    public List<String> getAllStatus() {
-    String sql = "SELECT DISTINCT status FROM Personnels WHERE status = N'đang làm việc'";
-    List<String> status = new ArrayList<>();
-    try {
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet = statement.executeQuery();
-        while (resultSet.next()) {
-            status.add(resultSet.getString("status"));
+      public List<String> getAllStatus() {
+        String sql = "select distinct status from Personnels";
+        List<String> status = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                status.add(resultSet.getString("status"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
-    } catch (Exception e) {
-        System.out.println(e);
+        return status;
     }
-    return status;
-}
-
 
     public List<Personnel> getPersonnelByStatus(String status) {
         String sql = " Select * from Personnels where [status] = N'" + status + "' order by id desc";

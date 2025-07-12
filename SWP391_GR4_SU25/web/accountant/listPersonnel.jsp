@@ -65,22 +65,27 @@
                                             </label>
                                         </div>
                                         <div class="class-form">
-
                                             <label>Trạng thái
                                                 <select name="status" onchange="this.form.submit()" class="custom-select">
                                                     <option value="" hidden>Trạng thái</option>
                                                     <c:forEach items="${requestScope.statuss}" var="r">
-                                                        <option ${sltedstatus eq r ? "selected" : ""} value="${r}">${r}</option>
+                                                        <c:choose>
+                                                            <c:when test="${r == 'đang làm việc'}">
+                                                                <option value="${r}" ${sltedstatus eq r ? "selected" : ""}>Chưa thanh toán</option>
+                                                            </c:when>
+                                                            <c:when test="${r == 'đang chờ xử lý'}">
+                                                                <option value="${r}" ${sltedstatus eq r ? "selected" : ""}>Đã thanh toán</option>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <option value="${r}" ${sltedstatus eq r ? "selected" : ""}>${r}</option>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:forEach>
-                                                    <c:if test="${sltedstatus eq 'all'}">
-                                                        <option value="all" selected>Hiện toàn bộ trạng thái</option>
-                                                    </c:if>
-                                                    <c:if test="${sltedstatus ne'all'}">
-                                                        <option value="all">Hiện toàn bộ trạng thái</option>
-                                                    </c:if>
+                                                    <option value="all" ${sltedstatus eq 'all' ? "selected" : ""}>Hiện toàn bộ trạng thái</option>
                                                 </select>
                                             </label>
                                         </div>
+
 
                                     </div>
 
@@ -169,37 +174,32 @@
                                                 <c:if test="${p.getStatus() != null}">
                                                     <c:choose>
                                                         <c:when test="${p.getStatus() == 'đang làm việc'}">
-                                                            <td >
-                                                                <span class="badge badge-success">${p.getStatus()}</span>
+                                                            <td>
+                                                                <span class="badge badge-warning">Chưa thanh toán</span>
                                                             </td>
                                                         </c:when>
                                                         <c:when test="${p.getStatus() == 'đang chờ xử lý'}">
                                                             <td>
-                                                                <span class="badge badge-warning">${p.getStatus()}</span>
+                                                                <span class="badge badge-success">Đã thanh toán</span>
                                                             </td>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <td >
+                                                            <td>
                                                                 <span class="badge badge-info">${p.getStatus()}</span>
                                                             </td>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </c:if>
+
                                                 <td>
                                                     <a href="viewpersonnel?id=${p.getId()}"
                                                        class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Thanh Toán
                                                         Lương</a>
-
-
                                                 </td>
                                             </tr>
                                         </c:forEach>
-
                                         </tbody>
                                     </table>
-
-                                    <!--                                        <p>Đây là nội dung JSP thuần, không cần JSTL.</p>-->
-
                                 </div>
                             </div>
 

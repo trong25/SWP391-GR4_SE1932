@@ -18,8 +18,11 @@ import model.personnel.PersonnelDAO;
 import model.role.Role;
 
 /**
- *
- * @author MSI
+ * ListPersonnelServlet chịu trách nhiệm lấy tất cả nhân viên
+ * sử dụng hàm getAllPersonnel, hiển thị bảng lương của tất cả nhân viên, hiển thị họ tên , ảnh, trạng thái, lương cơ bản, tổng lương.
+ * Lương được tính theo lương cứng và dựa vào số năm kinh nghiệm và trình độ
+ * @author TrongNV
+ * @version 1.0
  */
 public class ListPersonnelServlett extends HttpServlet {
 

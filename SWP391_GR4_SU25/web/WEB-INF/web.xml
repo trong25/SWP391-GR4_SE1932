@@ -223,6 +223,10 @@
         <servlet-name>ListPersonnelServlett</servlet-name>
         <servlet-class>Controller.accountant.ListPersonnelServlett</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
+        <servlet-class>Controller.accountant.ViewPersonnelSalaryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -410,5 +414,9 @@
     <servlet-mapping>
         <servlet-name>ListPersonnelServlett</servlet-name>
         <url-pattern>/accountant/listpersonnell</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
+        <url-pattern>/accountant/viewpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>
