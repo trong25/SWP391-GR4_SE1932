@@ -7,6 +7,8 @@ import model.student.StudentDAO;
 import utils.DBContext;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 public class EvaluationDAO extends DBContext {
     private Evaluation createEvaluation(ResultSet resultSet) throws SQLException {
         StudentDAO studentDAO = new StudentDAO();
@@ -105,6 +107,7 @@ public class EvaluationDAO extends DBContext {
         }
         return list;
     }
+
     
     public Evaluation createEvaluation(Evaluation evaluation) {
         String sql = "INSERT INTO Evaluations (student_id, date_id, evaluation, notes) VALUES (?, ?, ?, ?)";
@@ -128,6 +131,7 @@ public class EvaluationDAO extends DBContext {
         }
         return null;
     }
+
 
 }
 

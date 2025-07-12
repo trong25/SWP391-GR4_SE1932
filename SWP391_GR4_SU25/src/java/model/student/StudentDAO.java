@@ -1051,6 +1051,10 @@ public class StudentDAO extends DBContext {
                 student.setBirthday(resultSet.getDate("birthday"));
                 student.setGender(resultSet.getBoolean("gender"));
                 student.setAvatar(resultSet.getString("avatar"));            
+
+                Personnel personnel = PersonnelDAO.getPersonnel(resultSet.getString("created_by"));
+                student.setCreatedBy(personnel);
+
                 student.setParentSpecialNote(resultSet.getString("parent_special_note"));
                 listStudents.add(student);
             }
