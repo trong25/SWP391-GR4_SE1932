@@ -201,23 +201,31 @@
     <!-- Servlet Mappings -->
     <servlet>
         <servlet-name>DashboardAccountantServlet</servlet-name>
-        <servlet-class>accountant.DashboardAccountantServlet</servlet-class>
+        <servlet-class>Controller.accountant.DashboardAccountantServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InformationAccountantServlet</servlet-name>
-        <servlet-class>accountant.InformationAccountantServlet</servlet-class>
+        <servlet-class>Controller.accountant.InformationAccountantServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewInformationAccServlet</servlet-name>
-        <servlet-class>accountant.ViewInformationAccServlet</servlet-class>
+        <servlet-class>Controller.accountant.ViewInformationAccServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TimeKeepServlet</servlet-name>
-        <servlet-class>accountant.TimeKeepServlet</servlet-class>
+        <servlet-class>Controller.accountant.TimeKeepServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TakeTimeKeepServlet</servlet-name>
-        <servlet-class>accountant.TakeTimeKeepServlet</servlet-class>
+        <servlet-class>Controller.accountant.TakeTimeKeepServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListPersonnelServlett</servlet-name>
+        <servlet-class>Controller.accountant.ListPersonnelServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
+        <servlet-class>Controller.accountant.ViewPersonnelSalaryServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -402,5 +410,13 @@
     <servlet-mapping>
         <servlet-name>TakeTimeKeepServlet</servlet-name>
         <url-pattern>/accountant/taketimekeep</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListPersonnelServlett</servlet-name>
+        <url-pattern>/accountant/listpersonnell</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
+        <url-pattern>/accountant/viewpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>

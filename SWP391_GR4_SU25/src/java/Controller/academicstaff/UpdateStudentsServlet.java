@@ -101,11 +101,21 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
     // Chuyển school_class_id thành SchoolClass object
     String schoolClassIdParam = request.getParameter("school_class_id");
-    if (schoolClassIdParam != null && !schoolClassIdParam.trim().isEmpty()) {
-        SchoolClass schoolClass = new SchoolClass();
-        schoolClass.setId(schoolClassIdParam.trim());
-        student.setSchool_class_id(schoolClass);
+    String gradeLevel = request.getParameter("grade_level");
+   if (schoolClassIdParam != null && !schoolClassIdParam.trim().isEmpty()) {
+    SchoolClass schoolClass = new SchoolClass();
+    schoolClass.setId(schoolClassIdParam.trim());
+
+    if (gradeLevel != null && !gradeLevel.trim().isEmpty()) {
+        schoolClass.setGrade_level(gradeLevel.trim());
     }
+
+
+    student.setSchool_class_id(schoolClass);
+}
+
+    
+    
 
     // Cập nhật sinh viên
     StudentDAO studentDAO = new StudentDAO();

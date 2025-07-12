@@ -135,11 +135,14 @@ public class StudentServlet extends HttpServlet {
                     String firstGuardianPhoneNumber = request.getParameter("firstGuardianPhoneNumber").trim();
                     String schoolID = request.getParameter("schoolID").trim();
                     String schoolClassID = request.getParameter("schoolClassId").trim();
+                    String gradeName = request.getParameter("gradeName").trim();
                     String status = "đang chờ xử lý";
                     Schools school = new Schools();
                     school.setId(schoolID);
 
                     SchoolClass schoolClass = new SchoolClass();
+                    schoolClass.setGrade_level(gradeName);
+
                     schoolClass.setId(schoolClassID);
 
                     // Parse ngày sinh
@@ -159,7 +162,7 @@ public class StudentServlet extends HttpServlet {
 
                     if (address.isBlank() || email.isBlank() || firstGuardianPhoneNumber.isBlank() || avatar.isBlank() || genderRaw.equals("-1")
                             || Helper.formatName(firstName).isBlank() || Helper.formatName(lastName).isBlank()
-                            || Helper.formatName(firstGuardianName).isBlank() || schoolID == null || schoolID.isBlank() || schoolClassID == null || schoolClassID.isBlank()) {
+                            || Helper.formatName(firstGuardianName).isBlank() || schoolID == null || schoolID.isBlank() || schoolClassID == null || schoolClassID.isBlank() || gradeName == null || gradeName.isBlank()) {
                         if (address.isBlank()) {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường địa chỉ !";
                         } else if (schoolID.isBlank() || schoolID == null) {
@@ -180,6 +183,8 @@ public class StudentServlet extends HttpServlet {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường giới tính !";
                         } else if (email.isBlank()) {
                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường email !";
+                        }else if(gradeName.isBlank()){
+                             toastMessage = "Tạo thật bại ! Vui lòng không bỏ trống trường khối lớp !";
                         }
                         toastType = "error";
                         session.setAttribute("toastMessage", toastMessage);

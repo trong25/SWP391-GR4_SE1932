@@ -76,7 +76,7 @@ public class SchoolYearServlet extends HttpServlet {
                 User user = (User) session.getAttribute("user");
                 String username = user.getUsername();
                 SchoolYear schoolYear = new SchoolYear();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Date startDate = dateFormat.parse(startDateRaw);
                 Date endDate = dateFormat.parse(endDateRaw);
                 schoolYear.setName(getSchoolYearName(startDate, endDate));

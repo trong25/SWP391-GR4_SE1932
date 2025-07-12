@@ -308,6 +308,9 @@ public class ClassDAO extends DBContext {
 
 
  public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
+
+       
+
         String sql = "update classDetails set class_id = ? where student_id= ? and class_id= ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -315,12 +318,17 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(2, studentId);
             preparedStatement.setString(3, oldClassId);
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
+
+
+
+   
  public String assignTeacherToClass(String teacherId, String classId) {
         String sql = "update [Class] set teacher_id = ? where id = ?";
         try {
@@ -328,6 +336,7 @@ public class ClassDAO extends DBContext {
             statement.setString(1, teacherId);
             statement.setString(2, classId);
             statement.executeUpdate();
+
         } catch (Exception e) {
             e.printStackTrace();
             return "Phân công giáo viên vào lớp thất bại! Vui lòng thử lại sau!";
