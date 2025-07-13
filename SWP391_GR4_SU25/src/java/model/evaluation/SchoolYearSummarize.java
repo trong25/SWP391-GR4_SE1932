@@ -1,18 +1,18 @@
 package model.evaluation;
 
-import models.personnel.Personnel;
-import models.pupil.Pupil;
+import model.personnel.Personnel;
+import model.student.Student;
 
 public class SchoolYearSummarize {
-    private Pupil pupil;
+    private Student student;
     private String schoolYearId;
     private Personnel teacher;
     private String title;
     private String goodTicket;
     private String teacherNote;
 
-    public SchoolYearSummarize(Pupil pupil, String schoolYearId, Personnel teacher, String title, String goodTicket, String teacherNote) {
-        this.pupil = pupil;
+    public SchoolYearSummarize(Student student, String schoolYearId, Personnel teacher, String title, String goodTicket, String teacherNote) {
+        this.student = student;
         this.schoolYearId = schoolYearId;
         this.teacher = teacher;
         this.title = title;
@@ -23,12 +23,12 @@ public class SchoolYearSummarize {
     public SchoolYearSummarize() {
     }
 
-    public Pupil getPupil() {
-        return pupil;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setPupil(Pupil pupil) {
-        this.pupil = pupil;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     public String getSchoolYearId() {
