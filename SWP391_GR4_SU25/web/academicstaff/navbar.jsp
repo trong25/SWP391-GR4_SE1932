@@ -150,6 +150,12 @@
                     </div>
                 </div>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="application">
+                    <i class="fas fa-fw fa-envelope" aria-hidden="true"></i>
+                    <span>Xử Lý Đơn Từ</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
