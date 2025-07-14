@@ -39,19 +39,21 @@ public class Role {
         this.description = description;
     }
 
-    public String getVNeseDescription() {
-        switch (this.id) {
-            case 0:
-                return "Nhân viên IT";
-            case 1:
-                return "Giám đốc";
-            case 2:
-                return "Giáo vụ";
-            case 3:
-                return "Giáo viên";
-//            default:
-//                return "";
-        }
-        return null;
+  public String getVNeseDescription() {
+    switch (this.id) {
+        case 0:
+            return "Quản trị viên";
+        case 1:
+            return "Giám đốc";
+        case 2:
+            return "Giáo vụ";
+        case 3:
+            return "Giáo viên";
+        case 5:
+            return "Kế toán";
+        default:
+            return "Không xác định";
     }
+}
+
 }

@@ -145,16 +145,16 @@
                                                                         Nhân viên IT
                                                                     </c:if>
                                                                     <c:if test="${p.getRoleId()==1}">
-                                                                        Hiệu trưởng
+                                                                        Giám đốc
                                                                     </c:if>
                                                                     <c:if test="${p.getRoleId()==2}">
                                                                         Giáo vụ
                                                                     </c:if>
                                                                     <c:if test="${p.getRoleId()==3}">
-                                                                        Nhân viên kế toán
-                                                                    </c:if>
-                                                                    <c:if test="${p.getRoleId()==4}">
                                                                         Giáo viên
+                                                                    </c:if>
+                                                                    <c:if test="${p.getRoleId()==5}">
+                                                                        Nhân viên kế toán
                                                                     </c:if></p>
                                                             </div>
                                                         </div>
