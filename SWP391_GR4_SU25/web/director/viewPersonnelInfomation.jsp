@@ -212,7 +212,7 @@
                                                                         <td style="text-align: left;">${p.getSpecialization()}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Trình độ chuyên môn</th>
+                                                                        <th style="text-align: left;">Học vấn</th>
                                                                         <td style="text-align: left;">${p.getQualification()}</td>
                                                                     </tr>
                                                                     <tr>
@@ -273,15 +273,13 @@
                                                                         </div>
 
                                                                     </c:if>
+                                                                    <!-- Nút Quay lại -->
                                                                     <div class="col-lg-4">
-                                                                        <button class="btn btn-info w-100"
-                                                                                onclick="redirect('${page}', '${status}', '${role}', '${search}')">
+                                                                        <button class="btn btn-info w-100" onclick="window.history.back()">
                                                                             Quay Lại
                                                                         </button>
-
-
-
                                                                     </div>
+
                                                                 </div>
                                                             </div>
 
@@ -324,67 +322,52 @@
     <script src="js/plugins/pace.min.js"></script>
     <!--===============================================================================================-->
     <!--===============================================================================================-->
-    <script>
-                                                                            
-    function redirect(page, status, role, search) {
-        let baseUrl = (page === "list") ? "listpersonnel" : "waitlistpersonnel";
-        let params = [];
+  
 
-        if (status && status !== "null") params.push("status=" + encodeURIComponent(status));
-        if (role && role !== "null") params.push("role=" + encodeURIComponent(role));
-        if (search && search !== "null") params.push("search=" + encodeURIComponent(search));
+<script>
+    function submitForm(action, id) {
+        // Tạo form
+        var form = document.createElement("form");
+        form.method = "post";
+        form.action = "waitlistpersonnel";
 
-        const queryString = params.length > 0 ? "?" + params.join("&") : "";
-        window.location.href = baseUrl + queryString;
+        // Tạo input hidden cho action
+        var actionInput = document.createElement("input");
+        actionInput.type = "hidden";
+        actionInput.name = "action";
+        actionInput.value = action;
+        form.appendChild(actionInput);
+
+        // Tạo input hidden cho id
+        var idInput = document.createElement("input");
+        idInput.type = "hidden";
+        idInput.name = "id";
+        idInput.value = id;
+        form.appendChild(idInput);
+
+        // Thêm form vào body và submit
+        document.body.appendChild(form);
+        form.submit();
     }
+    function confirmAndSubmit(action, id) {
+        let message = '';
+        switch (action) {
+            case 'accept':
+                message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
+                break;
+            case 'decline':
+                message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
+                break;
+            default:
+                message = 'Bạn có chắc muốn thực hiện hành động này không?';
+        }
+
+        if (confirm(message)) {
+            submitForm(action, id);
+        }
+    }
+
 </script>
-
-
-    </script>
-    <script>
-        function submitForm(action, id) {
-            // Tạo form
-            var form = document.createElement("form");
-            form.method = "post";
-            form.action = "waitlistpersonnel";
-
-            // Tạo input hidden cho action
-            var actionInput = document.createElement("input");
-            actionInput.type = "hidden";
-            actionInput.name = "action";
-            actionInput.value = action;
-            form.appendChild(actionInput);
-
-            // Tạo input hidden cho id
-            var idInput = document.createElement("input");
-            idInput.type = "hidden";
-            idInput.name = "id";
-            idInput.value = id;
-            form.appendChild(idInput);
-
-            // Thêm form vào body và submit
-            document.body.appendChild(form);
-            form.submit();
-        }
-        function confirmAndSubmit(action, id) {
-            let message = '';
-            switch (action) {
-                case 'accept':
-                    message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
-                    break;
-                case 'decline':
-                    message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
-                    break;
-                default:
-                    message = 'Bạn có chắc muốn thực hiện hành động này không?';
-            }
-
-            if (confirm(message)) {
-                submitForm(action, id);
-            }
-        }
-
-    </script>
 
 
 </html>
