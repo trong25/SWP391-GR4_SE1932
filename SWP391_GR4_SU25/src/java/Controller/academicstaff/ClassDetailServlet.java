@@ -50,11 +50,12 @@ public class ClassDetailServlet extends HttpServlet {
         session.setAttribute("classId", classId);
         List<Student> listStudent = studentDAO.getListStudentsByClass(null, classId);
         Class classes = classDAO.getClassById(classId);
-        List<Student> listAllStudent = studentDAO.getAllStudents();
+        String gradeLevel = classes.getGrade().getName();
+        List<Student> listAllStudent = studentDAO.getStudentsByGrade(gradeLevel);
         request.setAttribute("checkedDate", isSchoolYearInThePast(classes.getSchoolYear()));
         request.setAttribute("listAllStudent", listAllStudent);
         request.setAttribute("teacher", classes.getTeacher());
-        request.setAttribute("teacherName", classes.getTeacher().getLastName() + " " + classes.getTeacher().getFirstName());
+        request.setAttribute("teacherName", classes.getTeacher().getLastName() + " " + classes.getTeacher().getFirstName() + "-" + classes.getTeacher().getAddressSchool());
         request.setAttribute("classes", classes);
 
         request.setAttribute("moveOutClass", classDAO.getClassesByGradeAndSchoolYear(classId, classes.getGrade().getId(), classes.getSchoolYear().getId()));

@@ -122,7 +122,8 @@
                                                     <th scope="row">${status.index + 1}</th>
                                                     <td>${student.id}</td>
                                                     <td>${student.lastName} ${student.firstName}</td>
-                                                    <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd"/></td>
+                                                    <td><fmt:formatDate value="${student.birthday}" pattern="dd/MM/yyyy"/></td>
+
                                                     <td>${student.school_id.id}</td>
                                                     <td>${student.school_id.schoolName}</td>
 

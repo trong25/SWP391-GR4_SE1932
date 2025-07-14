@@ -214,6 +214,8 @@
                                         style="margin-right: 60px;">${classes.name}</a></h6>
                                 <h6 class="m-0 font-weight-bold text-primary">Khối: <a
                                         >${classes.grade.name}</a></h6>
+                                      <h6 class="m-0 font-weight-bold text-primary">Loại Lớp <a
+                                        >${classes.classType}</a></h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">

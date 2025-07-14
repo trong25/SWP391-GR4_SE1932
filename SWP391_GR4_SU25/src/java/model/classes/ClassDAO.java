@@ -43,13 +43,14 @@ public class ClassDAO extends DBContext {
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
         c.setStatus(resultSet.getString("status"));
+        c.setClassType(resultSet.getString("class_type"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
         return c;
     }
 
 
     public String createNewClass(Class c) {
-        String sql = "insert into [Class] values (?,?,?,?,?,?,?)";
+        String sql = "insert into [Class] values (?,?,?,?,?,?,?,?)";
         try {
             if (!isSchoolYearValid(c.getSchoolYear())) {
                 return "Lớp phải được tạo trước khi năm học bắt đầu 7 ngày";
@@ -75,6 +76,7 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(5, c.getSchoolYear().getId());
             preparedStatement.setString(6, "đang chờ xử lý");
             preparedStatement.setString(7, c.getCreatedBy().getId());
+            preparedStatement.setString(8, c.getClassType()); 
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
