@@ -81,7 +81,7 @@
                                         </thead>
                                         <tbody>
                                         <div style="color: red">${requestScope.error}</div>
-                                        <c:forEach var="student" items="${requestScope.liststudent}" varStatus="status">
+                                        <c:forEach var="student" items="${requestScope.listStudent}" varStatus="status">
                                             <tr>
                                                 <th scope="row">${status.index + 1}</th>
                                                 <td>${student.id}</td>
