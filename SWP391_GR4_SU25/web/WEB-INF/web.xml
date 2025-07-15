@@ -201,23 +201,23 @@
     <!-- Servlet Mappings -->
     <servlet>
         <servlet-name>DashboardAccountantServlet</servlet-name>
-        <servlet-class>accountant.DashboardAccountantServlet</servlet-class>
+        <servlet-class>Controller.accountant.DashboardAccountantServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>InformationAccountantServlet</servlet-name>
-        <servlet-class>accountant.InformationAccountantServlet</servlet-class>
+        <servlet-class>Controller.accountant.InformationAccountantServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewInformationAccServlet</servlet-name>
-        <servlet-class>accountant.ViewInformationAccServlet</servlet-class>
+        <servlet-class>Controller.accountant.ViewInformationAccServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TimeKeepServlet</servlet-name>
-        <servlet-class>accountant.TimeKeepServlet</servlet-class>
+        <servlet-class>Controller.accountant.TimeKeepServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TakeTimeKeepServlet</servlet-name>
-        <servlet-class>accountant.TakeTimeKeepServlet</servlet-class>
+        <servlet-class>Controller.accountant.TakeTimeKeepServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ListPersonnelAdminServlet</servlet-name>
