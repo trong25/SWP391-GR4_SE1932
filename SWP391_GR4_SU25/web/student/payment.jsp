@@ -248,7 +248,7 @@
                                         <i class="fas fa-user"></i>
                                         Người nhận:
                                     </span>
-                                    <span class="info-value">Pham Nguyn Kien</span>
+                                    <span class="info-value">Pham Nguyen Kien</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">
