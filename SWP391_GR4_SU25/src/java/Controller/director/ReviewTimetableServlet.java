@@ -11,12 +11,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.timetable.Timetable;
+import model.timetable.TimetableDAO;
+import jakarta.servlet.annotation.WebServlet;
 
 /**
  *
  * @author ThanhNT
 
  */
+@WebServlet(name = "ReviewTimetableServlet", urlPatterns = {"/director/reviewTimetable"})
 public class ReviewTimetableServlet extends HttpServlet {
    
     /** 
@@ -38,9 +43,11 @@ public class ReviewTimetableServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       // processRequest(request, response);
-               request.getRequestDispatcher("timetableWaitApprove.jsp").forward(request, response);
-
+        // Lấy danh sách thời khóa biểu đang chờ duyệt
+        TimetableDAO timetableDAO = new TimetableDAO();
+        List<Timetable> pendingTimetables = timetableDAO.getTimetablesByStatus("đang chờ xử lý");
+        request.setAttribute("pendingTimetables", pendingTimetables);
+        request.getRequestDispatcher("timetableWaitApprove.jsp").forward(request, response);
     } 
 
     /** 
@@ -53,6 +60,22 @@ public class ReviewTimetableServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        String action = request.getParameter("action");
+        String timetableId = request.getParameter("timetableId");
+        TimetableDAO timetableDAO = new TimetableDAO();
+
+        if ("approve".equals(action)) {
+            timetableDAO.updateTimetableStatus(timetableId, "đã được duyệt");
+            request.setAttribute("message", "Duyệt thời khóa biểu thành công!");
+        } else if ("reject".equals(action)) {
+            timetableDAO.updateTimetableStatus(timetableId, "bị từ chối");
+            request.setAttribute("message", "Từ chối thời khóa biểu thành công!");
+        }
+
+        // Sau khi duyệt, load lại danh sách chờ duyệt
+        List<Timetable> pendingTimetables = timetableDAO.getTimetablesByStatus("đang chờ xử lý");
+        request.setAttribute("pendingTimetables", pendingTimetables);
+        request.getRequestDispatcher("timetableWaitApprove.jsp").forward(request, response);
     }
 
     /** 

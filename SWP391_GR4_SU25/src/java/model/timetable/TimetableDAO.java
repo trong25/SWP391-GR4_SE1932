@@ -385,4 +385,32 @@ public class TimetableDAO extends DBContext {
         }
         return null; // Giá trị mặc định nếu không có bản ghi nào trong bảng
     }
+
+    // Lấy danh sách thời khóa biểu theo trạng thái
+    public List<Timetable> getTimetablesByStatus(String status) {
+        List<Timetable> list = new ArrayList<>();
+        String sql = "SELECT * FROM Timetables WHERE status = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                list.add(createTimetable(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // Cập nhật trạng thái thời khóa biểu
+    public void updateTimetableStatus(String timetableId, String status) {
+        String sql = "UPDATE Timetables SET status = ? WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setString(2, timetableId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
