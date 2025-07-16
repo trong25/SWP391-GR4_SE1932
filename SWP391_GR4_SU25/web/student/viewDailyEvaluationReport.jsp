@@ -122,7 +122,7 @@
 
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary"> Đánh giá Theo Tuần: ${requestScope.cweek.getStartDatetoEndDate()} </h6>
-                                    <h6 class="m-0 font-weight-bold text-primary"> Học sinh : ${requestScope.student.getLastName()} ${requestScope.student.getFirstName()} </h6>
+                                    <h6 class="m-0 font-weight-bold text-primary"> Học sinh : ${sessionScope.student.lastName} ${sessionScope.student.firstName}</h6>
                                 </div>
 
 

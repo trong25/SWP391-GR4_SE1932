@@ -31,7 +31,7 @@ import model.week.WeekDAO;
  *
  * @author TuyenCute
  */
-@WebServlet(name = "ViewTimeTableClassServlet", urlPatterns = {"/academicstaff/viewtimetableclass"})
+@WebServlet(name = "ViewTimeTableClassStaffServlet", urlPatterns = {"/academicstaff/viewtimetableclass"})
 public class ViewTimeTableClassServlet extends HttpServlet {
 
     /**

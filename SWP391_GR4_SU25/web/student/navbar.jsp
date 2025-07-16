@@ -107,7 +107,7 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="transaction">
+                    <a class="nav-link" href="payments">
                         <i class="fas fa-fw fa-money-bill-wave"></i>                    
                         <span>Thanh toán</span></a>
                 </li>
