@@ -250,29 +250,27 @@ public class TimetableDAO extends DBContext {
         return 0;
     }
 
-    public String getLatestTimetableId() {
-        String sql = "SELECT TOP 1 id FROM Timetables ORDER BY id DESC";
+    // Lấy số lớn nhất hiện tại trong DB
+    public int getMaxTimetableNumber() {
+        String sql = "SELECT MAX(CAST(SUBSTRING(id, 3, 6) AS INT)) AS max_id FROM Timetables";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
-                return rs.getString("id");
+                return rs.getInt("max_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "TB000000"; // Giá trị mặc định nếu không có bản ghi nào trong bảng
+        return 0; // Nếu chưa có bản ghi nào
     }
 
-    public String generateTimetableId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
+    // Sinh mã mới dựa trên số lớn nhất
+    public String generateTimetableId() {
+        int maxNumber = getMaxTimetableNumber();
+        int newNumber = maxNumber + 1;
         DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
+        String result = decimalFormat.format(newNumber);
         return "TT" + result;
     }
 

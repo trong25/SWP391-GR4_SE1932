@@ -193,12 +193,8 @@ public class CreateTimetableServlet extends HttpServlet {
 
                 parameterNames = request.getParameterNames();
                 StringBuilder sql = new StringBuilder("insert into Timetables([id], [class_id], [timeslot_id], [date_id], [subject_id], [created_by], [status], [note], [teacher_id]) values ");
-                String timetableId = "";
-                if (timetableDAO.getLatestTimetableId() != null) {
-                    timetableId = timetableDAO.generateTimetableId(timetableDAO.getLatestTimetableId());
-                } else {
-                    timetableId = "TT000001";
-                }
+                // Lấy số lớn nhất hiện tại trong DB một lần
+                int maxNumber = timetableDAO.getMaxTimetableNumber();
 
                 while (parameterNames.hasMoreElements()) {
                     String paramName = parameterNames.nextElement();
@@ -210,12 +206,15 @@ public class CreateTimetableServlet extends HttpServlet {
                             String timeslotId = parts[2];
                             String subjectId = timeslotIdValue; // ID môn học được chọn
 
-                            sql.append("('").append(timetableId).append("','").append(classId).append("','").
-                                    append(timeslotId).append("','").append(dayId).append("','").
-                                    append(subjectId).append("','").append(timetable.getCreatedBy().getId()).
-                                    append("',N'").append(status).append("',NULL").append(",'").
-                                    append(timetable.getTeacher().getId()).append("'),");
-                            timetableId = timetableDAO.generateTimetableId(timetableId);
+                            // Tăng số và sinh mã mới cho từng bản ghi
+                            maxNumber++;
+                            String timetableId = String.format("TT%06d", maxNumber);
+
+                            sql.append("('").append(timetableId).append("','").append(classId).append("','")
+                                .append(timeslotId).append("','").append(dayId).append("','")
+                                .append(subjectId).append("','").append(timetable.getCreatedBy().getId())
+                                .append("',N'").append(status).append("',NULL").append(",'")
+                                .append(timetable.getTeacher().getId()).append("'),");
                         }
                     }
                 }
