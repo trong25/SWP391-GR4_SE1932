@@ -91,7 +91,7 @@ public class EvaluationDAO extends DBContext {
         return false;
     }
                 
-                    public List<Evaluation> getEvaluationByWeek(String weekId) {
+        public List<Evaluation> getEvaluationByWeek(String weekId) {
         List<Evaluation> list = new ArrayList<>();
         String sql = "select e.id, e.student_id,e.date_id,e.evaluation,e.notes  from Evaluations e join Days d on e.date_id = d.id\n"
                 + "join Weeks w on d.week_id = w.id\n"
@@ -109,7 +109,9 @@ public class EvaluationDAO extends DBContext {
         return list;
     }
 
-    
+         
+
+                    
     public Evaluation createEvaluation(Evaluation evaluation) {
         String sql = "INSERT INTO Evaluations (student_id, date_id, evaluation, notes) VALUES (?, ?, ?, ?)";
         try {
