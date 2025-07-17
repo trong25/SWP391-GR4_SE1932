@@ -4,7 +4,10 @@
  */
 package model.personnel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import model.Salaries.Salary;
 
 /**
  *
@@ -34,10 +37,10 @@ public class Personnel {
     private int teaching_years;
     private String achievements;
     private String cv_file;
-    private int baseSalary;
-private int totalSalary;
+  private List<Salary> salaries;
 
     public Personnel() {
+        this.salaries = new ArrayList<>();
     }
 
     public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
@@ -65,20 +68,17 @@ private int totalSalary;
         this.cv_file = cv_file;
     }
 
-    public int getBaseSalary() {
-        return baseSalary;
+   
+   public List<Salary> getSalaries() {
+        return salaries;
     }
 
-    public void setBaseSalary(int baseSalary) {
-        this.baseSalary = baseSalary;
+    public void setSalaries(List<Salary> salaries) {
+        this.salaries = salaries;
     }
 
-    public int getTotalSalary() {
-        return totalSalary;
-    }
-
-    public void setTotalSalary(int totalSalary) {
-        this.totalSalary = totalSalary;
+    public void addSalary(Salary salary) {
+        this.salaries.add(salary);
     }
 
     public String getSchool_id() {
@@ -256,9 +256,14 @@ private int totalSalary;
     public void setCv_file(String cv_file) {
         this.cv_file = cv_file;
     }
-public void calculateSalary() {
-    int base = 0;
-    switch (this.getQualification()) {
+public Salary calculateSalary(Personnel p, int month, int year) {
+    Salary salary = new Salary();
+    salary.setPersonnelId(p.getId());
+    salary.setSalaryMonth(month);
+    salary.setSalaryYear(year);
+
+    int base;
+    switch (p.getQualification()) {
         case "Cử nhân":
             base = 6000000;
             break;
@@ -274,13 +279,17 @@ public void calculateSalary() {
     }
 
     int bonus = 0;
-    int years = this.getTeaching_years();
+    int years = p.getTeaching_years();
     if (years >= 1 && years <= 3) bonus = 500000;
     else if (years >= 4 && years <= 6) bonus = 1000000;
     else if (years > 6) bonus = 2000000;
 
-    this.setBaseSalary(base);
-    this.setTotalSalary(base + bonus);
+    salary.setBaseSalary(base);
+    salary.setTotalSalary(base + bonus);
+    salary.setPaymentStatus("chưa thanh toán"); // mặc định ban đầu
+    salary.setPaymentDate(null); // chưa thanh toán nên chưa có ngày
+
+    return salary;
 }
 
 

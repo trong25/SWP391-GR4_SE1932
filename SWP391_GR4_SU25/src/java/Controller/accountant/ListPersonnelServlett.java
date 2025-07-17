@@ -18,9 +18,10 @@ import model.personnel.PersonnelDAO;
 import model.role.Role;
 
 /**
- * ListPersonnelServlet chịu trách nhiệm lấy tất cả nhân viên
- * sử dụng hàm getAllPersonnel, hiển thị bảng lương của tất cả nhân viên, hiển thị họ tên , ảnh, trạng thái, lương cơ bản, tổng lương.
- * Lương được tính theo lương cứng và dựa vào số năm kinh nghiệm và trình độ
+ * ListPersonnelServlet chịu trách nhiệm lấy tất cả nhân viên sử dụng hàm
+ * getAllPersonnel, hiển thị bảng lương của tất cả nhân viên, hiển thị họ tên,
+ * ảnh, trạng thái, lương cơ bản, tổng lương.
+ *
  * @author TrongNV
  * @version 1.0
  */
@@ -30,7 +31,6 @@ public class ListPersonnelServlett extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -59,19 +59,17 @@ public class ListPersonnelServlett extends HttpServlet {
         String xrole = (String) session.getAttribute("role");
         String xavatar = (String) session.getAttribute("avatar");
 
-        List<Personnel> persons = new ArrayList<Personnel>();
+        List<Personnel> persons = new ArrayList<>();
         List<Role> roles = new ArrayList<>();
         List<String> statuss = new ArrayList<>();
         List<Personnel> waitlist = new ArrayList<>();
         PersonnelDAO personnelDAO = new PersonnelDAO();
-        persons = personnelDAO.getAllPersonnels();
-        for (Personnel p : persons) {
-            p.calculateSalary();
-        }
+        persons = personnelDAO.getAllPersonnelsWithSalary();
+        List<Personnel> activePersonnels = personnelDAO.getActivePersonnels(); // Thêm dòng này
 
         roles = personnelDAO.getAllPersonnelRole();
         statuss = personnelDAO.getAllStatus();
-        waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
+
         request.setAttribute("message", message);
         request.setAttribute("type", type);
         if (type != null) {
@@ -102,6 +100,9 @@ public class ListPersonnelServlett extends HttpServlet {
         request.setAttribute("roles", roles);
         request.setAttribute("waitlist", waitlist);
         request.setAttribute("statuss", statuss);
+        request.setAttribute("activePersonnels", activePersonnels); // Set activePersonnels
+        request.setAttribute("currentYear", java.time.Year.now().getValue());
+
         request.getRequestDispatcher("listPersonnel.jsp").forward(request, response);
         session.removeAttribute("message");
         session.removeAttribute("type");
@@ -115,54 +116,51 @@ public class ListPersonnelServlett extends HttpServlet {
         String type = (String) session.getAttribute("type");
         String role = request.getParameter("role");
         String status = request.getParameter("status");
+        String month = request.getParameter("month");
         String search = request.getParameter("search");
-        List<Personnel> persons = new ArrayList<Personnel>();
+        List<Personnel> persons = new ArrayList<>();
         List<Role> roles = new ArrayList<>();
         PersonnelDAO personnelDAO = new PersonnelDAO();
         roles = personnelDAO.getAllPersonnelRole();
-        if (status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
-            persons = personnelDAO.getAllPersonnels();
-            for (Personnel p : persons) {
-                p.calculateSalary();
-            }
-        } else if (!status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
+        List<Personnel> activePersonnels = personnelDAO.getActivePersonnels(); // Thêm dòng này
+
+        if (status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all") && (month == null || month.equalsIgnoreCase("all"))) {
+            persons = personnelDAO.getAllPersonnelsWithSalary();
+        } else if (!status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all") && (month == null || month.equalsIgnoreCase("all"))) {
             persons = personnelDAO.getPersonnelByStatus(status);
-            for (Personnel p : persons) {
-                p.calculateSalary();
-            }
-        } else if (!role.equalsIgnoreCase("all") && status.equalsIgnoreCase("all")) {
+        } else if (!role.equalsIgnoreCase("all") && status.equalsIgnoreCase("all") && (month == null || month.equalsIgnoreCase("all"))) {
             try {
                 int xrole = Integer.parseInt(role);
                 persons = personnelDAO.getPersonnelByRole(xrole);
-                for (Personnel p : persons) {
-                    p.calculateSalary();
-                }
             } catch (NumberFormatException e) {
                 persons = personnelDAO.getPersonnelByRole(-1);
-                for (Personnel p : persons) {
-                    p.calculateSalary();
-                }
             }
-
+        } else if (month != null && !month.trim().isEmpty() && !month.equalsIgnoreCase("all") && status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
+            try {
+                int m = Integer.parseInt(month);
+                persons = personnelDAO.getPersonnelByMonthWithSalary(m);
+            } catch (NumberFormatException e) {
+                persons = new ArrayList<>();
+            }
         } else {
-            persons = personnelDAO.getPersonnelByIdNameRoleStatus(status, role);
-            for (Personnel p : persons) {
-                p.calculateSalary();
-            }
+            persons = personnelDAO.getPersonnelByStatusRoleMonth(status, role, month);
         }
+
         List<String> statuss = new ArrayList<>();
         statuss = personnelDAO.getAllStatus();
         request.setAttribute("statuss", statuss);
         List<Personnel> waitlist = new ArrayList<>();
-        waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
         request.setAttribute("searchdata", search);
         request.setAttribute("selectedstatus", status);
         request.setAttribute("selectedrole", role);
         request.setAttribute("message", message);
         request.setAttribute("type", type);
-        request.setAttribute("waitlist", waitlist);
+        request.setAttribute("selectedmonth", month);
         request.setAttribute("roles", roles);
         request.setAttribute("persons", persons);
+        request.setAttribute("activePersonnels", activePersonnels); // Set activePersonnels
+        request.setAttribute("currentYear", java.time.Year.now().getValue());
+
         request.getRequestDispatcher("listPersonnel.jsp").forward(request, response);
         session.removeAttribute("message");
         session.removeAttribute("type");
@@ -171,6 +169,5 @@ public class ListPersonnelServlett extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

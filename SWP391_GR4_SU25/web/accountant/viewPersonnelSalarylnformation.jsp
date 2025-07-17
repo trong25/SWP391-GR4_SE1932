@@ -1,311 +1,232 @@
-<%-- 
-    Document   : viewPersonnellnformation
-    Created on : Jul 12, 2025, 9:49:52 AM
-    Author     : MSI
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
-
-    <head>
-        <title>Quản lý nhân sự</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                var toastMessage = '<%= request.getAttribute("message") %>';
-                var toastType = '<%= request.getAttribute("type") %>';
-                if (toastMessage) {
-                    if (toastType === 'success') {
-                        toastr.success(toastMessage);
-                    } else if (toastType === 'fail') {
-                        toastr.error(toastMessage);
-                    }
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Bảng Lương</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var toastMessage = '<%= request.getAttribute("message") != null ? request.getAttribute("message") : "" %>';
+            var toastType = '<%= request.getAttribute("type") != null ? request.getAttribute("type") : "" %>';
+            if (toastMessage && toastMessage !== 'null') {
+                if (toastType === 'success') {
+                    toastr.success(toastMessage);
+                } else if (toastType === 'fail') {
+                    toastr.error(toastMessage);
                 }
-            });
-        </script>
-        <script>
-            function submitForm() {
-                document.getElementById("myForm").submit();
             }
-        </script>
-        <!-- Custom styles for this page -->
-        <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-        <style >
-            #style-span{
-                padding: 11px 150px;
-                margin-top: 10px;
-                border-radius: 20px;
-                margin-bottom: 15px;
-            }
-            table.table-bordered, table.table-bordered th, table.table-bordered td {
-                border: 2px solid black;
-                text-align: left;
-            }
-            .accept-button , decltine-button , return-button {
-                color: #001C41;
-                background-color: #4CB5FB;
-                cursor: pointer;
-
-                padding: 5px 0px;
-                display: block;
-            }
-            .decline-button{
-                color: #001C41;
-                background-color: red;
-                cursor: pointer;
-
-                padding: 5px 0px;
-                display: block;
-            }
-            .return-button{
-                color: #001C41;
-                background-color: #99ff99;
-                cursor: pointer;
-
-                padding: 5px 0px;
-                display: block;
-            }
-            .accept-button:hover{
-                background-color: white;
-                border: 1px grey solid;
-            }
-            .decline-button:hover{
-                background-color: white;
-                border: 1px grey solid;
-            }
-            .return-button:hover{
-                background-color: white;
-                border: 1px grey solid;
-            }
-
-            #myForm{
-                display: flex;
-                justify-content: space-evenly;
-                font-weight: bold;
-            }
-
-
-        </style>
-    </head>
-
-    <body id="page-top">
-        <div id="wrapper">
-            <jsp:include page="navbar.jsp"/>
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
-                    <jsp:include page="../header.jsp"/>
-                    <div class="container-fluid">
-
-                        <div style="display: flex; justify-content: center">
-                            <div style="display: block; border: 2px solid black;
-                                 border-radius: 5px; ">
-                                <header style="text-decoration: #007bff; background-color:#000; color: #ffffff; padding-left:200px; padding-right: 200px   " >THÔNG TIN NHÂN VIÊN</header>
-                            </div>
-
+        });
+    </script>
+    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        #style-span {
+            padding: 11px 150px;
+            margin-top: 10px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+        table.table-bordered, table.table-bordered th, table.table-bordered td {
+            border: 2px solid black;
+            text-align: left;
+        }
+        .btn-primary, .btn-info {
+            cursor: pointer;
+            padding: 5px 0;
+            display: block;
+            width: 100%;
+        }
+        .btn-primary:hover, .btn-info:hover {
+            background-color: white;
+            border: 1px grey solid;
+        }
+    </style>
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        <jsp:include page="navbar.jsp"/>
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <jsp:include page="../header.jsp"/>
+                <div class="container-fluid">
+                    <div style="display: flex; justify-content: center">
+                        <div style="display: block; border: 2px solid black; border-radius: 5px;">
+                            <header style="background-color: #000; color: #fff; padding: 10px 200px;">THÔNG TIN NHÂN VIÊN</header>
                         </div>
-                        <c:set var="p" value="${requestScope.person}"/>
+                    </div>
 
+                    <c:if test="${person == null}">
+                        <div style="color: red; text-align: center; margin: 20px;">
+                            Không tìm thấy thông tin nhân viên.
+                        </div>
+                        <div style="text-align: center;">
+                            <a href="listpersonnell" class="btn btn-info">Quay lại danh sách</a>
+                        </div>
+                    </c:if>
 
-
+                    <c:if test="${person != null}">
                         <section>
                             <div class="rt-container">
                                 <div class="col-rt-12">
                                     <div class="Scriptcontent">
-
-                                        <!-- Student Profile -->
                                         <div class="student-profile py-4">
                                             <div class="container">
                                                 <div class="row">
                                                     <div class="col-lg-4">
                                                         <div class="card shadow-sm">
                                                             <div class="card-header bg-transparent text-center">
-                                                                <img class="profile_img" src="../images/${p.getAvatar()}" alt="ảnh nhân viên" width="191px" height="263px" object-fit: cover>
-
+                                                                <img class="profile_img" src="../images/${person.avatar}" alt="Ảnh nhân viên" width="191px" height="263px" style="object-fit: cover;">
                                                             </div>
                                                             <div class="card-body">
-                                                                <p class="mb-0"><strong class="pr-1">Mã nhân viên:</strong>${p.getId()}</p>
-                                                                <p class="mb-0"><strong class="pr-1">Tên:</strong>${p.getLastName()} ${p.getFirstName()}</p>
-                                                                <p class="mb-0"><strong class="pr-1">Chức vụ:</strong>
-                                                                <c:if test="${p.getRoleId()== 0}">
-                                                                    Nhân viên IT
-                                                                </c:if>
-
-                                                                <c:if test="${p.getRoleId()==2}">
-                                                                    Giáo vụ
-                                                                </c:if>
-                                                                <c:if test="${p.getRoleId()==5}">
-                                                                    Nhân viên kế toán
-                                                                </c:if>
-                                                                <c:if test="${p.getRoleId()==3}">
-                                                                    Giáo viên
-                                                                </c:if></p>
+                                                                <p class="mb-0"><strong>Mã nhân viên:</strong> ${person.id}</p>
+                                                                <p class="mb-0"><strong>Tên:</strong> ${person.lastName} ${person.firstName}</p>
+                                                                <p class="mb-0"><strong>Chức vụ:</strong>
+                                                                    <c:choose>
+                                                                        <c:when test="${person.roleId == 0}">Nhân viên IT</c:when>
+                                                                        <c:when test="${person.roleId == 2}">Giáo vụ</c:when>
+                                                                        <c:when test="${person.roleId == 3}">Giáo viên</c:when>
+                                                                        <c:when test="${person.roleId == 5}">Nhân viên kế toán</c:when>
+                                                                        <c:otherwise>Khác</c:otherwise>
+                                                                    </c:choose>
+                                                                </p>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <div class="card shadow-sm">
                                                             <div class="card-header bg-transparent border-0">
-                                                                <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Thông tin chi tiết</h3>
+                                                                <h3 class="mb-0">Thông tin chi tiết</h3>
                                                             </div>
                                                             <div class="card-body pt-0">
                                                                 <table class="table table-bordered">
                                                                     <tr>
-                                                                        <th style="text-align: left;">Ngày sinh</th>
-
-                                                                        <td style="text-align: left;"><fmt:formatDate value="${p.getBirthday()}" pattern="yyyy/MM/dd"/> </td>
+                                                                        <th>Ngày sinh</th>
+                                                                        <td><fmt:formatDate value="${person.birthday}" pattern="yyyy/MM/dd"/></td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Tình trạng thanh toán</th>
-                                                                    <c:if test="${p.getStatus() != null}">
-                                                                        <c:choose>
-                                                                            <c:when test="${p.getStatus() == 'đang làm việc'}">
-                                                                                <td>
-                                                                                    <span class="badge badge-success">Chưa thanh toán</span>
-                                                                                </td>
-                                                                            </c:when>
-                                                                            <c:when test="${p.getStatus() == 'đang chờ xử lý'}">
-                                                                                <td>
-                                                                                    <span class="badge badge-warning">Đã thanh toán</span>
-                                                                                </td>
-                                                                            </c:when>
-                                                                            <c:otherwise>
-                                                                                <td>
-                                                                                    <span class="badge badge-info">${p.getStatus()}</span>
-                                                                                </td>
-                                                                            </c:otherwise>
-                                                                        </c:choose>
-                                                                    </c:if>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <th style="text-align: left;">Giới tính</th>
-
-                                                                        <td style="text-align: left;">
-                                                                    <c:if test="${p.getGender()==true}">
-                                                                        Nam
-                                                                    </c:if>
-                                                                    <c:if test="${p.getGender()==false}">
-                                                                        Nữ
-                                                                    </c:if>
-                                                                    </td>
+                                                                        <th>Tình trạng thanh toán</th>
+                                                                        <td>
+                                                                            <c:set var="selectedSalary" value="${null}"/>
+                                                                            <c:forEach items="${person.salaries}" var="salary">
+                                                                                <c:if test="${salary.salaryMonth == selectedMonth && salary.salaryYear == selectedYear}">
+                                                                                    <c:set var="selectedSalary" value="${salary}"/>
+                                                                                </c:if>
+                                                                            </c:forEach>
+                                                                            <c:choose>
+                                                                                <c:when test="${selectedSalary != null}">
+                                                                                    <c:choose>
+                                                                                        <c:when test="${selectedSalary.paymentStatus == 'đã thanh toán'}">
+                                                                                            <span class="badge badge-success">Đã thanh toán</span>
+                                                                                        </c:when>
+                                                                                        <c:when test="${selectedSalary.paymentStatus == 'chưa thanh toán'}">
+                                                                                            <span class="badge badge-warning">Chưa thanh toán</span>
+                                                                                        </c:when>
+                                                                                        <c:otherwise>
+                                                                                            <span class="badge badge-info">${selectedSalary.paymentStatus}</span>
+                                                                                        </c:otherwise>
+                                                                                    </c:choose>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <span class="badge badge-info">Chưa có dữ liệu lương</span>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Trình độ</th>
-                                                                        <td style="text-align: left;">${p.getQualification()}</td>
+                                                                        <th>Giới tính</th>
+                                                                        <td>
+                                                                            <c:if test="${person.gender}">Nam</c:if>
+                                                                            <c:if test="${!person.gender}">Nữ</c:if>
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Năm kinh nghiệm</th>
-                                                                        <td style="text-align: left;">${p.getTeaching_years()}</td>
+                                                                        <th>Trình độ</th>
+                                                                        <td>${person.qualification != null ? person.qualification : '-'}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Lương cơ bản</th>
-                                                                        <td style="text-align: left;"><fmt:formatNumber value="${p.getBaseSalary()}" type="currency" currencySymbol="₫"/></td>
+                                                                        <th>Năm kinh nghiệm</th>
+                                                                        <td>${person.teaching_years != null ? person.teaching_years : '-'}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Tổng lương</th>
-                                                                        <td style="text-align: left;"><fmt:formatNumber value="${p.getTotalSalary()}" type="currency" currencySymbol="₫"/></td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <th style="text-align: left;">Địa chỉ</th>
-
-                                                                        <td style="text-align: left;">${p.getAddress()}</td>
-                                                                    </tr>
-
-                                                                    <tr>
-                                                                        <th style="text-align: left;">Email</th>
-
-                                                                        <td style="text-align: left;">${p.getEmail()}</td>
+                                                                        <th>Lương cơ bản</th>
+                                                                        <td>
+                                                                            <c:if test="${selectedSalary != null}">
+                                                                                <fmt:formatNumber value="${selectedSalary.baseSalary}" type="currency" currencySymbol="₫"/>
+                                                                            </c:if>
+                                                                            <c:if test="${selectedSalary == null}">-</c:if>
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th style="text-align: left;">Số điện thoại</th>
-
-                                                                        <td style="text-align: left;">${p.getPhoneNumber()}</td>
+                                                                        <th>Tổng lương</th>
+                                                                        <td>
+                                                                            <c:if test="${selectedSalary != null}">
+                                                                                <fmt:formatNumber value="${selectedSalary.totalSalary}" type="currency" currencySymbol="₫"/>
+                                                                            </c:if>
+                                                                            <c:if test="${selectedSalary == null}">-</c:if>
+                                                                        </td>
                                                                     </tr>
-
+                                                                    <tr>
+                                                                        <th>Tháng</th>
+                                                                        <td>${selectedSalary != null ? selectedSalary.salaryMonth : '-'}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Năm</th>
+                                                                        <td>${selectedSalary != null ? selectedSalary.salaryYear : '-'}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Địa chỉ</th>
+                                                                        <td>${person.address != null ? person.address : '-'}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Email</th>
+                                                                        <td>${person.email != null ? person.email : '-'}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Số điện thoại</th>
+                                                                        <td>${person.phoneNumber != null ? person.phoneNumber : '-'}</td>
+                                                                    </tr>
                                                                 </table>
                                                             </div>
                                                         </div>
-                                                        <div style="height: 26px"></div>
-                                                        <div >
-
-                                                            <div class="row text-center align-content-center my-3">
-                                                                <form action="viewpersonnel" method="post" id="changeQuitStatus">
-                                                                    <input type="hidden" name="id" value="${p.getId()}">
-                                                                </form>
-
-                                                                <div class="col-lg-4"></div>
-                                                                <c:if test="${p.getStatus() eq 'đang làm việc'}">
-                                                                    <div class="col-lg-4">
-                                                                        <button class="btn btn-primary w-100" onclick="document.getElementById('changeQuitStatus').submit()">Thanh Toán</button>
-                                                                    </div>
-                                                                </c:if>
-                                                                <c:if test="${p.getStatus() ne 'đang làm việc'}">
-                                                                    <div class="col-lg-4">
-
-                                                                    </div>
-                                                                </c:if>
-
+                                                        <div style="height: 26px;"></div>
+                                                        <div class="row text-center align-content-center my-3">
+                                                            <form action="viewpersonnel" method="post" id="changeQuitStatus">
+                                                                <input type="hidden" name="id" value="${person.id}">
+                                                                <input type="hidden" name="month" value="${selectedMonth}">
+                                                                <input type="hidden" name="year" value="${selectedYear}">
+                                                            </form>
+                                                            <div class="col-lg-4"></div>
+                                                            <c:if test="${selectedSalary != null && selectedSalary.paymentStatus == 'chưa thanh toán'}">
                                                                 <div class="col-lg-4">
-                                                                    <button class="btn btn-info w-100" onclick="redirect()">Danh sách nhân viên</button>
+                                                                    <button class="btn btn-primary w-100" onclick="document.getElementById('changeQuitStatus').submit()">Thanh Toán</button>
                                                                 </div>
+                                                            </c:if>
+                                                            <div class="col-lg-4">
+                                                                <a href="listpersonnell" class="btn btn-info w-100">Danh sách nhân viên</a>
                                                             </div>
-
-
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- partial -->
-
                                     </div>
                                 </div>
                             </div>
                         </section>
-
-                    </div>
+                    </c:if>
                 </div>
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-    </body>
 
-
-
-
-
-
-
-
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="js/popper.min.js"></script>
-    <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
-    <!--===============================================================================================-->
-    <script src="js/bootstrap.min.js"></script>
-    <!--===============================================================================================-->
-    <script src="js/main.js"></script>
-    <!--===============================================================================================-->
-    <script src="js/plugins/pace.min.js"></script>
-    <!--===============================================================================================-->
-    <!--===============================================================================================-->
-    <script>
-                                                                        // JavaScript Function to Redirect to Product Details Page
-                                                                        function redirect() {
-                                                                            // Assuming x is your result set containing product details
-                                                                            // Replace this line with the correct way to retrieve product ID from your data
-
-                                                                            // Redirect to the product details page with the product ID
-                                                                            window.location.href = "listpersonnell";
-                                                                        }
-    </script> 
-
-
-
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/plugins/pace.min.js"></script>
+</body>
 </html>

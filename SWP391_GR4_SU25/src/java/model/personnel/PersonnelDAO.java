@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.Salaries.Salary;
 import model.role.Role;
 import utils.DBContext;
 
@@ -61,9 +62,79 @@ public class PersonnelDAO extends DBContext {
         return person;
     }
 
+    public List<Personnel> getAllPersonnelsWithSalary() {
+    List<Personnel> persons = new ArrayList<>();
+    String sql = """
+        SELECT 
+            p.*,
+            s.id AS salary_id,
+            s.salary_month,
+            s.salary_year,
+            s.base_salary,
+            s.total_salary,
+            s.payment_status,
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+        ORDER BY p.id, s.salary_year DESC, s.salary_month DESC
+    """;
+
+    try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+        Personnel person = null;
+        String lastId = null;
+
+        while (rs.next()) {
+            String currentId = rs.getString("id");
+            if (!currentId.equals(lastId)) {
+                if (person != null) {
+                    persons.add(person);
+                }
+                person = new Personnel();
+                person.setId(currentId);
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setEmail(rs.getString("email"));
+                person.setAddress(rs.getString("address"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status"));
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setSchool_id(rs.getString("school_id"));
+                person.setSchool_class_id(rs.getString("school_class_id"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                lastId = currentId;
+            }
+
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary);
+            }
+        }
+        if (person != null) {
+            persons.add(person);
+        }
+    } catch (Exception e) {
+        System.out.println("Lỗi khi lấy danh sách nhân viên kèm lương: " + e.getMessage());
+    }
+
+    return persons;
+}
+
 //Hàm lấy tất cả nhân viên trong cơ sở dữ liệu
-    
-public List<Personnel> getAllPersonnels() {
+    public List<Personnel> getAllPersonnels() {
         String sql = "SELECT * FROM [Personnels] ORDER BY id DESC";
         List<Personnel> persons = new ArrayList<>();
         try {
@@ -97,6 +168,43 @@ public List<Personnel> getAllPersonnels() {
         }
         return persons;
     }
+public List<Personnel> getActivePersonnels() {
+    List<Personnel> list = new ArrayList<>();
+    String sql = "SELECT * FROM Personnels WHERE status = N'đang làm việc'";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            Personnel p = new Personnel();
+            p.setId(rs.getString("id"));
+            p.setFirstName(rs.getString("first_name"));
+            p.setLastName(rs.getString("last_name"));
+            p.setGender(rs.getBoolean("gender"));
+            p.setBirthday(rs.getDate("birthday"));
+            p.setAddress(rs.getString("address"));
+            p.setEmail(rs.getString("email"));
+            p.setPhoneNumber(rs.getString("phone_number"));
+            p.setRoleId(rs.getInt("role_id"));
+            p.setStatus(rs.getString("status"));
+            p.setAvatar(rs.getString("avatar"));
+            p.setUserId(rs.getString("user_id"));
+            p.setSchool_id(rs.getString("school_id"));
+            p.setSchool_class_id(rs.getString("school_class_id"));
+            p.setSpecialization(rs.getString("specialization"));
+            p.setQualification(rs.getString("qualification"));
+            p.setTeaching_years(rs.getInt("teaching_years"));
+            p.setAchievements(rs.getString("achievements"));
+
+            list.add(p);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace(); // hoặc log lỗi bằng logger
+    }
+
+    return list;
+}
 
 
     public Personnel getPersonnelByUserId(String userId) {
@@ -131,48 +239,71 @@ public List<Personnel> getAllPersonnels() {
     }
 
    public Personnel getPersonnel(String id) {
-    String sql = "SELECT * FROM [Personnels] WHERE id = ?";
+    String sql = """
+        SELECT 
+            p.*, 
+            s.id AS salary_id,
+            s.salary_month, 
+            s.salary_year,
+            s.base_salary, 
+            s.total_salary, 
+            s.payment_status, 
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+        WHERE p.id = ?
+    """;
+
     Personnel person = null;
 
-    try {
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, id); // KHÔNG dùng LIKE, dùng id chính xác
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setString(1, id);
+        ResultSet rs = statement.executeQuery();
 
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            person = new Personnel();
+        while (rs.next()) {
+            if (person == null) {
+                person = new Personnel();
+                person.setId(rs.getString("id"));
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setEmail(rs.getString("email"));
+                person.setAddress(rs.getString("address"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status")); // Sửa lại, không lấy từ payment_status
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setSchool_id(rs.getString("school_id"));
+                person.setSchool_class_id(rs.getString("school_class_id"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                person.setSpecialization(rs.getString("specialization"));
+                person.setAchievements(rs.getString("achievements"));
+                person.setCv_file(rs.getString("cv_file"));
+            }
 
-            person.setId(resultSet.getString("id"));
-            person.setFirstName(resultSet.getString("first_name"));
-            person.setLastName(resultSet.getString("last_name"));
-            person.setGender(resultSet.getBoolean("gender"));
-            person.setBirthday(resultSet.getDate("birthday"));
-            person.setEmail(resultSet.getString("email"));
-            person.setAddress(resultSet.getString("address"));
-            person.setPhoneNumber(resultSet.getString("phone_number"));
-            person.setRoleId(resultSet.getInt("role_id"));
-            person.setStatus(resultSet.getString("status"));
-            person.setAvatar(resultSet.getString("avatar"));
-            person.setUserId(resultSet.getString("user_id"));
-            person.setSchool_id(resultSet.getString("school_id"));
-            person.setSchool_class_id(resultSet.getString("school_class_id"));
-            person.setQualification(resultSet.getString("qualification"));
-            person.setTeaching_years(resultSet.getInt("teaching_years"));
-            person.setSpecialization(resultSet.getString("specialization"));
-            person.setAchievements(resultSet.getString("achievements"));
-            person.setCv_file(resultSet.getString("cv_file"));
-
-            // 👉 TÍNH lương sau khi load dữ liệu
-            person.calculateSalary();
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary); // Thêm vào danh sách salaries
+            }
         }
-
     } catch (Exception e) {
-        System.out.println("Lỗi khi lấy Personnel theo id: " + e.getMessage());
+        System.out.println("Lỗi khi lấy Personnel theo id (JOIN Salaries): " + e.getMessage());
     }
 
     return person;
 }
-
 
     public int getPendingTeacherCount() {
         String sql = "SELECT COUNT(*) AS total FROM Personnels WHERE status = ? AND role_id = ?";
@@ -208,122 +339,417 @@ public List<Personnel> getAllPersonnels() {
         return roles;
     }
 
-      public List<String> getAllStatus() {
-        String sql = "select distinct status from Personnels";
-        List<String> status = new ArrayList<>();
+    public List<String> getAllStatus() {
+        String sql = "SELECT DISTINCT payment_status FROM Salaries";
+        List<String> statusList = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                status.add(resultSet.getString("status"));
+                String status = resultSet.getString("payment_status");
+                if (status != null && !status.trim().isEmpty()) {
+                    statusList.add(status.trim());
+                }
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Lỗi khi lấy danh sách trạng thái lương: " + e.getMessage());
         }
-        return status;
+        return statusList;
     }
 
-    public List<Personnel> getPersonnelByStatus(String status) {
-        String sql = " Select * from Personnels where [status] = N'" + status + "' order by id desc";
-        List<Personnel> persons = new ArrayList<>();
+   public List<Personnel> getPersonnelByStatus(String status) {
+    StringBuilder sql = new StringBuilder("""
+        SELECT 
+            p.*,
+            s.id AS salary_id,
+            s.salary_month,
+            s.salary_year,
+            s.base_salary,
+            s.total_salary,
+            s.payment_status,
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+    """);
+    
+    // Thêm điều kiện lọc trạng thái nếu status không phải "all"
+    if (!"all".equalsIgnoreCase(status)) {
+        sql.append(" WHERE s.payment_status = ?");
+    }
+    sql.append(" ORDER BY p.id DESC, s.salary_year DESC, s.salary_month DESC");
+
+    List<Personnel> persons = new ArrayList<>();
+    try (PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+        // Gán tham số nếu có điều kiện status
+        if (!"all".equalsIgnoreCase(status)) {
+            statement.setString(1, status);
+        }
+        
+        ResultSet rs = statement.executeQuery();
+        Personnel person = null;
+        String lastId = null;
+
+        while (rs.next()) {
+            String currentId = rs.getString("id");
+            if (!currentId.equals(lastId)) {
+                if (person != null) {
+                    persons.add(person);
+                }
+                person = new Personnel();
+                person.setId(currentId);
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setAddress(rs.getString("address"));
+                person.setEmail(rs.getString("email"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status"));
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setSchool_id(rs.getString("school_id"));
+                person.setSchool_class_id(rs.getString("school_class_id"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                lastId = currentId;
+            }
+
+            // Thêm bản ghi lương nếu có
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary); // Thêm vào danh sách salaries
+            }
+        }
+        if (person != null) {
+            persons.add(person);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy danh sách nhân viên theo trạng thái thanh toán: " + e.getMessage());
+    }
+    return persons;
+}
+
+   public List<Personnel> getPersonnelByRole(int role) {
+    String sql = """
+        SELECT 
+            p.*,
+            s.id AS salary_id,
+            s.salary_month,
+            s.salary_year,
+            s.base_salary,
+            s.total_salary,
+            s.payment_status,
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+        WHERE p.role_id = ?
+        ORDER BY p.id DESC, s.salary_year DESC, s.salary_month DESC
+    """;
+
+    List<Personnel> persons = new ArrayList<>();
+
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        statement.setInt(1, role);
+        ResultSet rs = statement.executeQuery();
+
+        Personnel person = null;
+        String lastId = null;
+
+        while (rs.next()) {
+            String currentId = rs.getString("id");
+            if (!currentId.equals(lastId)) {
+                if (person != null) {
+                    persons.add(person);
+                }
+                person = new Personnel();
+                person.setId(currentId);
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setEmail(rs.getString("email"));
+                person.setAddress(rs.getString("address"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status"));
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setSchool_id(rs.getString("school_id"));
+                person.setSchool_class_id(rs.getString("school_class_id"));
+                person.setSpecialization(rs.getString("specialization"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                person.setAchievements(rs.getString("achievements"));
+                person.setCv_file(rs.getString("cv_file"));
+                lastId = currentId;
+            }
+
+            // Thêm thông tin lương nếu có
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary); // Thêm vào danh sách salaries
+            }
+        }
+        if (person != null) {
+            persons.add(person);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy Personnel theo role có lương: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return persons;
+}
+
+public List<Personnel> getPersonnelByStatusRoleMonth(String status, String role, String month) {
+    StringBuilder sql = new StringBuilder("""
+        SELECT 
+            p.*,
+            s.id AS salary_id,
+            s.salary_month,
+            s.salary_year,
+            s.base_salary,
+            s.total_salary,
+            s.payment_status,
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+        WHERE 1=1
+    """);
+
+    List<Object> params = new ArrayList<>();
+
+    // Lọc trạng thái thanh toán
+    if (status != null && !status.equalsIgnoreCase("all") && !status.isEmpty()) {
+        sql.append(" AND s.payment_status = ?");
+        params.add(status);
+    }
+
+    // Lọc vai trò
+    if (role != null && !role.equalsIgnoreCase("all") && !role.isEmpty()) {
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Personnel person = new Personnel();
-                person.setId(resultSet.getString("id"));
-                person.setFirstName(resultSet.getString("first_name"));
-                person.setLastName(resultSet.getString("last_name"));
-                person.setGender(resultSet.getBoolean("gender"));
-                person.setBirthday(resultSet.getDate("birthday"));
-                person.setEmail(resultSet.getString("email"));
-                person.setAddress(resultSet.getString("address"));
-                person.setPhoneNumber(resultSet.getString("phone_number"));
-                person.setRoleId(resultSet.getInt("role_id"));
-                person.setStatus(resultSet.getString("status"));
-                person.setAvatar(resultSet.getString("avatar"));
-                person.setUserId(resultSet.getString("user_id"));
-                person.setQualification(resultSet.getString("qualification"));
-                person.setTeaching_years(resultSet.getInt("teaching_years"));
-                persons.add(person);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return persons;
-    }
-
-    public List<Personnel> getPersonnelByRole(int role) {
-        String sql = "select * from [Personnels] where role_id = ? order by id desc";
-        List<Personnel> persons = new ArrayList<>();
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, role);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Personnel person = new Personnel();
-                person.setId(resultSet.getString("id"));
-                person.setFirstName(resultSet.getString("first_name"));
-                person.setLastName(resultSet.getString("last_name"));
-                person.setGender(resultSet.getBoolean("gender"));
-                person.setBirthday(resultSet.getDate("birthday"));
-                person.setEmail(resultSet.getString("email"));
-                person.setAddress(resultSet.getString("address"));
-                person.setPhoneNumber(resultSet.getString("phone_number"));
-                person.setRoleId(resultSet.getInt("role_id"));
-                person.setStatus(resultSet.getString("status"));
-                person.setAvatar(resultSet.getString("avatar"));
-                person.setUserId(resultSet.getString("user_id"));
-                person.setQualification(resultSet.getString("qualification"));
-                person.setTeaching_years(resultSet.getInt("teaching_years"));
-                persons.add(person);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return persons;
-    }
-
-    public List<Personnel> getPersonnelByIdNameRoleStatus(String status, String role) {
-        String sql = " Select * from Personnels where 1=1";
-
-        if (status != null && !status.isEmpty()) {
-            sql += " AND status = N'" + status + "'";
-        }
-        if (role != null && !role.isEmpty()) {
             int xrole = Integer.parseInt(role);
-            sql += " AND role_id = " + xrole + "";
+            sql.append(" AND p.role_id = ?");
+            params.add(xrole);
+        } catch (NumberFormatException e) {
+            System.out.println("Lỗi role không hợp lệ: " + role);
+            e.printStackTrace();
         }
-        List<Personnel> persons = new ArrayList<>();
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Personnel person = new Personnel();
-                person.setId(resultSet.getString("id"));
-                person.setFirstName(resultSet.getString("first_name"));
-                person.setLastName(resultSet.getString("last_name"));
-                person.setGender(resultSet.getBoolean("gender"));
-                person.setBirthday(resultSet.getDate("birthday"));
-                person.setEmail(resultSet.getString("email"));
-                person.setAddress(resultSet.getString("address"));
-                person.setPhoneNumber(resultSet.getString("phone_number"));
-                person.setRoleId(resultSet.getInt("role_id"));
-                person.setStatus(resultSet.getString("status"));
-                person.setAvatar(resultSet.getString("avatar"));
-                person.setUserId(resultSet.getString("user_id"));
-                person.setQualification(resultSet.getString("qualification"));
-                person.setTeaching_years(resultSet.getInt("teaching_years"));
-                persons.add(person);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return persons;
     }
 
+    // Lọc tháng
+    if (month != null && !month.equalsIgnoreCase("all") && !month.isEmpty()) {
+        try {
+            int m = Integer.parseInt(month);
+            sql.append(" AND s.salary_month = ?");
+            params.add(m);
+        } catch (NumberFormatException e) {
+            System.out.println("Lỗi tháng không hợp lệ: " + month);
+            e.printStackTrace();
+        }
+    }
+
+    sql.append(" ORDER BY p.id DESC, s.salary_year DESC, s.salary_month DESC");
+
+    List<Personnel> persons = new ArrayList<>();
+
+    try (PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+        for (int i = 0; i < params.size(); i++) {
+            statement.setObject(i + 1, params.get(i));
+        }
+
+        ResultSet rs = statement.executeQuery();
+        Personnel person = null;
+        String lastId = null;
+
+        while (rs.next()) {
+            String currentId = rs.getString("id");
+            if (!currentId.equals(lastId)) {
+                if (person != null) {
+                    persons.add(person);
+                }
+                person = new Personnel();
+                person.setId(currentId);
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setEmail(rs.getString("email"));
+                person.setAddress(rs.getString("address"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status"));
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setSchool_id(rs.getString("school_id"));
+                person.setSchool_class_id(rs.getString("school_class_id"));
+                person.setSpecialization(rs.getString("specialization"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                person.setAchievements(rs.getString("achievements"));
+                person.setCv_file(rs.getString("cv_file"));
+                lastId = currentId;
+            }
+
+            // Thêm thông tin lương nếu có
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary); // Thêm vào danh sách salaries
+            }
+        }
+        if (person != null) {
+            persons.add(person);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy nhân sự theo status + role + month: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return persons;
+}
+public List<Personnel> getPersonnelByIdNameRoleStatus(String status, String role, String month) {
+    StringBuilder sql = new StringBuilder("""
+        SELECT 
+            p.*,
+            s.id AS salary_id,
+            s.salary_month,
+            s.salary_year,
+            s.base_salary,
+            s.total_salary,
+            s.payment_status,
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+        WHERE 1=1
+    """);
+
+    List<Object> params = new ArrayList<>();
+
+    // Lọc theo trạng thái thanh toán
+    if (status != null && !status.equalsIgnoreCase("all") && !status.isEmpty()) {
+        sql.append(" AND s.payment_status = ?");
+        params.add(status);
+    }
+
+    // Lọc theo vai trò
+    if (role != null && !role.equalsIgnoreCase("all") && !role.isEmpty()) {
+        try {
+            int xrole = Integer.parseInt(role);
+            sql.append(" AND p.role_id = ?");
+            params.add(xrole);
+        } catch (NumberFormatException e) {
+            System.out.println("Lỗi role không hợp lệ: " + role);
+            e.printStackTrace();
+        }
+    }
+
+    // Lọc theo tháng (nếu có)
+    if (month != null && !month.equalsIgnoreCase("all") && !month.isEmpty()) {
+        try {
+            int m = Integer.parseInt(month);
+            sql.append(" AND s.salary_month = ?");
+            params.add(m);
+        } catch (NumberFormatException e) {
+            System.out.println("Lỗi tháng không hợp lệ: " + month);
+            e.printStackTrace();
+        }
+    }
+
+    sql.append(" ORDER BY p.id DESC, s.salary_year DESC, s.salary_month DESC");
+
+    List<Personnel> persons = new ArrayList<>();
+
+    try (PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+        for (int i = 0; i < params.size(); i++) {
+            statement.setObject(i + 1, params.get(i));
+        }
+
+        ResultSet rs = statement.executeQuery();
+        Personnel person = null;
+        String lastId = null;
+
+        while (rs.next()) {
+            String currentId = rs.getString("id");
+            if (!currentId.equals(lastId)) {
+                if (person != null) {
+                    persons.add(person);
+                }
+                person = new Personnel();
+                person.setId(currentId);
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setEmail(rs.getString("email"));
+                person.setAddress(rs.getString("address"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status"));
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setSchool_id(rs.getString("school_id"));
+                person.setSchool_class_id(rs.getString("school_class_id"));
+                person.setSpecialization(rs.getString("specialization"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                person.setAchievements(rs.getString("achievements"));
+                person.setCv_file(rs.getString("cv_file"));
+                lastId = currentId;
+            }
+
+            // Thêm thông tin lương nếu có
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary); // Thêm vào danh sách salaries
+            }
+        }
+        if (person != null) {
+            persons.add(person);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy nhân sự theo role và status có join Salaries: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+    return persons;
+}
     public List<Personnel> getPersonnelByNameOrId(String search) {
         String sql = "select * from [Personnels] where (last_name+' '+ first_name like N'%" + search + "%' or id like '%" + search + "%' ) ";
         List<Personnel> persons = new ArrayList<>();
@@ -450,6 +876,22 @@ public List<Personnel> getAllPersonnels() {
         }
         return personnel;
     }
+    public boolean updatePersonnelStatus(String pId, String status) {
+        String sql = "UPDATE [dbo].[Personnels]\n"
+                + "   SET [status] = ? \n"
+                + " WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, pId);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
 
     public List<Personnel> getByStudentId(String studentId) {
         String sql = """
@@ -650,21 +1092,98 @@ public List<Personnel> getAllPersonnels() {
         return teacherList;
     }
 
-    public boolean updatePersonnelStatus(String pId, String status) {
-        String sql = "UPDATE [dbo].[Personnels]\n"
-                + "   SET [status] = ? \n"
-                + " WHERE id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);
-            preparedStatement.setString(2, pId);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
+  public boolean updateSalaryStatus(String personnelId, String status, int month, int year) {
+    String sql = """
+        UPDATE Salaries
+        SET payment_status = ?, payment_date = GETDATE()
+        WHERE personnel_id = ? AND salary_month = ? AND salary_year = ?
+    """;
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setString(1, status);
+        preparedStatement.setString(2, personnelId);
+        preparedStatement.setInt(3, month);
+        preparedStatement.setInt(4, year);
+        int rowsUpdated = preparedStatement.executeUpdate();
+        return rowsUpdated > 0;
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi cập nhật trạng thái lương: " + e.getMessage());
         return false;
     }
+}
+public List<Personnel> getPersonnelByMonthWithSalary(int month) {
+    StringBuilder sql = new StringBuilder("""
+        SELECT 
+            p.*,
+            s.id AS salary_id,
+            s.salary_month,
+            s.salary_year,
+            s.base_salary,
+            s.total_salary,
+            s.payment_status,
+            s.payment_date
+        FROM Personnels p
+        LEFT JOIN Salaries s ON p.id = s.personnel_id
+        WHERE s.salary_month = ?
+        ORDER BY p.id DESC
+    """);
+
+    List<Personnel> persons = new ArrayList<>();
+
+    try (PreparedStatement statement = connection.prepareStatement(sql.toString())) {
+        statement.setInt(1, month);
+        ResultSet rs = statement.executeQuery();
+        Personnel person = null;
+        String lastId = null;
+
+        while (rs.next()) {
+            String currentId = rs.getString("id");
+            if (!currentId.equals(lastId)) {
+                if (person != null) {
+                    persons.add(person);
+                }
+                person = new Personnel();
+                person.setId(currentId);
+                person.setFirstName(rs.getString("first_name"));
+                person.setLastName(rs.getString("last_name"));
+                person.setGender(rs.getBoolean("gender"));
+                person.setBirthday(rs.getDate("birthday"));
+                person.setEmail(rs.getString("email"));
+                person.setAddress(rs.getString("address"));
+                person.setPhoneNumber(rs.getString("phone_number"));
+                person.setRoleId(rs.getInt("role_id"));
+                person.setStatus(rs.getString("status"));
+                person.setAvatar(rs.getString("avatar"));
+                person.setUserId(rs.getString("user_id"));
+                person.setQualification(rs.getString("qualification"));
+                person.setTeaching_years(rs.getInt("teaching_years"));
+                lastId = currentId;
+            }
+
+            int salaryId = rs.getInt("salary_id");
+            if (!rs.wasNull()) {
+                Salary salary = new Salary();
+                salary.setId(salaryId);
+                salary.setPersonnelId(person.getId());
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                person.addSalary(salary);
+            }
+        }
+        if (person != null) {
+            persons.add(person);
+        }
+    } catch (Exception e) {
+        System.out.println("Lỗi khi lấy nhân viên theo tháng có lương: " + e.getMessage());
+    }
+
+    return persons;
+}
+
 
     public Personnel getTeacherByClassAndSchoolYear(String classId, String schoolYearId) {
         String sql = "Select teacher_id from class where id= ? and school_year_id = ?";
