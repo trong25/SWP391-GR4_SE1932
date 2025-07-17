@@ -35,13 +35,22 @@ public class SubjectServlet extends HttpServlet {
         SubjectDAO subjectDAO = new SubjectDAO();
         GradeDAO gradeDAO = new GradeDAO();
         String status = request.getParameter("status");
-        List<Subject> subjectList;
-
-        if (status == null || status.equals("all")) {
-            subjectList = subjectDAO.getAll();
-        } else {
-            subjectList = subjectDAO.getSubjectsByStatus(status);
+        List<Subject> subjectList = subjectDAO.getAll();
+        if(status!=null){
+            switch (status){
+                case "all" : subjectList = subjectDAO.getAll();
+                    break;
+                case "pending": subjectList = subjectDAO.getSubjectsByStatus("Đang chờ xử lý");
+                    break;
+                case "approve": subjectList = subjectDAO.getSubjectsByStatus("Đã được duyệt");
+                    break;
+                case "decline": subjectList = subjectDAO.getSubjectsByStatus("Không được duyệt");
+                    break;
+                default:
+                    break;
+            }
         }
+        
 
         request.setAttribute("listAllSubject", subjectList);
         request.setAttribute("listGrade", gradeDAO.getAll());

@@ -92,22 +92,27 @@ public class SubjectDAO extends DBContext {
         return subjects;
     }
 
-    public List<Subject> getSubjectsByStatus(String status) {
-        List<Subject> subjectList = new ArrayList<>();
-        String sql = "select * from Subjects where status = ? order by id desc";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);
-            ResultSet resultSet = preparedStatement.executeQuery();
+public List<Subject> getSubjectsByStatus(String status) {
+    List<Subject> subjectList = new ArrayList<>();
+    String sql = "SELECT * FROM Subjects WHERE status = ? ORDER BY id DESC";
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setString(1, status); // "Đang hoạt động", "Ngừng hoạt động", v.v.
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Subject subject = createSubject(resultSet);
                 subjectList.add(subject);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
-        return subjectList;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Lỗi truy vấn môn học theo trạng thái", e);
     }
+
+    return subjectList;
+}
+
+
 
     public Subject getLastest() {
         String sql = "Select top 1 * from Subjects order by id desc";
