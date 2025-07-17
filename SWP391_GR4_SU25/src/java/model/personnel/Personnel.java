@@ -37,20 +37,13 @@ public class Personnel {
     private int teaching_years;
     private String achievements;
     private String cv_file;
-
-    private int baseSalary;
-    private int totalSalary;
-
- 
-
   private List<Salary> salaries;
-
 
     public Personnel() {
         this.salaries = new ArrayList<>();
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -144,7 +137,7 @@ public class Personnel {
         this.className = className;
     }
 
-    public boolean isGender() {
+    public boolean getGender() {
         return gender;
     }
 
@@ -263,10 +256,6 @@ public class Personnel {
     public void setCv_file(String cv_file) {
         this.cv_file = cv_file;
     }
-
-
-   
-
 public Salary calculateSalary(Personnel p, int month, int year) {
     Salary salary = new Salary();
     salary.setPersonnelId(p.getId());
@@ -302,7 +291,6 @@ public Salary calculateSalary(Personnel p, int month, int year) {
 
     return salary;
 }
-
 
 
 }

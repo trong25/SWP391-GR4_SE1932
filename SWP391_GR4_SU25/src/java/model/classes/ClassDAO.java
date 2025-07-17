@@ -307,27 +307,6 @@ public class ClassDAO extends DBContext {
         }
         return list;
     }
-   
-   public List<Class> getClassByGradeIdAndSchoolYearAndStatus(String gradeId, String schoolYearId, String status) {
-        List<Class> classes = new ArrayList<>();
-        String sql = "SELECT TOP (1000) [id], [name], [grade_id], [teacher_id], [school_year_id], [status], [created_by] "
-                + "FROM [Class] "
-                + "WHERE grade_id = ? AND school_year_id = ? AND status = ?";
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, gradeId);
-            statement.setString(2, schoolYearId);
-            statement.setString(3, status);
-            ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
-                Class cls = createClass(rs);
-                classes.add(cls);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return classes;
-    }
 
 
  public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
@@ -365,5 +344,26 @@ public class ClassDAO extends DBContext {
             return "Phân công giáo viên vào lớp thất bại! Vui lòng thử lại sau!";
         }
         return "success";
+    }
+ 
+    public List<Class> getClassByGradeIdAndSchoolYearAndStatus(String gradeId, String schoolYearId, String status) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "SELECT TOP (1000) [id], [name], [grade_id], [teacher_id], [school_year_id], [status], [created_by] "
+                + "FROM [Class] "
+                + "WHERE grade_id = ? AND school_year_id = ? AND status = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, gradeId);
+            statement.setString(2, schoolYearId);
+            statement.setString(3, status);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Class cls = createClass(rs);
+                classes.add(cls);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
     }
 }

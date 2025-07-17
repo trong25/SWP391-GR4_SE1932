@@ -104,7 +104,7 @@ public class ListPersonnelAdminServlet extends HttpServlet {
                  }
                 
              } else{
-            persons = personnelDAO.getPersonnelByIdNameRoleStatus(status, role);
+            persons = personnelDAO.getPersonnelByIdNameRoleStatus1(status, role);
              }
         }else if(search != null){
             persons = personnelDAO.getPersonnelByNameOrId(Helper.formatString(search));
