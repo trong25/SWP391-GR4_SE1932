@@ -24,6 +24,7 @@ public class Timetable {
     private String status;
     private String note;
     private Personnel teacher;
+    private String attendanceStatus;
 
     public Timetable() {
     }
@@ -111,6 +112,16 @@ public class Timetable {
     public void setTeacher(Personnel teacher) {
         this.teacher = teacher;
     }
+
+    public String getAttendanceStatus() {
+        return attendanceStatus;
+    }
+
+    public void setAttendanceStatus(String attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
+    }
+    
+    
     
     
 }

@@ -25,12 +25,25 @@ public class Personnel {
     private String cv_file;
     private String schoolName;
     private String className;
+    private String addressSchool;
+
+    public String getAddressSchool() {
+        return addressSchool;
+    }
+
+    public void setAddressSchool(String addressSchool) {
+        this.addressSchool = addressSchool;
+    }
 
     // Constructors
     public Personnel() {
     }
 
+
     public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String specialization, String qualification, int teaching_years, String achievements, String cv_file, String schoolName, String className) {
+
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool) {
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -52,10 +65,18 @@ public class Personnel {
         this.cv_file = cv_file;
         this.schoolName = schoolName;
         this.className = className;
+        this.addressSchool = addressSchool;
     }
+
 
     public String getSchoolName() {
         return schoolName;
+
+   
+
+    public String getSchool_id() {
+        return school_id;
+
     }
 
     public void setSchoolName(String schoolName) {

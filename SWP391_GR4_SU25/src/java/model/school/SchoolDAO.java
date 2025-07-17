@@ -32,6 +32,26 @@ public class SchoolDAO extends DBContext{
         }
         return listSchools;
     }
+    
+    public Schools getSchoolsById(String id) {
+        String sql = "SELECT * FROM Schools where id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setObject(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Schools school = new Schools();
+                school.setId(rs.getString("id"));
+                school.setSchoolName(rs.getString("schoolName"));
+                school.setAddressSchool(rs.getString("addressSchool"));
+                school.setEmail(rs.getString("email"));
+                return school;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi khi lấy danh sách trường học", e);
+        }
+        return null;
+    }
 }
 
 

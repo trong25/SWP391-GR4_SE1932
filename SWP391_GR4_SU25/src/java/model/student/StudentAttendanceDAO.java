@@ -161,11 +161,24 @@ public class StudentAttendanceDAO extends DBContext {
 
    
     public StudentAttendance getAttendanceByStudentAndDay(String studentId, String dayId) {
-        String sql = "SELECT sa.*, s.first_name, s.last_name, d.date\n"
-                + "FROM StudentsAttendance sa\n"
-                + "JOIN Students s ON sa.student_id = s.id\n"
-                + "JOIN Days d ON sa.day_id = d.id\n"
-                + "WHERE sa.student_id = ? AND sa.day_id = ?";
+        String sql = """
+                     SELECT sa.*, 
+                            s.first_name, 
+                            s.last_name, 
+                            d.date,
+                            sub.name AS subject_name,
+                            ts.name AS timeslot_name,
+                            ts.start_time,
+                            ts.end_time,
+                            ts.slot_number
+                     FROM StudentsAttendance sa
+                     JOIN Students s ON sa.student_id = s.id
+                     JOIN Days d ON sa.day_id = d.id
+                     LEFT JOIN Timetables tt ON sa.day_id = tt.date_id AND sa.teacher_id = tt.teacher_id
+                     LEFT JOIN Subjects sub ON tt.subject_id = sub.id
+                     LEFT JOIN Timeslots ts ON tt.timeslot_id = ts.id
+                     WHERE sa.student_id = ? AND sa.day_id = ?
+                     """;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, studentId);
@@ -179,6 +192,60 @@ public class StudentAttendanceDAO extends DBContext {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 StudentAttendance attendance = createStudentAttendance(resultSet);
+                attendance.setSubjectName(resultSet.getString("subject_name"));
+                attendance.setTimeslotName(resultSet.getString("timeslot_name"));
+                System.out.println("Debug - Found attendance: " + attendance.getStatus());
+                System.out.println("Debug - Attendance ID: " + attendance.getId());
+                System.out.println("Debug - Attendance Note: " + attendance.getNote());
+                System.out.println("Debug - Student: " + attendance.getStudent().getLastName() + " " + attendance.getStudent().getFirstName());
+                System.out.println("Debug - Day: " + attendance.getDay().getDate());
+                return attendance;
+            } else {
+                System.out.println("Debug - No attendance record found for student: " + studentId + " and day: " + dayId);
+            }
+        } catch (Exception e) {
+            System.out.println("Debug - Error getting attendance: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    
+    public StudentAttendance getAttendanceByStudentAndDayAndTimeslotId(String studentId, String dayId, String timeslotId) {
+        String sql = """
+                     SELECT sa.*, 
+                            s.first_name, 
+                            s.last_name, 
+                            d.date,
+                            sub.name AS subject_name,
+                            ts.name AS timeslot_name,
+                            ts.start_time,
+                            ts.end_time,
+                            ts.slot_number
+                     FROM StudentsAttendance sa
+                     JOIN Students s ON sa.student_id = s.id
+                     JOIN Days d ON sa.day_id = d.id
+                     LEFT JOIN Timetables tt ON sa.day_id = tt.date_id AND sa.teacher_id = tt.teacher_id AND tt.timeslot_id = ?
+                     LEFT JOIN Subjects sub ON tt.subject_id = sub.id
+                     LEFT JOIN Timeslots ts ON tt.timeslot_id = ts.id
+                     WHERE sa.student_id = ? AND sa.day_id = ?
+                     """;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, timeslotId);
+            statement.setString(2, studentId);
+            statement.setString(3, dayId);
+            
+            // Debug log
+            System.out.println("Debug - Getting attendance for student: " + studentId);
+            System.out.println("Debug - Day: " + dayId);
+            System.out.println("Debug - SQL: " + sql);
+            
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                StudentAttendance attendance = createStudentAttendance(resultSet);
+                attendance.setSubjectName(resultSet.getString("subject_name"));
+                attendance.setTimeslotName(resultSet.getString("timeslot_name"));
                 System.out.println("Debug - Found attendance: " + attendance.getStatus());
                 System.out.println("Debug - Attendance ID: " + attendance.getId());
                 System.out.println("Debug - Attendance Note: " + attendance.getNote());
