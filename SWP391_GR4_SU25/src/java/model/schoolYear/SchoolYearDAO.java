@@ -36,18 +36,6 @@ import utils.Helper;
 public class SchoolYearDAO extends DBContext {
 
     // hàm tạo năm học mới
-    private SchoolYear createNewSchoolYear(ResultSet rs) throws SQLException {
-        SchoolYear schoolYear = new SchoolYear();
-        schoolYear.setId(rs.getString("id"));
-        schoolYear.setName(rs.getString("name"));
-        schoolYear.setStartDate(rs.getDate("start_date"));
-        schoolYear.setEndDate(rs.getDate("end_date"));
-        schoolYear.setDescription(rs.getString("description"));
-        PersonnelDAO personnelDAO = new PersonnelDAO();
-        Personnel personnel = personnelDAO.getPersonnel(rs.getString("created_by"));
-        schoolYear.setCreatedBy(personnel);
-        return schoolYear;
-    }
 
     public String createNewSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
@@ -207,6 +195,18 @@ public class SchoolYearDAO extends DBContext {
         return null;
     }
 
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "SY" + result;
+    }
+
     //Thanhnthe181132
     public List<SchoolYear> getFutureSchoolYears() {
         String sql = "select * from schoolYears where start_date > CAST(GETDATE() AS DATE)";
@@ -298,4 +298,47 @@ public class SchoolYearDAO extends DBContext {
         return "SY" + result;
     }
 
+    public List<SchoolYear> getListSchoolYearsByPupilID(String id) {
+        List<SchoolYear> schoolYears = new ArrayList<>();
+        String sql = "select sy.* from Students p join classDetails cd on p.id = cd.student_id\n"
+                + "JOIN dbo.Class C on C.id = cd.class_id\n"
+                + "join dbo.SchoolYears SY on C.school_year_id = SY.id\n"
+                + "where p.id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                SchoolYear schoolYear = new SchoolYear();
+                schoolYear.setId(resultSet.getString("id"));
+                schoolYear.setName(resultSet.getString("name"));
+                schoolYear.setStartDate(resultSet.getDate("start_date"));
+                schoolYear.setEndDate(resultSet.getDate("end_date"));
+                schoolYear.setDescription(resultSet.getString("description"));
+                schoolYears.add(schoolYear);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return schoolYears;
+    }
+    
+    public boolean checkPupilInClassOfSchoolYear(String pupil_id, String school_year_id) {
+        String sql = "select * from Pupils p join classDetails cd on p.id = cd.pupil_id\n" +
+                "join dbo.Class C on cd.class_id = C.id\n" +
+                "where p.id =? and c.school_year_id =?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, pupil_id);
+            statement.setString(2, school_year_id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

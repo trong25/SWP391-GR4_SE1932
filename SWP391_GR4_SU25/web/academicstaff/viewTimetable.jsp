@@ -1,10 +1,11 @@
-<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
+
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,11 +37,6 @@
                     }
                 }
             });
-
-            function resetWeekAndSubmitForm() {
-                document.getElementById("week").selectedIndex = 0;
-                document.getElementById("schoolYearForm").submit();
-            }
         </script>
         <style>
             #selectWeek {
@@ -106,68 +102,44 @@
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
-                    <jsp:include page="header-student.jsp"/>
+                    <jsp:include page="../header.jsp"/>
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid" style="width: 90%">
 
                         <div class="app-title">
                             <div>
-                                <h3><i class="fa fa-calendar"></i> Chi tiết thời khóa biểu của ${requestScope.aClass.className}</h3>
-                                </br>
+                                <h3><i class="fa fa-calendar"></i> Chi tiết thời khóa biểu của lớp ${requestScope.aClass.name}</h3></br>
                                 <h2 class="row justify-content-center">
                                     Thời khóa biểu
                                 </h2>
                                 </br>
+                                <h5 class="row justify-content-center">
+                                    Thời khóa biểu áp dụng từ ngày 
+                                    <fmt:formatDate value="${requestScope.week.startDate}" pattern="yyyy/MM/dd"/>
+                                    đến ngày 
+                                    <fmt:formatDate value="${requestScope.week.endDate}" pattern="yyyy/MM/dd"/>
+                                </h5>
                             </div>
                         </div>
-                        <form id="schoolYearForm" method="get" action="view-timetable">
+
+
+
+                        <form>
                             <table class="timetable-table table table-bordered text-center">
-                                <div class="d-flex justify-content-lg-start">
-                                    <div class="class-form m-2">
-                                        <label>Năm học
-                                            <select name="schoolyear" onchange="resetWeekAndSubmitForm();
-                                                    this.form.submit();" class="custom-select">
-                                                <option value="" hidden>Năm học</option>
-                                                <c:forEach items="${requestScope.schoolYearList}" var="sy">
-                                                    <option ${sltedsy eq sy.getId() ? "selected" : ""}
-                                                        value="${sy.getId()}">${sy.getName()}</option>
-                                                </c:forEach>
-                                            </select>
-                                        </label>
-                                    </div>
-                                    <div class="class-form m-2">
-                                        <label>Tuần học
-                                            <select id="week" name="week" onchange="this.form.submit()" class="custom-select" ${not empty sltedsy ? '' : 'disabled'}>
-                                                <option value="" hidden>Tuần học</option>
-                                                <c:forEach items="${requestScope.weekList}" var="w">
-                                                    <option ${sltedw eq w.getId() ? "selected" : ""}
-                                                        value="${w.getId()}">${w.getStartDatetoEndDate()} </option>
-                                                </c:forEach>
-                                            </select>
-                                        </label>
-                                    </div>
-                                </div>
                                 <thead>
                                     <tr class="bg-light-gray">
-                                        <c:if test="${not empty requestScope.dayList}">
-                                            <th class="text-uppercase">Thời gian</th>
-                                            </c:if>
-                                            <c:forEach var="day" items="${requestScope.dayList}" varStatus="status">
-                                            <th class="text-uppercase">
-                                                <c:choose>
-                                                    <c:when test="${day.getDate().getDay() == 1}">Thứ hai</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 2}">Thứ ba</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 3}">Thứ tư</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 4}">Thứ năm</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 5}">Thứ sáu</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 6}">Thứ bảy</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 0}">Chủ nhật</c:when>
-                                                </c:choose>
-                                                <br>
-                                                (<fmt:formatDate value="${day.date}" pattern="dd-MM-yyyy"/>)
-                                            </th>
-                                        </c:forEach>
+                                        <th class="text-uppercase">Thời gian</th>
+                                        <th class="text-uppercase">Thứ hai</th>
+                                        <th class="text-uppercase">Thứ ba</th>
+                                        <th class="text-uppercase">Thứ tư</th>
+                                        <th class="text-uppercase">Thứ năm</th>
+                                        <th class="text-uppercase">Thứ sáu</th>
+                                        <th class="text-uppercase">Thứ bảy</th>
+                                        <th class="text-uppercase">Chủ nhật</th>
+
+
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,12 +149,10 @@
                                             <c:forEach var="day" items="${requestScope.dayList}">
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${not empty requestScope.timetables}">
-                                                            <c:forEach var="timetable" items="${requestScope.timetables}">
+                                                        <c:when test="${not empty requestScope.timetable}">
+                                                            <c:forEach var="timetable" items="${requestScope.timetable}">
                                                                 <c:if test="${timetable.timeslot.id eq timeslot.id && timetable.day.id eq day.id}">
-                                                                    ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName}<span>
-                                                                        (${timetable.attendanceStatus})
-                                                                    </span>
+                                                                    ${timetable.subject.name}
                                                                 </c:if>
                                                             </c:forEach>
                                                         </c:when>
@@ -197,19 +167,22 @@
                                 </tbody>
                             </table>
 
+
                             <div class="btn-container">
                                 <div class="d-flex justify-content-end">
                                     <p>Ghi chú*: (-) không có dữ liệu</p>
                                 </div>
+                                <button class="btn btn-danger" type="button" onclick="goBack()">Quay Lại</button>
                             </div>
                         </form>
+
 
                     </div>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- End of Main Content -->
 
-                <jsp:include page="../footer.jsp" />
+                <jsp:include page="../footer.jsp"/>
             </div>
             <!-- End of Content Wrapper -->
 
@@ -221,5 +194,4 @@
             }
         </script>
     </body>
-
 </html>

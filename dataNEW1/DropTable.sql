@@ -1,0 +1,10 @@
+USE master;
+GO
+
+ALTER DATABASE Cultural_Tutoring_Center_HN
+SET SINGLE_USER
+WITH ROLLBACK IMMEDIATE;
+GO
+
+DROP DATABASE Cultural_Tutoring_Center_HN
+GO

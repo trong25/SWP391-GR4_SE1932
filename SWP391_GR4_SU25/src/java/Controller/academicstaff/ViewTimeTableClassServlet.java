@@ -2,34 +2,36 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.director;
+package Controller.academicstaff;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import model.schoolYear.SchoolYear;
-import model.schoolYear.SchoolYearDAO;
-import model.week.WeekDAO;
-import model.classes.Class;
 import model.classes.ClassDAO;
 import model.day.Day;
 import model.day.DayDAO;
+import model.schoolYear.SchoolYear;
+import model.schoolYear.SchoolYearDAO;
 import model.timeslot.TimeSlot;
 import model.timeslot.TimeSlotDAO;
 import model.timetable.Timetable;
 import model.timetable.TimetableDAO;
 import model.week.Week;
+import model.week.WeekDAO;
 
 /**
  *
- * @author ThanhNT
+ * @author TuyenCute
  */
+@WebServlet(name = "ViewTimeTableClassStaffServlet", urlPatterns = {"/academicstaff/viewtimetableclass"})
 public class ViewTimeTableClassServlet extends HttpServlet {
 
     /**
@@ -41,8 +43,6 @@ public class ViewTimeTableClassServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -55,22 +55,19 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
         HttpSession session = request.getSession();
         String toastMessage = (String) session.getAttribute("toastMessage");
         String toastType = (String) session.getAttribute("toastType");
         if (toastMessage != null && toastType != null) {
             request.setAttribute("toastMessage", toastMessage);
             request.setAttribute("toastType", toastType);
-            session.removeAttribute("toastType");
             session.removeAttribute("toastMessage");
-
+            session.removeAttribute("toastType");
         }
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();
         request.setAttribute("schoolYearList", schoolYearList);
         request.getRequestDispatcher("viewTimetableClass.jsp").forward(request, response);
-
     }
 
     /**
@@ -84,27 +81,14 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-
-        // Lấy thông tin người dùng chọn:
         String classId = request.getParameter("class");
-         String week = request.getParameter("week");
-
-      
-        String schoolyear = request.getParameter("schoolyear");
-        
-        
         WeekDAO weekDAO = new WeekDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
-        Class aclass = new ClassDAO().getClassById(classId);
-
-     
-
-
-        //Lấy danh sách lớp học của năm học đó
-        List<Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
-        if (listClass.isEmpty()) {//Nếu không có lớp thì thông báo lỗi và chuyển hướng về lại trang GET
-
+        model.classes.Class aclass = new ClassDAO().getClassById(classId);
+        String week = request.getParameter("week");
+        String schoolyear = request.getParameter("schoolyear");
+        List<model.classes.Class> listClass = new ClassDAO().getBySchoolYearandStatus(schoolyear);
+        if (listClass.isEmpty()) {
             HttpSession session = request.getSession();
             session.setAttribute("toastType", "error");
             session.setAttribute("toastMessage", "Năm này không có lớp học");
@@ -113,16 +97,15 @@ public class ViewTimeTableClassServlet extends HttpServlet {
         }
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();
         List<Week> weekList = weekDAO.getWeeks(schoolyear);
-
         List<Timetable> timetable = new ArrayList<>();
-        TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
-        List<TimeSlot> timeslotList = timeSlotDAO.getTimeslotsForTimetable();
+        TimeSlotDAO timeslotDAO = new TimeSlotDAO();
+        List<TimeSlot> timeslotList = timeslotDAO.getTimeslotsForTimetable();
         DayDAO dayDAO = new DayDAO();
         List<Day> dayList = dayDAO.getDayByWeek(week);
-        if (dayList.size() > 0) {// Nếu có ngày học → set thêm timeslotList
+        if (dayList.size() > 0) {
             request.setAttribute("timeslotList", timeslotList);
         }
-        if (classId != null && week != null && schoolyear != null) {// Lấy thời khóa biểu theo lớp và tuần
+        if (classId != null && week != null && schoolyear != null) {
             timetable = new TimetableDAO().getTimetableByClassAndWeek(classId, week, "đã được duyệt");
         }
         request.setAttribute("listClass", listClass);
@@ -148,5 +131,3 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     }// </editor-fold>
 
 }
-
-

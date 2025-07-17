@@ -2,18 +2,20 @@ package model.evaluation;
 
 import model.day.Day;
 import model.student.Student;
+import model.timetable.Timetable;
 
 public class Evaluation {
+
     private String id;
     private Student student;
-    private Day date;
+    private Timetable timetable;
     private String evaluation;
     private String notes;
 
-    public Evaluation(String id, Student student, Day date, String evaluation, String notes) {
+    public Evaluation(String id, Student student, Timetable timetable, String evaluation, String notes) {
         this.id = id;
         this.student = student;
-        this.date = date;
+        this.timetable = timetable;
         this.evaluation = evaluation;
         this.notes = notes;
     }
@@ -37,12 +39,12 @@ public class Evaluation {
         this.student = student;
     }
 
-    public Day getDate() {
-        return date;
+    public Timetable getTimetable() {
+        return timetable;
     }
 
-    public void setDate(Day date) {
-        this.date = date;
+    public void setTimetable(Timetable timetable) {
+        this.timetable = timetable;
     }
 
     public String getEvaluation() {
@@ -60,4 +62,5 @@ public class Evaluation {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
 }

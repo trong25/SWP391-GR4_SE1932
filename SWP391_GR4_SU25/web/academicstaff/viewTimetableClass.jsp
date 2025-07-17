@@ -1,6 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<jsp:useBean id="timetableBean" class="model.timetable.TimetableDAO"/>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +12,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>TaBi Learning Center</title>
+        <title>Tabi Learning Center</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -39,8 +40,10 @@
 
             function resetWeekAndSubmitForm() {
                 document.getElementById("week").selectedIndex = 0;
+                document.getElementById("class").selectedIndex = 0;
                 document.getElementById("schoolYearForm").submit();
             }
+            
         </script>
         <style>
             #selectWeek {
@@ -101,27 +104,37 @@
 
     <body id="page-top">
         <div id="wrapper">
-            <jsp:include page="navbar.jsp"/>
+            <jsp:include page="navbar.jsp" />
 
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
-                    <jsp:include page="header-student.jsp"/>
+                    <jsp:include page="../header.jsp" />
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid" style="width: 90%">
 
                         <div class="app-title">
-                            <div>
-                                <h3><i class="fa fa-calendar"></i> Chi tiết thời khóa biểu của ${requestScope.aClass.className}</h3>
-                                </br>
-                                <h2 class="row justify-content-center">
-                                    Thời khóa biểu
-                                </h2>
-                                </br>
-                            </div>
+                            <c:if test="${requestScope.aClass == null}">
+                                <div>
+                                    <h3><i class="fa fa-exclamation-circle"></i> Chọn để hiển thị thời khóa biểu</h3>
+                                </div>
+                            </c:if>
+                            <c:if test="${requestScope.aClass != null}">
+                                <div>
+                                    <h3><i class="fa fa-calendar"></i> Chi tiết thời khóa biểu của lớp ${requestScope.aClass.name}</h3>
+                                    </br>
+                                    <h2 class="row justify-content-center">
+                                        Thời khóa biểu
+                                    </h2>
+                                    </br>
+                                </div>
+                            </c:if>
                         </div>
-                        <form id="schoolYearForm" method="get" action="view-timetable">
+                        <form id="schoolYearForm" method="post" action="viewtimetableclass">
+                            <input type="hidden" name="pid" value="${sessionScope.personnel.id}" />
+                            <input type="hidden" name="id" value="${param.id}" />
+                            <input type="hidden" name="classId" value="${requestScope.aClass.id}" />
                             <table class="timetable-table table table-bordered text-center">
                                 <div class="d-flex justify-content-lg-start">
                                     <div class="class-form m-2">
@@ -137,8 +150,20 @@
                                         </label>
                                     </div>
                                     <div class="class-form m-2">
+                                        <label>Lớp
+                                            <select name="class" id="class" onchange="this.form.submit();
+                                                    this.form.submit();" class="custom-select" ${not empty sltedsy ? '' : 'disabled'}>
+                                                <option value="" hidden>Lớp</option>
+                                                <c:forEach items="${requestScope.listClass}" var="lc">
+                                                    <option ${classselect eq lc.getId() ? "selected" : ""}
+                                                        value="${lc.getId()}">${lc.getName()}</option>
+                                                </c:forEach>
+                                            </select>
+                                        </label>
+                                    </div>
+                                    <div class="class-form m-2">
                                         <label>Tuần học
-                                            <select id="week" name="week" onchange="this.form.submit()" class="custom-select" ${not empty sltedsy ? '' : 'disabled'}>
+                                            <select name="week" id="week" onchange="this.form.submit()" class="custom-select" ${not empty classselect ? '' : 'disabled'}>
                                                 <option value="" hidden>Tuần học</option>
                                                 <c:forEach items="${requestScope.weekList}" var="w">
                                                     <option ${sltedw eq w.getId() ? "selected" : ""}
@@ -156,18 +181,18 @@
                                             <c:forEach var="day" items="${requestScope.dayList}" varStatus="status">
                                             <th class="text-uppercase">
                                                 <c:choose>
-                                                    <c:when test="${day.getDate().getDay() == 1}">Thứ hai</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 2}">Thứ ba</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 3}">Thứ tư</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 4}">Thứ năm</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 5}">Thứ sáu</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 6}">Thứ bảy</c:when>
-                                                    <c:when test="${day.getDate().getDay() == 0}">Chủ nhật</c:when>
+                                                    <c:when test="${status.index == 0}">Thứ hai</c:when>
+                                                    <c:when test="${status.index == 1}">Thứ ba</c:when>
+                                                    <c:when test="${status.index == 2}">Thứ tư</c:when>
+                                                    <c:when test="${status.index == 3}">Thứ năm</c:when>
+                                                    <c:when test="${status.index == 4}">Thứ sáu</c:when>
+                                                    <c:when test="${status.index == 5}">Thứ bảy</c:when>
+                                                    <c:when test="${status.index == 6}">Chủ nhật</c:when>
                                                 </c:choose>
                                                 <br>
                                                 (<fmt:formatDate value="${day.date}" pattern="dd-MM-yyyy"/>)
-                                            </th>
-                                        </c:forEach>
+                                                </td>
+                                            </c:forEach>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,12 +202,10 @@
                                             <c:forEach var="day" items="${requestScope.dayList}">
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${not empty requestScope.timetables}">
-                                                            <c:forEach var="timetable" items="${requestScope.timetables}">
+                                                        <c:when test="${not empty requestScope.timetable}">
+                                                            <c:forEach var="timetable" items="${requestScope.timetable}">
                                                                 <c:if test="${timetable.timeslot.id eq timeslot.id && timetable.day.id eq day.id}">
-                                                                    ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName}<span>
-                                                                        (${timetable.attendanceStatus})
-                                                                    </span>
+                                                                    ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName}
                                                                 </c:if>
                                                             </c:forEach>
                                                         </c:when>
@@ -215,11 +238,6 @@
 
         </div>
         <!-- End of Page Wrapper -->
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
     </body>
 
 </html>

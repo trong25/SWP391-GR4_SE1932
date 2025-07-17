@@ -1,16 +1,10 @@
-<%--
-  User: ThanhNT
- Date: 23/06/2025
-  Time: 8:47 PM
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
     <head>
-
-        <title>Đang chờ phê duyệt</title>
-
+        <title>Quản Lý Lớp Học</title>
         <script>
             function submitForm() {
                 document.getElementById("myForm").submit();
@@ -33,7 +27,6 @@
         <!-- Custom styles for this page -->
         <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script>
@@ -57,12 +50,12 @@
                 <div id="content">
                     <jsp:include page="../header.jsp"/>
                     <div class="container-fluid">
-                        <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Thời Khóa Biểu Đang Chờ Phê Duyệt</h1>
-
+                        <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Thời Khóa Biểu</h1>
+                        
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Đang Chờ Phê Duyệt</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Danh Sách Thời Khóa Biểu</h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -71,39 +64,48 @@
                                             <tr>
                                                 <th>Số thứ tự</th>
                                                 <th>Tên lớp</th>
-                                                <th>Khối</th>
                                                 <th>Tạo Bởi</th>
                                                 <th>Hiệu lực</th>
                                                 <th>Trạng thái</th>
                                                 <th>Giáo Viên</th>
-
+                                                <th>Ghi chú</th>
                                                 <th>Hành động</th>
                                             </tr>
 
 
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="tt" items="${pendingTimetables}" varStatus="loop">
-                                                <tr>
-                                                    <td>${loop.index + 1}</td>
-                                                    <td>${tt.aClass.name}</td>
-                                                    <td>${tt.aClass.grade.name}</td>
-                                                    <td>${tt.createdBy.lastName} ${tt.createdBy.firstName}</td>
-                                                    <td>
-                                                        <fmt:formatDate value="${tt.day.date}" pattern="yyyy/MM/dd"/>
-                                                    </td>
-                                                    <td>
-                                                        <span class="badge badge-warning">${tt.status}</span>
-                                                    </td>
-                                                    <td>${tt.teacher.lastName} ${tt.teacher.firstName}</td>
-                                                    <td>
-                                                        <form method="post" action="reviewTimetable">
-                                                            <input type="hidden" name="timetableId" value="${tt.id}" />
-                                                            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm btn-custom-width">Duyệt</button>
-                                                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm btn-custom-width">Từ chối</button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
+                                            <c:forEach var="listTimetable" items="${requestScope.listTimetable}" varStatus="loop">
+                                                
+                                                    <tr>
+                                                        <td>${loop.index + 1}</td>
+                                                        <td>${listTimetable.aClass.name}</td>
+                                                        <td>${listTimetable.createdBy.lastName} ${listTimetable.createdBy.firstName}</td>
+                                                        <td>
+                                                            <fmt:formatDate value="${listTimetable.startDate}" pattern="yyyy/MM/dd"/>
+                                                            đến
+                                                            <fmt:formatDate value="${listTimetable.endDate}" pattern="yyyy/MM/dd"/>
+                                                        </td>
+                                                        <c:set value="${listTimetable.status}" var="status"/>
+                                                        <c:if test="${status eq 'đã được duyệt'}">
+                                                            <td><span class="badge badge-success">${status}</span></td>
+                                                            </c:if>
+                                                            <c:if test="${status eq 'đang chờ xử lý'}">
+                                                            <td><span class="badge badge-warning">${status}</span>  </td>
+                                                        </c:if>
+                                                        <c:if test="${status eq 'không được duyệt'}">
+                                                            <td><span class="badge badge-danger">${status}</span>  </td>
+                                                        </c:if>
+                                                        <td>${listTimetable.teacher.lastName} ${listTimetable.teacher.firstName}</td>
+                                                        <td>${listTimetable.note}</td>
+                                                        <td>
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <a href="view-timetable?classId=${listTimetable.aClass.id}&weekId=${listTimetable.weekId}&status=${listTimetable.status}" class="btn btn-sm btn-primary shadow-sm btn-custom-width">Chi tiết</a>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                
                                             </c:forEach>
 
                                         </tbody>

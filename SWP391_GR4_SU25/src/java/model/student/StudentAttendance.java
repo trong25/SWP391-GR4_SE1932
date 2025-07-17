@@ -16,6 +16,8 @@ public class StudentAttendance {
     private Student student;
     private String status;
     private String note;
+    private String subjectName;
+    private String timeslotName;
 
     public StudentAttendance() {
     }
@@ -66,6 +68,22 @@ public class StudentAttendance {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    public String getTimeslotName() {
+        return timeslotName;
+    }
+
+    public void setTimeslotName(String timeslotName) {
+        this.timeslotName = timeslotName;
     }
     
     
