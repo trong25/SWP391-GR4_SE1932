@@ -4,6 +4,7 @@
  */
 package model.payment;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -101,4 +102,36 @@ public class PaymentDAO extends DBContext {
             return false;
         }
     }
+
+    public boolean insert(Payment payment) {
+        String sql = """
+            INSERT INTO Payments (code, student_id, class_id, month, year, amount, status, payment_date, note)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, payment.getCode());
+            ps.setString(2, payment.getStudentId());
+            ps.setString(3, payment.getClassId());
+            ps.setInt(4, payment.getMonth());
+            ps.setInt(5, payment.getYear());
+            ps.setFloat(6, payment.getAmount());
+            ps.setString(7, payment.getStatus());
+
+            // Nếu ngày thanh toán null, thì setNull
+            if (payment.getPaymentDate() != null) {
+                ps.setDate(8, new Date(payment.getPaymentDate().getTime()));
+            } else {
+                ps.setNull(8, java.sql.Types.DATE);
+            }
+
+            ps.setString(9, payment.getNote());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi insert Payment: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

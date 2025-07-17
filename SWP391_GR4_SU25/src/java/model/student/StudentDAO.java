@@ -789,7 +789,42 @@ public class StudentDAO extends DBContext {
         return null;
     }
 
-    public List<Student> getStudentByClass(String classId) {
+    public List<StudentWithClassDTO> getStudentWithClassById(String studentId) {
+        List<StudentWithClassDTO> list = new ArrayList<>();
+        String sql = """
+        SELECT 
+            s.id,
+            s.avatar,
+            s.first_name,
+            s.last_name,
+            cd.class_id,
+            cl.name
+        FROM Students s
+        JOIN classDetails cd ON cd.student_id = s.id
+        JOIN Class cl ON cl.id = cd.class_id
+        WHERE s.id = ? AND s.status = N'đang theo học';
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, studentId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                StudentWithClassDTO s = new StudentWithClassDTO();
+                s.setId(rs.getString("id"));
+                s.setAvatar(rs.getString("avatar"));
+                s.setFirstName(rs.getString("first_name"));
+                s.setLastName(rs.getString("last_name"));
+                s.setClassId(rs.getString("class_id"));
+                s.setClassName(rs.getString("name"));
+                list.add(s);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+public List<Student> getStudentByClass(String classId) {
         String sql = "SELECT *\n"
                 + "FROM     Class INNER JOIN\n"
                 + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
@@ -962,12 +997,18 @@ public class StudentDAO extends DBContext {
         List<StudentWithClassDTO> list = new ArrayList<>();
 
         String sql = """
-        SELECT s.id, s.avatar, s.first_name, s.last_name, 
-               c.class_id, cl.name AS class_name
+      SELECT 
+          s.id,
+          s.avatar,
+          s.first_name,
+          s.last_name,
+          STRING_AGG(cd.class_id,', ') AS class_id,
+          STRING_AGG(cl.name, ',  ') AS class_name
         FROM Students s
-        LEFT JOIN classDetails c ON c.student_id = s.id
-        LEFT JOIN Class cl ON cl.id = c.class_id
-        WHERE s.status = N'đang theo học'
+        JOIN classDetails cd ON cd.student_id = s.id
+        JOIN Class cl ON cl.id = cd.class_id
+        WHERE s.status =  N'đang theo học'
+        GROUP BY s.id, s.avatar, s.first_name, s.last_name;
     """;
 
         PreparedStatement ps = null;

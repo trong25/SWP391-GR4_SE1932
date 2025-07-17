@@ -8,9 +8,10 @@ import java.util.Date;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
  */
-public class Payment {
+
+ public class Payment {
 
     private Integer id;
     private String code;
@@ -39,20 +40,20 @@ public class Payment {
         this.note = note;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getStudentId() {
@@ -118,5 +119,8 @@ public class Payment {
     public void setNote(String note) {
         this.note = note;
     }
+
+  
+   
 
 }
