@@ -16,6 +16,24 @@
                 min-height: 100vh;
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             }
+            .section-title {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #2c3e50;
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .section-content {
+                font-size: 1rem;
+                color: #34495e;
+                font-weight: 400;
+            }
+            .section-content b, .section-content strong {
+                font-weight: 600;
+                color: #2c3e50;
+            }
 
             .payment-container {
                 max-width: 500px;
@@ -61,8 +79,10 @@
                 border-radius: 15px;
                 font-size: 1.5rem;
                 font-weight: bold;
-                margin-bottom: 2rem;
-                display: inline-block;
+                margin: 2rem auto 2rem auto;
+                display: block;
+                text-align: center;
+                max-width: 220px;
             }
 
             .qr-container {
@@ -209,74 +229,90 @@
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
                     <jsp:include page="header-student.jsp"/>
-                    <div class="payment-container">
-                        <div class="payment-card">
-                            <div class="payment-header">
-                                <h1 class="payment-title">
-                                    <i class="fas fa-qrcode text-primary"></i>
-                                    Thanh Toán QR Code
-                                </h1>
-                                <p class="payment-subtitle">Quét mã QR bên dưới để thực hiện thanh toán</p>
-                            </div>
-
-                            <div class="amount-display">
-                                <i class="fas fa-money-bill-wave"></i>
-                                <span id="amount-text"></span>
-                            </div>
-
-                            <div class="qr-container">
-                                <img src='https://img.vietqr.io/image/MB-00160920049999-qr_only.jpg?amount=${payment.amount}&addInfo=${payment.code}&accountName=Pham%20Nguyen%20Kien' class="qr-code" alt="QR Code thanh toán">
-                            </div>
-
-                            <div class="payment-info">
-                                <div class="info-item">
-                                    <span class="info-label">
-                                        <i class="fas fa-receipt"></i>
-                                        Mã giao dịch:
-                                    </span>
-                                    <span class="info-value">${payment.code}</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">
-                                        <i class="fas fa-university"></i>
-                                        Ngân hàng:
-                                    </span>
-                                    <span class="info-value">MB Bank</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">
-                                        <i class="fas fa-user"></i>
-                                        Người nhận:
-                                    </span>
-                                    <span class="info-value">Pham Nguyen Kien</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">
-                                        <i class="fas fa-credit-card"></i>
-                                        Số tài khoản:
-                                    </span>
-                                    <span class="info-value">00160920049999</span>
+                    <div class="container-fluid py-5">
+                        <div class="row justify-content-center align-items-start">
+                            <!-- Cột trái: Hướng dẫn -->
+                            <div class="col-md-3 mb-4">
+                                <div class="instructions h-100">
+                                    <div class="section-title"><i class="fas fa-info-circle"></i> Hướng dẫn thanh toán:</div>
+                                    <ol class="section-content">
+                                        <li>Mở ứng dụng ngân hàng trên điện thoại</li>
+                                        <li>Chọn chức năng quét QR Code</li>
+                                        <li>Quét mã QR code ở giữa</li>
+                                        <li>Kiểm tra thông tin và xác nhận thanh toán</li>
+                                        <li>Chờ hệ thống xác nhận giao dịch</li>
+                                    </ol>
                                 </div>
                             </div>
+                            <!-- Cột giữa: QR & Thông tin -->
+                            <div class="col-md-6 mb-4">
+                                <div class="payment-card">
+                                    <div class="payment-header">
+                                        <div class="section-title"><i class="fas fa-qrcode text-primary"></i> Thanh Toán QR Code</div>
+                                        <p class="payment-subtitle section-content">Quét mã QR bên dưới để thực hiện thanh toán</p>
+                                    </div>
 
-                            <div class="status-indicator" id="status-indicator">
-                                <div class="spinner"></div>
-                                <span>Đang chờ thanh toán...</span>
+                                    <div class="qr-container">
+                                        <img src='https://img.vietqr.io/image/MB-00160920049999-qr_only.jpg?amount=${payment.amount}&addInfo=${payment.code}&accountName=Pham%20Nguyen%20Kien' class="qr-code" alt="QR Code thanh toán">
+                                    </div>
+                                    <div class="amount-display">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span id="amount-text"></span>
+                                    </div>
+
+                                    <div class="payment-info">
+                                        <div class="info-item">
+                                            <span class="info-label">
+                                                <i class="fas fa-receipt"></i>
+                                                Mã giao dịch:
+                                            </span>
+                                            <span class="info-value">${payment.code}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">
+                                                <i class="fas fa-university"></i>
+                                                Ngân hàng:
+                                            </span>
+                                            <span class="info-value">MB Bank</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">
+                                                <i class="fas fa-user"></i>
+                                                Người nhận:
+                                            </span>
+                                            <span class="info-value">Pham Nguyen Kien</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">
+                                                <i class="fas fa-credit-card"></i>
+                                                Số tài khoản:
+                                            </span>
+                                            <span class="info-value">00160920049999</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="status-indicator" id="status-indicator">
+                                        <div class="spinner"></div>
+                                        <span>Đang chờ thanh toán...</span>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="instructions">
-                                <h6><i class="fas fa-info-circle"></i> Hướng dẫn thanh toán:</h6>
-                                <ol>
-                                    <li>Mở ứng dụng ngân hàng trên điện thoại</li>
-                                    <li>Chọn chức năng quét QR Code</li>
-                                    <li>Quét mã QR code ở trên</li>
-                                    <li>Kiểm tra thông tin và xác nhận thanh toán</li>
-                                    <li>Chờ hệ thống xác nhận giao dịch</li>
-                                </ol>
-
-                                <div class="bank-info">
-                                    <strong><i class="fas fa-shield-alt"></i> Bảo mật:</strong>
-                                    Giao dịch được bảo vệ bởi hệ thống bảo mật ngân hàng
+                            <!-- Cột phải: Thông tin phụ/bảo mật -->
+                            <div class="col-md-3 mb-4">
+                                <div class="bank-info h-100 p-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #2c3e50; border-radius: 20px; box-shadow: 0 4px 24px rgba(44,62,80,0.07);">
+                                    <div class="section-title"><i class="fas fa-shield-alt" style="color: #4e73df;"></i> Bảo mật & Hỗ trợ</div>
+                                    <hr>
+                                    <div class="section-content" style="margin-bottom: 1rem;">
+                                        <i class="fas fa-lock"></i> Giao dịch được bảo vệ bởi hệ thống bảo mật ngân hàng.<br>
+                                        <i class="fas fa-clock"></i> Thời gian xử lý: <b>1-3 phút</b> sau khi thanh toán.<br>
+                                        <i class="fas fa-info-circle"></i> Nếu quá 10 phút chưa xác nhận, vui lòng liên hệ hỗ trợ.
+                                    </div>
+                                    <div class="section-content" style="margin-bottom: 1rem;">
+                                        <b><i class="fas fa-headset"></i> Liên hệ hỗ trợ:</b><br>
+                                        Hotline: <a href="tel:0123456789" style="color: #2c3e50;">0123 456 789</a><br>
+                                        Email: <a href="mailto:support@tabi.edu.vn" style="color: #2c3e50;">support@tabi.edu.vn</a><br>
+                                        Thời gian: <b>8:00 - 22:00</b> (T2 - CN)
+                                    </div>
                                 </div>
                             </div>
                         </div>
