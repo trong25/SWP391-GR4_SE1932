@@ -23,19 +23,23 @@ import utils.DBContext;
 import utils.Helper;
 
 /**
- * Lớp SchoolYearDAO chịu trách nhiệm thao tác dữ liệu với bảng SchoolYear trong
- * Database Lấy dữ liệu từ database liên quan đến bảng SchoolYear Thức hiên các
- * chức năng như tạo năm học, lấy năm học qua id, cập nhật và chỉnh sửa năm học
- * Ví dụ: createNewSchoolYear(SchoolYear schoolYear),getAll,getSchoolYear(String
- * id),editSchoolYear(SchoolYear schoolYear), updateSchoolYear(SchoolYear
- * schoolYear) Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
  *
- * @author TrongNV
- * @version 1.0
+ * @author MSI
  */
 public class SchoolYearDAO extends DBContext {
 
-    // hàm tạo năm học mới
+    private SchoolYear createNewSchoolYear(ResultSet rs) throws SQLException {
+        SchoolYear schoolYear = new SchoolYear();
+        schoolYear.setId(rs.getString("id"));
+        schoolYear.setName(rs.getString("name"));
+        schoolYear.setStartDate(rs.getDate("start_date"));
+        schoolYear.setEndDate(rs.getDate("end_date"));
+        schoolYear.setDescription(rs.getString("description"));
+        PersonnelDAO personnelDAO = new PersonnelDAO();
+        Personnel personnel = personnelDAO.getPersonnel(rs.getString("created_by"));
+        schoolYear.setCreatedBy(personnel);
+        return schoolYear;
+    }
 
     public String createNewSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
@@ -97,7 +101,6 @@ public class SchoolYearDAO extends DBContext {
         }
         return "success";
     }
-    // hàm lấy tất cả danh sách năm học(TrongNV)
 
     public List<SchoolYear> getAll() {
         List<SchoolYear> schoolYears = new ArrayList<SchoolYear>();
@@ -115,7 +118,6 @@ public class SchoolYearDAO extends DBContext {
         return schoolYears;
     }
 
-    //hàm lấy năm học qua id (TrongNV)
     public SchoolYear getSchoolYear(String id) {
         String sql = "select * from schoolYears where id = ?";
         try {
@@ -131,7 +133,6 @@ public class SchoolYearDAO extends DBContext {
         }
         return null;
     }
-// hàm lấy năm học gần nhất(TrongNV)
 
     public SchoolYear getClosestSchoolYears() {
         String sql = "select top 1  * from schoolYears where end_date >= CAST(GETDATE() AS DATE) order by start_date";
@@ -177,6 +178,7 @@ public class SchoolYearDAO extends DBContext {
         }
     }
 
+//Thanhnthe181132
     public SchoolYear getLatest() {
         String sql = "SELECT TOP 1 * FROM SchoolYears ORDER BY ID DESC";
 
@@ -224,7 +226,6 @@ public class SchoolYearDAO extends DBContext {
         return schoolYears;
     }
 
-    // hàm chỉnh sửa năm học (TrongNV)
     public String editSchoolYear(SchoolYear schoolYear) {
         SchoolYear oldSchoolYear = getSchoolYear(schoolYear.getId());
         if (!new Date().before(oldSchoolYear.getStartDate())) {
@@ -259,7 +260,6 @@ public class SchoolYearDAO extends DBContext {
         }
         return updateSchoolYear(schoolYear);
     }
-// hàm cập nhật năm học (TrongNV)
 
     private String updateSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
@@ -284,18 +284,6 @@ public class SchoolYearDAO extends DBContext {
             return "Thao tác thất bại! " + e.getMessage();
         }
         return "success";
-    }
-
-    private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "SY" + result;
     }
 
     public List<SchoolYear> getListSchoolYearsByPupilID(String id) {

@@ -35,12 +35,14 @@ public class Personnel {
     private String achievements;
     private String cv_file;
     private int baseSalary;
-private int totalSalary;
+    private int totalSalary;
+
+ 
 
     public Personnel() {
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -137,7 +139,7 @@ private int totalSalary;
         this.className = className;
     }
 
-    public boolean getGender() {
+    public boolean isGender() {
         return gender;
     }
 
@@ -256,32 +258,36 @@ private int totalSalary;
     public void setCv_file(String cv_file) {
         this.cv_file = cv_file;
     }
-public void calculateSalary() {
-    int base = 0;
-    switch (this.getQualification()) {
-        case "Cử nhân":
-            base = 6000000;
-            break;
-        case "Thạc Sĩ":
-            base = 8000000;
-            break;
-        case "Tiến Sĩ":
-            base = 10000000;
-            break;
-        default:
-            base = 5000000;
-            break;
+
+    public void calculateSalary() {
+        int base = 0;
+        switch (this.getQualification()) {
+            case "Cử nhân":
+                base = 6000000;
+                break;
+            case "Thạc Sĩ":
+                base = 8000000;
+                break;
+            case "Tiến Sĩ":
+                base = 10000000;
+                break;
+            default:
+                base = 5000000;
+                break;
+        }
+
+        int bonus = 0;
+        int years = this.getTeaching_years();
+        if (years >= 1 && years <= 3) {
+            bonus = 500000;
+        } else if (years >= 4 && years <= 6) {
+            bonus = 1000000;
+        } else if (years > 6) {
+            bonus = 2000000;
+        }
+
+        this.setBaseSalary(base);
+        this.setTotalSalary(base + bonus);
     }
-
-    int bonus = 0;
-    int years = this.getTeaching_years();
-    if (years >= 1 && years <= 3) bonus = 500000;
-    else if (years >= 4 && years <= 6) bonus = 1000000;
-    else if (years > 6) bonus = 2000000;
-
-    this.setBaseSalary(base);
-    this.setTotalSalary(base + bonus);
-}
-
 
 }

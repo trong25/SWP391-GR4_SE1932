@@ -146,10 +146,6 @@
                                             <div class="user-profile">
                                                 <div class="user-avatar">
                                                     <c:set var="tempStudent" value="${studentBean.getStudentByUserId(sessionScope.student.userId)}"/>
-                                                    <c:if test="${tempStudent != null}">
-                                                        <c:set var="student" value="${studentBean.getStudentByIdWithNames(tempStudent.id)}"/>
-                                                    </c:if>
-
                                                     <img src="${pageContext.request.contextPath}/images/${student.avatar}" alt="User Avatar">
                                                 </div>
                                                 <h5 class="user-name">${student.lastName} ${student.firstName}</h5>
@@ -221,22 +217,16 @@
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
                                                         <label for="schoolName">Trường</label>
-                                                        <input style="width: 60%;" type="text" class="form-control" 
-                                                               placeholder="Trường" name="schoolName" 
-                                                               value="${student.school_id.schoolName}" readonly />
+                                                        <input style="width: 60%;" type="text" class="form-control" placeholder="Trường" name="schoolName" value="${personnel.schoolName}" />
                                                     </div>
                                                 </div>
-
                                                 <!-- Lớp -->
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
                                                         <label for="className">Lớp</label>
-                                                        <input style="width: 40%;" type="text" class="form-control" 
-                                                               placeholder="Lớp" name="className" 
-                                                               value="${student.school_class_id.className}" readonly />
+                                                        <input style="width: 40%;" type="text" class="form-control" placeholder="Lớp" name="className" value="${personnel.className}" />
                                                     </div>
                                                 </div>
-
                                             </div> 
                                             <div class="row gutters">
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
