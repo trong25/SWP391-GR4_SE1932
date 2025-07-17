@@ -101,12 +101,14 @@ public class ClassServlett extends HttpServlet {
                 String name = request.getParameter("name");
                 name = Helper.formatName(name);
                 String gradeId = request.getParameter("grade");
+                String classType = request.getParameter("classType");
                 String schoolYearId = request.getParameter("schoolYear");
                 String teacherId = request.getParameter("teacher");
                 Class c = new Class();
                 c.setName(name);
                 GradeDAO gradeDAO = new GradeDAO();
                 c.setGrade(gradeDAO.getGrade(gradeId));
+                c.setClassType(classType);
                 SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
                 c.setSchoolYear(schoolYearDAO.getSchoolYear(schoolYearId));
                 PersonnelDAO personnelDAO = new PersonnelDAO();

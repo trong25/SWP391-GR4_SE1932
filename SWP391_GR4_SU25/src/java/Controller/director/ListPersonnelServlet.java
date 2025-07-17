@@ -117,7 +117,7 @@ public class ListPersonnelServlet extends HttpServlet {
                     persons = personnelDAO.getPersonnelByRole(-1);
                 }
             } else {
-                persons = personnelDAO.getPersonnelByIdNameRoleStatus(status, role);
+                persons = personnelDAO.getPersonnelByIdNameRoleStatus1(status, role);
             }
         }
         List<String> statuss = new ArrayList<>();

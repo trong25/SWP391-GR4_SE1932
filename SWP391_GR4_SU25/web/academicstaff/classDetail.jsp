@@ -199,21 +199,16 @@
 
                             <div class="card-header py-3">
                                 <c:choose>
-                                    <c:when test="${requestScope.teacherName eq 'null null'}">
-                                        <h6 class="m-0 font-weight-bold text-primary">Giáo viên: <a
-                                                style="color: red">Chưa được phân công</a>
-                                        </h6>
+                                    <c:when test="${requestScope.teacherName eq 'Chưa được phân công'}">
+                                        <h6 class="m-0 font-weight-bold text-primary">Giáo viên: <a style="color: red">Chưa được phân công</a></h6>
                                     </c:when>
                                     <c:otherwise>
-                                        <h6 class="m-0 font-weight-bold text-primary">Giáo viên: <a
-                                                >${requestScope.teacherName}</a>
-                                        </h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Giáo viên: <a>${requestScope.teacherName}</a></h6>
                                     </c:otherwise>
                                 </c:choose>
-                                <h6 class="m-0 font-weight-bold text-primary">Lớp: <a
-                                        style="margin-right: 60px;">${classes.name}</a></h6>
-                                <h6 class="m-0 font-weight-bold text-primary">Khối: <a
-                                        >${classes.grade.name}</a></h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Lớp: <a style="margin-right: 60px;">${classes.name}</a></h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Khối: <a>${classes.grade.name}</a></h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Loại Lớp <a>${classes.classType}</a></h6>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -439,28 +434,28 @@
                                                     </div>
 
                                                     <%--                                                        sub teacher--%>
-<!--                                                    <div class="form-group">
-                                                        <input type="checkbox" id="substituteCheckbox" name="substituteCheckbox">
-                                                        <label for="substituteCheckbox">Phân công giáo viên dạy thay</label>
-                                                    </div>
-                                                    <div class="form-group" id="substituteTeacherDiv" style="display:none;">
-                                                        <label class="control-label mt-2" for="days">Chọn ngày<a style="color: red">*</a></label>
-                                                        <select class="form-control" id="days" name="day" onchange="submit('assignTeacher')">
-                                                            <option value="">-- Chọn Ngày --</option>
-                                                            <c:forEach var="day" items="${dayBean.getDaysInFutureWithTimetableForClass(requestScope.classes.id)}">
-                                                                <option value="${day.id}" ${requestScope.dayId eq day.id ? "selected":""}>${day.date}</option>
-                                                            </c:forEach>
-                                                        </select>
-                                                        <label class="control-label" for="substituteTeacher">Mã - Tên giáo viên Dạy Thay<a style="color: red">*</a></label>
-                                                        <select class="form-control" id="substituteTeacher" name="substituteTeacher">
-                                                            <option value="null">-- Chọn Giáo Viên --</option>
+                                                    <!--                                                    <div class="form-group">
+                                                                                                            <input type="checkbox" id="substituteCheckbox" name="substituteCheckbox">
+                                                                                                            <label for="substituteCheckbox">Phân công giáo viên dạy thay</label>
+                                                                                                        </div>
+                                                                                                        <div class="form-group" id="substituteTeacherDiv" style="display:none;">
+                                                                                                            <label class="control-label mt-2" for="days">Chọn ngày<a style="color: red">*</a></label>
+                                                                                                            <select class="form-control" id="days" name="day" onchange="submit('assignTeacher')">
+                                                                                                                <option value="">-- Chọn Ngày --</option>
+                                                    <c:forEach var="day" items="${dayBean.getDaysInFutureWithTimetableForClass(requestScope.classes.id)}">
+                                                        <option value="${day.id}" ${requestScope.dayId eq day.id ? "selected":""}>${day.date}</option>
+                                                    </c:forEach>
+                                                </select>
+                                                <label class="control-label" for="substituteTeacher">Mã - Tên giáo viên Dạy Thay<a style="color: red">*</a></label>
+                                                <select class="form-control" id="substituteTeacher" name="substituteTeacher">
+                                                    <option value="null">-- Chọn Giáo Viên --</option>
 
-                                                            <c:forEach var="teacher" items="${requestScope.freeTeachers}">
-                                                                <option value="${teacher.id}" ${param.substituteTeacher eq teacher.id ? "selected":""}>${teacher.id} - ${teacher.lastName} ${teacher.firstName}</option>
-                                                            </c:forEach>
+                                                    <c:forEach var="teacher" items="${requestScope.freeTeachers}">
+                                                        <option value="${teacher.id}" ${param.substituteTeacher eq teacher.id ? "selected":""}>${teacher.id} - ${teacher.lastName} ${teacher.firstName}</option>
+                                                    </c:forEach>
 
-                                                        </select>
-                                                    </div>-->
+                                                </select>
+                                            </div>-->
                                                 </div>
                                             </div>
                                             <br>
@@ -545,7 +540,7 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-          <script>
+        <script>
             // Variable to track the current state (true: checked, false: unchecked)
             var areChecked = false;
 

@@ -202,6 +202,38 @@ public class StudentDAO extends DBContext {
         return 0;
     }
 
+    public List<Student> getStudentsByGrade(String gradeName) {
+    String sql = """
+        SELECT s.*, 
+               sch.schoolName AS schoolName,
+               sch.addressSchool AS addressSchool,
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_name
+        FROM Students s
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
+        WHERE cls.grade_level = ? AND s.status = N'Đang theo học'
+        ORDER BY s.id DESC
+    """;
+
+    List<Student> listStudent = new ArrayList<>();
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, gradeName); // ví dụ: "Khối 6"
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Student student = createStudent(resultSet);
+            if (student != null) {
+                listStudent.add(student);
+            }
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi lấy học sinh theo khối và trạng thái: " + e.getMessage(), e);
+    }
+    return listStudent;
+}
+
+
     public List<Student> getAllStudents() {
         String sql = """
         SELECT s.*, 

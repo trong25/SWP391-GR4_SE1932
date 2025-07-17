@@ -230,6 +230,10 @@
         <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
         <servlet-class>Controller.accountant.ViewPersonnelSalaryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateSalaryServlet</servlet-name>
+        <servlet-class>Controller.accountant.CreateSalaryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -423,5 +427,9 @@
     <servlet-mapping>
         <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
         <url-pattern>/accountant/viewpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateSalaryServlet</servlet-name>
+        <url-pattern>/accountant/createsalary</url-pattern>
     </servlet-mapping>
 </web-app>
