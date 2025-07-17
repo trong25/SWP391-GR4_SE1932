@@ -750,6 +750,45 @@ public List<Personnel> getPersonnelByIdNameRoleStatus(String status, String role
 
     return persons;
 }
+ public List<Personnel> getPersonnelByIdNameRoleStatus1(String status, String role) {
+        String sql = " Select * from Personnels where 1=1";
+
+        if (status != null && !status.isEmpty()) {
+            sql += " AND status = N'" + status + "'";
+        }
+        if (role != null && !role.isEmpty()) {
+            int xrole = Integer.parseInt(role);
+            sql += " AND role_id = " + xrole + "";
+        }
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+
     public List<Personnel> getPersonnelByNameOrId(String search) {
         String sql = "select * from [Personnels] where (last_name+' '+ first_name like N'%" + search + "%' or id like '%" + search + "%' ) ";
         List<Personnel> persons = new ArrayList<>();
