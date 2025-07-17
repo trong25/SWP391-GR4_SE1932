@@ -49,13 +49,19 @@ public class StudentDAO extends DBContext {
             SchoolDAO schoolDAO = new SchoolDAO();
             // Tạo và gán School object
             Schools school = schoolDAO.getSchoolsById(resultSet.getString("school_id"));
-//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
             student.setSchool_id(school);
 
 //         Tạo và gán SchoolClass object
             SchoolClass schoolClass = new SchoolClass();
             schoolClass.setId(resultSet.getString("school_class_id"));
-//        schoolClass.setClassName(resultSet.getString("class_name"));
+
+       schoolClass.setClassName(resultSet.getString("class_name"));
+
+            schoolClass.setClassName(resultSet.getString("class_name"));
+            schoolClass.setGrade_level(resultSet.getString("grade_level")); // Lấy tên khối từ grade_level
+
+
             student.setSchool_class_id(schoolClass);
 
             return student;
@@ -70,7 +76,12 @@ public class StudentDAO extends DBContext {
         SELECT TOP 1 s.*, 
                      sc.schoolName, 
                      sc.addressSchool, 
+
                      c.class_name 
+
+                     c.class_name, 
+                     c.grade_level AS grade_level
+
         FROM Students s 
         LEFT JOIN Schools sc ON s.school_id = sc.id 
         LEFT JOIN SchoolClasses c ON s.school_class_id = c.id 
@@ -165,7 +176,13 @@ public class StudentDAO extends DBContext {
         String sql = """
         SELECT s.*, 
                sch.schoolName AS schoolName, 
+
                cls.class_name AS class_name
+
+               sch.addressSchool AS addressSchool, 
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
+
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -208,7 +225,7 @@ public class StudentDAO extends DBContext {
                sch.schoolName AS schoolName,
                sch.addressSchool AS addressSchool,
                cls.class_name AS class_name,
-               cls.grade_level AS grade_name
+               cls.grade_level AS grade_level
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -235,49 +252,79 @@ public class StudentDAO extends DBContext {
 
 
     public List<Student> getAllStudents() {
-        String sql = """
+  String sql = """
         SELECT s.*, 
-               sch.schoolName AS schoolName,
+     sch.schoolName AS schoolName,
                sch.addressSchool AS addressSchool,
-               cls.class_name AS class_name
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
         ORDER BY s.id DESC
     """;
 
-        List<Student> listStudent = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Student student = createStudent(resultSet);
+    List<Student> listStudent = new ArrayList<>();
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Student student = createStudent(resultSet);
+            if (student != null) {
                 listStudent.add(student);
+            } else {
+                System.err.println("⚠️ Lỗi tạo student từ ResultSet");
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
-        return listStudent;
+    } catch (SQLException e) {
+        throw new RuntimeException("❌ Lỗi khi lấy danh sách học sinh: ", e);
     }
+    return listStudent;
+}
 
-    public Student getStudentByUserId(String userId) {
-        String sql = "SELECT s.*, sc.schoolName, c.class_name "
-                + "FROM Students s "
-                + "LEFT JOIN Schools sc ON s.school_id = sc.id "
-                + "LEFT JOIN SchoolClasses c ON s.school_class_id = c.id "
-                + "WHERE s.user_id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
+
+
+   
+
+
+   public Student getStudentByUserId(String userId) {
+    String sql = """
+        SELECT s.*, 
+               sc.schoolName, 
+               sc.addressSchool, 
+               c.class_name,
+               c.grade_level
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.user_id = ?
+    """;
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setString(1, userId);
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
             if (resultSet.next()) {
                 return createStudent(resultSet);
+            } else {
+                System.out.println("⚠️ Không tìm thấy học sinh với user_id = " + userId);
             }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
+
+
         }
-        return null;
+
+    } catch (SQLException e) {
+        System.err.println("❌ Lỗi khi truy vấn học sinh theo userId = " + userId);
+        e.printStackTrace();
     }
+
+    return null;
+}
+
 
     public boolean checkFirstGuardianPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Students] WHERE first_guardian_phone_number = ?";
@@ -314,7 +361,12 @@ public class StudentDAO extends DBContext {
         SELECT s.*, 
                sch.schoolName AS schoolName,
                sch.addressSchool AS addressSchool,
+
                cls.class_name AS class_name
+
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
+
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -654,6 +706,10 @@ public class StudentDAO extends DBContext {
                sch.schoolName, 
                sch.addressSchool AS addressSchool, 
                cls.class_name
+
+               cls.class_name,
+                    cls.grade_level AS grade_level
+
         FROM Students s
         JOIN classDetails c ON s.id = c.student_id
         LEFT JOIN Schools sch ON s.school_id = sch.id

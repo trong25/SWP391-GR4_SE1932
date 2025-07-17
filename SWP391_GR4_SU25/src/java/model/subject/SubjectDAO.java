@@ -41,31 +41,7 @@ public class SubjectDAO extends DBContext {
         return subject;
     }
 
-    public String createSubject(Subject subject) {
-        String sql = "INSERT INTO [dbo].[Subjects] ([id], [name], [grade_id], [description], [status], [subject_type]) VALUES (?, ?, ?, ?, ?, ?)";
-
-        if (checkSubjectExist(subject.getName(), subject.getGrade().getId())) {
-            return "Tạo thất bại! Môn học đã tồn tại.";
-        }
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
-
-            preparedStatement.setString(1, newId);
-            preparedStatement.setString(2, subject.getName());
-            preparedStatement.setString(3, subject.getGrade().getId());
-            preparedStatement.setString(4, subject.getDescription());
-            preparedStatement.setString(5, subject.getStatus());
-            preparedStatement.setString(6, subject.getSubjectType());
-
-            int rowsInserted = preparedStatement.executeUpdate();
-            return (rowsInserted > 0) ? "success" : "Tạo thất bại! Không thể thêm môn học.";
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Tạo thất bại! Lỗi cơ sở dữ liệu: " + e.getMessage();
-        }
-    }
+    
 
     public boolean checkSubjectExist(String name, String gradeId) {
         String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt')";
@@ -83,31 +59,6 @@ public class SubjectDAO extends DBContext {
         return false;
     }
 
-    public Subject getLastest() {
-        String sql = "Select top 1 * from Subjects order by id desc";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return createSubject(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
-    private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "S" + result;
-    }
 
     public Subject getSubjectBySubjectId(String subjectId) {
         String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
@@ -153,22 +104,85 @@ public class SubjectDAO extends DBContext {
         return subjects;
     }
 
-    public List<Subject> getSubjectsByStatus(String status) {
-        List<Subject> subjectList = new ArrayList<>();
-        String sql = "select * from Subjects where status = ? order by id desc";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);
-            ResultSet resultSet = preparedStatement.executeQuery();
+public List<Subject> getSubjectsByStatus(String status) {
+    List<Subject> subjectList = new ArrayList<>();
+    String sql = "SELECT * FROM Subjects WHERE status = ? ORDER BY id DESC";
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setString(1, status); // "Đang hoạt động", "Ngừng hoạt động", v.v.
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 Subject subject = createSubject(resultSet);
                 subjectList.add(subject);
             }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Lỗi truy vấn môn học theo trạng thái", e);
+    }
+
+
+    return subjectList;
+}
+
+
+
+    public Subject getLastest() {
+        String sql = "Select top 1 * from Subjects order by id desc";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createSubject(resultSet);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return subjectList;
+        return null;
     }
+
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "S" + result;
+    }
+
+    public String createSubject(Subject subject) {
+        String sql = "INSERT INTO [dbo].[Subjects] ([id], [name], [grade_id], [description], [status], [subject_type]) VALUES (?, ?, ?, ?, ?, ?)";
+
+        if (checkSubjectExist(subject.getName(), subject.getGrade().getId())) {
+            return "Tạo thất bại! Môn học đã tồn tại.";
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
+
+            preparedStatement.setString(1, newId);
+            preparedStatement.setString(2, subject.getName());
+            preparedStatement.setString(3, subject.getGrade().getId());
+            preparedStatement.setString(4, subject.getDescription());
+            preparedStatement.setString(5, subject.getStatus());
+            preparedStatement.setString(6, subject.getSubjectType());
+
+            int rowsInserted = preparedStatement.executeUpdate();
+            return (rowsInserted > 0) ? "success" : "Tạo thất bại! Không thể thêm môn học.";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Tạo thất bại! Lỗi cơ sở dữ liệu: " + e.getMessage();
+        }
+    }
+
+   
+
+   
+
 
     public String editSubject(Subject subject) {
         // Kiểm tra xem môn học đã tồn tại chưa (trừ chính nó)
