@@ -69,16 +69,29 @@
                                     <tr>
                                         <td>${status.index + 1}</td>
                                         <td>${student.lastName} ${student.firstName}</td>
-                                        <c:forEach var="day" items="${requestScope.days}">
-                                            <c:set var="evaluation" value="${studentEvaluationBean.getEvaluationByStudentIdAndDay(student.id, date.id)}"/>
-                                            <c:set value="${evaluation.status}" var="s"/>
-                                            <c:if test="${s eq 'Tốt'}">
-                                                <td><span class="badge badge-success">Tốt</span></td>
-                                            </c:if>
-                                            <c:if test="${s eq 'Khá'}">
-                                                <td><span class="badge badge-danger">Khá</span> </td>
-                                            </c:if>
-                                        </c:forEach>
+                                                                <c:forEach var="day" items="${requestScope.days}">
+                            <c:set var="evaluation" value="${studentEvaluationBean.getEvaluationByStudentIdAndDay(student.id, day.id)}"/>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${evaluation != null}">
+                                        <c:set value="${evaluation.evaluation}" var="s"/>
+                                        <c:if test="${s eq 'Tốt'}">
+                                            <span class="badge badge-success">Tốt</span>
+                                        </c:if>
+                                        <c:if test="${s eq 'Khá'}">
+                                            <span class="badge badge-warning">Khá</span>
+                                        </c:if>
+                                        <c:if test="${s eq 'Trung bình'}">
+                                            <span class="badge badge-info">Trung bình</span>
+                                        </c:if>
+                                        <c:if test="${s eq 'Yếu'}">
+                                            <span class="badge badge-danger">Yếu</span>
+                                        </c:if>
+                                    </c:when>
+             
+                                </c:choose>
+                            </td>
+                        </c:forEach>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

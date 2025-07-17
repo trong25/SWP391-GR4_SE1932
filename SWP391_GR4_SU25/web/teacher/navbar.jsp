@@ -159,7 +159,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="evaluate"><span>Đánh giá học sinh <br> hằng ngày</span></a>
                         <a class="collapse-item" href="schoolyearsummarize">Tổng kết năm học</a>
-                        <a class="collapse-item" href="viewevaluationreport">Báo cáo đánh giá</a>
+                        <a class="collapse-item" href="studentsevaluation">Báo cáo đánh giá</a>
                     </div>
                 </div>
             </li>
