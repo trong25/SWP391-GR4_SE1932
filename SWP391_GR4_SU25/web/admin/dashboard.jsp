@@ -24,6 +24,24 @@
 
         <!-- Custom styles for this template-->
         <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+        <style>
+            html, body {
+                height: 100%;
+            }
+            #content-wrapper {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #content {
+                flex: 1;
+            }
+
+            footer {
+                margin-top: auto;
+            }
+        </style>
 
     </head>
 
@@ -111,15 +129,166 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Content Row - Charts -->
+                            <div class="row">
+
+                                <!-- Biểu đồ cột: Nhân sự theo vai trò -->
+                                <div class="col-xl-6 col-lg-6 mb-4">
+                                    <div class="card shadow h-100">
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Nhân sự theo vai trò</h6>
+                                            <div class="dropdown no-arrow">
+                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body" style="height: 400px;">
+                                            <div class="chart-bar h-100">
+                                                <canvas id="barChart" width="100%" height="100%"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Biểu đồ tròn: Nhân sự theo trạng thái -->
+                                <div class="col-xl-6 col-lg-6 mb-4">
+                                    <div class="card shadow h-100">
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-success">Nhân sự theo trạng thái</h6>
+                                            <div class="dropdown no-arrow">
+                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="card-body d-flex flex-column justify-content-center" style="height: 400px;">
+                                            <div class="chart-pie h-75 d-flex justify-content-center align-items-center">
+                                                <canvas id="pieChart" width="100%" height="100%"></canvas>
+                                            </div>
+                                            <div class="mt-3 text-center small">
+                                                <span class="mr-3">
+                                                    <i class="fas fa-circle text-success"></i> Đang làm việc
+                                                </span>
+                                                <span class="mr-3">
+                                                    <i class="fas fa-circle text-warning"></i> Đang chờ xử lý
+                                                </span>
+                                                <span class="mr-3">
+                                                    <i class="fas fa-circle text-danger"></i> Từ chối
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-
                     </div>
+                    <jsp:include page="../footer.jsp"/>
                 </div>
-                <jsp:include page="../footer.jsp"/>
             </div>
-        </div>
+                
+
+
+            <!-- Page level plugins -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+            <script>
+                // Dữ liệu từ JSP
+                const roleLabels = [<c:forEach var="entry" items="${countByRole}">"${entry.key}",</c:forEach>];
+                const roleData = [<c:forEach var="entry" items="${countByRole}">${entry.value},</c:forEach>];
+
+                const statusLabels = [<c:forEach var="entry" items="${countByStatus}">"${entry.key}",</c:forEach>];
+                const statusData = [<c:forEach var="entry" items="${countByStatus}">${entry.value},</c:forEach>];
+
+                // Map màu theo trạng thái (dạng thường, không dấu)
+                const statusColorMap = {
+                    "đang làm việc": "#1cc88a",
+                    "đang chờ xử lý": "#f6c23e",
+                    "từ chối": "#e74a3b"
+                };
+
+                // Chuẩn hóa nhãn trạng thái (để khớp với key trong map)
+                const normalizeLabel = label => label.trim().toLowerCase();
+
+                // Sinh mảng màu đúng thứ tự label từ dữ liệu backend
+                const backgroundColors = statusLabels.map(label => {
+                    const normalized = normalizeLabel(label);
+                    return statusColorMap[normalized] || "#cccccc"; // màu xám nếu không khớp
+                });
+
+                // ==== BIỂU ĐỒ CỘT - Nhân sự theo vai trò ====
+                new Chart(document.getElementById("barChart"), {
+                    type: 'bar',
+                    data: {
+                        labels: roleLabels,
+                        datasets: [{
+                                label: 'Số lượng nhân sự',
+                                data: roleData,
+                                backgroundColor: [
+                                    '#4e73df',
+                                    '#1cc88a',
+                                    '#36b9cc',
+                                    '#f6c23e',
+                                    '#e74a3b'
+                                ],
+                                borderColor: [
+                                    '#4e73df',
+                                    '#1cc88a',
+                                    '#36b9cc',
+                                    '#f6c23e',
+                                    '#e74a3b'
+                                ],
+                                borderWidth: 1
+                            }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // ==== BIỂU ĐỒ TRÒN - Nhân sự theo trạng thái ====
+                new Chart(document.getElementById("pieChart"), {
+                    type: 'doughnut',
+                    data: {
+                        labels: statusLabels,
+                        datasets: [{
+                                data: statusData,
+                                backgroundColor: backgroundColors,
+                                borderColor: backgroundColors,
+                                borderWidth: 2
+                            }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
+            </script>
+
+
     </body>
-
-
 
 </html>

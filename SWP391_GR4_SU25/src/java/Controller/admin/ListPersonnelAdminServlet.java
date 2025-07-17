@@ -49,7 +49,6 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         List<Personnel> persons = personnelDAO.getAllPersonnels();
         List<Role> roles = personnelDAO.getAllPersonnelRole();
         List<String> statuss = personnelDAO.getAllStatus();
-        List<Personnel> waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
 
         request.setAttribute("selectedstatus", "all");
         request.setAttribute("selectedrole", "all");
@@ -57,7 +56,6 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         request.setAttribute("type", type);
         request.setAttribute("persons", persons);
         request.setAttribute("roles", roles);
-        request.setAttribute("waitlist", waitlist);
         request.setAttribute("statuss", statuss);
 
        request.getRequestDispatcher("/admin/listPersonnel.jsp").forward(request, response);
@@ -81,9 +79,7 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         String role = request.getParameter("role");
         String status = request.getParameter("status");
         String search = request.getParameter("search");
-        System.out.println(role);
-        System.out.println(status);
-        System.out.println(search);
+
         List<Personnel> persons = new ArrayList<Personnel>();
         List<Role> roles = new ArrayList<>();
         PersonnelDAO personnelDAO = new PersonnelDAO();
@@ -112,14 +108,10 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         List<String> statuss = new ArrayList<>();
         statuss = personnelDAO.getAllStatus();
         request.setAttribute("statuss", statuss);
-        List<Personnel> waitlist = new ArrayList<>();
-        waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-        request.setAttribute("searchdata", search);
         request.setAttribute("selectedstatus", status);
         request.setAttribute("selectedrole", role);
         request.setAttribute("message", message);
         request.setAttribute("type", type);
-        request.setAttribute("waitlist", waitlist);
         request.setAttribute("roles", roles);
         request.setAttribute("persons", persons);
         request.getRequestDispatcher("/admin/listPersonnel.jsp").forward(request, response);

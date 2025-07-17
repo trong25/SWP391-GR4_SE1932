@@ -80,6 +80,9 @@
                                             </c:forEach>
                                         </tbody>
                                     </table>
+                                    <div class="form-group float-right">
+                                        <a href="dashboard" class="btn btn-danger ml-2"">← Quay lại</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
