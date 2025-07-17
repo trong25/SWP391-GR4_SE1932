@@ -191,6 +191,10 @@
                                             <label>Tên Lớp Học:</label>
                                             <input class="form-control-sm form-control" type="text" name="className" value="${student.school_class_id.className}" readonly>
                                         </div>
+                                          <div class="form-group">
+                                            <label>Khối:</label>
+                                            <input class="form-control-sm form-control" type="text" name="grade_level" value="${student.school_class_id.grade_level}" readonly>
+                                        </div>
                                         <div class="form-group">
                                             <label>Họ Tên Bố:</label>
                                             <input class="form-control-sm form-control" type="text" name="first_guardian_name" value="${student.firstGuardianName}" readonly>
@@ -206,10 +210,6 @@
                                         <div class="form-group">
                                             <label>SĐT Mẹ:</label>
                                             <input class="form-control-sm form-control" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" readonly>
-                                        </div>
-                                          <div class="form-group">
-                                            <label>Địa chỉ Trường Học:</label>
-                                            <input class="form-control-sm form-control" type="text" name="addressSchool" value="${student.school_id.addressSchool}" readonly>
                                         </div>
                                         <div class="form-group">
                                             <label>Cam kết của phụ huynh:</label>

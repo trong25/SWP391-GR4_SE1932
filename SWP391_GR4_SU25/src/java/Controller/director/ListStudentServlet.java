@@ -18,7 +18,6 @@ import model.schoolYear.SchoolYearDAO;
 import model.student.Student;
 import model.student.StudentDAO;
 import model.classes.Class;
-
 /**
  * Servlet ListStudentServlet xử lý các yêu cầu HTTP liên quan đến hiển thị danh sách học sinh theo lớp và năm học.
  * 
@@ -31,7 +30,11 @@ import model.classes.Class;
  * 
  * Phân quyền: Chỉ vai trò Director (Giám đốc trung tâm) được phép truy cập chức năng này
  * 
+
+ * @author ThanhNT
+
  * @author Hachithanh
+
  * @version 1.0
  */
 
@@ -55,7 +58,9 @@ public class ListStudentServlet extends HttpServlet {
         }
     }
 
+
   
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

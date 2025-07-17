@@ -1,3 +1,4 @@
+
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -166,11 +167,6 @@
                 <a class="nav-link" href="application">
                     <i class="fas fa-fw fa-envelope" aria-hidden="true"></i>
                     <span>Xử Lý Đơn Từ</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="listevent">
-                    <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
-                    <span>Danh Sách Sự Kiện</span></a>
             </li>
 
 

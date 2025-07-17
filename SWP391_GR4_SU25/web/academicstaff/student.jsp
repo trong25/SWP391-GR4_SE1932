@@ -100,6 +100,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
+
                                     <table class="table table-bordered" id="dataTable">
                                         <thead>
                                             <tr class="table">
@@ -110,7 +111,7 @@
                                                 <th>Mã Trường</th>
                                                 <th>Tên Trường Học</th>
                                                 <th>Tên Lớp Học</th>
-                                                <th>Địa chỉ Trường Học</th>
+                                                <th>Khối Lớp</th>
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -124,8 +125,11 @@
                                                     <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd"/></td>
                                                     <td>${student.school_id.id}</td>
                                                     <td>${student.school_id.schoolName}</td>
+
                                                     <td>${student.school_class_id.className}</td>
-                                                    <td>${student.school_id.addressSchool}</td>
+                                                    <td>${student.school_class_id.grade_level}</td>
+
+
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
                                                         <td><span class="badge badge-success">${status}</span></td>
@@ -156,7 +160,7 @@
                         </div>
 
 
-                        <!-- New School Pupil Modal -->
+                        <!-- New School Student Modal -->
                         <div class="modal fade create-pupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
                              aria-hidden="true" >
                             <div class="modal-dialog modal-lg">
@@ -234,8 +238,6 @@
                                                                     <input type="text" class="form-control" id="firstName" style="width: 70%"
                                                                            name="firstName" value="${param.firstName}">
                                                                 </div>
-
-
                                                                 <div class="form-group col-md-6">
                                                                     <label for="schoolID">Mã Trường Học<a style="color: red">(*)</a></label>
                                                                     <select class="form-control" id="schoolID" name="schoolID" style="width: 70%" onchange="loadSchoolClasses(this.value)">
@@ -254,9 +256,11 @@
                                                                         <option value="">-- Chọn lớp học --</option>
                                                                     </select>
                                                                 </div>
-                                                                
 
-
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="gradeLevel">Khối Học<a style="color: red">*</a></label>
+                                                                    <input type="text" class="form-control" id="gradeLevel" name="gradeName" style="width: 70%" value="${param.gradeName}">
+                                                                </div>
 
                                                                 <div class="form-group col-md-6">
                                                                     <label for="firstGuardianName">Họ tên Bố<a
@@ -348,57 +352,59 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-           <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form"); // điều chỉnh selector nếu cần
-        form.addEventListener("submit", function (event) {
-            const schoolSelect = document.getElementById("schoolID");
-            const classSelect = document.getElementById("schoolClassID");
 
-            let isValid = true;
-            let message = "";
 
-            if (schoolSelect.value.trim() === "") {
-                isValid = false;
-                message += "Vui lòng chọn trường học.\n";
-            }
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form"); // điều chỉnh selector nếu cần
+                form.addEventListener("submit", function (event) {
+                    const schoolSelect = document.getElementById("schoolID");
+                    const classSelect = document.getElementById("schoolClassID");
 
-            if (classSelect.value.trim() === "") {
-                isValid = false;
-                message += "Vui lòng chọn lớp học.\n";
-            }
+                    let isValid = true;
+                    let message = "";
 
-            if (!isValid) {
-                event.preventDefault(); // Ngăn không cho submit form
-                alert(message); // hoặc thay bằng toast nếu bạn đang dùng thư viện thông báo
-            }
-        });
-    });
+                    if (schoolSelect.value.trim() === "") {
+                        isValid = false;
+                        message += "Vui lòng chọn trường học.\n";
+                    }
 
-    function loadSchoolClasses(schoolId) {
-        const classSelect = document.getElementById("schoolClassID");
-        classSelect.innerHTML = '<option value="">-- Đang tải lớp học --</option>';
+                    if (classSelect.value.trim() === "") {
+                        isValid = false;
+                        message += "Vui lòng chọn lớp học.\n";
+                    }
 
-        fetch('student?schoolId=' + schoolId, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                classSelect.innerHTML = '<option value="">-- Chọn lớp học --</option>';
-                data.forEach(function (schoolClass) {
-                    const option = document.createElement("option");
-                    option.value = schoolClass.id;
-                    option.text = schoolClass.className;
-                    classSelect.appendChild(option);
+                    if (!isValid) {
+                        event.preventDefault(); // Ngăn không cho submit form
+                        alert(message); // hoặc thay bằng toast nếu bạn đang dùng thư viện thông báo
+                    }
                 });
-            })
-            .catch(error => {
-                classSelect.innerHTML = '<option value="">-- Không thể tải lớp học --</option>';
             });
-    }
-</script>
+
+            function loadSchoolClasses(schoolId) {
+                const classSelect = document.getElementById("schoolClassID");
+                classSelect.innerHTML = '<option value="">-- Đang tải lớp học --</option>';
+
+                fetch('student?schoolId=' + schoolId, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                        .then(response => response.json())
+                        .then(data => {
+                            classSelect.innerHTML = '<option value="">-- Chọn lớp học --</option>';
+                            data.forEach(function (schoolClass) {
+                                const option = document.createElement("option");
+                                option.value = schoolClass.id;
+                                option.text = schoolClass.className;
+                                classSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => {
+                            classSelect.innerHTML = '<option value="">-- Không thể tải lớp học --</option>';
+                        });
+            }
+        </script>
 
         <script>
             function validateForm() {

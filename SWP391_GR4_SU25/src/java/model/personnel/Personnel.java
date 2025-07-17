@@ -27,13 +27,24 @@ public class Personnel {
     private String className;
     private String addressSchool;
 
-   
+    private String specialization;
+    private String qualification;
+    private int teaching_years;
+    private String achievements;
+    private String cv_file;
+    private int baseSalary;
+private int totalSalary;
+
 
     // Constructors
     public Personnel() {
     }
 
+
     public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String specialization, String qualification, int teaching_years, String achievements, String cv_file, String schoolName, String className, String addressSchool) {
+
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
+
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -56,7 +67,46 @@ public class Personnel {
         this.schoolName = schoolName;
         this.className = className;
         this.addressSchool = addressSchool;
+        this.specialization = specialization;
+        this.qualification = qualification;
+        this.teaching_years = teaching_years;
+        this.achievements = achievements;
+        this.cv_file = cv_file;
     }
+
+
+    public int getBaseSalary() {
+        return baseSalary;
+    }
+
+    public void setBaseSalary(int baseSalary) {
+        this.baseSalary = baseSalary;
+    }
+
+    public int getTotalSalary() {
+        return totalSalary;
+    }
+
+    public void setTotalSalary(int totalSalary) {
+        this.totalSalary = totalSalary;
+    }
+
+    public String getSchool_id() {
+        return school_id;
+    }
+
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
+    }
+
+    public String getSchool_class_id() {
+        return school_class_id;
+    }
+
+    public void setSchool_class_id(String school_class_id) {
+        this.school_class_id = school_class_id;
+    }
+
 
     public String getId() {
         return id;
@@ -82,7 +132,27 @@ public class Personnel {
         this.lastName = lastName;
     }
 
+
     public boolean isGender() {
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public boolean getGender() {
+
         return gender;
     }
 
@@ -154,6 +224,7 @@ public class Personnel {
         this.userId = userId;
     }
 
+
     public String getSchool_id() {
         return school_id;
     }
@@ -168,6 +239,14 @@ public class Personnel {
 
     public void setSchool_class_id(String school_class_id) {
         this.school_class_id = school_class_id;
+
+    public String getAddressSchool() {
+        return addressSchool;
+    }
+
+    public void setAddressSchool(String addressSchool) {
+        this.addressSchool = addressSchool;
+
     }
 
     public String getSpecialization() {
@@ -210,6 +289,7 @@ public class Personnel {
         this.cv_file = cv_file;
     }
 
+
     public String getSchoolName() {
         return schoolName;
     }
@@ -237,4 +317,34 @@ public class Personnel {
 
    
    
+
+public void calculateSalary() {
+    int base = 0;
+    switch (this.getQualification()) {
+        case "Cử nhân":
+            base = 6000000;
+            break;
+        case "Thạc Sĩ":
+            base = 8000000;
+            break;
+        case "Tiến Sĩ":
+            base = 10000000;
+            break;
+        default:
+            base = 5000000;
+            break;
+    }
+
+    int bonus = 0;
+    int years = this.getTeaching_years();
+    if (years >= 1 && years <= 3) bonus = 500000;
+    else if (years >= 4 && years <= 6) bonus = 1000000;
+    else if (years > 6) bonus = 2000000;
+
+    this.setBaseSalary(base);
+    this.setTotalSalary(base + bonus);
+}
+
+
+
 }

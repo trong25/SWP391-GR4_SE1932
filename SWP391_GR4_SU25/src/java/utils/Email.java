@@ -16,24 +16,24 @@ import java.util.Properties;
  * @author HuyDV
  */
 public class Email {
-    public static void sendEmail(String to, String subject, String content){
+
+    public static void sendEmail(String to, String subject, String content) {
         final String from = "he180086daovanhuy@gmail.com";
-        final String password = "eouf pspj zbeb rxsr"; 
-        
+        final String password = "eouf pspj zbeb rxsr";
+
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
-        
-        
-                Authenticator authenticator = new Authenticator() {
+
+        Authenticator authenticator = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(from, password);
             }
         };
-    Session session = Session.getInstance(properties, authenticator);
+        Session session = Session.getInstance(properties, authenticator);
 
         //Sending email
         MimeMessage message = new MimeMessage(session);
@@ -50,7 +50,6 @@ public class Email {
         } catch (MessagingException e) {
             System.out.println("SendEmail " + e);
         }
-        
 
-}
+    }
 }

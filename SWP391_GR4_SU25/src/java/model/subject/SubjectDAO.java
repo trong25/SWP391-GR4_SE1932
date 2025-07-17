@@ -22,8 +22,15 @@ import model.grade.GradeDAO;
 import utils.DBContext;
 
 /**
+ * Lớp SubjectDAO chịu trách nhiệm thao tác dữ liệu với bảng SubjectDAO trong
+ * Database Lấy dữ liệu từ database liên quan đến bảng SubjectDAO Thức hiên các
+ * chức năng như tạo môn học, lấy môn học qua id, cập nhật và chỉnh sửa môn học,
+ * Ví dụ: createSubject(Subject subject),getSubjectBySubjectId(String
+ * subjectId), getSubjectsByStatus(String status), editSubject(Subject subject)
  *
- * @author MSI
+ * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ *
+ * @author TrongNV
  */
 public class SubjectDAO extends DBContext {
 
@@ -43,76 +50,12 @@ public class SubjectDAO extends DBContext {
         // Thêm dòng này để lấy subject_type từ DB
         subject.setSubjectType(resultSet.getString("subject_type"));
 
+
         return subject;
     }
 
 
-    public String createSubject(Subject subject) {
-        String sql = "INSERT INTO [dbo].[Subjects] ([id], [name], [grade_id], [description], [status], [subject_type]) VALUES (?, ?, ?, ?, ?, ?)";
-
-        if (checkSubjectExist(subject.getName(), subject.getGrade().getId())) {
-            return "Tạo thất bại! Môn học đã tồn tại.";
-        }
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
-
-            preparedStatement.setString(1, newId);
-            preparedStatement.setString(2, subject.getName());
-            preparedStatement.setString(3, subject.getGrade().getId());
-            preparedStatement.setString(4, subject.getDescription());
-            preparedStatement.setString(5, subject.getStatus());
-            preparedStatement.setString(6, subject.getSubjectType());
-
-            int rowsInserted = preparedStatement.executeUpdate();
-            return (rowsInserted > 0) ? "success" : "Tạo thất bại! Không thể thêm môn học.";
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "Tạo thất bại! Lỗi cơ sở dữ liệu: " + e.getMessage();
-        }
-    }
-
-    public boolean checkSubjectExist(String name, String gradeId) {
-        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt')";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, gradeId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
-    }
-
-    public Subject getLastest() {
-        String sql = "Select top 1 * from Subjects order by id desc";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return createSubject(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
-    }
-
-    private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "S" + result;
+        return subject;
     }
 
 
@@ -180,6 +123,7 @@ public class SubjectDAO extends DBContext {
     }
 
 
+
     public boolean updateStatusById(String id, String status) {
         String sql = "update Subjects set status =? where id = ?";
         try {
@@ -190,6 +134,90 @@ public class SubjectDAO extends DBContext {
             return true;
         } catch (SQLException e) {
             System.out.println(e);
+
+    public Subject getLastest() {
+        String sql = "Select top 1 * from Subjects order by id desc";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createSubject(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "S" + result;
+    }
+
+    public String createSubject(Subject subject) {
+        String sql = "INSERT INTO [dbo].[Subjects] ([id], [name], [grade_id], [description], [status], [subject_type]) VALUES (?, ?, ?, ?, ?, ?)";
+
+        if (checkSubjectExist(subject.getName(), subject.getGrade().getId())) {
+            return "Tạo thất bại! Môn học đã tồn tại.";
+        }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
+
+            preparedStatement.setString(1, newId);
+            preparedStatement.setString(2, subject.getName());
+            preparedStatement.setString(3, subject.getGrade().getId());
+            preparedStatement.setString(4, subject.getDescription());
+            preparedStatement.setString(5, subject.getStatus());
+            preparedStatement.setString(6, subject.getSubjectType());
+
+            int rowsInserted = preparedStatement.executeUpdate();
+            return (rowsInserted > 0) ? "success" : "Tạo thất bại! Không thể thêm môn học.";
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Tạo thất bại! Lỗi cơ sở dữ liệu: " + e.getMessage();
+        }
+    }
+
+    public boolean checkSubjectExist(String name, String gradeId) {
+        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt')";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, gradeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
+        return false;
+    }
+
+
+    private boolean checkSubjectExist(String name, String gradeId, String id) {
+        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt') and id != ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, gradeId);
+            preparedStatement.setString(3, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return false;
     }
@@ -225,6 +253,7 @@ public class SubjectDAO extends DBContext {
 
         return "success";
     }
+
 
     private boolean checkSubjectExist(String name, String gradeId, String id) {
         String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt') and id != ?";
@@ -271,5 +300,6 @@ public class SubjectDAO extends DBContext {
         }
         return subjects;
     }
+
 
 }

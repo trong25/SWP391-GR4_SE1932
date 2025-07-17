@@ -31,7 +31,7 @@ import model.day.Day;
 
 /**
  *
- * @author Admin
+ * @author PC
  */
 public class DashboardTeacherServlet extends HttpServlet {
 
@@ -70,7 +70,6 @@ public class DashboardTeacherServlet extends HttpServlet {
             request.setAttribute("sumApplication", sumApplication);
             request.setAttribute("sumNotification", sumNotification);
 
-            // Get today's classes count using TimetableDAO
             TimetableDAO timetableDAO = new TimetableDAO();
             DayDAO dayDAO = new DayDAO();
             try {

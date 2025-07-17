@@ -20,8 +20,16 @@ import model.schoolclass.SchoolClass;
 import utils.DBContext;
 
 /**
+ * Lớp StudentDAO chịu trách nhiệm thao tác dữ liệu với bảng StudentDAO trong
+ * Database Lấy dữ liệu từ database liên quan đến bảng SubjectDAO Thức hiên các
+ * chức năng như tạo học sinh, lấy học sinh qua id, cập nhật và chỉnh sửa thông
+ * tin học sinh, Ví dụ: createStudent(Student student),getStudentByStatus(String
+ * status), getListStudentsByClass(String studentId, String classId),
+ * updateStudent(Student student),...
  *
- * @author MSI
+ * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ *
+ * @author TrongNV
  */
 public class StudentDAO extends DBContext {
 
@@ -46,6 +54,7 @@ public class StudentDAO extends DBContext {
             student.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
             student.setParentSpecialNote(resultSet.getString("parent_special_note"));
 
+
             SchoolDAO schoolDAO = new SchoolDAO();
             // Tạo và gán School object
             Schools school = schoolDAO.getSchoolsById(resultSet.getString("school_id"));
@@ -63,6 +72,29 @@ public class StudentDAO extends DBContext {
             e.printStackTrace();
             return null;
         }
+
+            // Tạo và gán School object
+            Schools school = new Schools();
+            school.setId(resultSet.getString("school_id"));
+            school.setSchoolName(resultSet.getString("schoolName"));
+            school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+            student.setSchool_id(school);
+
+            // Tạo và gán SchoolClass object
+            SchoolClass schoolClass = new SchoolClass();
+            schoolClass.setId(resultSet.getString("school_class_id"));
+            schoolClass.setClassName(resultSet.getString("class_name"));
+            schoolClass.setGrade_level(resultSet.getString("grade_name")); // Lấy tên khối từ grade_level
+
+            student.setSchool_class_id(schoolClass);
+
+            return student;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+
     }
 
     public Student getLatest() {
@@ -70,12 +102,14 @@ public class StudentDAO extends DBContext {
         SELECT TOP 1 s.*, 
                      sc.schoolName, 
                      sc.addressSchool, 
-                     c.class_name 
+                     c.class_name, 
+                     c.grade_level AS grade_name
         FROM Students s 
         LEFT JOIN Schools sc ON s.school_id = sc.id 
         LEFT JOIN SchoolClasses c ON s.school_class_id = c.id 
         ORDER BY s.id DESC
     """;
+
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -85,6 +119,18 @@ public class StudentDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            if (resultSet.next()) {
+                return createStudent(resultSet);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
         return null;
     }
 
@@ -162,10 +208,13 @@ public class StudentDAO extends DBContext {
     }
 
     public List<Student> getStudentByStatus(String status) {
+        List<Student> students = new ArrayList<>();
         String sql = """
         SELECT s.*, 
                sch.schoolName AS schoolName, 
-               cls.class_name AS class_name
+               sch.addressSchool AS addressSchool, 
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_name
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -173,19 +222,22 @@ public class StudentDAO extends DBContext {
         ORDER BY s.id DESC
     """;
 
-        List<Student> listStudents = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);  // tránh SQL injection
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Student student = createStudent(resultSet);
-                listStudents.add(student);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Student student = createStudent(resultSet);
+                    if (student != null) {
+                        students.add(student);
+                    }
+                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving students by status", e);
         }
-        return listStudents;
+
+        return students;
     }
 
     public int getPendingStudentCount() {
@@ -204,15 +256,45 @@ public class StudentDAO extends DBContext {
 
     public List<Student> getAllStudents() {
         String sql = """
+
+    SELECT s.*, 
+           sch.schoolName AS schoolName,
+           sch.addressSchool AS addressSchool,
+           cls.class_name AS class_name,
+           cls.grade_level AS grade_name
+    FROM Students s
+    LEFT JOIN Schools sch ON s.school_id = sch.id
+    LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
+    ORDER BY s.id DESC
+""";
+
+        List<Student> listStudent = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = createStudent(resultSet);
+                listStudent.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listStudent;
+    }
+
+    public Student getStudentByUserId(String userId) {
+        String sql = """
+
         SELECT s.*, 
-               sch.schoolName AS schoolName,
-               sch.addressSchool AS addressSchool,
-               cls.class_name AS class_name
+               sc.schoolName, 
+               sc.addressSchool, 
+               c.class_name
         FROM Students s
-        LEFT JOIN Schools sch ON s.school_id = sch.id
-        LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
-        ORDER BY s.id DESC
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.user_id = ?
     """;
+
 
         List<Student> listStudent = new ArrayList<>();
         try {
@@ -246,6 +328,9 @@ public class StudentDAO extends DBContext {
         }
         return null;
     }
+
+    
+
 
     public boolean checkFirstGuardianPhoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM [Students] WHERE first_guardian_phone_number = ?";
@@ -282,7 +367,8 @@ public class StudentDAO extends DBContext {
         SELECT s.*, 
                sch.schoolName AS schoolName,
                sch.addressSchool AS addressSchool,
-               cls.class_name AS class_name
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_name
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -360,6 +446,7 @@ public class StudentDAO extends DBContext {
         return null;
     }
 
+
     public boolean updateStudent(Student student) {
         String updateStudentSQL = """
         UPDATE dbo.Students 
@@ -384,6 +471,14 @@ public class StudentDAO extends DBContext {
         SET addressSchool = ?
         WHERE id = ?
     """;
+
+
+        String updateGradeLevelSQL = """
+        UPDATE dbo.SchoolClasses
+        SET grade_level = ?
+        WHERE id = ?
+    """;
+
 
         try {
             connection.setAutoCommit(false); // Bắt đầu transaction
@@ -411,7 +506,11 @@ public class StudentDAO extends DBContext {
                 ps.executeUpdate();
             }
 
+
             // 2. Cập nhật địa chỉ trường nếu có thông tin
+
+            // 2. Cập nhật địa chỉ trường nếu có
+
             if (student.getSchool_id() != null && student.getSchool_id().getAddressSchool() != null) {
                 try (PreparedStatement psSchool = connection.prepareStatement(updateSchoolSQL)) {
                     psSchool.setString(1, student.getSchool_id().getAddressSchool());
@@ -419,6 +518,17 @@ public class StudentDAO extends DBContext {
                     psSchool.executeUpdate();
                 }
             }
+
+
+            // 3. Cập nhật grade_level nếu có
+            if (student.getSchool_class_id() != null && student.getSchool_class_id().getGrade_level() != null) {
+                try (PreparedStatement psGrade = connection.prepareStatement(updateGradeLevelSQL)) {
+                    psGrade.setString(1, student.getSchool_class_id().getGrade_level());
+                    psGrade.setString(2, student.getSchool_class_id().getId());
+                    psGrade.executeUpdate();
+                }
+            }
+
 
             connection.commit(); // Commit nếu không có lỗi
             return true;
@@ -556,15 +666,29 @@ public class StudentDAO extends DBContext {
     }
 
 
+
     public Student getStudentById(String id) {
-        String sql = "SELECT * FROM Students WHERE id = ?";
+        String sql = """
+        SELECT 
+            s.*, 
+            sc.schoolName, 
+            sc.addressSchool, 
+            c.class_name
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.id = ?
+    """;
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return createStudent(rs);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return createStudent(rs);
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy học sinh theo ID: " + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -616,6 +740,7 @@ public class StudentDAO extends DBContext {
             System.out.println("Debug - Date: " + date);
 
 
+
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Student student = new Student();
@@ -624,13 +749,12 @@ public class StudentDAO extends DBContext {
                 student.setLastName(rs.getString("last_name"));
                 student.setAvatar(rs.getString("avatar"));
                 list.add(student);
-
-                // Debug log for each student
             }
 
             // Debug log for results
 
             System.out.println("Debug - Total students found: " + list.size());
+
 
 
         } catch (Exception e) {
@@ -640,13 +764,20 @@ public class StudentDAO extends DBContext {
     }
 
     public List<Student> getListStudentsByClass(String studentId, String classId) {
+
         List<Student> listStudents = new ArrayList<>();
+
+
+
+        List<Student> listStudents = new ArrayList<>();
+
 
         String sql = """
         SELECT s.*, 
                sch.schoolName, 
                sch.addressSchool AS addressSchool, 
-               cls.class_name
+               cls.class_name,
+                    cls.grade_level AS grade_name
         FROM Students s
         JOIN classDetails c ON s.id = c.student_id
         LEFT JOIN Schools sch ON s.school_id = sch.id
@@ -668,9 +799,11 @@ public class StudentDAO extends DBContext {
             }
 
 
+
             // Debug logs
             System.out.println("Debug - Getting students for class: " + classId);
             System.out.println("Debug - SQL: " + sql);
+
 
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -684,8 +817,106 @@ public class StudentDAO extends DBContext {
             System.out.println("Debug - Total students found: " + listStudents.size());
 
 
+
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+
+        return listStudents;
+    }
+
+    public boolean addStudentToClass(String pupilId, String classId) {
+        String sql = "INSERT INTO [dbo].[classDetails]\n"
+                + "           ([student_id]\n"
+                + "           ,[class_id])\n"
+                + "     VALUES\n"
+                + "           (?,?)";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, pupilId);
+            preparedStatement.setString(2, classId);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    public Student getStudentById2(String studentId) {
+        String sql = "SELECT s.id AS student_id, "
+                + "       s.school_id, sch.schoolName AS school_name, "
+                + "       s.school_class_id, sc.class_name AS class_name "
+                + "FROM Students s "
+                + "LEFT JOIN Schools sch ON s.school_id = sch.id "
+                + "LEFT JOIN SchoolClasses sc ON s.school_class_id = sc.id "
+                + "WHERE s.id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, studentId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Student student = new Student();
+                    student.setId(rs.getString("student_id"));
+
+                    // Gán trường học
+                    Schools school = new Schools();
+                    school.setId(rs.getString("school_id"));
+                    school.setSchoolName(rs.getString("school_name"));
+                    student.setSchool_id(school);
+
+                    // Gán lớp học
+                    SchoolClass schoolClass = new SchoolClass();
+                    schoolClass.setId(rs.getString("school_class_id"));
+                    schoolClass.setClassName(rs.getString("class_name"));
+                    student.setSchool_class_id(schoolClass);
+
+                    return student;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error in getStudentById2: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public List<Student> getStudentByClass(String classId) {
+        String sql = "SELECT *\n"
+                + "FROM     Class INNER JOIN\n"
+                + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
+                + "                  Students ON classDetails.student_id = Students.id INNER JOIN\n"
+                + "                  SchoolYears ON Class.school_year_id = SchoolYears.id\n"
+                + "\t\t\t\t  where class_id= ?";
+        List<Student> listStudents = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, classId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = new Student();
+                PersonnelDAO personnelDAO = new PersonnelDAO();
+                student.setId(resultSet.getString("student_id"));
+                student.setUserId(resultSet.getString("user_id"));
+                student.setFirstName(resultSet.getString("first_name"));
+                student.setLastName(resultSet.getString("last_name"));
+                student.setAddress(resultSet.getString("address"));
+                student.setEmail(resultSet.getString("email"));
+                student.setStatus(resultSet.getString("status"));
+                student.setBirthday(resultSet.getDate("birthday"));
+                student.setGender(resultSet.getBoolean("gender"));
+                student.setFirstGuardianName(resultSet.getString("first_guardian_name"));
+                student.setFirstGuardianPhoneNumber(resultSet.getString("first_guardian_phone_number"));
+                student.setAvatar(resultSet.getString("avatar"));
+                student.setSecondGuardianName(resultSet.getString("second_guardian_name"));
+                student.setSecondGuardianPhoneNumber(resultSet.getString("second_guardian_phone_number"));
+                Personnel personnel = personnelDAO.getPersonnel(resultSet.getString("created_by"));
+                student.setCreatedBy(personnel);
+                student.setParentSpecialNote(resultSet.getString("parent_special_note"));
+                listStudents.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         return listStudents;
@@ -694,13 +925,15 @@ public class StudentDAO extends DBContext {
 
     public static void main(String[] args) {
         StudentDAO studentDAO = new StudentDAO();
-
-        int a = studentDAO.getPendingStudentCount();  // đúng kiểu trả về
+        int a = studentDAO.getPendingStudentCount();
         System.out.println("Số học sinh đang chờ xử lý: " + a);
     }
 
 
+
     // Add this method to check data
+
+
     public void checkDataForAttendance(String teacherId, String date) {
         try {
             // Check Timetables
@@ -742,8 +975,25 @@ public class StudentDAO extends DBContext {
     }
 
     public List<Student> getStudentNonUserId() {
+
         List<Student> list = new ArrayList<>();
         String sql = "SELECT * FROM Students WHERE user_id IS NULL AND status = N'đang theo học' order by id desc";
+
+
+        List<Student> list = new ArrayList<>();
+        String sql = """
+        SELECT s.*, 
+               sc.schoolName, 
+               sc.addressSchool, 
+               c.class_name 
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.user_id IS NULL AND s.status = N'đang theo học'
+        ORDER BY s.id DESC
+    """;
+
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -754,49 +1004,54 @@ public class StudentDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return list;
     }
 
 
-    public List<Student> getStudentByClass(String classId) {
-        String sql = "SELECT *\n"
-                + "FROM     Class INNER JOIN\n"
-                + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
-                + "                  Students ON classDetails.student_id = Students.id INNER JOIN\n"
-                + "                  SchoolYears ON Class.school_year_id = SchoolYears.id\n"
-                + "\t\t\t\t  where class_id= ?";
-        List<Student> listPupils = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, classId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
+//     public List<Student> getStudentsWithoutClass(String schoolYearId) {
+//        List<Student> listStudent = new ArrayList<>();
+//        String sql = "Select  Students.id    FROM  Students left  JOIN\n"
+//                + "                 classDetails ON Students.id = classDetails.student_id  left  JOIN\n"
+//                + "                Class ON Class.id = classDetails.class_id\n"
+//                + "               where  Students.status= N'đang theo học' and class_id is null \n"
+//                + "\t\t\t  union  \n"
+//                + "\t\t\t  Select  distinct student_id  from \n"
+//                + "\t\t\t  classDetails join Class on classDetails.class_id = Class.id\n"
+//                + "               where   pupil_id not in (Select pupil_id\n"
+//                + "\t\t\t   from classDetails  join Class on classDetails.class_id = Class.id\n"
+//                + "\t\t\t   where school_year_id = ? )";
+//
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, schoolYearId);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                listStudent.add(getStudentsById(resultSet.getString(1)));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return listStudent;
+//    }
+    public List<Student> getStudentsByClassId(String classId) {
+        List<Student> students = new ArrayList<>();
+
+        String sql = """
+        SELECT s.*, sch.schoolName, sch.addressSchool
+        FROM classDetails cd
+        JOIN Students s ON cd.student_id = s.id
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        WHERE cd.class_id = ?
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, classId);
+            ResultSet rs = ps.executeQuery();
+
+
+            while (rs.next()) {
                 Student student = new Student();
-                PersonnelDAO personnelDAO = new PersonnelDAO();
-                student.setId(resultSet.getString("student_id"));
-                student.setUserId(resultSet.getString("user_id"));
-                student.setFirstName(resultSet.getString("first_name"));
-                student.setLastName(resultSet.getString("last_name"));
-                student.setAddress(resultSet.getString("address"));
-                student.setEmail(resultSet.getString("email"));
-                student.setStatus(resultSet.getString("status"));
-                student.setBirthday(resultSet.getDate("birthday"));
-                student.setGender(resultSet.getBoolean("gender"));
-                student.setFirstGuardianName(resultSet.getString("first_guardian_name"));
-                student.setFirstGuardianPhoneNumber(resultSet.getString("first_guardian_phone_number"));
-                student.setAvatar(resultSet.getString("avatar"));
-                student.setSecondGuardianName(resultSet.getString("second_guardian_name"));
-                student.setSecondGuardianPhoneNumber(resultSet.getString("second_guardian_phone_number"));
-                Personnel personnel = personnelDAO.getPersonnel(resultSet.getString("created_by"));
-                student.setCreatedBy(personnel);
-                student.setParentSpecialNote(resultSet.getString("parent_special_note"));
-                listPupils.add(student);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return listPupils;
-    }
 
 
     public boolean addStudentToClass(String pupilId, String classId) {
@@ -880,4 +1135,38 @@ public class StudentDAO extends DBContext {
 //    }
 
 
-}
+
+                student.setId(rs.getString("id"));
+                student.setUserId(rs.getString("user_id"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setLastName(rs.getString("last_name"));
+                student.setAddress(rs.getString("address"));
+                student.setEmail(rs.getString("email"));
+                student.setStatus(rs.getString("status"));
+                student.setBirthday(rs.getDate("birthday"));
+                student.setGender(rs.getInt("gender") == 1); // 1 = Nam, 0 = Nữ
+                student.setFirstGuardianName(rs.getString("first_guardian_name"));
+                student.setFirstGuardianPhoneNumber(rs.getString("first_guardian_phone_number"));
+                student.setAvatar(rs.getString("avatar"));
+                student.setSecondGuardianName(rs.getString("second_guardian_name"));
+                student.setSecondGuardianPhoneNumber(rs.getString("second_guardian_phone_number"));
+                student.setParentSpecialNote(rs.getString("parent_special_note"));
+
+                // Gán thông tin trường học
+                Schools school = new Schools();
+                school.setId(rs.getString("school_id"));
+                school.setSchoolName(rs.getString("schoolName"));
+                school.setAddressSchool(rs.getString("addressSchool"));
+                student.setSchool_id(school);
+
+                students.add(student);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return students;
+    }
+
+

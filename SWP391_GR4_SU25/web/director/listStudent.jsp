@@ -1,5 +1,4 @@
 <%--
-  Created by IntelliJ IDEA.
   User: ThanhNT
   Date: 23/06/2025
   Time: 8:47 PM

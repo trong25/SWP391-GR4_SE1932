@@ -136,51 +136,51 @@
 
                 // Validate first guardian's name
                 if (firstGuardianName === "") {
-                    toastr.error("Họ tên người giám hộ thứ nhất không được để trống");
+                    toastr.error("Họ tên Bố không được để trống");
                     return false;
                 }
                 if (!isValidName(firstGuardianName)) {
-                    toastr.error("Họ tên người giám hộ thứ nhất chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
+                    toastr.error("Họ tên Bố chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
                     return false;
                 }
 
                 // Validate first guardian's phone
                 if (firstGuardianPhone === "") {
-                    toastr.error("Số điện thoại người giám hộ thứ nhất không được để trống");
+                    toastr.error("Số điện thoại Bố không được để trống");
                     return false;
                 }
 
                 // Validate second guardian's name and phone
                 if (secondGuardianName !== "" && secondGuardianPhone === "") {
-                    toastr.error("Vui lòng nhập số điện thoại người giám hộ thứ hai");
+                    toastr.error("Vui lòng nhập số điện thoại Mẹ");
                     return false;
                 }
                 if (secondGuardianPhone !== "" && secondGuardianName === "") {
-                    toastr.error("Vui lòng nhập họ tên người giám hộ thứ hai");
+                    toastr.error("Vui lòng nhập họ tên Mẹ");
                     return false;
                 }
                 if (secondGuardianName !== "" && !isValidName(secondGuardianName)) {
-                    toastr.error("Họ tên người giám hộ thứ hai chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
+                    toastr.error("Họ tên Mẹ chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
                     return false;
                 }
 
                 // Validate first name
                 if (firstName === "") {
-                    toastr.error("Tên của bé không được để trống");
+                    toastr.error("Tên của Học Sinh không được để trống");
                     return false;
                 }
                 if (!isValidName(firstName)) {
-                    toastr.error("Tên của bé chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
+                    toastr.error("Tên của Học Sinh chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
                     return false;
                 }
 
                 // Validate last name
                 if (lastName === "") {
-                    toastr.error("Họ của bé không được để trống");
+                    toastr.error("Họ của Học Sinh không được để trống");
                     return false;
                 }
                 if (!isValidName(lastName)) {
-                    toastr.error("Họ của bé chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
+                    toastr.error("Họ của Học Sinh chỉ được nhập chữ cái và không được chứa ký tự đặc biệt");
                     return false;
                 }
 
@@ -297,12 +297,7 @@
                                                                 <input class="form-control form-control-sm" type="text" name="schoolName" value="${student.school_id.schoolName}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
                                                             </div>
                                                         </td>
-                                                         <td>
-                                                            <div class="form-group">
-                                                                <h5>Tên Lớp <a style="color: red">*</a>:</h5>
-                                                                <input class="form-control form-control-sm" type="text" name="className" value="${student.school_class_id.className}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
-                                                            </div>
-                                                        </td>
+                                                         
                                                           <td>
                                                             <div class="form-group">
                                                                 <h5>Địa Chỉ Trường Học <a style="color: red">*</a>:</h5>

@@ -24,8 +24,16 @@ import model.user.User;
 import utils.Helper;
 
 /**
- *
- * @author MSI
+  *Servlet ClassServlett xử lý các yêu cầu HTTP để hiển thị danh sách  lớp học
+ * và chỉnh sửa thông tinlớp học sinh,
+ * 
+ * URL Mapping: /academicstaff/class
+ * Chức năng:
+ * -Nhận dữ liệu từ form
+ * - gọi ClassDAO để lấy các hàm lấy danh sách các lớp theo trạng thái,và gọi hàm tạo lớp học đẻe tạo lớp mới và lưu vào cơ sở dữ liệu
+ * Phân quyền: chỉ Giáo Vụ mới được phép tạo lớp học mới.
+ * @author TrongNV
+ * @version 1.0
  */
 public class ClassServlett extends HttpServlet {
    

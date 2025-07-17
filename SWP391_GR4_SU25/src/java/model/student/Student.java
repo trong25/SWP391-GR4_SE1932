@@ -10,7 +10,10 @@ import model.school.Schools;
 import model.schoolclass.SchoolClass;
 
 /**
- *
+ *Lớp Student khai báo các thuộc tính của  học sinh trong hệ thống.
+ * Được sử dụng để quản lý thông tin về lớp học như: mã, tên,  trạng thái,địa chỉ, ngày sinh
+ *,tên bố, tên mẹ, sdt bố và mẹ, trường học và lớp học mô tả , kiểu môn học và người tạo.
+ * @author TrongNV
  * @author MSI
  */
 public class Student {
@@ -33,15 +36,10 @@ public class Student {
     private String parentSpecialNote;
     private Schools school_id;
     private SchoolClass school_class_id;
-//    private Schools school_name;
-//    private Schools addressSchool;
 
     public Student() {
     }
 
-    
-
-    
     public Student(String id, String userId, String firstName, String lastName, String address, String email, String status, Date birthday, boolean gender, String firstGuardianName, String firstGuardianPhoneNumber, String avatar, String secondGuardianName, String secondGuardianPhoneNumber, Personnel createdBy, String parentSpecialNote, Schools school_id, SchoolClass school_class_id) {
         this.id = id;
         this.userId = userId;

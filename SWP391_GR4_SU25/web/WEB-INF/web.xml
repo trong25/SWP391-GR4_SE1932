@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <!-- Filter Configuration -->
+
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>utils.LoginFilter</filter-class>
@@ -33,7 +38,6 @@
         <url-pattern>/accountant/*</url-pattern>
     </filter-mapping>
 
-    <!-- Servlets Declaration -->
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
@@ -175,6 +179,7 @@
         <servlet-class>Controller.director.ListStudentServlet</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>ReviewStudentServlet</servlet-name>
         <servlet-class>Controller.director.ReviewStudentServlet</servlet-class>
     </servlet>
@@ -191,6 +196,7 @@
         <servlet-class>Controller.director.ReviewSubjectServlet</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
@@ -216,6 +222,37 @@
     </servlet>
 
     <!-- Servlets Mapping -->
+
+    <!-- Servlet Mappings -->
+    <servlet>
+        <servlet-name>DashboardAccountantServlet</servlet-name>
+        <servlet-class>Controller.accountant.DashboardAccountantServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InformationAccountantServlet</servlet-name>
+        <servlet-class>Controller.accountant.InformationAccountantServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewInformationAccServlet</servlet-name>
+        <servlet-class>Controller.accountant.ViewInformationAccServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TimeKeepServlet</servlet-name>
+        <servlet-class>Controller.accountant.TimeKeepServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TakeTimeKeepServlet</servlet-name>
+        <servlet-class>Controller.accountant.TakeTimeKeepServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListPersonnelServlett</servlet-name>
+        <servlet-class>Controller.accountant.ListPersonnelServlett</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
+        <servlet-class>Controller.accountant.ViewPersonnelSalaryServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -345,6 +382,7 @@
         <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>WaitlistPersonnelServlet</servlet-name>
         <url-pattern>/director/waitlistpersonnel</url-pattern>
     </servlet-mapping>
@@ -373,6 +411,7 @@
         <url-pattern>/director/reviewsubject</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
@@ -396,4 +435,48 @@
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
     </servlet-mapping>
+
 </web-app>
+
+    <servlet-mapping>
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <url-pattern>/director/waitlistpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <url-pattern>/director/viewpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListStudentServlet</servlet-name>
+        <url-pattern>/director/listpupil</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DashboardAccountantServlet</servlet-name>
+        <url-pattern>/accountant/dashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InformationAccountantServlet</servlet-name>
+        <url-pattern>/accountant/information</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewInformationAccServlet</servlet-name>
+        <url-pattern>/accountant/view-information</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TimeKeepServlet</servlet-name>
+        <url-pattern>/accountant/mytimekeeping</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TakeTimeKeepServlet</servlet-name>
+        <url-pattern>/accountant/taketimekeep</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListPersonnelServlett</servlet-name>
+        <url-pattern>/accountant/listpersonnell</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
+        <url-pattern>/accountant/viewpersonnel</url-pattern>
+    </servlet-mapping>
+</web-app>
+

@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Trung tâm dạy thêm TaBi - DashBoard</title>
+        <title>Trung tâm dạy thêm TABI - DashBoard</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -162,6 +162,7 @@
                                 </div>
                             </div>
 
+
                             <!-- Nhân sự chờ phê duyệt -->
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <div class="card border-left-info shadow h-100 py-2">
@@ -221,6 +222,43 @@
                                         </div>
                                     </c:if>
                                 </div>
+
+ </div>
+
+                            <!-- Bảng doanh thu -->
+                          
+                            <h3 class="h3 mb-0 text-gray-800">Bảng doanh thu</h3>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Thời gian</th>
+                                        <th>Doanh thu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:choose>
+                                        <c:when test="${not empty revenueData}">
+                                            <c:forEach var="entry" items="${revenueData}">
+                                                <tr>
+                                                    <td>${entry.key}</td>
+                                                    <td>${entry.value}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <tr>
+                                                <td colspan="2" class="text-center text-muted">Chưa có dữ liệu doanh thu</td>
+                                            </tr>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </tbody>
+                            </table>
+
+                            <!-- Biểu đồ doanh thu -->
+                            <h3 class="h3 mb-0 text-gray-800">Biểu đồ doanh thu</h3>
+                            <div style="width: 600px; height: 400px;">
+                                <canvas id="revenueChart"></canvas>
+
                             </div>
                         </div>
 

@@ -8,8 +8,15 @@ import java.util.Date;
 import model.personnel.Personnel;
 
 /**
- *
- * @author MSI
+* Lớp SchoolYear khai báo các thuộc tính của một năm học trong hệ thống.
+ * Được sử dụng để quản lý thông tin về năm học như: mã, tên, ngày bắt đầu, ngày kết thúc,
+ * mô tả và người tạo.
+ * 
+ * 
+ * 
+ * 
+ * 
+ * @author TrongNV
  */
 public class SchoolYear {
     private String id;
@@ -21,7 +28,7 @@ public class SchoolYear {
 
     public SchoolYear() {
     }
-
+/* Constructor đầy đủ để khởi tạo một năm học với các thông tin cụ thể.*/
     public SchoolYear(String id, String name, Date startDate, Date endDate, String description, Personnel createdBy) {
         this.id = id;
         this.name = name;
