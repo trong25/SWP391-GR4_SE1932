@@ -32,6 +32,8 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/accountant/*</url-pattern>
     </filter-mapping>
+
+    <!-- Servlets Declaration -->
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
@@ -160,7 +162,6 @@
         <servlet-name>ResetPassword</servlet-name>
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>WaitlistPersonnelServlet</servlet-name>
         <servlet-class>Controller.director.WaitlistPersonnelServlet</servlet-class>
@@ -188,13 +189,11 @@
     <servlet>
         <servlet-name>ReviewSubjectServlet</servlet-name>
         <servlet-class>Controller.director.ReviewSubjectServlet</servlet-class>
-
-
+    </servlet>
     <servlet>
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>SubjectServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SubjectServlet</servlet-class>
@@ -214,8 +213,9 @@
     <servlet>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <servlet-class>Controller.academicstaff.UpdateStudentsClassServlet</servlet-class>
-
     </servlet>
+
+    <!-- Servlets Mapping -->
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -313,7 +313,6 @@
         <url-pattern>/student/view-information</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>InformationStudentServlet</servlet-name>
         <url-pattern>/student/information</url-pattern>
     </servlet-mapping>
@@ -345,7 +344,6 @@
         <servlet-name>ResetPassword</servlet-name>
         <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>WaitlistPersonnelServlet</servlet-name>
         <url-pattern>/director/waitlistpersonnel</url-pattern>
@@ -373,13 +371,11 @@
     <servlet-mapping>
         <servlet-name>ReviewSubjectServlet</servlet-name>
         <url-pattern>/director/reviewsubject</url-pattern>
-
-
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>SubjectServlet</servlet-name>
         <url-pattern>/academicstaff/subject</url-pattern>
@@ -399,7 +395,5 @@
     <servlet-mapping>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
-
-
     </servlet-mapping>
 </web-app>

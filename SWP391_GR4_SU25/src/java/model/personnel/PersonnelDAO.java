@@ -41,7 +41,6 @@ public class PersonnelDAO extends DBContext {
         person.setAchievements(resultSet.getString("achievements"));
         person.setCv_file(resultSet.getString("cv_file"));
 
-
         // ✅ Lấy thêm thông tin từ bảng Schools (nếu có trong câu truy vấn)
         try {
             person.setSchoolName(resultSet.getString("schoolName"));
@@ -55,7 +54,6 @@ public class PersonnelDAO extends DBContext {
         } catch (SQLException e) {
             // Trường hợp không có cột addressSchool trong ResultSet
         }
-
 
         return person;
     }
@@ -109,18 +107,11 @@ public class PersonnelDAO extends DBContext {
     }
 
     public Personnel getPersonnel(String id) {
-
-        String sql = "SELECT * FROM [Personnels] WHERE id LIKE ?";
+        String sql = "SELECT * FROM [Personnels] WHERE id = ?";
         Personnel person = null;
+
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, "%" + id + "%");
-
-        String sql = "select * from [Personnels] where id = ? ";
-        Personnel person = new Personnel();
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, id);
-
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -148,6 +139,7 @@ public class PersonnelDAO extends DBContext {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+
         return person;
     }
 
@@ -581,7 +573,6 @@ public class PersonnelDAO extends DBContext {
         return list;
     }
 
-
     public boolean updatePersonnelStatus(String pId, String status) {
         String sql = "UPDATE [dbo].[Personnels]\n"
                 + "   SET [status] = ? \n"
@@ -599,11 +590,25 @@ public class PersonnelDAO extends DBContext {
     }
 
     public Personnel getTeacherByClassAndSchoolYear(String classId, String schoolYearId) {
-        String sql = "Select teacher_id from class where id= ? and school_year_id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = "SELECT t.* FROM Class c "
+                + "JOIN Personnels t ON c.teacher_id = t.id "
+                + "WHERE c.id = ? AND c.school_year_id = ?";
+        Personnel teacher = null;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, classId);
             preparedStatement.setString(2, schoolYearId);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                teacher = createPersonnel(resultSet);  // Dùng lại hàm tạo đối tượng Personnel
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return teacher;
+    }
 
     public List<Personnel> getAvailableTeachers(String schoolYearId) {
         String sql = "SELECT t.*, s.schoolName, s.addressSchool "
@@ -666,7 +671,7 @@ public class PersonnelDAO extends DBContext {
         }
         return null;
     }
-    
+
     public Personnel getTeacherByClass(String classId) {
         String sql = "Select teacher_id from class where id= ?";
         try {
