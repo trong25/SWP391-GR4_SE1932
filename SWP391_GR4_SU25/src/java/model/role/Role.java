@@ -1,4 +1,3 @@
-
 package model.role;
 
 
@@ -6,14 +5,10 @@ package model.role;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
-
 /**
  *
  * @author ASUS VIVOBOOK
  */
-
-
 public class Role {
 
     private String id;
@@ -43,13 +38,9 @@ public class Role {
         this.description = description;
     }
 
+    public String getVNeseDescription() {
 
-    
-    public String getVNeseDescription(){
-
-
-
-        switch(this.id){
+        switch (this.id) {
 
             case "0":
                 return "Nhân viên IT";
@@ -58,33 +49,15 @@ public class Role {
             case "2":
                 return "Giáo vụ";
             case "3":
-
-                return "Kế toán";
+                return "Giáo viên";
             case "4":
 
-                return "Giáo viên";
             case "5":
 
-                return "Giáo viên";
-            case "6":
-
-                return "Phụ huynh";
-
-
+                return "Kế toán";
         }
         return "";
 
     }
 
 }
-
-
-
-
-    
-    
-
-
-
-
-

@@ -346,18 +346,4 @@ public class SchoolYearDAO extends DBContext {
         }
         return false;
     }
-
-    private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "SY" + result;
-    }
-
-
 }

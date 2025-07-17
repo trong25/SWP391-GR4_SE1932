@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee           https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <!-- Filter Configuration -->
-
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>utils.LoginFilter</filter-class>
@@ -37,7 +33,7 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/accountant/*</url-pattern>
     </filter-mapping>
-
+    <!-- Servlets Declaration -->
     <servlet>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <servlet-class>Controller.academicstaff.DashboardAcademicStaffServlet</servlet-class>
@@ -179,7 +175,6 @@
         <servlet-class>Controller.director.ListStudentServlet</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ReviewStudentServlet</servlet-name>
         <servlet-class>Controller.director.ReviewStudentServlet</servlet-class>
     </servlet>
@@ -196,7 +191,6 @@
         <servlet-class>Controller.director.ReviewSubjectServlet</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
@@ -220,10 +214,6 @@
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <servlet-class>Controller.academicstaff.UpdateStudentsClassServlet</servlet-class>
     </servlet>
-
-    <!-- Servlets Mapping -->
-
-    <!-- Servlet Mappings -->
     <servlet>
         <servlet-name>DashboardAccountantServlet</servlet-name>
         <servlet-class>Controller.accountant.DashboardAccountantServlet</servlet-class>
@@ -252,7 +242,11 @@
         <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
         <servlet-class>Controller.accountant.ViewPersonnelSalaryServlet</servlet-class>
     </servlet>
-
+    <!-- Servlets Mapping -->
+    <servlet>
+        <servlet-name>SendPaymentNoticeServlet</servlet-name>
+        <servlet-class>Controller.accountant.SendPaymentNoticeServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -382,7 +376,6 @@
         <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>WaitlistPersonnelServlet</servlet-name>
         <url-pattern>/director/waitlistpersonnel</url-pattern>
     </servlet-mapping>
@@ -411,7 +404,6 @@
         <url-pattern>/director/reviewsubject</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
@@ -434,21 +426,6 @@
     <servlet-mapping>
         <servlet-name>UpdateStudentsClassServlet</servlet-name>
         <url-pattern>/academicstaff/updatestudentsclass</url-pattern>
-    </servlet-mapping>
-
-</web-app>
-
-    <servlet-mapping>
-        <servlet-name>WaitlistPersonnelServlet</servlet-name>
-        <url-pattern>/director/waitlistpersonnel</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ViewPersonnelServlet</servlet-name>
-        <url-pattern>/director/viewpersonnel</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListStudentServlet</servlet-name>
-        <url-pattern>/director/listpupil</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DashboardAccountantServlet</servlet-name>
@@ -478,5 +455,8 @@
         <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
         <url-pattern>/accountant/viewpersonnel</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendPaymentNoticeServlet</servlet-name>
+        <url-pattern>/accountant/notify-payment</url-pattern>
+    </servlet-mapping>
 </web-app>
-

@@ -26,12 +26,6 @@ public class Personnel {
     private String schoolName;
     private String className;
     private String addressSchool;
-
-    private String specialization;
-    private String qualification;
-    private int teaching_years;
-    private String achievements;
-    private String cv_file;
     private int baseSalary;
 private int totalSalary;
 
@@ -40,11 +34,7 @@ private int totalSalary;
     public Personnel() {
     }
 
-
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String specialization, String qualification, int teaching_years, String achievements, String cv_file, String schoolName, String className, String addressSchool) {
-
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
-
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String specialization, String qualification, int teaching_years, String achievements, String cv_file, String schoolName, String className, String addressSchool, int baseSalary, int totalSalary) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,46 +57,9 @@ private int totalSalary;
         this.schoolName = schoolName;
         this.className = className;
         this.addressSchool = addressSchool;
-        this.specialization = specialization;
-        this.qualification = qualification;
-        this.teaching_years = teaching_years;
-        this.achievements = achievements;
-        this.cv_file = cv_file;
-    }
-
-
-    public int getBaseSalary() {
-        return baseSalary;
-    }
-
-    public void setBaseSalary(int baseSalary) {
         this.baseSalary = baseSalary;
-    }
-
-    public int getTotalSalary() {
-        return totalSalary;
-    }
-
-    public void setTotalSalary(int totalSalary) {
         this.totalSalary = totalSalary;
     }
-
-    public String getSchool_id() {
-        return school_id;
-    }
-
-    public void setSchool_id(String school_id) {
-        this.school_id = school_id;
-    }
-
-    public String getSchool_class_id() {
-        return school_class_id;
-    }
-
-    public void setSchool_class_id(String school_class_id) {
-        this.school_class_id = school_class_id;
-    }
-
 
     public String getId() {
         return id;
@@ -132,27 +85,7 @@ private int totalSalary;
         this.lastName = lastName;
     }
 
-
     public boolean isGender() {
-
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public boolean getGender() {
-
         return gender;
     }
 
@@ -224,7 +157,6 @@ private int totalSalary;
         this.userId = userId;
     }
 
-
     public String getSchool_id() {
         return school_id;
     }
@@ -239,14 +171,6 @@ private int totalSalary;
 
     public void setSchool_class_id(String school_class_id) {
         this.school_class_id = school_class_id;
-
-    public String getAddressSchool() {
-        return addressSchool;
-    }
-
-    public void setAddressSchool(String addressSchool) {
-        this.addressSchool = addressSchool;
-
     }
 
     public String getSpecialization() {
@@ -289,7 +213,6 @@ private int totalSalary;
         this.cv_file = cv_file;
     }
 
-
     public String getSchoolName() {
         return schoolName;
     }
@@ -314,6 +237,24 @@ private int totalSalary;
         this.addressSchool = addressSchool;
     }
 
+    public int getBaseSalary() {
+        return baseSalary;
+    }
+
+    public void setBaseSalary(int baseSalary) {
+        this.baseSalary = baseSalary;
+    }
+
+    public int getTotalSalary() {
+        return totalSalary;
+    }
+
+    public void setTotalSalary(int totalSalary) {
+        this.totalSalary = totalSalary;
+    }
+
+
+   
 
    
    

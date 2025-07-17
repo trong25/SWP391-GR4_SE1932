@@ -50,14 +50,8 @@ public class SubjectDAO extends DBContext {
         // Thêm dòng này để lấy subject_type từ DB
         subject.setSubjectType(resultSet.getString("subject_type"));
 
-
         return subject;
     }
-
-
-        return subject;
-    }
-
 
     public Subject getSubjectBySubjectId(String subjectId) {
         String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
@@ -87,7 +81,6 @@ public class SubjectDAO extends DBContext {
         return subject;
     }
 
-
     public List<Subject> getAll() {
         List<Subject> subjects = new ArrayList<>();
         String sql = "Select * from Subjects order by id desc";
@@ -103,7 +96,6 @@ public class SubjectDAO extends DBContext {
         }
         return subjects;
     }
-
 
     public List<Subject> getSubjectsByStatus(String status) {
         List<Subject> subjectList = new ArrayList<>();
@@ -122,8 +114,6 @@ public class SubjectDAO extends DBContext {
         return subjectList;
     }
 
-
-
     public boolean updateStatusById(String id, String status) {
         String sql = "update Subjects set status =? where id = ?";
         try {
@@ -135,10 +125,13 @@ public class SubjectDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
 
-    public Subject getLastest() {
-        String sql = "Select top 1 * from Subjects order by id desc";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        }
+        return false;
+    }
+
+    public Subject getLatest() {
+        String sql = "SELECT TOP 1 * FROM Subjects ORDER BY id DESC";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return createSubject(resultSet);
@@ -169,7 +162,7 @@ public class SubjectDAO extends DBContext {
         }
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
+            String newId = (getLatest() == null) ? "S000001" : generateId(getLatest().getId());
 
             preparedStatement.setString(1, newId);
             preparedStatement.setString(2, subject.getName());
@@ -204,8 +197,7 @@ public class SubjectDAO extends DBContext {
         return false;
     }
 
-
-    private boolean checkSubjectExist(String name, String gradeId, String id) {
+    private boolean checkSubjectExistByID(String name, String gradeId, String id) {
         String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt') and id != ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -221,7 +213,6 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
-
 
     public String editSubject(Subject subject) {
         // Kiểm tra xem môn học đã tồn tại chưa (trừ chính nó)
@@ -254,7 +245,6 @@ public class SubjectDAO extends DBContext {
         return "success";
     }
 
-
     private boolean checkSubjectExist(String name, String gradeId, String id) {
         String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt') and id != ?";
         try {
@@ -271,7 +261,7 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
-    
+
     public List<Subject> getSubjectsByGradeId(String gradeId) {
         List<Subject> subjects = new ArrayList<>();
         String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
@@ -295,11 +285,10 @@ public class SubjectDAO extends DBContext {
                 subject.setDescription(rs.getString("description"));
                 subjects.add(subject);
             }
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return subjects;
     }
-
 
 }

@@ -54,6 +54,8 @@ public class DashboardStudentServlet extends HttpServlet {
         //Lấy thông tin từ session
         User user = (User) request.getSession().getAttribute("user");
         Student student = (Student) request.getSession().getAttribute("student");
+    
+
         String studentId = student.getId();
 
         //Khởi tạo các DAO
@@ -74,7 +76,7 @@ public class DashboardStudentServlet extends HttpServlet {
             Date mon = calendar.getTime();
             Date sun = new Date(mon.getTime()+518400000);
             System.out.println(mon.toString());
-            System.out.println(sun.toString());
+System.out.println(sun.toString());
             List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivotByDateRange(studentId, mon, sun);
 
             // Đưa dữ liệu vào request scope
