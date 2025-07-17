@@ -309,9 +309,9 @@
                                     </div>
                                     <div class="section-content" style="margin-bottom: 1rem;">
                                         <b><i class="fas fa-headset"></i> Liên hệ hỗ trợ:</b><br>
-                                        Hotline: <a href="tel:0123456789" style="color: #2c3e50;">0123 456 789</a><br>
-                                        Email: <a href="mailto:support@tabi.edu.vn" style="color: #2c3e50;">support@tabi.edu.vn</a><br>
-                                        Thời gian: <b>8:00 - 22:00</b> (T2 - CN)
+                                        Hotline:0123 456 789</a><br>
+                                        Email: support@tabi.edu.vn</a><br>
+                                        Thời gian làm việc: <b>8:00 - 22:00 (T2 - CN)</b> 
                                     </div>
                                 </div>
                             </div>
