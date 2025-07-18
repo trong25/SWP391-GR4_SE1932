@@ -113,14 +113,13 @@ public class EvaluationDAO extends DBContext {
 
                     
     public Evaluation createEvaluation(Evaluation evaluation) {
-        String sql = "INSERT INTO Evaluations (id, student_id, date_id, evaluation, notes) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Evaluations (student_id, date_id, evaluation, notes) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, evaluation.getStudent().getId());
-            preparedStatement.setString(2, evaluation.getStudent().getId());
-            preparedStatement.setString(3, evaluation.getDate().getId());
-            preparedStatement.setString(4, evaluation.getEvaluation());
-            preparedStatement.setString(5, evaluation.getNotes());
+            preparedStatement.setString(2, evaluation.getDate().getId());
+            preparedStatement.setString(3, evaluation.getEvaluation());
+            preparedStatement.setString(4, evaluation.getNotes());
             
             int affectedRows = preparedStatement.executeUpdate();
             if (affectedRows > 0) {
