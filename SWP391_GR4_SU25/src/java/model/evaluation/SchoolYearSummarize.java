@@ -3,6 +3,8 @@ package model.evaluation;
 import model.personnel.Personnel;
 import model.student.Student;
 
+
+
 public class SchoolYearSummarize {
     private Student student;
     private String schoolYearId;
