@@ -274,11 +274,13 @@ public class TimetableDAO extends DBContext {
         return "TT" + result;
     }
 
-    public boolean existsTimetableForClassInCurrentWeek(String classId, String dayId) {
-        String sql = "SELECT status FROM Timetables WHERE class_id = ? AND date_id = ?";
+    // Hàm kiểm tra trùng thời khóa biểu theo class, day, timeslot
+    public boolean existsTimetableForClassDayAndTimeslot(String classId, String dayId, String timeslotId) {
+        String sql = "SELECT status FROM Timetables WHERE class_id = ? AND date_id = ? AND timeslot_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, classId);
             stmt.setString(2, dayId);
+            stmt.setString(3, timeslotId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String status = rs.getString("status");

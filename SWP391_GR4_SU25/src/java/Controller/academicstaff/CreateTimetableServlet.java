@@ -181,13 +181,19 @@ public class CreateTimetableServlet extends HttpServlet {
                     }
                 }
 
-                // Kiểm tra thời khóa biểu tồn tại cho tất cả `dayId`
+                // Kiểm tra thời khóa biểu tồn tại cho tất cả dayId và timeslotId
                 for (String dayId : dayIds) {
-                    if (timetableDAO.existsTimetableForClassInCurrentWeek(classId, dayId)) {
-                        session.setAttribute("toastType", "error");
-                        session.setAttribute("toastMessage", "Thời khóa biểu của lớp này đã được tạo!");
-                        response.sendRedirect("timetable");
-                        return; // Dừng lại nếu thời khóa biểu đã tồn tại
+                    for (TimeSlot timeslot : new TimeSlotDAO().getTimeslotsForTimetable()) {
+                        String paramName = "timeslotId_" + dayId + "_" + timeslot.getId();
+                        String timeslotIdValue = request.getParameter(paramName);
+                        if (timeslotIdValue != null && !timeslotIdValue.isEmpty()) {
+                            if (timetableDAO.existsTimetableForClassDayAndTimeslot(classId, dayId, timeslot.getId())) {
+                                session.setAttribute("toastType", "error");
+                                session.setAttribute("toastMessage", "Thời khóa biểu của lớp này đã được tạo cho ca học này!");
+                                response.sendRedirect("timetable");
+                                return; // Dừng lại nếu thời khóa biểu đã tồn tại
+                            }
+                        }
                     }
                 }
 
@@ -234,7 +240,10 @@ public class CreateTimetableServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("toastType", "error");
+            session.setAttribute("toastMessage", "Có lỗi xảy ra khi tạo thời khóa biểu!");
+            response.sendRedirect("timetable");
         }
     }
 

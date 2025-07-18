@@ -210,12 +210,12 @@ weeks.add(week);
         return null;
     }
 
-    public Week getLastWeekOfClosestSchoolYearOfPupil(String id){
+    public Week getLastWeekOfClosestSchoolYearOfStudent(String id){
         Week week = new Week();
         String sql = " select top 1 w.* from classDetails cd join dbo.Class C on cd.class_id = C.id\n" +
                 "join dbo.SchoolYears SY on C.school_year_id = SY.id\n" +
                 "join dbo.Weeks W on SY.id = W.school_year_id\n" +
-                " where SY.end_date <= CAST(GETDATE() AS DATE) and cd.pupil_id =? order by w.end_date desc";
+                " where SY.end_date <= CAST(GETDATE() AS DATE) and cd.student_id =? order by w.end_date desc";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, id);
