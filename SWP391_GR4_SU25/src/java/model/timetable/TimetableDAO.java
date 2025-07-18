@@ -487,4 +487,15 @@ public class TimetableDAO extends DBContext {
         }
         return timetables;
     }
+
+    public boolean approveTimetable(String timetableId) {
+        String sql = "UPDATE Timetables SET status = N'đã được duyệt' WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, timetableId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

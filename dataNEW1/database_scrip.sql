@@ -1,16 +1,14 @@
-﻿USE [master]
+﻿-- Script tạo database Cultural_Tutoring_Center_HN đã được sửa lỗi
+
+USE [master]
 GO
 
-/*******************************************************************************
-   Drop database if it exists
-********************************************************************************/
-IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'Cultural tutoring center')
+IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'Cultural_Tutoring_Center_HN')
 BEGIN
-	ALTER DATABASE [Cultural_Tutoring_Center_HN] SET OFFLINE WITH ROLLBACK IMMEDIATE;
-	ALTER DATABASE [Cultural_Tutoring_Center_HN] SET ONLINE;
-	DROP DATABASE [Cultural_Tutoring_Center_HN];
+    ALTER DATABASE [Cultural_Tutoring_Center_HN] SET OFFLINE WITH ROLLBACK IMMEDIATE;
+    ALTER DATABASE [Cultural_Tutoring_Center_HN] SET ONLINE;
+    DROP DATABASE [Cultural_Tutoring_Center_HN];
 END
-
 GO
 
 CREATE DATABASE [Cultural_Tutoring_Center_HN]
@@ -19,34 +17,13 @@ GO
 USE [Cultural_Tutoring_Center_HN]
 GO
 
-/*******************************************************************************
-	Drop tables if exists
-*******************************************************************************/
-DECLARE @sql nvarchar(MAX) 
-SET @sql = N'' 
-
-SELECT @sql = @sql + N'ALTER TABLE ' + QUOTENAME(KCU1.TABLE_SCHEMA) 
-    + N'.' + QUOTENAME(KCU1.TABLE_NAME) 
-    + N' DROP CONSTRAINT ' -- + QUOTENAME(rc.CONSTRAINT_SCHEMA)  + N'.'  -- not in MS-SQL
-    + QUOTENAME(rc.CONSTRAINT_NAME) + N'; ' + CHAR(13) + CHAR(10) 
-FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS AS RC 
-
-INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KCU1 
-    ON KCU1.CONSTRAINT_CATALOG = RC.CONSTRAINT_CATALOG  
-    AND KCU1.CONSTRAINT_SCHEMA = RC.CONSTRAINT_SCHEMA 
-    AND KCU1.CONSTRAINT_NAME = RC.CONSTRAINT_NAME 
-
-EXECUTE(@sql) 
-
+-- Tạo các bảng không có foreign key trước
+CREATE TABLE [Roles] (
+  [id] integer PRIMARY KEY,
+  [description] nvarchar(255)
+)
 GO
-DECLARE @sql2 NVARCHAR(max)=''
 
-SELECT @sql2 += ' Drop table ' + QUOTENAME(TABLE_SCHEMA) + '.'+ QUOTENAME(TABLE_NAME) + '; '
-FROM   INFORMATION_SCHEMA.TABLES
-WHERE  TABLE_TYPE = 'BASE TABLE'
-
-Exec Sp_executesql @sql2 
-GO 
 CREATE TABLE [User] (
   [id] varchar(10) PRIMARY KEY,
   [user_name] nvarchar(255) UNIQUE,
@@ -57,11 +34,22 @@ CREATE TABLE [User] (
   [isDisabled] tinyint
 )
 GO
-CREATE TABLE [Roles] (
-  [id] integer PRIMARY KEY,
+
+CREATE TABLE [Schools] (
+    [id] NVARCHAR(10) PRIMARY KEY,
+    [schoolName] NVARCHAR(255),
+    [addressSchool] NVARCHAR(255),
+    [email] NVARCHAR(255)
+)
+GO
+
+CREATE TABLE [Grades] (
+  [id] varchar(10) PRIMARY KEY,
+  [name] nvarchar(255),
   [description] nvarchar(255)
 )
 GO
+
 CREATE TABLE [SchoolYears] (
   [id] varchar(10) PRIMARY KEY,
   [name] nvarchar(255) UNIQUE,
@@ -71,6 +59,38 @@ CREATE TABLE [SchoolYears] (
   [created_by] varchar(10)
 )
 GO
+
+CREATE TABLE [SchoolClasses] (
+    [id] NVARCHAR(10) PRIMARY KEY,
+    [school_id] NVARCHAR(10),
+    [class_name] NVARCHAR(50),
+    [grade_level] NVARCHAR(50)
+)
+GO
+
+CREATE TABLE [Personnels] (
+  [id] varchar(10) PRIMARY KEY,
+  [first_name] nvarchar(255),
+  [last_name] nvarchar(255),
+  [gender] integer,
+  [birthday] date,
+  [address] nvarchar(255),
+  [email] nvarchar(255) UNIQUE,
+  [phone_number] nvarchar(255) UNIQUE,
+  [role_id] integer,
+  [status] nvarchar(255),
+  [avatar] nvarchar(255),
+  [user_id] varchar(10),
+  [school_id] nvarchar(10),
+  [school_class_id] nvarchar(10),
+  specialization NVARCHAR(255),
+  qualification NVARCHAR(255),
+  teaching_years INT,
+  achievements NVARCHAR(500),
+  cv_file NVARCHAR(255)
+)
+GO
+
 CREATE TABLE [Class] (
   [id] varchar(10) PRIMARY KEY,
   [name] nvarchar(255),
@@ -81,22 +101,17 @@ CREATE TABLE [Class] (
   [created_by] varchar(10)
 )
 GO
-CREATE TABLE [Schools] (
-    [id] NVARCHAR(10) PRIMARY KEY,
-    [schoolName] NVARCHAR(255),
-    [addressSchool] NVARCHAR(255),
-    [email] NVARCHAR(255)
-);
-GO
-CREATE TABLE [SchoolClasses] (
-    [id] NVARCHAR(10) PRIMARY KEY,
-    [school_id] NVARCHAR(10) FOREIGN KEY REFERENCES Schools(id),
-    [class_name] NVARCHAR(50),
-    [grade_level] NVARCHAR(50)
-);
+
+CREATE TABLE [Subjects] (
+  [id] varchar(10) PRIMARY KEY,
+  [name] nvarchar(255),
+  [grade_id] varchar(10),
+  [description] nvarchar(255),
+  [status] nvarchar(255),
+  [subject_type] nvarchar(50)
+)
 GO
 
--- bảng học sinh
 CREATE TABLE [Students] (
   [id] varchar(10) PRIMARY KEY,
   [user_id] varchar(10),
@@ -115,59 +130,10 @@ CREATE TABLE [Students] (
   [created_by] varchar(10),
   [parent_special_note] nvarchar(max),
   [school_id] nvarchar(10),
-[school_class_id] nvarchar(10),
+  [school_class_id] nvarchar(10)
+)
+GO
 
-)
-GO
-CREATE TABLE [Timeslots] (
-  [id] varchar(10) PRIMARY KEY,
-  [name] nvarchar(255),
-  [start_time] nvarchar(255),
-  [end_time] nvarchar(255),
-  [slot_number] nvarchar(2),
-  [day_type] nvarchar(20) -- 'weekday' hoặc 'weekend'
-);
-GO
---bảng khối lớp 
-CREATE TABLE [Grades] (
-  [id] varchar(10) PRIMARY KEY,
-  [name] nvarchar(255),
-  [description] nvarchar(255)
-)
-GO
--- bảng môn học
-CREATE TABLE [Subjects] (
-  [id] varchar(10) PRIMARY KEY,
-  [name] nvarchar(255),
-  [grade_id] varchar(10),
-  [description] nvarchar(255),
-  [status] nvarchar(255),
-  [subject_type] nvarchar(50) -- Cơ bản/Nâng cao/Chuyên đề/Ôn thi
-);
-GO
-CREATE TABLE [Personnels] (
-  [id] varchar(10) PRIMARY KEY,
-  [first_name] nvarchar(255),
-  [last_name] nvarchar(255),
-  [gender] integer,
-  [birthday] date,
-  [address] nvarchar(255),
-  [email] nvarchar(255) UNIQUE,
-  [phone_number] nvarchar(255) UNIQUE,
-  [role_id] integer,
-  [status] nvarchar(255),
-  [avatar] nvarchar(255),
-  [user_id] varchar(10),
-   [school_id] nvarchar(10),
-[school_class_id] nvarchar(10),
-specialization NVARCHAR(255),
-    qualification NVARCHAR(255),
-    teaching_years INT,
-    achievements NVARCHAR(500),
-    cv_file NVARCHAR(255),
-
-)
-GO
 CREATE TABLE [Weeks] (
   [id] varchar(10) PRIMARY KEY,
   [start_date] date,
@@ -175,13 +141,25 @@ CREATE TABLE [Weeks] (
   [school_year_id] varchar(10)
 )
 GO
+
 CREATE TABLE [Days] (
   [id] varchar(10) PRIMARY KEY,
   [week_id] varchar(10) NOT NULL,
   [date] date NOT NULL,
-  [day_of_week] int NOT NULL -- lưu thứ trong tuần, vd: 2 = Thứ hai, 3 = Thứ ba ...
+  [day_of_week] int NOT NULL
 )
 GO
+
+CREATE TABLE [Timeslots] (
+  [id] varchar(10) PRIMARY KEY,
+  [name] nvarchar(255),
+  [start_time] nvarchar(255),
+  [end_time] nvarchar(255),
+  [slot_number] nvarchar(2),
+  [day_type] nvarchar(20)
+)
+GO
+
 CREATE TABLE [Timetables] (
   [id] varchar(10) PRIMARY KEY,
   [class_id] varchar(10),
@@ -192,19 +170,19 @@ CREATE TABLE [Timetables] (
   [status] nvarchar(255),
   [note] nvarchar(max),
   [teacher_id] varchar(10),
-  [class_level] nvarchar(20), -- Lớp 6, lớp 7,...
-  [class_type] nvarchar(50) -- Cơ bản/Nâng cao/Chuyên đề
-);
+  [class_level] nvarchar(20),
+  [class_type] nvarchar(50)
+)
 GO
+
 CREATE TABLE [Evaluations] (
   [id] varchar(10) PRIMARY KEY,
   [student_id] varchar(10),
-  [timetable_id] varchar(10) references [Timetables](id),
+  [timetable_id] varchar(10),
   [evaluation] nvarchar(255),
   [notes] nvarchar(max)
 )
 GO
-Insert into Evaluations values ('E000001', 'HS000001', 'TT2000', 'Ngoan',' ')
 
 CREATE TABLE [Notifications] (
   [id] varchar(10) PRIMARY KEY,
@@ -239,8 +217,6 @@ CREATE TABLE [Application_Types] (
 )
 GO
 
-
-
 CREATE TABLE [StudentsAttendance] (
   [id] varchar(10) PRIMARY KEY,
   [day_id] varchar(10),
@@ -272,7 +248,8 @@ CREATE TABLE [classDetails] (
   [class_id] varchar(10),
   PRIMARY KEY ([student_id], [class_id])
 )
-Go
+GO
+
 CREATE TABLE [ScoreReports] (
   [id] varchar(10) PRIMARY KEY,
   [student_id] varchar(10),
@@ -286,162 +263,129 @@ CREATE TABLE [ScoreReports] (
   [final_score] float,
   [average_score] float,
   [notes] nvarchar(max)
-);
+)
 GO
 
-Create table [SchoolYearSummarizeReport](
-	[student_id]varchar(10),
-	[schoolyear_id]varchar(10),
-	[teacher_id]varchar(10),
-	[good_ticket] varchar(10),
-	[title] nvarchar(10),
-	[teacher_note] nvarchar(MAX),
-	PRIMARY KEY([student_id],[schoolyear_id])
+CREATE TABLE [SchoolYearSummarizeReport](
+    [student_id]varchar(10),
+    [schoolyear_id]varchar(10),
+    [teacher_id]varchar(10),
+    [good_ticket] varchar(10),
+    [title] nvarchar(10),
+    [teacher_note] nvarchar(MAX),
+    PRIMARY KEY([student_id],[schoolyear_id])
 )
-;
+GO
+
 CREATE TABLE Payments (
     id INT IDENTITY(1,1) PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
     student_id VARCHAR(10) NOT NULL,
     class_id VARCHAR(10) NOT NULL,
-    month INT NOT NULL, -- Tháng thanh toán
-    year INT NOT NULL,  -- Năm thanh toán
-    amount DECIMAL(10, 2) NOT NULL,
-    status NVARCHAR(30) DEFAULT N'Nợ', -- Nợ / Đã thanh toán
+    month INT NOT NULL,
+    year INT NOT NULL,
+    amount FLOAT NOT NULL,
+    status NVARCHAR(30) DEFAULT 'Not yet',
     payment_date DATETIME NULL,
-    note NVARCHAR(MAX)
-
-
+    note NVARCHAR(MAX),
+    CONSTRAINT FK_StudentPayments_Student FOREIGN KEY (student_id) REFERENCES Students(id),
+    CONSTRAINT FK_StudentPayments_Class FOREIGN KEY (class_id) REFERENCES Class(id)
 )
+GO
 
-
-);
+-- Tạo các foreign key
+ALTER TABLE [User] ADD FOREIGN KEY ([role_id]) REFERENCES [Roles] ([id])
+GO
+ALTER TABLE [Personnels] ADD FOREIGN KEY ([user_id]) REFERENCES [User] ([id])
+GO
+ALTER TABLE [Personnels] ADD FOREIGN KEY ([school_id]) REFERENCES [Schools]([id])
+GO
+ALTER TABLE [Personnels] ADD FOREIGN KEY ([school_class_id]) REFERENCES [SchoolClasses]([id])
+GO
+ALTER TABLE [Personnels] ADD FOREIGN KEY ([role_id]) REFERENCES [Roles] ([id])
+GO
+ALTER TABLE [Class] ADD FOREIGN KEY ([grade_id]) REFERENCES [Grades] ([id])
+GO
+ALTER TABLE [Class] ADD FOREIGN KEY ([school_year_id]) REFERENCES [SchoolYears] ([id])
+GO
+ALTER TABLE [Class] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [Class] ADD FOREIGN KEY ([teacher_id]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [SchoolYears] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [SchoolClasses] ADD FOREIGN KEY ([school_id]) REFERENCES [Schools]([id])
+GO
+ALTER TABLE [Subjects] ADD FOREIGN KEY ([grade_id]) REFERENCES [Grades] ([id])
+GO
+ALTER TABLE [Students] ADD FOREIGN KEY ([school_id]) REFERENCES [Schools]([id])
+GO
+ALTER TABLE [Students] ADD FOREIGN KEY ([school_class_id]) REFERENCES [SchoolClasses]([id])
+GO
+ALTER TABLE [Students] ADD FOREIGN KEY ([user_id]) REFERENCES [User] ([id])
+GO
+ALTER TABLE [Students] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [Weeks] ADD FOREIGN KEY ([school_year_id]) REFERENCES [SchoolYears] ([id])
+GO
+ALTER TABLE [Days] ADD FOREIGN KEY ([week_id]) REFERENCES [Weeks] ([id])
+GO
+ALTER TABLE [Timetables] ADD FOREIGN KEY ([class_id]) REFERENCES [Class] ([id])
+GO
+ALTER TABLE [Timetables] ADD FOREIGN KEY ([timeslot_id]) REFERENCES [Timeslots] ([id])
+GO
+ALTER TABLE [Timetables] ADD FOREIGN KEY ([date_id]) REFERENCES [Days] ([id])
+GO
+ALTER TABLE [Timetables] ADD FOREIGN KEY ([subject_id]) REFERENCES [Subjects] ([id])
+GO
+ALTER TABLE [Timetables] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [Evaluations] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
+GO
+ALTER TABLE [Evaluations] ADD FOREIGN KEY ([timetable_id]) REFERENCES [Timetables] ([id])
+GO
+ALTER TABLE [Notifications] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [Applications] ADD FOREIGN KEY ([processed_by]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [Applications] ADD FOREIGN KEY ([created_by]) REFERENCES [User] ([id])
+GO
+ALTER TABLE [Applications] ADD FOREIGN KEY ([application_type]) REFERENCES [Application_Types] ([id])
+GO
+ALTER TABLE [StudentsAttendance] ADD CONSTRAINT FK_Attendance_Teacher FOREIGN KEY (teacher_id) REFERENCES Personnels(id)
+GO
+ALTER TABLE [StudentsAttendance] ADD FOREIGN KEY ([day_id]) REFERENCES [Days] ([id])
+GO
+ALTER TABLE [StudentsAttendance] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
+GO
+ALTER TABLE [PersonnelsAttendance] ADD FOREIGN KEY ([day_id]) REFERENCES [Days] ([id])
+GO
+ALTER TABLE [PersonnelsAttendance] ADD FOREIGN KEY ([personnel_id]) REFERENCES [Personnels] ([id])
+GO
+ALTER TABLE [NotificationDetails] ADD FOREIGN KEY ([notification_id]) REFERENCES [Notifications] ([id])
+GO
+ALTER TABLE [NotificationDetails] ADD FOREIGN KEY ([receiver_id]) REFERENCES [User] ([id])
+GO
+ALTER TABLE [classDetails] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
+GO
+ALTER TABLE [classDetails] ADD FOREIGN KEY ([class_id]) REFERENCES [Class] ([id])
 GO
 ALTER TABLE [SchoolYearSummarizeReport] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
 GO
 ALTER TABLE [SchoolYearSummarizeReport] ADD FOREIGN KEY ([schoolyear_id]) REFERENCES [SchoolYears] ([id])
 GO
-CREATE UNIQUE INDEX [Class_index_0] ON [Class] ("name", "school_year_id")
+ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([student_id]) REFERENCES [Students]([id])
 GO
+ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([subject_id]) REFERENCES [Subjects]([id])
+GO
+ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([teacher_id]) REFERENCES [Personnels]([id])
+GO
+ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([school_year_id]) REFERENCES [SchoolYears]([id])
+GO
+ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([class_id]) REFERENCES [Class]([id])
+GO
+ALTER TABLE [Class] ADD class_type nvarchar(50);
 
-ALTER TABLE [Students] ADD FOREIGN KEY ([school_id]) REFERENCES [Schools]([id]);
-GO
-
-ALTER TABLE [Students] ADD FOREIGN KEY ([school_class_id]) REFERENCES [SchoolClasses]([id]);
-GO
-ALTER TABLE [Students] ADD FOREIGN KEY ([user_id]) REFERENCES [User] ([id])
-GO
-
-ALTER TABLE [Class] ADD FOREIGN KEY ([grade_id]) REFERENCES [Grades] ([id])
-GO
-
-ALTER TABLE [Class] ADD FOREIGN KEY ([school_year_id]) REFERENCES [SchoolYears] ([id])
-GO
-
-ALTER TABLE [Personnels] ADD FOREIGN KEY ([user_id]) REFERENCES [User] ([id])
-GO
-ALTER TABLE [Personnels] ADD FOREIGN KEY ([school_id]) REFERENCES [Schools]([id]);
-GO
-
-ALTER TABLE [Personnels] ADD FOREIGN KEY ([school_class_id]) REFERENCES [SchoolClasses]([id]);
-GO
-
-ALTER TABLE [User] ADD FOREIGN KEY ([role_id]) REFERENCES [Roles] ([id])
-GO
-
-ALTER TABLE [Days] ADD FOREIGN KEY ([week_id]) REFERENCES [Weeks] ([id])
-GO
-
-ALTER TABLE [Timetables] ADD FOREIGN KEY ([class_id]) REFERENCES [Class] ([id])
-GO
-
-ALTER TABLE [Timetables] ADD FOREIGN KEY ([timeslot_id]) REFERENCES [Timeslots] ([id])
-GO
-
-ALTER TABLE [Timetables] ADD FOREIGN KEY ([date_id]) REFERENCES [Days] ([id])
-GO
-
-ALTER TABLE [Timetables] ADD FOREIGN KEY ([subject_id]) REFERENCES [Subjects] ([id])
-GO
-
-ALTER TABLE StudentsAttendance ADD CONSTRAINT FK_Attendance_Teacher FOREIGN KEY (teacher_id) REFERENCES Personnels(id);
-GO
-
-ALTER TABLE [Timetables] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [Class] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [SchoolYears] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [Evaluations] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
-GO
-
-ALTER TABLE [Evaluations] ADD FOREIGN KEY ([date_id]) REFERENCES [Days] ([id])
-GO
-
-ALTER TABLE [Weeks] ADD FOREIGN KEY ([school_year_id]) REFERENCES [SchoolYears] ([id])
-GO
-
-ALTER TABLE [StudentsAttendance] ADD FOREIGN KEY ([day_id]) REFERENCES [Days] ([id])
-GO
-
-ALTER TABLE [StudentsAttendance] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
-GO
-
-ALTER TABLE [Notifications] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [Applications] ADD FOREIGN KEY ([processed_by]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [Applications] ADD FOREIGN KEY ([created_by]) REFERENCES [User] ([id])
-GO
-
-ALTER TABLE [PersonnelsAttendance] ADD FOREIGN KEY ([day_id]) REFERENCES [Days] ([id])
-GO
-
-ALTER TABLE [PersonnelsAttendance] ADD FOREIGN KEY ([personnel_id]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [Subjects] ADD FOREIGN KEY ([grade_id]) REFERENCES [Grades] ([id])
-GO
-
-ALTER TABLE [classDetails] ADD FOREIGN KEY ([student_id]) REFERENCES [Students] ([id])
-GO
-
-ALTER TABLE [classDetails] ADD FOREIGN KEY ([class_id]) REFERENCES [Class] ([id])
-GO
-
-ALTER TABLE [Class] ADD FOREIGN KEY ([teacher_id]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [NotificationDetails] ADD FOREIGN KEY ([notification_id]) REFERENCES [Notifications] ([id])
-GO
-
-ALTER TABLE [NotificationDetails] ADD FOREIGN KEY ([receiver_id]) REFERENCES [User] ([id])
-GO
-
-ALTER TABLE [Personnels] ADD FOREIGN KEY ([role_id]) REFERENCES [Roles] ([id])
-GO
-
-ALTER TABLE [Students] ADD FOREIGN KEY ([created_by]) REFERENCES [Personnels] ([id])
-GO
-
-ALTER TABLE [Applications] ADD FOREIGN KEY ([application_type]) REFERENCES [Application_Types] ([id])
-GO
-ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([student_id]) REFERENCES [Students]([id]);
-GO
-ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([subject_id]) REFERENCES [Subjects]([id]);
-GO
-ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([teacher_id]) REFERENCES [Personnels]([id]);
-GO
-ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([school_year_id]) REFERENCES [SchoolYears]([id]);
-GO
-ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([class_id]) REFERENCES [Class]([id]);
-GO
-
-ALTER TABLE [Days] ADD FOREIGN KEY ([week_id]) REFERENCES [Weeks] ([id]);
-
-
+-- Tạo index
+CREATE UNIQUE INDEX [Class_index_0] ON [Class] ([name], [school_year_id])
+GO 

@@ -15,6 +15,7 @@ import java.util.List;
 import model.timetable.Timetable;
 import model.timetable.TimetableDAO;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -60,22 +61,26 @@ public class ReviewTimetableServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String action = request.getParameter("action");
         String timetableId = request.getParameter("timetableId");
+        String action = request.getParameter("action");
         TimetableDAO timetableDAO = new TimetableDAO();
-
+        HttpSession session = request.getSession();
+        boolean result = false;
         if ("approve".equals(action)) {
-            timetableDAO.updateTimetableStatus(timetableId, "đã được duyệt");
-            request.setAttribute("message", "Duyệt thời khóa biểu thành công!");
+            result = timetableDAO.approveTimetable(timetableId);
+            if (result) {
+                session.setAttribute("toastType", "success");
+                session.setAttribute("toastMessage", "Duyệt thời khóa biểu thành công!");
+            } else {
+                session.setAttribute("toastType", "error");
+                session.setAttribute("toastMessage", "Duyệt thất bại!");
+            }
         } else if ("reject".equals(action)) {
-            timetableDAO.updateTimetableStatus(timetableId, "bị từ chối");
-            request.setAttribute("message", "Từ chối thời khóa biểu thành công!");
+            timetableDAO.updateTimetableStatus(timetableId, "đã bị từ chối");
+            session.setAttribute("toastType", "success");
+            session.setAttribute("toastMessage", "Từ chối thời khóa biểu thành công!");
         }
-
-        // Sau khi duyệt, load lại danh sách chờ duyệt
-        List<Timetable> pendingTimetables = timetableDAO.getTimetablesByStatus("đang chờ xử lý");
-        request.setAttribute("pendingTimetables", pendingTimetables);
-        request.getRequestDispatcher("timetableWaitApprove.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/director/reviewTimetable");
     }
 
     /** 
