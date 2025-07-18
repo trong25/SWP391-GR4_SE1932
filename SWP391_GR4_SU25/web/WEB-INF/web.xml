@@ -221,7 +221,7 @@
     </servlet>
     <servlet>
         <servlet-name>ListPersonnelServlett</servlet-name>
-        <servlet-class>Controller.accountant.ListPersonnelServlett</servlet-class>
+        <servlet-class>Controller.accountant.ListPersonnelSalaryServlett</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewPersonnelSalaryServlet</servlet-name>

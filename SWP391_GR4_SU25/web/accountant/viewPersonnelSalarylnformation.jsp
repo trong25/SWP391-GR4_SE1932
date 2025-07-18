@@ -1,3 +1,4 @@
+```jsp
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -64,7 +65,7 @@
                             Không tìm thấy thông tin nhân viên.
                         </div>
                         <div style="text-align: center;">
-                            <a href="listpersonnell" class="btn btn-info">Quay lại danh sách</a>
+                            <a href="listpersonnel" class="btn btn-info">Quay lại danh sách</a>
                         </div>
                     </c:if>
 
@@ -112,7 +113,7 @@
                                                                         <td>
                                                                             <c:set var="selectedSalary" value="${null}"/>
                                                                             <c:forEach items="${person.salaries}" var="salary">
-                                                                                <c:if test="${salary.salaryMonth == selectedMonth && salary.salaryYear == selectedYear}">
+                                                                            <c:if test="${salary.salaryMonth == selectedMonth && salary.salaryYear == selectedYear}">
                                                                                     <c:set var="selectedSalary" value="${salary}"/>
                                                                                 </c:if>
                                                                             </c:forEach>
@@ -152,13 +153,8 @@
                                                                         <td>${person.teaching_years != null ? person.teaching_years : '-'}</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th>Lương cơ bản</th>
-                                                                        <td>
-                                                                            <c:if test="${selectedSalary != null}">
-                                                                                <fmt:formatNumber value="${selectedSalary.baseSalary}" type="currency" currencySymbol="₫"/>
-                                                                            </c:if>
-                                                                            <c:if test="${selectedSalary == null}">-</c:if>
-                                                                        </td>
+                                                                        <th>Số ngày công</th>
+                                                                        <td>${selectedSalary != null ? selectedSalary.workingDays : '-'}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Tổng lương</th>
@@ -176,6 +172,15 @@
                                                                     <tr>
                                                                         <th>Năm</th>
                                                                         <td>${selectedSalary != null ? selectedSalary.salaryYear : '-'}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Ngày thanh toán</th>
+                                                                        <td>
+                                                                            <c:if test="${selectedSalary != null && selectedSalary.paymentDate != null}">
+                                                                                <fmt:formatDate value="${selectedSalary.paymentDate}" pattern="yyyy/MM/dd"/>
+                                                                            </c:if>
+                                                                            <c:if test="${selectedSalary == null || selectedSalary.paymentDate == null}">-</c:if>
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th>Địa chỉ</th>
@@ -228,5 +233,5 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
         <script src="js/plugins/pace.min.js"></script>
-</body>
+    </body>
 </html>

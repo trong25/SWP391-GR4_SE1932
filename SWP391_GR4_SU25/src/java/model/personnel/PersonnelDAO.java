@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import model.Salaries.Salary;
 import model.role.Role;
@@ -1131,25 +1132,29 @@ public List<Personnel> getPersonnelByIdNameRoleStatus(String status, String role
         return teacherList;
     }
 
-  public boolean updateSalaryStatus(String personnelId, String status, int month, int year) {
-    String sql = """
-        UPDATE Salaries
-        SET payment_status = ?, payment_date = GETDATE()
-        WHERE personnel_id = ? AND salary_month = ? AND salary_year = ?
-    """;
-
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        preparedStatement.setString(1, status);
-        preparedStatement.setString(2, personnelId);
-        preparedStatement.setInt(3, month);
-        preparedStatement.setInt(4, year);
-        int rowsUpdated = preparedStatement.executeUpdate();
-        return rowsUpdated > 0;
-    } catch (SQLException e) {
-        System.out.println("Lỗi khi cập nhật trạng thái lương: " + e.getMessage());
-        return false;
+  public boolean updateSalaryStatus(String personnelId, String status, int month, int year, Date paymentDate) {
+        String sql = """
+            UPDATE Salaries
+            SET payment_status = ?, payment_date = ?
+            WHERE personnel_id = ? AND salary_month = ? AND salary_year = ?
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setDate(2, paymentDate != null ? new java.sql.Date(paymentDate.getTime()) : null);
+            stmt.setString(3, personnelId);
+            stmt.setInt(4, month);
+            stmt.setInt(5, year);
+            System.out.println("Updating payment status: personnelId=" + personnelId + ", status=" + status + ", month=" + month + ", year=" + year + ", paymentDate=" + paymentDate);
+            int rowsAffected = stmt.executeUpdate();
+            System.out.println("Rows affected: " + rowsAffected);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi cập nhật trạng thái thanh toán: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
-}
+  
 public List<Personnel> getPersonnelByMonthWithSalary(int month) {
     StringBuilder sql = new StringBuilder("""
         SELECT 
@@ -1317,6 +1322,76 @@ public List<Personnel> getPersonnelByMonthWithSalary(int month) {
             e.printStackTrace();
         }
         return list;
+    }
+  
+   public int getWorkingDaysByMonth(String personnelId, int month, int year) {
+    int workingDays = 0;
+    String sql = """
+        SELECT COUNT(*)
+        FROM PersonnelsAttendance pa
+        JOIN Days d ON pa.day_id = d.id
+        WHERE pa.personnel_id = ? AND MONTH(d.date) = ? AND YEAR(d.date) = ? AND pa.status = 'present'
+    """;
+
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setString(1, personnelId);
+        stmt.setInt(2, month);
+        stmt.setInt(3, year);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            workingDays = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi lấy số ngày công: " + e.getMessage());
+    }
+    return workingDays;
+}
+
+public void updateTotalSalary(String personnelId, int month, int year, float totalSalary) {
+    String sql = """
+        UPDATE Salaries
+        SET total_salary = ?
+        WHERE personnel_id = ? AND salary_month = ? AND salary_year = ?
+    """;
+
+    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setFloat(1, totalSalary);
+        stmt.setString(2, personnelId);
+        stmt.setInt(3, month);
+        stmt.setInt(4, year);
+        stmt.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Lỗi khi cập nhật tổng lương: " + e.getMessage());
+    }
+}
+ private List<Salary> getSalariesByPersonnelId(String personnelId) {
+        List<Salary> salaries = new ArrayList<>();
+        String sql = """
+            SELECT id, personnel_id, salary_month, salary_year, base_salary, total_salary, payment_status, payment_date
+            FROM Salaries
+            WHERE personnel_id = ?
+        """;
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, personnelId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Salary salary = new Salary();
+                salary.setId(rs.getInt("id"));
+                salary.setPersonnelId(rs.getString("personnel_id"));
+                salary.setSalaryMonth(rs.getInt("salary_month"));
+                salary.setSalaryYear(rs.getInt("salary_year"));
+                salary.setBaseSalary(rs.getFloat("base_salary"));
+                salary.setTotalSalary(rs.getFloat("total_salary"));
+                salary.setPaymentStatus(rs.getString("payment_status"));
+                salary.setPaymentDate(rs.getDate("payment_date"));
+                int workingDays = getWorkingDaysByMonth(personnelId, rs.getInt("salary_month"), rs.getInt("salary_year"));
+                salary.setWorkingDays(workingDays);
+                salaries.add(salary);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy danh sách lương: " + e.getMessage());
+        }
+        return salaries;
     }
 
 }
