@@ -38,6 +38,7 @@ public class Personnel {
     private String achievements;
     private String cv_file;
   private List<Salary> salaries;
+ 
 
     public Personnel() {
         this.salaries = new ArrayList<>();
@@ -68,6 +69,7 @@ public class Personnel {
         this.cv_file = cv_file;
     }
 
+   
    
    public List<Salary> getSalaries() {
         return salaries;
