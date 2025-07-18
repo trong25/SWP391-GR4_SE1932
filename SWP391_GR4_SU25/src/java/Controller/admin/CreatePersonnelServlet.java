@@ -111,7 +111,7 @@ public class CreatePersonnelServlet extends HttpServlet {
         DecimalFormat decimalFormat = new DecimalFormat("000000");
         id= decimalFormat.format(newid);
         if (role == 0) {
-            id = "GD" + id;
+            id = "AD" + id;
         } else if (role == 1) {
             id = "GD" + id;
         } else if (role == 2) {

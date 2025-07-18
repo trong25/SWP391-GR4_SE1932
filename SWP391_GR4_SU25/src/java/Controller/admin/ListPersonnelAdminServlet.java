@@ -48,10 +48,7 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         PersonnelDAO personnelDAO = new PersonnelDAO();
         List<Personnel> persons = personnelDAO.getAllPersonnels();
         List<Role> roles = personnelDAO.getAllPersonnelRole();
-        List<String> statuss = personnelDAO.getAllStatus();
-
-        List<Personnel> waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-
+        List<String> statuss = personnelDAO.getAllStatuss();
 
         request.setAttribute("selectedstatus", "all");
         request.setAttribute("selectedrole", "all");
@@ -59,9 +56,6 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         request.setAttribute("type", type);
         request.setAttribute("persons", persons);
         request.setAttribute("roles", roles);
-
-        request.setAttribute("waitlist", waitlist);
-
         request.setAttribute("statuss", statuss);
 
        request.getRequestDispatcher("/admin/listPersonnel.jsp").forward(request, response);
@@ -86,12 +80,6 @@ public class ListPersonnelAdminServlet extends HttpServlet {
         String status = request.getParameter("status");
         String search = request.getParameter("search");
 
-        System.out.println(role);
-        System.out.println(status);
-        System.out.println(search);
-
-
-
         List<Personnel> persons = new ArrayList<Personnel>();
         List<Role> roles = new ArrayList<>();
         PersonnelDAO personnelDAO = new PersonnelDAO();
@@ -101,43 +89,29 @@ public class ListPersonnelAdminServlet extends HttpServlet {
                  persons = personnelDAO.getAllPersonnels();
              }
             else if(!status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")){
-                  persons =personnelDAO.getPersonnelByStatus(status);
+                  persons =personnelDAO.getPersonnelByStatuss(status);
                  
              }else if(!role.equalsIgnoreCase("all") && status.equalsIgnoreCase("all")){
                  try{
                  int xrole = Integer.parseInt(role);
-                 persons = personnelDAO.getPersonnelByRole(xrole);
+                 persons = personnelDAO.getPersonnelByRoles(xrole);
                  }catch (NumberFormatException e){
-                     persons = personnelDAO.getPersonnelByRole(-1);
+                     persons = personnelDAO.getPersonnelByRoles(-1);
                  }
                 
              } else{
-
-            persons = personnelDAO.getPersonnelByIdNameRoleStatus1(status, role);
-
-            persons = personnelDAO.getPersonnelByIdNameRoleStatus(status, role);
-
+            persons = personnelDAO.getPersonnelByIdNameRoleStatuss(status, role);
              }
         }else if(search != null){
             persons = personnelDAO.getPersonnelByNameOrId(Helper.formatString(search));
         } 
         List<String> statuss = new ArrayList<>();
-        statuss = personnelDAO.getAllStatus();
+        statuss = personnelDAO.getAllStatuss();
         request.setAttribute("statuss", statuss);
-
-        List<Personnel> waitlist = new ArrayList<>();
-        waitlist = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-        request.setAttribute("searchdata", search);
-
-
         request.setAttribute("selectedstatus", status);
         request.setAttribute("selectedrole", role);
         request.setAttribute("message", message);
         request.setAttribute("type", type);
-
-        request.setAttribute("waitlist", waitlist);
-
-
         request.setAttribute("roles", roles);
         request.setAttribute("persons", persons);
         request.getRequestDispatcher("/admin/listPersonnel.jsp").forward(request, response);

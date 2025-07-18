@@ -90,7 +90,7 @@
                                         <div class="account-settings">
                                             <div class="user-profile">
                                                 <div class="user-avatar">
-                                                    <c:set var="personnel" value="${personnelBean.getPersonnel(sessionScope.personnel.id)}"/>
+                                                    <c:set var="personnel" value="${personnelBean.getPersonnels(sessionScope.personnel.id)}"/>
                                                     <img src="${pageContext.request.contextPath}/images/${personnel.avatar}" alt="Maxwell Admin">
                                                 </div>
                                                 <h5 class="user-name">${personnel.lastName} ${personnel.firstName}</h5>

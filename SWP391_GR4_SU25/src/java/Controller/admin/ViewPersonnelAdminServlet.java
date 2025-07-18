@@ -43,7 +43,7 @@ public class ViewPersonnelAdminServlet extends HttpServlet {
             String xpage = request.getParameter("page");
             Personnel person;
             PersonnelDAO personnelDAO = new PersonnelDAO();
-            person = personnelDAO.getPersonnel(xid);
+            person = personnelDAO.getPersonnels(xid);
             request.setAttribute("person", person);
             request.setAttribute("message", message);
             request.setAttribute("type", type);

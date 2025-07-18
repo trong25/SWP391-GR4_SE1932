@@ -73,7 +73,7 @@ public class RegisterAccountServlet extends HttpServlet {
                         }
                         break;
                     case "KT":
-                        u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 5, (byte) 0);
+                        u = userDAO.createNewUser(username, personnelDAO.getPersonnels(username).getEmail(), 5, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
                         } else {
@@ -81,7 +81,7 @@ public class RegisterAccountServlet extends HttpServlet {
                         }
                         break;
                     case "GD":
-                        u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 1, (byte) 0);
+                        u = userDAO.createNewUser(username, personnelDAO.getPersonnels(username).getEmail(), 1, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
                         } else {
@@ -89,7 +89,7 @@ public class RegisterAccountServlet extends HttpServlet {
                         }
                         break;
                     case "GV":
-                        u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 3, (byte) 0);
+                        u = userDAO.createNewUser(username, personnelDAO.getPersonnels(username).getEmail(), 3, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
                         } else {
@@ -97,7 +97,7 @@ public class RegisterAccountServlet extends HttpServlet {
                         }
                         break;
                     case "NV":
-                        u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 2, (byte) 0);
+                        u = userDAO.createNewUser(username, personnelDAO.getPersonnels(username).getEmail(), 2, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
                         } else {
@@ -105,7 +105,7 @@ public class RegisterAccountServlet extends HttpServlet {
                         }
                         break;
                     case "AD":
-                        u = userDAO.createNewUser(username, personnelDAO.getPersonnel(username).getEmail(), 0, (byte) 0);
+                        u = userDAO.createNewUser(username, personnelDAO.getPersonnels(username).getEmail(), 0, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
                         } else {

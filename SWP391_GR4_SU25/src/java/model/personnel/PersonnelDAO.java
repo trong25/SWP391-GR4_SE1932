@@ -300,37 +300,6 @@ public List<Personnel> getActivePersonnels() {
                 salary.setPaymentDate(rs.getDate("payment_date"));
                 person.addSalary(salary); // Thêm vào danh sách salaries
             }
-
-        String sql = "SELECT * FROM [Personnels] WHERE id LIKE ?";
-        Personnel person = null;
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, "%" + id + "%");
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                person = new Personnel();
-                person.setId(resultSet.getString("id"));
-                person.setFirstName(resultSet.getString("first_name"));
-                person.setLastName(resultSet.getString("last_name"));
-                person.setGender(resultSet.getBoolean("gender"));
-                person.setBirthday(resultSet.getDate("birthday"));
-                person.setEmail(resultSet.getString("email"));
-                person.setAddress(resultSet.getString("address"));
-                person.setPhoneNumber(resultSet.getString("phone_number"));
-                person.setRoleId(resultSet.getInt("role_id"));
-                person.setStatus(resultSet.getString("status"));
-                person.setAvatar(resultSet.getString("avatar"));
-                person.setUserId(resultSet.getString("user_id"));
-                person.setSchool_id(resultSet.getString("school_id"));
-                person.setSchool_class_id(resultSet.getString("school_class_id"));
-                person.setSpecialization(resultSet.getString("specialization"));
-                person.setQualification(resultSet.getString("qualification"));
-                person.setTeaching_years(resultSet.getInt("teaching_years"));
-                person.setAchievements(resultSet.getString("achievements"));
-                person.setCv_file(resultSet.getString("cv_file"));
-            }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-
         }
     } catch (Exception e) {
         System.out.println("Lỗi khi lấy Personnel theo id (JOIN Salaries): " + e.getMessage());
@@ -389,6 +358,20 @@ public List<Personnel> getActivePersonnels() {
             System.out.println("Lỗi khi lấy danh sách trạng thái lương: " + e.getMessage());
         }
         return statusList;
+    }
+  public List<String> getAllStatuss() {
+        String sql = "select distinct status from Personnels";
+        List<String> status = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                status.add(resultSet.getString("status"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return status;
     }
 
    public List<Personnel> getPersonnelByStatus(String status) {
@@ -1368,7 +1351,7 @@ public List<Personnel> getPersonnelByMonthWithSalary(int month) {
     }
 
 
-}
+
 
        
        
@@ -1501,6 +1484,140 @@ public List<Personnel> getPersonnelByMonthWithSalary(int month) {
         }
         return result;
     }
+     
+     
+       public Personnel getPersonnels(String id) {
+        String sql = "SELECT * FROM [Personnels] WHERE id LIKE ?";
+        Personnel person = null;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + id + "%");
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                person.setSchool_id(resultSet.getString("school_id"));
+                person.setSchool_class_id(resultSet.getString("school_class_id"));
+                person.setSpecialization(resultSet.getString("specialization"));
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
+                person.setAchievements(resultSet.getString("achievements"));
+                person.setCv_file(resultSet.getString("cv_file"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return person;
+    }
+       
+       
+        public List<Personnel> getPersonnelByIdNameRoleStatuss(String status, String role) {
+        String sql = " Select * from Personnels where 1=1";
+
+        if (status != null && !status.isEmpty()) {
+            sql += " AND status = N'" + status + "'";
+        }
+        if (role != null && !role.isEmpty()) {
+            int xrole = Integer.parseInt(role);
+            sql += " AND role_id = " + xrole + "";
+        }
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+        
+        
+          public List<Personnel> getPersonnelByStatuss(String status) {
+        String sql = " Select * from Personnels where [status] = N'" + status + "' order by id desc";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+          
+              public List<Personnel> getPersonnelByRoles(int role) {
+        String sql = "select * from [Personnels] where role_id = ? order by id desc";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, role);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+
+
 
 }
 

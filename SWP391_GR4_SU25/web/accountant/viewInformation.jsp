@@ -114,7 +114,7 @@
                                         </div>
                                     </div>
                                     <div class="profile-card">
-                                        <c:set var="personnel" value="${personnelBean.getPersonnel(sessionScope.personnel.id)}"/>
+                                        <c:set var="personnel" value="${personnelBean.getPersonnels(sessionScope.personnel.id)}"/>
                                         <img src="${pageContext.request.contextPath}/images/${personnel.avatar}" alt="User Avatar">
                                         <div class="profile-info">
                                             <h3>${personnel.lastName} ${personnel.firstName}</h3>

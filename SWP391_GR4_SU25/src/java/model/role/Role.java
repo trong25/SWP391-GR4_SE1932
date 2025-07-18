@@ -13,9 +13,7 @@ package model.role;
  * @author ASUS VIVOBOOK
  */
 
-
 public class Role {
-
     private String id;
     private String description;
 
@@ -43,15 +41,10 @@ public class Role {
         this.description = description;
     }
 
-
-    
     
     public String getVNeseDescription(){
 
-
-
         switch(this.id){
-
             case "0":
                 return "Nhân viên IT";
             case "1":
@@ -63,17 +56,8 @@ public class Role {
             case "4":
                 return "Học Sinh";
             case "5":
-
-
-                return "Giáo viên";
-            case "6":
-
-                return "Phụ huynh";
-
-
                 return "Kế Toán";
            
-
         }
         return "";
     }
