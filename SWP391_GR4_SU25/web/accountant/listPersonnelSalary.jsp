@@ -211,7 +211,7 @@
                                                             <td>${p.qualification != null ? p.qualification : '-'}</td>
                                                             <td>-</td>
                                                             <td>-</td>
-                                                            <td>${p.workingDays}</td>
+                                                            
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>-</td>
