@@ -779,7 +779,7 @@ public class StudentDAO extends DBContext {
         return listStudents;
     }
 
-    public boolean addStudentToClass(String pupilId, String classId) {
+    public boolean addStudentToClass(String studentId, String classId) {
         String sql = "INSERT INTO [dbo].[classDetails]\n"
                 + "           ([student_id]\n"
                 + "           ,[class_id])\n"
@@ -787,7 +787,7 @@ public class StudentDAO extends DBContext {
                 + "           (?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, pupilId);
+            preparedStatement.setString(1, studentId);
             preparedStatement.setString(2, classId);
             preparedStatement.executeUpdate();
             return true;
@@ -1062,6 +1062,22 @@ public class StudentDAO extends DBContext {
             throw new RuntimeException(e);
         }
         return listStudents;
+    }
+        
+            public boolean updateStudentStatus(String studentId, String status) {
+        String sql = "UPDATE [dbo].[Students]\n"
+                + "   SET [status] = ? \n"
+                + " WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, studentId);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
     }
 
 }
