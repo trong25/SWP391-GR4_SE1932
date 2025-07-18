@@ -72,7 +72,7 @@ public class TimeKeepServlet extends HttpServlet {
             User user = (User) session.getAttribute("user");
             request.setAttribute("personnelId", user.getUsername());
             PersonnelDAO personnelDAO = new PersonnelDAO();
-            Personnel personnel = personnelDAO.getPersonnel(user.getUsername());
+            Personnel personnel = personnelDAO.getPersonnels(user.getUsername());
             request.setAttribute("personnelFullName", personnel.getLastName() + " " + personnel.getFirstName());
             System.out.println(weekId);
             List<Day> days = dayDAO.getDayByWeek(weekId);

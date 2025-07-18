@@ -8,8 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+
 import model.Salaries.Salary;
+import java.util.Map;
 import model.role.Role;
 import utils.DBContext;
 
@@ -355,6 +358,20 @@ public List<Personnel> getActivePersonnels() {
             System.out.println("Lỗi khi lấy danh sách trạng thái lương: " + e.getMessage());
         }
         return statusList;
+    }
+  public List<String> getAllStatuss() {
+        String sql = "select distinct status from Personnels";
+        List<String> status = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                status.add(resultSet.getString("status"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return status;
     }
 
    public List<Personnel> getPersonnelByStatus(String status) {
@@ -1333,4 +1350,274 @@ public List<Personnel> getPersonnelByMonthWithSalary(int month) {
         return list;
     }
 
+
+
+
+       
+       
+         
+   // Kiểm tra xem số điện thoại đã tồn tại trong bảng Personnels hay chưa
+   public boolean checkPersonnelPhone(String phoneNumber) {
+    String sql = "SELECT phone_number FROM Personnels WHERE phone_number = ?";
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, phoneNumber.trim());  // Đặt giá trị cho dấu hỏi ?
+        ResultSet resultSet = statement.executeQuery();
+        return resultSet.next();  // Nếu có bản ghi trùng thì trả về true
+    } catch (Exception e) {
+        System.out.println("Error checking phone number: " + e.getMessage());
+    }
+    return false;  // Không tìm thấy => trả về false
 }
+
+
+    // Kiểm tra xem email đã tồn tại trong bảng Personnels hay chưa
+   public boolean checkPersonnelEmail(String email) {
+    String sql = "SELECT email FROM Personnels WHERE LOWER(email) = ?";
+    try {
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, email.trim().toLowerCase());
+        ResultSet resultSet = statement.executeQuery();
+        return resultSet.next(); // Nếu tìm thấy => trùng
+    } catch (Exception e) {
+        System.out.println("Error checking email: " + e.getMessage());
+    }
+    return false;
+}
+
+
+    // Thêm một nhân sự mới vào bảng Personnels với các thông tin đầu vào
+    public void insertPersonnel(String id, String firstName, String lastName, int gender, String birthday, String address,
+            String email, String phone, int role, String avatar,
+            String qualification, String specialization, String achievements,
+            int teaching_years, String cv_file) {
+
+        String sql = "INSERT INTO Personnels (id, first_name, last_name, gender, birthday, address, email, phone_number, role_id, status, avatar, user_id, school_id, school_class_id, specialization, qualification, teaching_years, achievements, cv_file) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, id);
+            st.setString(2, firstName);
+            st.setString(3, lastName);
+            st.setInt(4, gender);
+            st.setString(5, birthday);
+            st.setString(6, address);
+            st.setString(7, email);
+            st.setString(8, phone);
+            st.setInt(9, role);
+            st.setString(10, "đang chờ xử lý"); // status mặc định
+            st.setString(11, avatar);
+            st.setString(12, null); // user_id
+            st.setString(13, null); // school_id
+            st.setString(14, null); // school_class_id
+            st.setString(15, specialization);
+            st.setString(16, qualification);
+            st.setInt(17, teaching_years);
+            st.setString(18, achievements);
+            st.setString(19, cv_file);
+
+            st.executeUpdate();
+            System.out.println("✅ Insert thành công!");
+        } catch (Exception e) {
+            System.out.println("❌ Lỗi khi insert: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Trả về số lượng nhân sự theo một vai trò cụ thể (role_id)
+    public int getNumberOfPersonByRole(int id) {
+        String sql = "select count(id) as numberofpersonbyrole\n"
+                + "from Personnels where role_id = ? ";
+        int number = 0;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                number = resultSet.getInt("numberofpersonbyrole");
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return number;
+    }
+
+    // Thống kê số lượng nhân sự theo vai trò
+ public Map<String, Integer> getPersonnelCountByRole() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = """
+            SELECT r.description, COUNT(p.id) AS count
+            FROM Personnels p
+            JOIN Roles r ON p.role_id = r.id
+            GROUP BY r.description
+            ORDER BY r.description
+        """;
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql); 
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                result.put(rs.getString("description"), rs.getInt("count"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider proper logging instead of printStackTrace
+        }
+        return result;
+    }
+
+// Thống kê số lượng nhân sự theo trạng thái
+     public Map<String, Integer> getPersonnelCountByStatus() {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        String sql = "SELECT status, COUNT(id) AS count FROM Personnels GROUP BY status ORDER BY status";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql); 
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                result.put(rs.getString("status"), rs.getInt("count"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider proper logging instead of printStackTrace
+        }
+        return result;
+    }
+     
+     
+       public Personnel getPersonnels(String id) {
+        String sql = "SELECT * FROM [Personnels] WHERE id LIKE ?";
+        Personnel person = null;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + id + "%");
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                person.setSchool_id(resultSet.getString("school_id"));
+                person.setSchool_class_id(resultSet.getString("school_class_id"));
+                person.setSpecialization(resultSet.getString("specialization"));
+                person.setQualification(resultSet.getString("qualification"));
+                person.setTeaching_years(resultSet.getInt("teaching_years"));
+                person.setAchievements(resultSet.getString("achievements"));
+                person.setCv_file(resultSet.getString("cv_file"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return person;
+    }
+       
+       
+        public List<Personnel> getPersonnelByIdNameRoleStatuss(String status, String role) {
+        String sql = " Select * from Personnels where 1=1";
+
+        if (status != null && !status.isEmpty()) {
+            sql += " AND status = N'" + status + "'";
+        }
+        if (role != null && !role.isEmpty()) {
+            int xrole = Integer.parseInt(role);
+            sql += " AND role_id = " + xrole + "";
+        }
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+        
+        
+          public List<Personnel> getPersonnelByStatuss(String status) {
+        String sql = " Select * from Personnels where [status] = N'" + status + "' order by id desc";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+          
+              public List<Personnel> getPersonnelByRoles(int role) {
+        String sql = "select * from [Personnels] where role_id = ? order by id desc";
+        List<Personnel> persons = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, role);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Personnel person = new Personnel();
+                person.setId(resultSet.getString("id"));
+                person.setFirstName(resultSet.getString("first_name"));
+                person.setLastName(resultSet.getString("last_name"));
+                person.setGender(resultSet.getBoolean("gender"));
+                person.setBirthday(resultSet.getDate("birthday"));
+                person.setEmail(resultSet.getString("email"));
+                person.setAddress(resultSet.getString("address"));
+                person.setPhoneNumber(resultSet.getString("phone_number"));
+                person.setRoleId(resultSet.getInt("role_id"));
+                person.setStatus(resultSet.getString("status"));
+                person.setAvatar(resultSet.getString("avatar"));
+                person.setUserId(resultSet.getString("user_id"));
+                persons.add(person);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return persons;
+    }
+
+
+
+}
+

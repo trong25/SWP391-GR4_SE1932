@@ -11,7 +11,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import model.day.DayDAO;
+import model.personnel.PersonnelAttendanceDAO;
 import model.personnel.PersonnelDAO;
 import model.student.StudentDAO;
 import model.user.User;
@@ -40,7 +44,19 @@ public class DashboardAccountantServlet extends HttpServlet {
     throws ServletException, IOException {
         StudentDAO studentDAO = new StudentDAO();
         PersonnelDAO personnelDAO = new PersonnelDAO();
-   
+       PersonnelAttendanceDAO personnelAttendanceDAO = new PersonnelAttendanceDAO();
+        DayDAO dayDAO = new DayDAO();
+         HttpSession session = request.getSession();
+         
+         //chấm công
+         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        String formattedDate = formatter.format(new Date());
+          if (dayDAO.getDayByDate(formattedDate) != null) {
+            User user = (User)session.getAttribute("user");
+            request.setAttribute("attendance", personnelAttendanceDAO.getAttendanceByPersonnelAndDay(
+                    user.getUsername(), dayDAO.getDayByDate(formattedDate).getId()));
+        }
+          
         User user = (User) request.getSession().getAttribute("user");
 
         int students = studentDAO.getStudentByStatus("đang theo học").size();

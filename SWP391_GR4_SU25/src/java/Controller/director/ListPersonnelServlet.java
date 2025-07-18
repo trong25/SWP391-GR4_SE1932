@@ -58,7 +58,7 @@ public class ListPersonnelServlet extends HttpServlet {
             PersonnelDAO personnelDAO = new PersonnelDAO();
             List<Personnel> persons = personnelDAO.getAllPersonnels();
             List<Role> roles = personnelDAO.getAllPersonnelRole();
-            List<String> statuss = personnelDAO.getAllStatus();
+            List<String> statuss = personnelDAO.getAllStatuss();
 
             request.setAttribute("selectedstatus", "all");
             request.setAttribute("selectedrole", "all");
@@ -107,21 +107,21 @@ public class ListPersonnelServlet extends HttpServlet {
             if (status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
                 persons = personnelDAO.getAllPersonnels();
             } else if (!status.equalsIgnoreCase("all") && role.equalsIgnoreCase("all")) {
-                persons = personnelDAO.getPersonnelByStatus(status);
+                persons = personnelDAO.getPersonnelByStatuss(status);
 
             } else if (!role.equalsIgnoreCase("all") && status.equalsIgnoreCase("all")) {
                 try {
                     int xrole = Integer.parseInt(role);
-                    persons = personnelDAO.getPersonnelByRole(xrole);
+                    persons = personnelDAO.getPersonnelByRoles(xrole);
                 } catch (NumberFormatException e) {
-                    persons = personnelDAO.getPersonnelByRole(-1);
+                    persons = personnelDAO.getPersonnelByRoles(-1);
                 }
             } else {
                 persons = personnelDAO.getPersonnelByIdNameRoleStatus1(status, role);
             }
         }
         List<String> statuss = new ArrayList<>();
-        statuss = personnelDAO.getAllStatus();
+        statuss = personnelDAO.getAllStatuss();
         request.setAttribute("statuss", statuss);
         request.setAttribute("selectedstatus", status);
         request.setAttribute("selectedrole", role);

@@ -57,14 +57,14 @@ public class StudentDAO extends DBContext {
             Schools school = new Schools();
             school.setId(resultSet.getString("school_id"));
             school.setSchoolName(resultSet.getString("schoolName"));
-            school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+           school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
             student.setSchool_id(school);
 
             // Tạo và gán SchoolClass object
             SchoolClass schoolClass = new SchoolClass();
             schoolClass.setId(resultSet.getString("school_class_id"));
             schoolClass.setClassName(resultSet.getString("class_name"));
-            schoolClass.setGrade_level(resultSet.getString("grade_level")); // Lấy tên khối từ grade_level
+           schoolClass.setGrade_level(resultSet.getString("grade_level")); // Lấy tên khối từ grade_level
 
             student.setSchool_class_id(schoolClass);
 
@@ -545,7 +545,7 @@ public class StudentDAO extends DBContext {
             ps.setString(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return createStudent(rs);
+                    return createStudents(rs);
                 }
             }
         } catch (SQLException e) {
@@ -812,7 +812,7 @@ public class StudentDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Student student = createStudent(rs);
+                Student student = createStudents(rs);
                 list.add(student);
             }
         } catch (SQLException e) {
@@ -897,4 +897,52 @@ public class StudentDAO extends DBContext {
 
         return students;
     }
+    
+    
+     private Student createStudents(ResultSet resultSet) throws SQLException {
+        try {
+            PersonnelDAO personnelDAO = new PersonnelDAO();
+            Student student = new Student();
+            student.setId(resultSet.getString("id"));
+            student.setUserId(resultSet.getString("user_id"));
+            student.setFirstName(resultSet.getString("first_name"));
+            student.setLastName(resultSet.getString("last_name"));
+            student.setAddress(resultSet.getString("address"));
+            student.setEmail(resultSet.getString("email"));
+            student.setStatus(resultSet.getString("status"));
+            student.setBirthday(resultSet.getDate("birthday"));
+            student.setGender(resultSet.getBoolean("gender"));
+            student.setFirstGuardianName(resultSet.getString("first_guardian_name"));
+            student.setFirstGuardianPhoneNumber(resultSet.getString("first_guardian_phone_number"));
+            student.setAvatar(resultSet.getString("avatar"));
+            student.setSecondGuardianName(resultSet.getString("second_guardian_name"));
+            student.setSecondGuardianPhoneNumber(resultSet.getString("second_guardian_phone_number"));
+            student.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
+            student.setParentSpecialNote(resultSet.getString("parent_special_note"));
+
+           
+
+        // Tạo và gán School object
+        Schools school = new Schools();
+        school.setId(resultSet.getString("school_id"));
+        school.setSchoolName(resultSet.getString("schoolName"));
+//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+        student.setSchool_id(school);
+
+
+        // Tạo và gán SchoolClass object
+        SchoolClass schoolClass = new SchoolClass();
+        schoolClass.setId(resultSet.getString("school_class_id"));
+        schoolClass.setClassName(resultSet.getString("class_name"));
+        student.setSchool_class_id(schoolClass);
+
+return student;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+       return null;
+    
+        
+   }
+    
 }
