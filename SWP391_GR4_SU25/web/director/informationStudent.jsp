@@ -1,109 +1,128 @@
-<%-- 
-    Document   : informationStudent
-    Created on : Jul 3, 2025, 5:19:09 PM
-    Author     : ThanhNT
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
     <head>
-        <title>Title</title>
+        <title>Thông tin học sinh - ${student.lastName} ${student.firstName}</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <!-- Main CSS-->
         <link rel="stylesheet" type="text/css" href="../css/main.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-        <!-- or -->
-        <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-        <!-- Font-icon css-->
-        <link rel="stylesheet" type="text/css"
-              href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+        <!-- Scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
         <style>
-            .app-sidebar__user-avatar {
+            .student-info-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .student-avatar {
                 width: 150px;
                 height: 150px;
                 border-radius: 50%;
-                cursor: pointer;
                 object-fit: cover;
+                border: 4px solid #007bff;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
 
-            .avatar-input {
-                display: none;
-            }
-
-            .form-buttons {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+            .info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
                 margin-top: 20px;
             }
 
-            .update-btn, .cancel-btn {
-                background-color: #007bff;
+            .info-item {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                border-left: 4px solid #007bff;
+            }
+
+            .info-item.full-width {
+                grid-column: span 2;
+            }
+
+            .info-label {
+                font-weight: 600;
+                color: #495057;
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+
+            .info-value {
+                color: #212529;
+                font-size: 16px;
+                word-wrap: break-word;
+            }
+
+            .info-value.empty {
+                color: #6c757d;
+                font-style: italic;
+            }
+
+            .back-button {
+                background: linear-gradient(45deg, #dc3545, #c82333);
                 color: white;
                 border: none;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
+                padding: 12px 24px;
+                border-radius: 25px;
                 font-size: 16px;
-                border-radius: 5px;
                 cursor: pointer;
-                transition: background-color 0.3s ease;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
             }
 
-            .update-btn:hover, .cancel-btn:hover {
-                background-color: #0056b3;
+            .back-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
             }
 
-            .cancel-btn {
-                background-color: #dc3545;
+            .profile-header {
+                text-align: center;
+                margin-bottom: 30px;
             }
 
-            .cancel-btn:hover {
-                background-color: #c82333;
-            }
-            input[readonly] {
-                background-color: #e9ecf3; /* Màu nền giống với disabled */
-                color: black; /* Màu chữ giống với disabled */
-                cursor: not-allowed; /* Con trỏ chuột giống với disabled */
-                border: 1px solid #ddd; /* Đường viền nhẹ */
+            .student-name {
+                font-size: 24px;
+                font-weight: 700;
+                color: #212529;
+                margin-top: 15px;
             }
 
-            /* Bỏ bóng và đường viền khi focus cho giống với disabled */
-            input[readonly]:focus {
-                outline: none;
-                box-shadow: none;
+            .student-id {
+                color: #6c757d;
+                font-size: 14px;
             }
 
-            textarea[readonly] {
-                background-color: #e9ecf3; /* Màu nền giống với disabled */
-                color: black; /* Màu chữ giống với disabled */
-                cursor: not-allowed; /* Con trỏ chuột giống với disabled */
-                border: 1px solid #ddd; /* Đường viền nhẹ */
-            }
+            @media (max-width: 768px) {
+                .info-grid {
+                    grid-template-columns: 1fr;
+                }
 
-            /* Bỏ bóng và đường viền khi focus cho giống với disabled */
-            textarea[readonly]:focus {
-                outline: none;
-                box-shadow: none;
+                .info-item.full-width {
+                    grid-column: span 1;
+                }
             }
-
         </style>
+
         <script>
             $(document).ready(function () {
                 var toastMessage = '<%= request.getAttribute("toastMessage") %>';
                 var toastType = '<%= request.getAttribute("toastType") %>';
-                if (toastMessage) {
+
+                if (toastMessage && toastMessage !== 'null') {
                     if (toastType === 'success') {
                         toastr.success(toastMessage);
                     } else if (toastType === 'error') {
@@ -111,122 +130,210 @@
                     }
                 }
             });
+
+            function goBack() {
+                window.history.back();
+            }
+        </script>
+        <script>
+            function confirmAccept(formId, msg) {
+                formIdToSubmit = formId;
+                document.getElementById('confirmationMessage').innerText = msg;
+                $('#confirmationModal').modal('show');
+            }
+            $(document).ready(function () {
+                $('#confirmButton').click(function () {
+                    document.getElementById(formIdToSubmit).submit();
+
+                });
+            });
         </script>
     </head>
+
     <body id="page-top">
         <div id="wrapper">
             <jsp:include page="navbar.jsp"/>
+
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
                     <jsp:include page="../header.jsp"/>
 
-                    <div class="container">
+                    <div class="student-info-container">
+                        <!-- Header Card -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h3 class="m-0 font-weight-bold"><i class="fa fa-edit"></i>THÔNG TIN HỌC SINH</h3>
+                                <h3 class="m-0 font-weight-bold text-primary">
+                                    <i class="fa fa-user"></i> THÔNG TIN HỌC SINH
+                                </h3>
                             </div>
                         </div>
-                        <div class="row gutters">
-                            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
-                                <div class="card h-100">
+
+                        <!-- Main Content -->
+                        <div class="row">
+                            <!-- Left Column - Avatar -->
+                            <div class="col-lg-4 col-md-12">
+                                <div class="card shadow h-100">
                                     <div class="card-body">
-                                        <div class="account-settings">
-                                            <div class="user-profile">
-                                                <div class="user-avatar">
-                                                    <img class="app-sidebar__user-avatar" id="avatarDisplay" src="../images/${student.avatar}" > 
-                                                </div>
-                                                <h5 class="user-name">${student.lastName} ${student.firstName}</h5>
-                                            </div>
+                                        <div class="profile-header">
+                                            <img class="student-avatar" 
+                                                 src="../images/${student.avatar}" 
+                                                 alt="Avatar của ${student.lastName} ${student.firstName}"
+                                                 onerror="this.src='../images/default-avatar.png'">
+                                            <h5 class="student-name">${student.lastName} ${student.firstName}</h5>
+                                            <p class="student-id">ID: ${student.id}</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
-                                <div class="card h-100">
+
+                            <!-- Right Column - Information -->
+                            <div class="col-lg-8 col-md-12">
+                                <div class="card shadow h-100">
                                     <div class="card-body">
-                                        <c:set var="vietnamesePattern" value="aáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵAÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶEÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊOÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢUÚÙỦŨỤƯỨỪỬỮỰYÝỲỶỸ\s]+"/>
-                                        <form action="studentprofile" method="post">
-                                            <input type="hidden" name="avatar" value="${student.avatar}"/>
-                                            <input type="hidden" name="id" value="${student.id}"/>
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Mã Người Dùng:</h5><input class="form-control-sm" placeholder="ID Người Dùng" type="text" name="userId" value="${student.userId!=null?student.userId:"Chưa có tài khoản"}" readonly=""/>
-                                                                <input  name="user_id" type="hidden" value="${student.userId!=null?student.userId:"Chưa có tài khoản"}" />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-6">
-                                                                <h5>Mã Học Sinh:</h5> <input class="form-control-sm" placeholder="ID" type="text" name="id" value="${student.id}" readonly=""/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-6">    
-                                                                <h5>Họ Tên:</h5> <input class="form-control-sm" type="text" name="name_student" value="${student.lastName} ${student.firstName}"  readonly="" /><br />
-                                                            </div></td>
-                                                        <td>
-                                                            <div class="form-group col-md-8">
-                                                                <h5>Ngày Sinh:</h5><input class="form-control-sm" type="date" name="birthday" value="${student.birthday}" readonly=""/><br />
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Người Giám Hộ Thứ Nhất:</h5> <input class="form-control-sm" type="text" name="first_guardian_name" value="${student.firstGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{1,20}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-
-                                                                <h5>Số Điện Thoại Người Giám Hộ Thứ Nhất:</h5> <input class="form-control-sm" type="text" name="firstGuardianPhoneNumber" value="${student.firstGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Họ Tên Người Giám Hộ Thứ Hai:</h5> <input class="form-control-sm" type="text" name="second_guardian_name" value="${student.secondGuardianName}" pattern="^[A-Za-z,${vietnamesePattern}\s]{30}$" title="Họ và tên không được chứa số hoặc kí tự đặc biệt (Tối đa 20 kí tự)" readonly/><br />
-                                                            </div></td>
-                                                        <td><div class="form-group col-md-8">
-                                                                <h5>Số Điện Thoại Người Giám Hộ Thứ Hai:</h5> <input class="form-control-sm" type="text" name="secondGuardianPhoneNumber" value="${student.secondGuardianPhoneNumber}" pattern="^0\d{9}$" title="Số điện thoại không hợp lệ vui lòng kiểm tra lại." readonly/><br />
-                                                            </div></td>
-                                                    </tr>
-                                                    <tr>
-
-                                                <input type="hidden" name="first_name" value="${student.firstName}"/>
-                                                <input type="hidden" name="last_name" value="${student.lastName}"/>
-
-                                                </tr>
-                                                <tr>
-                                                    <td><div class="form-group col-md-6">    
-                                                            <h5>Email:</h5> <input class="form-control-sm" type="text" name="email" value="${student.email}"  readonly="" /><br />
-                                                        </div></td>
-                                                    <td><div class="form-group col-md-5">
-                                                            <h5>Ghi Chú:</h5> <textarea class="form-control-sm" type="text" name="note" style="width: 200%" readonly>${student.parentSpecialNote}</textarea><br/>
-                                                        </div></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><div class="form-group col-md-auto">
-                                                            <h5>Địa Chỉ:</h5> <textarea class="form-control-sm" type="text" name="address" value="" style="width: 200%" pattern="^[A-Za-z1-9,${vietnamesePattern}\s]{1,100}$" title="Địa chỉ không được quá 100 kí tự" readonly>${student.address}</textarea><br />
-                                                        </div></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="d-flex justify-content-end">
-                                                <div class="m-2">
-                                                    <button onclick="goBack()" type="button" class="btn btn-danger">Quay Lại</button>
+                                        <div class="info-grid">
+                                            <!-- Basic Information -->
+                                            <div class="info-item">
+                                                <div class="info-label">Mã Người Dùng</div>
+                                                <div class="info-value ${student.userId == null ? 'empty' : ''}">
+                                                    ${student.userId != null ? student.userId : 'Chưa có tài khoản'}
                                                 </div>
                                             </div>
-                                        </form>
+
+                                            <div class="info-item">
+                                                <div class="info-label">Ngày Sinh</div>
+                                                <div class="info-value">
+                                                    <c:choose>
+                                                        <c:when test="${student.birthday != null}">
+                                                            ${student.birthday}
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="empty">Chưa cập nhật</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                            </div>
+
+                                            <!-- Guardian 1 Information -->
+                                            <div class="info-item">
+                                                <div class="info-label">Người Giám Hộ Thứ Nhất</div>
+                                                <div class="info-value ${empty student.firstGuardianName ? 'empty' : ''}">
+                                                    ${empty student.firstGuardianName ? 'Chưa cập nhật' : student.firstGuardianName}
+                                                </div>
+                                            </div>
+
+                                            <div class="info-item">
+                                                <div class="info-label">SĐT Người Giám Hộ Thứ Nhất</div>
+                                                <div class="info-value ${empty student.firstGuardianPhoneNumber ? 'empty' : ''}">
+                                                    ${empty student.firstGuardianPhoneNumber ? 'Chưa cập nhật' : student.firstGuardianPhoneNumber}
+                                                </div>
+                                            </div>
+
+                                            <!-- Guardian 2 Information -->
+                                            <div class="info-item">
+                                                <div class="info-label">Người Giám Hộ Thứ Hai</div>
+                                                <div class="info-value ${empty student.secondGuardianName ? 'empty' : ''}">
+                                                    ${empty student.secondGuardianName ? 'Chưa cập nhật' : student.secondGuardianName}
+                                                </div>
+                                            </div>
+
+                                            <div class="info-item">
+                                                <div class="info-label">SĐT Người Giám Hộ Thứ Hai</div>
+                                                <div class="info-value ${empty student.secondGuardianPhoneNumber ? 'empty' : ''}">
+                                                    ${empty student.secondGuardianPhoneNumber ? 'Chưa cập nhật' : student.secondGuardianPhoneNumber}
+                                                </div>
+                                            </div>
+
+                                            <!-- Contact Information -->
+                                            <div class="info-item">
+                                                <div class="info-label">Email</div>
+                                                <div class="info-value ${empty student.email ? 'empty' : ''}">
+                                                    ${empty student.email ? 'Chưa cập nhật' : student.email}
+                                                </div>
+                                            </div>
+
+                                            <!-- Address - Full Width -->
+                                            <div class="info-item full-width">
+                                                <div class="info-label">Địa Chỉ</div>
+                                                <div class="info-value ${empty student.address ? 'empty' : ''}">
+                                                    ${empty student.address ? 'Chưa cập nhật' : student.address}
+                                                </div>
+                                            </div>
+
+                                            <!-- Special Notes - Full Width -->
+                                            <div class="info-item full-width">
+                                                <div class="info-label">Ghi Chú Đặc Biệt</div>
+                                                <div class="info-value ${empty student.parentSpecialNote ? 'empty' : ''}">
+                                                    ${empty student.parentSpecialNote ? 'Không có ghi chú' : student.parentSpecialNote}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row text-center align-content-center my-3">
+                                            <c:if test="${student.status == 'đang chờ xử lý'}">
+                                                <!-- Nút Chấp nhận -->
+                                                <div class="col-lg-4 mb-2">
+                                                    <form method="post" action="reviewstudent" id="accept-form-${student.id}">
+                                                        <input type="hidden" name="action" value="accept">
+                                                        <input type="hidden" name="id" value="${student.id}">
+                                                        <input type="hidden" name="status" value="${student.status}">
+                                                        <button type="button" class="btn btn-success w-100" 
+                                                                onclick="confirmAccept('accept-form-${student.id}', 'Bạn có chắc chắn duyệt học sinh này không?')">
+                                                            Chấp nhận
+                                                        </button>
+                                                    </form>
+                                                </div>
+
+                                                <!-- Nút Từ chối -->
+                                                <div class="col-lg-4 mb-2">
+                                                    <form method="post" action="reviewstudent" id="decline-form-${student.id}">
+                                                        <input type="hidden" name="action" value="decline">
+                                                        <input type="hidden" name="id" value="${student.id}">
+                                                        <input type="hidden" name="status" value="${student.status}">
+                                                        <button type="button" class="btn btn-danger w-100" 
+                                                                onclick="confirmAccept('decline-form-${student.id}', 'Bạn có chắc chắn từ chối học sinh này không?')">
+                                                            Từ chối
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </c:if>
+
+
+                                            <!-- Nút Quay lại -->
+                                            <div class="col-lg-4 mb-2">
+                                                <button class="btn btn-info w-100" onclick="goBack()">
+                                                    <i class="fa fa-arrow-left"></i> Quay Lại
+                                                </button>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <%-- Begin confirmation modal--%>
+                    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmationModalLabel">Xác nhận thao tác</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" id="confirmationMessage">
+                                    <!-- Dynamic message will be inserted here -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                    <button type="button" class="btn btn-primary" id="confirmButton">Xác Nhận</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
     </body>
 </html>
-

@@ -4,7 +4,7 @@
  */
 package model.payment;
 
-import java.sql.Date;
+import java.sql.Types;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,18 +18,18 @@ import utils.DBContext;
  */
 public class PaymentDAO extends DBContext {
 
-    public Payment createPayment(ResultSet resultSet) throws SQLException {
+    public Payment createPayment(ResultSet rs) throws SQLException {
         Payment payment = new Payment();
-        payment.setId(resultSet.getInt("id"));
-        payment.setCode(resultSet.getString("code"));
-        payment.setStudentId(resultSet.getString("student_id"));
-        payment.setClassId(resultSet.getString("class_id"));
-        payment.setMonth(resultSet.getInt("month"));
-        payment.setYear(resultSet.getInt("year"));
-        payment.setAmount(resultSet.getFloat("amount"));
-        payment.setStatus(resultSet.getString("status"));
-        payment.setPaymentDate(resultSet.getDate("payment_date"));
-        payment.setNote(resultSet.getString("note"));
+        payment.setId(rs.getInt("id"));
+        payment.setCode(rs.getString("code"));
+        payment.setStudentId(rs.getString("student_id"));
+        payment.setClassId(rs.getString("class_id"));
+        payment.setDayId(rs.getString("day_id"));
+        payment.setAmount(rs.getInt("amount"));
+        payment.setStatus(rs.getString("status"));
+        payment.setPaymentDate(rs.getDate("payment_date"));
+        payment.setDueDate(rs.getDate("due_date"));
+        payment.setNote(rs.getString("note"));
         return payment;
     }
 
@@ -86,6 +86,33 @@ public class PaymentDAO extends DBContext {
         return list;
     }
 
+    public void insertPayment(Payment payment) {
+        String sql = "INSERT INTO Payments (code, student_id, class_id, day_id, amount, status, payment_date, due_date, note) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, payment.getCode());
+            ps.setString(2, payment.getStudentId());
+            ps.setString(3, payment.getClassId());
+            ps.setString(4, payment.getDayId());
+            ps.setFloat(5, payment.getAmount());
+            ps.setString(6, payment.getStatus());
+            if (payment.getPaymentDate() != null) {
+                ps.setDate(7, new java.sql.Date(payment.getPaymentDate().getTime()));
+            } else {
+                ps.setNull(7, Types.DATE);
+            }
+            if (payment.getDueDate() != null) {
+                ps.setDate(8, new java.sql.Date(payment.getDueDate().getTime()));
+            } else {
+                ps.setNull(8, Types.DATE);
+            }
+            ps.setString(9, payment.getNote());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean updateStatus(Integer id, String status) {
         String sql = """
                      update Payments set status = ?, payment_date = CURRENT_TIMESTAMP 
@@ -102,36 +129,4 @@ public class PaymentDAO extends DBContext {
             return false;
         }
     }
-
-    public boolean insert(Payment payment) {
-        String sql = """
-            INSERT INTO Payments (code, student_id, class_id, month, year, amount, status, payment_date, note)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """;
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, payment.getCode());
-            ps.setString(2, payment.getStudentId());
-            ps.setString(3, payment.getClassId());
-            ps.setInt(4, payment.getMonth());
-            ps.setInt(5, payment.getYear());
-            ps.setFloat(6, payment.getAmount());
-            ps.setString(7, payment.getStatus());
-
-            // Nếu ngày thanh toán null, thì setNull
-            if (payment.getPaymentDate() != null) {
-                ps.setDate(8, new Date(payment.getPaymentDate().getTime()));
-            } else {
-                ps.setNull(8, java.sql.Types.DATE);
-            }
-
-            ps.setString(9, payment.getNote());
-
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi insert Payment: " + e.getMessage());
-            return false;
-        }
-    }
-
 }

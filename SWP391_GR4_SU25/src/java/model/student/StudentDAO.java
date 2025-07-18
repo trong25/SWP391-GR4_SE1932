@@ -36,8 +36,6 @@ public class StudentDAO extends DBContext {
     private Student createStudent(ResultSet resultSet) throws SQLException {
         try {
             PersonnelDAO personnelDAO = new PersonnelDAO();
-            SchoolDAO schoolDAO = new SchoolDAO();
-
             Student student = new Student();
             student.setId(resultSet.getString("id"));
             student.setUserId(resultSet.getString("user_id"));
@@ -56,25 +54,25 @@ public class StudentDAO extends DBContext {
             student.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
             student.setParentSpecialNote(resultSet.getString("parent_special_note"));
 
-            // Tạo và gán School object từ ResultSet
+            // Tạo và gán School object
             Schools school = new Schools();
             school.setId(resultSet.getString("school_id"));
             school.setSchoolName(resultSet.getString("schoolName"));
-            school.setAddressSchool(resultSet.getString("addressSchool"));
+//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
             student.setSchool_id(school);
 
-            // Tạo và gán SchoolClass object từ ResultSet
+            // Tạo và gán SchoolClass object
             SchoolClass schoolClass = new SchoolClass();
             schoolClass.setId(resultSet.getString("school_class_id"));
             schoolClass.setClassName(resultSet.getString("class_name"));
-            schoolClass.setGrade_level(resultSet.getString("grade_name"));
             student.setSchool_class_id(schoolClass);
 
             return student;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
+
     }
 
     public Student getLatest() {
@@ -624,6 +622,7 @@ public class StudentDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+
     }
 
     public int getSumStudentInClass(String classId) {
@@ -824,7 +823,7 @@ public class StudentDAO extends DBContext {
         return list;
     }
 
-public List<Student> getStudentByClass(String classId) {
+    public List<Student> getStudentByClass(String classId) {
         String sql = "SELECT *\n"
                 + "FROM     Class INNER JOIN\n"
                 + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
@@ -1038,6 +1037,22 @@ public List<Student> getStudentByClass(String classId) {
         }
 
         return list;
+    }
+
+    public Student getInformationStudentById(String id) {
+        String sql = "SELECT * FROM Students WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                Student student = createStudent(resultSet); // dùng nếu chắc chắn không thiếu trường
+                return student;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // hoặc log lỗi
+        }
+        return null;
     }
 
 }

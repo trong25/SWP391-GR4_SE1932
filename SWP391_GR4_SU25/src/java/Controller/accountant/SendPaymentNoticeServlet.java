@@ -40,26 +40,25 @@ public class SendPaymentNoticeServlet extends HttpServlet {
         }
     }
 
-   @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    StudentDAO studentDAO = new StudentDAO();
-    List<StudentWithClassDTO> listStudent = studentDAO.getStudentsWithClassInfo();
-    request.setAttribute("listStudent", listStudent);
+        StudentDAO studentDAO = new StudentDAO();
+        List<StudentWithClassDTO> listStudent = studentDAO.getStudentsWithClassInfo();
+        request.setAttribute("listStudent", listStudent);
 
-    String studentId = request.getParameter("studentId");
-    if (studentId != null && !studentId.trim().isEmpty()) {
-        StudentWithClassDTO student = studentDAO.getStudentWithClassById(studentId).stream().findFirst().orElse(null);
-        if (student != null) {
-            request.setAttribute("selectedStudent", student);  // đúng tên theo JSP
-            request.setAttribute("openModal", true);
+        String studentId = request.getParameter("studentId");
+        if (studentId != null && !studentId.trim().isEmpty()) {
+            StudentWithClassDTO student = studentDAO.getStudentWithClassById(studentId).stream().findFirst().orElse(null);
+            if (student != null) {
+                request.setAttribute("selectedStudent", student);  // đúng tên theo JSP
+                request.setAttribute("openModal", true);
+            }
         }
+
+        request.getRequestDispatcher("sendPaymentNotice.jsp").forward(request, response);
     }
-
-    request.getRequestDispatcher("sendPaymentNotice.jsp").forward(request, response);
-}
-
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -68,49 +67,45 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         request.setCharacterEncoding("UTF-8");
 
         String code = request.getParameter("code");
-        String studentId = request.getParameter("student_id");
-        String classId = request.getParameter("class_id");
-        int month = Integer.parseInt(request.getParameter("month"));
-        int year = Integer.parseInt(request.getParameter("year"));
+        String studentId = request.getParameter("studentId");
+        String classId = request.getParameter("classId");
+        String dayId = request.getParameter("dayId");
         float amount = Float.parseFloat(request.getParameter("amount"));
         String status = request.getParameter("status");
+        String paymentDateStr = request.getParameter("paymentDate");
+        String dueDateStr = request.getParameter("dueDate");
         String note = request.getParameter("note");
 
         Date paymentDate = null;
+        Date dueDate = null;
+        try {
+            if (paymentDateStr != null && !paymentDateStr.isEmpty()) {
+                paymentDate = java.sql.Date.valueOf(paymentDateStr);
+            }
+            if (dueDateStr != null && !dueDateStr.isEmpty()) {
+                dueDate = java.sql.Date.valueOf(dueDateStr);
+            }
+        } catch (IllegalArgumentException e) {
+            // xử lý lỗi định dạng ngày
+        }
 
         Payment payment = new Payment();
         payment.setCode(code);
         payment.setStudentId(studentId);
         payment.setClassId(classId);
-        payment.setMonth(month);
-        payment.setYear(year);
-        payment.setAmount(amount);
+        payment.setDayId(dayId);
+        payment.setAmount((int) amount);
         payment.setStatus(status);
-        payment.setNote(note);
         payment.setPaymentDate(paymentDate);
+        payment.setDueDate(dueDate);
+        payment.setNote(note);
 
         PaymentDAO dao = new PaymentDAO();
-        boolean insertSuccess = false;
+        dao.insertPayment(payment);
 
-        try {
-            // Giả sử bạn có hàm insert:
-            insertSuccess = dao.insert(payment); // Thực hiện insert thực sự
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (!insertSuccess) {
-            request.setAttribute("openModal", "create-pupil");
-            request.setAttribute("error", "Thêm không thành công");
-            request.getRequestDispatcher("sendPaymentNotice.jsp").forward(request, response);
-        } else {
-            request.setAttribute("success", "Thêm hóa đơn thành công!");
-            request.getRequestDispatcher("sendPaymentNotice.jsp").forward(request, response);
-
-        }
+        request.getRequestDispatcher("sendPaymentNotice.jsp").forward(request, response);
     }
 
-  
     @Override
     public String getServletInfo() {
         return "Short description";

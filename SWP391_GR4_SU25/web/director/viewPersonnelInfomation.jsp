@@ -280,7 +280,7 @@
                                                                     </c:if>
                                                                     <!-- Nút Quay lại -->
                                                                     <div class="col-lg-4">
-                                                                        <button class="btn btn-info w-100" onclick="window.history.back()">
+                                                                        <button class="btn btn-info w-100" onclick="redirect()">
                                                                             Quay Lại
                                                                         </button>
                                                                     </div>
@@ -327,52 +327,61 @@
     <script src="js/plugins/pace.min.js"></script>
     <!--===============================================================================================-->
     <!--===============================================================================================-->
-  
+    <script>
+                                                                            function redirect() {
+                                                                                var xpage = '<%= request.getAttribute("page") %>';
+                                                                                if (xpage === "list") {
+                                                                                    window.location.href = "listpersonnel";
+                                                                                } else {
+                                                                                    window.location.href = "waitlistpersonnel";
+                                                                                }
+                                                                            }
+    </script>
 
-<script>
-    function submitForm(action, id) {
-        // Tạo form
-        var form = document.createElement("form");
-        form.method = "post";
-        form.action = "waitlistpersonnel";
+    <script>
+        function submitForm(action, id) {
+            // Tạo form
+            var form = document.createElement("form");
+            form.method = "post";
+            form.action = "waitlistpersonnel";
 
-        // Tạo input hidden cho action
-        var actionInput = document.createElement("input");
-        actionInput.type = "hidden";
-        actionInput.name = "action";
-        actionInput.value = action;
-        form.appendChild(actionInput);
+            // Tạo input hidden cho action
+            var actionInput = document.createElement("input");
+            actionInput.type = "hidden";
+            actionInput.name = "action";
+            actionInput.value = action;
+            form.appendChild(actionInput);
 
-        // Tạo input hidden cho id
-        var idInput = document.createElement("input");
-        idInput.type = "hidden";
-        idInput.name = "id";
-        idInput.value = id;
-        form.appendChild(idInput);
+            // Tạo input hidden cho id
+            var idInput = document.createElement("input");
+            idInput.type = "hidden";
+            idInput.name = "id";
+            idInput.value = id;
+            form.appendChild(idInput);
 
-        // Thêm form vào body và submit
-        document.body.appendChild(form);
-        form.submit();
-    }
-    function confirmAndSubmit(action, id) {
-        let message = '';
-        switch (action) {
-            case 'accept':
-                message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
-                break;
-            case 'decline':
-                message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
-                break;
-            default:
-                message = 'Bạn có chắc muốn thực hiện hành động này không?';
+            // Thêm form vào body và submit
+            document.body.appendChild(form);
+            form.submit();
+        }
+        function confirmAndSubmit(action, id) {
+            let message = '';
+            switch (action) {
+                case 'accept':
+                    message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
+                    break;
+                case 'decline':
+                    message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
+                    break;
+                default:
+                    message = 'Bạn có chắc muốn thực hiện hành động này không?';
+            }
+
+            if (confirm(message)) {
+                submitForm(action, id);
+            }
         }
 
-        if (confirm(message)) {
-            submitForm(action, id);
-        }
-    }
-
-</script>
+    </script>
 
 
 </html>

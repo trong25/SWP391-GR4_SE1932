@@ -10,33 +10,32 @@ import java.util.Date;
  *
  * @author ThanhNT
  */
-
- public class Payment {
+public class Payment {
 
     private Integer id;
     private String code;
     private String studentId;
     private String classId;
-    private Integer month;
-    private Integer year;
-    private Float amount;
+    private String dayId;
+    private int amount;
     private String status;
     private Date paymentDate;
+    private Date dueDate;
     private String note;
 
     public Payment() {
     }
 
-    public Payment(Integer id, String code, String studentId, String classId, Integer month, Integer year, Float amount, String status, Date paymentDate, String note) {
+    public Payment(Integer id, String code, String studentId, String classId, String dayId, int amount, String status, Date paymentDate, Date dueDate, String note) {
         this.id = id;
         this.code = code;
         this.studentId = studentId;
         this.classId = classId;
-        this.month = month;
-        this.year = year;
+        this.dayId = dayId;
         this.amount = amount;
         this.status = status;
         this.paymentDate = paymentDate;
+        this.dueDate = dueDate;
         this.note = note;
     }
 
@@ -72,27 +71,19 @@ import java.util.Date;
         this.classId = classId;
     }
 
-    public Integer getMonth() {
-        return month;
+    public String getDayId() {
+        return dayId;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
+    public void setDayId(String dayId) {
+        this.dayId = dayId;
     }
 
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public Float getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -112,6 +103,14 @@ import java.util.Date;
         this.paymentDate = paymentDate;
     }
 
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public String getNote() {
         return note;
     }
@@ -120,7 +119,6 @@ import java.util.Date;
         this.note = note;
     }
 
-  
    
 
 }

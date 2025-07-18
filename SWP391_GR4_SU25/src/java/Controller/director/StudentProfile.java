@@ -14,25 +14,24 @@ import model.student.Student;
 import model.student.StudentDAO;
 
 /**
- * Servlet StudentProfile xử lý các yêu cầu HTTP để hiển thị thông tin chi tiết của học sinh.
- * 
+ * Servlet StudentProfile xử lý các yêu cầu HTTP để hiển thị thông tin chi tiết
+ * của học sinh.
+ *
  * URL Mapping: /director/studentsprofile
- * 
- * Chức năng:
- * - Nhận ID học sinh từ request (POST)
- * - Gọi StudentDAO để truy vấn thông tin học sinh từ cơ sở dữ liệu
- * - Gửi đối tượng Student sang trang JSP để hiển thị thông tin chi tiết
- * 
+ *
+ * Chức năng: - Nhận ID học sinh từ request (POST) - Gọi StudentDAO để truy vấn
+ * thông tin học sinh từ cơ sở dữ liệu - Gửi đối tượng Student sang trang JSP để
+ * hiển thị thông tin chi tiết
+ *
  * JSP đích: informationStudent.jsp
- * 
- * Phân quyền: Chỉ vai trò Giám đốc (Director) hoặc người có quyền truy cập mới được phép xem thông tin học sinh chi tiết.
- * 
+ *
+ * Phân quyền: Chỉ vai trò Giám đốc (Director) hoặc người có quyền truy cập mới
+ * được phép xem thông tin học sinh chi tiết.
+ *
  * @author ThanhNT
- * @version 1.0
+ * @version 2.0
  */
-
 public class StudentProfile extends HttpServlet {
-
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,36 +50,37 @@ public class StudentProfile extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
+        
+
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Lấy tham số từ form
         String id = request.getParameter("id");
+
+        // Lấy thông tin học sinh từ database
         StudentDAO studentDAO = new StudentDAO();
         Student student = studentDAO.getStudentById(id);
+        if (student == null) {
+            request.setAttribute("toastMessage", "Không tìm thấy học sinh với ID: " + id);
+            request.setAttribute("toastType", "error");
+            request.getRequestDispatcher("reviewStudent.jsp").forward(request, response);
+            return;
+        }
+
+        // Gửi student và status về JSP
         request.setAttribute("student", student);
-        request.getRequestDispatcher("informationStudent.jsp").forward(request, response);
+        request.setAttribute("status", studentDAO.getStudentByStatus("đang chờ xử lý")); // dùng để hiển thị điều kiện ở JSP nếu cần
+
+        // Điều hướng sang trang thông tin chi tiết
+        request.getRequestDispatcher("/director/informationStudent.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -135,7 +135,7 @@
                                                                     <input type="hidden" name="id" value="${students.id}">
                                                                     <button type="button" class="btn btn-sm btn-danger shadow-sm btn-custom-width" onclick="confirmAccept('decline-form-${students.id}', 'Bạn có chắc chắn từ chối học sinh này không ?')">Từ chối</button>
                                                                 </form>
-                                                                <form action="studentsprofile" method="post">
+                                                                <form method="post" action="studentsprofile" >
                                                                     <input hidden name="id" value="${students.id}"/>
                                                                     <button class="btn btn-sm btn-primary shadow-sm btn-custom-width">Chi tiết</button>
                                                                 </form>

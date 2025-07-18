@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Quản lý học sinh</title>
+        <title>Tạo Hóa Đơn</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -107,8 +107,16 @@
                                         </div>
 
                                         <div class="modal-body">
-                                            <input type="hidden" name="studentId" id="studentId">
+                                            <!-- Input ẩn để gửi về Servlet -->
+                                            <input type="hidden" name="code" id="code">
+                                            <input type="hidden" name="student_id" id="student_id">
+                                            <input type="hidden" name="class_id" id="class_id">
+                                            <input type="hidden" name="day_id" id="day_id" value="DAY01">
+                                            <input type="hidden" name="month" id="month">
+                                            <input type="hidden" name="year" id="year">
+                                            <input type="hidden" name="status" id="status" value="Chưa đóng">
 
+                                            <!-- Thông tin hiển thị -->
                                             <div class="form-group">
                                                 <label>Mã học sinh</label>
                                                 <input type="text" id="displayStudentId" class="form-control" disabled>
@@ -141,7 +149,7 @@
 
                                             <div class="form-group">
                                                 <label>Ghi chú</label>
-                                                <textarea name="note" class="form-control"></textarea>
+                                                <textarea name="note" class="form-control" rows="2"></textarea>
                                             </div>
                                         </div>
 
@@ -153,11 +161,13 @@
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- End of Main Content -->
-                
+
                 <!-- Footer -->
                 <jsp:include page="../footer.jsp"/>
                 <!-- End of Footer -->
@@ -167,17 +177,38 @@
         <!-- End of Page Wrapper -->
 
         <script>
-            $(document).ready(function () {
-                $('#createInvoiceModal').on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget);
-                    $('#studentId').val(button.data('student-id'));
-                    $('#displayStudentId').val(button.data('student-id'));
-                    $('#studentName').val(button.data('student-name'));
-                    $('#classCode').val(button.data('class-code'));
-                    $('#className').val(button.data('class-name'));
+            document.addEventListener("DOMContentLoaded", function () {
+                const buttons = document.querySelectorAll(".open-modal");
+
+                buttons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        const studentId = this.getAttribute("data-student-id");
+                        const studentName = this.getAttribute("data-student-name");
+                        const classId = this.getAttribute("data-class-code");
+                        const className = this.getAttribute("data-class-name");
+
+                        // Gán vào các ô hiển thị
+                        document.getElementById("displayStudentId").value = studentId;
+                        document.getElementById("studentName").value = studentName;
+                        document.getElementById("classCode").value = classId;
+                        document.getElementById("className").value = className;
+
+                        // Gán vào các hidden input (dùng để submit)
+                        document.getElementById("student_id").value = studentId;
+                        document.getElementById("class_id").value = classId;
+
+                        // Gán tháng, năm hiện tại
+                        const today = new Date();
+                        document.getElementById("month").value = today.getMonth() + 1;
+                        document.getElementById("year").value = today.getFullYear();
+
+                        // Tạo mã hóa đơn đơn giản theo timestamp
+                        document.getElementById("code").value = "HD" + Date.now();
+                    });
                 });
             });
         </script>
+
 
         <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
         <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
