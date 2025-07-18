@@ -48,10 +48,6 @@ public class NotificationStudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null) {
-            response.sendRedirect ("/login");
-            return;
-        }
         NotificationDAO notificationDAO = new NotificationDAO();
         List<Notification> notifications = notificationDAO.getListNotifiByUserId(user.getId());
         request.setAttribute("notifications", notifications);

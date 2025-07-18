@@ -440,7 +440,7 @@
                                                     </div>
 
                                                     <%--                                                        sub teacher--%>
-                                                    <div class="form-group">
+<!--                                                    <div class="form-group">
                                                         <input type="checkbox" id="substituteCheckbox" name="substituteCheckbox">
                                                         <label for="substituteCheckbox">Phân công giáo viên dạy thay</label>
                                                     </div>
@@ -459,7 +459,7 @@
                                                                 <option value="${teacher.id}" ${param.substituteTeacher eq teacher.id ? "selected":""}>${teacher.id} - ${teacher.lastName} ${teacher.firstName}</option>
                                                             </c:forEach>
                                                         </select>
-                                                    </div>
+                                                    </div>-->
                                                 </div>
                                             </div>
                                             <br>

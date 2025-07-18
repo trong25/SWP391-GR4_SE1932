@@ -208,10 +208,10 @@
                                                                         <label for="subjectType">Loại môn học<a style="color: red">(*)</a></label>
                                                                         <select class="form-control" name="subjectType" id="subjectType" required>
                                                                             <option value="">-- Chọn loại --</option>
-                                                                            <option value="Cơ bản">Cơ bản</option>
-                                                                            <option value="Nâng cao">Nâng cao</option>
-                                                                            <option value="Chuyên đề">Chuyên đề</option>
-                                                                            <option value="Ôn thi">Ôn thi</option>
+                                                                            <option value="Tự Nhiên">Tự Nhiên</option>
+                                                                            <option value="Xã Hội">Xã Hội</option>
+                                                                            <option value="Năng Khiếu">Năng Khiếu</option>
+
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -285,10 +285,9 @@
                                                     <label for="subjectType">Loại môn học<a style="color: red">(*)</a></label>
                                                     <select class="form-control" name="subjectType" id="subjectType" required>
                                                         <option value="">-- Chọn loại --</option>
-                                                        <option value="Cơ bản">Cơ bản</option>
-                                                        <option value="Nâng cao">Nâng cao</option>
-                                                        <option value="Chuyên đề">Chuyên đề</option>
-                                                        <option value="Ôn thi">Ôn thi</option>
+                                                        <option value="Tự Nhiên">Tự Nhiên</option>
+                                                        <option value="Xã Hội">Xã Hội</option>
+                                                        <option value="Năng Khiếu">Năng Khiếu</option>
                                                     </select>
                                                 </div>
                                             </div>

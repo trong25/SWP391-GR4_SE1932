@@ -2,6 +2,65 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="" />
+
+    <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/CreateTimetableServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/ListTimetable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/ViewTimeTableClassServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/ViewTimetableServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/PaymentAccept.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/PaymentList.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/PaymentServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/ViewDailyEvaluationReportServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/payment/Payment.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/payment/PaymentDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TeacherSlot.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/createTimetable.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/listTimetable.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/viewTimetable.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/viewTimetableClass.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/payment.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/payments.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewDailyEvaluationReport.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataNEW1/DropTable.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dataNEW1/data1.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/hs_err_pid10324.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ReviewTimetableServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ReviewTimetableServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ViewTimeTableClassServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ViewTimeTableClassServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/DashboardStudentServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/DashboardStudentServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/controllerr/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/controllerr/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/classes/ClassDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/classes/ClassDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/day/Day.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/day/Day.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/day/DayDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/day/DayDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/evaluation/Evaluation.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/evaluation/Evaluation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/evaluation/EvaluationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/evaluation/EvaluationDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/personnel/PersonnelDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/personnel/PersonnelDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/school/SchoolDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/school/SchoolDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/schoolYear/SchoolYearDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/schoolYear/SchoolYearDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendance.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendanceDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendanceDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/subject/SubjectDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/subject/SubjectDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/Timetable.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/Timetable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetablepivot/TimetableDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetablepivot/TimetableDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/week/WeekDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/week/WeekDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/timetableWaitApprove.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/timetableWaitApprove.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/navbar.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewAttendance.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewAttendance.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewTimetable.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewTimetable.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataNEW/DropTable.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataNEW/data1.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataNEW/data2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dataNEW1/data2.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataNEW/database_scrip.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dataNEW1/database_scrip.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataOLD/data1.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataOLD/data2.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataOLD/database_script.sql" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +94,7 @@
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;KienPN&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging main&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -68,6 +127,19 @@
       <workItem from="1750687050614" duration="100000" />
       <workItem from="1750690004955" duration="13000" />
       <workItem from="1752764410536" duration="17000" />
+      <workItem from="1750695408450" duration="11000" />
+      <workItem from="1752743566949" duration="4000" />
+      <workItem from="1752743601305" duration="48000" />
+      <workItem from="1752743664049" duration="61000" />
+      <workItem from="1752743738052" duration="19000" />
+      <workItem from="1752743769580" duration="140000" />
+      <workItem from="1752743923855" duration="75000" />
+      <workItem from="1752744014814" duration="108000" />
+      <workItem from="1752744136410" duration="28000" />
+      <workItem from="1752744178367" duration="52000" />
+      <workItem from="1752744244510" duration="21000" />
+      <workItem from="1752744279127" duration="31000" />
+      <workItem from="1752744322619" duration="23000" />
     </task>
     <servers />
   </component>

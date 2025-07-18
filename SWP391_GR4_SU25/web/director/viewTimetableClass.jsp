@@ -1,3 +1,8 @@
+<%--
+  User: ThanhNT
+ Date: 23/06/2025
+  Time: 8:47 PM
+--%>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>

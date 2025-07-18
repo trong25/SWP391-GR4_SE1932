@@ -135,20 +135,38 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="specialization">Chuyên môn <a style="color: red">(*)</a></label>
+                                                        <input style="width: 40%;" class="form-control" placeholder="Chuyên môn" type="text"
+                                                               name="specialization" value="${personnel.specialization}" pattern="^[a-zA-Z0-9${vietnamesePattern}\s]{1,100}$"
+                                                               title="Chuyên môn không được quá 100 ký tự và không chứa ký tự đặc biệt"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="qualification">Trình độ <a style="color: red">(*)</a></label>
+                                                        <input style="width: 40%;" class="form-control" placeholder="Trình độ" type="text"
+                                                               name="qualification" value="${personnel.qualification}" pattern="^[a-zA-Z0-9${vietnamesePattern}\s]{1,100}$"
+                                                               title="Trình độ không được quá 100 ký tự và không chứa ký tự đặc biệt"/>
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                                         <div class="row gutters">
+                                            <div class="row gutters">
                                                 <!-- Trường -->
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
                                                         <label for="schoolName">Trường</label>
-                                                        <input style="width: 60%;" type="text" class="form-control" placeholder="Trường" name="schoolName" value="${personnel.schoolName}" />
+                                                        <input style="width: 60%;" type="text" class="form-control" placeholder="Trường" name="schoolName" value="${personnel.schoolName}" readonly />
                                                     </div>
                                                 </div>
                                                 <!-- Lớp -->
                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                                     <div class="form-group">
                                                         <label for="className">Lớp</label>
-                                                        <input style="width: 40%;" type="text" class="form-control" placeholder="Lớp" name="className" value="${personnel.className}" />
+                                                        <input style="width: 40%;" type="text" class="form-control" placeholder="Lớp" name="className" value="${personnel.className}" readonly />
                                                     </div>
                                                 </div>
                                             </div>     
@@ -178,8 +196,29 @@
                                                         <textarea class="form-control" placeholder="Địa chỉ" name="address" rows="2" pattern="^[A-Za-z1-9,${vietnamesePattern}\s]{1,100}$" title="Địa chỉ không được quá 100 kí tự">${personnel.address}</textarea>
                                                     </div>
                                                 </div>
+                                                             
                                             </div>
-                                             
+                                                    <div class="row gutters">
+                                                           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="teaching_years">Số năm giảng dạy <a style="color: red">(*)</a></label>
+                                                        <input style="width: 40%;" class="form-control" placeholder="Số năm giảng dạy" type="number" min="0" max="99"
+                                                               name="teaching_years" value="${personnel.teaching_years}" title="Vui lòng nhập số năm giảng dạy hợp lệ (0–99)"/>
+                                                    </div>
+                                                </div>
+                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                    <div class="form-group">
+                                                        <label for="achievements">Thành tích nổi bật <a style="color: red">(*)</a></label>
+                                                        <textarea class="form-control" placeholder="Thành tích nổi bật" name="achievements"
+                                                                  rows="3" style="width: 50%;" maxlength="300"
+                                                                  title="Không được vượt quá 300 ký tự">${personnel.achievements}</textarea>
+                                                    </div>
+                                                </div>
+                                                    </div>
+
+
+                                            
+
                                             <div class="row gutters">
                                                 <div class="button-container">
                                                     <div>

@@ -63,11 +63,7 @@ public class NotificationDAO extends DBContext  {
         }
         return null;
     }
-//    public static void main(String[] args) {
-//        NotificationDAO noti = new NotificationDAO();
-//        Notification  a = noti.getLatest();
-//        System.out.println(a);
-//    }
+
 
 
     public String generateId(String latestId) {

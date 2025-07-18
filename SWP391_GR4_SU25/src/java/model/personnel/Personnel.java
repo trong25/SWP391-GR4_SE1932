@@ -4,14 +4,18 @@
  */
 package model.personnel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import model.Salaries.Salary;
 
 /**
  *
  * @author MSI
  */
 public class Personnel {
-      private String id;
+
+    private String id;
     private String firstName;
     private String lastName;
     private boolean gender;
@@ -28,19 +32,18 @@ public class Personnel {
     private String schoolName;
     private String className;
     private String addressSchool;
-
-    public String getAddressSchool() {
-        return addressSchool;
-    }
-
-    public void setAddressSchool(String addressSchool) {
-        this.addressSchool = addressSchool;
-    }
+    private String specialization;
+    private String qualification;
+    private int teaching_years;
+    private String achievements;
+    private String cv_file;
+  private List<Salary> salaries;
 
     public Personnel() {
+        this.salaries = new ArrayList<>();
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,9 +61,25 @@ public class Personnel {
         this.schoolName = schoolName;
         this.className = className;
         this.addressSchool = addressSchool;
+        this.specialization = specialization;
+        this.qualification = qualification;
+        this.teaching_years = teaching_years;
+        this.achievements = achievements;
+        this.cv_file = cv_file;
     }
 
    
+   public List<Salary> getSalaries() {
+        return salaries;
+    }
+
+    public void setSalaries(List<Salary> salaries) {
+        this.salaries = salaries;
+    }
+
+    public void addSalary(Salary salary) {
+        this.salaries.add(salary);
+    }
 
     public String getSchool_id() {
         return school_id;
@@ -77,8 +96,6 @@ public class Personnel {
     public void setSchool_class_id(String school_class_id) {
         this.school_class_id = school_class_id;
     }
-
-    
 
     public String getId() {
         return id;
@@ -120,7 +137,7 @@ public class Personnel {
         this.className = className;
     }
 
-    public boolean isGender() {
+    public boolean getGender() {
         return gender;
     }
 
@@ -192,6 +209,88 @@ public class Personnel {
         this.userId = userId;
     }
 
- 
-    
+    public String getAddressSchool() {
+        return addressSchool;
+    }
+
+    public void setAddressSchool(String addressSchool) {
+        this.addressSchool = addressSchool;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public int getTeaching_years() {
+        return teaching_years;
+    }
+
+    public void setTeaching_years(int teaching_years) {
+        this.teaching_years = teaching_years;
+    }
+
+    public String getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(String achievements) {
+        this.achievements = achievements;
+    }
+
+    public String getCv_file() {
+        return cv_file;
+    }
+
+    public void setCv_file(String cv_file) {
+        this.cv_file = cv_file;
+    }
+public Salary calculateSalary(Personnel p, int month, int year) {
+    Salary salary = new Salary();
+    salary.setPersonnelId(p.getId());
+    salary.setSalaryMonth(month);
+    salary.setSalaryYear(year);
+
+    int base;
+    switch (p.getQualification()) {
+        case "Cử nhân":
+            base = 6000000;
+            break;
+        case "Thạc Sĩ":
+            base = 8000000;
+            break;
+        case "Tiến Sĩ":
+            base = 10000000;
+            break;
+        default:
+            base = 5000000;
+            break;
+    }
+
+    int bonus = 0;
+    int years = p.getTeaching_years();
+    if (years >= 1 && years <= 3) bonus = 500000;
+    else if (years >= 4 && years <= 6) bonus = 1000000;
+    else if (years > 6) bonus = 2000000;
+
+    salary.setBaseSalary(base);
+    salary.setTotalSalary(base + bonus);
+    salary.setPaymentStatus("chưa thanh toán"); // mặc định ban đầu
+    salary.setPaymentDate(null); // chưa thanh toán nên chưa có ngày
+
+    return salary;
+}
+
+
 }

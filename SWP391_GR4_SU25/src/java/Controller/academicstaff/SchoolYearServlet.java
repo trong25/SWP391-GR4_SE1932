@@ -25,8 +25,16 @@ import model.user.User;
 import utils.Helper;
 
 /**
- *
- * @author MSI
+*Servlet SchoolYearServlet xử lý các yêu cầu HTTP để hiển thị danh sách năm học
+ * và chỉnh sửa thông tin năm học , tạo năm học  mới,
+ * 
+ * URL Mapping: /academicstaff/schoolyear
+ * Chức năng:
+ * -Nhận dữ liệu từ form
+ * - gọi SchoolYearDAO để tạo năm học mới và lưu vào cơ sở dữ liệu
+ * Phân quyền: chỉ Giáo Vụ mới được phép tạo năm học mới.
+ * @author TrongNV
+ * @version 1.0
  */
 public class SchoolYearServlet extends HttpServlet {
    
@@ -68,7 +76,7 @@ public class SchoolYearServlet extends HttpServlet {
                 User user = (User) session.getAttribute("user");
                 String username = user.getUsername();
                 SchoolYear schoolYear = new SchoolYear();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Date startDate = dateFormat.parse(startDateRaw);
                 Date endDate = dateFormat.parse(endDateRaw);
                 schoolYear.setName(getSchoolYearName(startDate, endDate));

@@ -68,7 +68,7 @@ public class LoginServlet extends HttpServlet {
             Student student = studentDAO.getStudentByUserId(user.getId());
 
             System.out.println(student);
-            if (student != null) {
+            /*if (student != null) {
                 // Lưu thông tin student vào session
                 HttpSession session = request.getSession();
                 session.setAttribute("student", student);
@@ -85,7 +85,15 @@ public class LoginServlet extends HttpServlet {
                         return;
                     }
                 }
+            }*/
+            if (student != null) {
+                // Lưu thông tin student vào session
+                HttpSession session = request.getSession();
+                session.setAttribute("student", student);
             }
+
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
             // Login success
             switch (user.getRoleId()) {
                 case 0:

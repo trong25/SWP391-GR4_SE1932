@@ -353,6 +353,12 @@
                                                                 <input class="form-control form-control-sm" type="text" name="className" value="${student.school_class_id.className}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
                                                             </div>
                                                         </td>
+                                                         <td>
+                                                            <div class="form-group">
+                                                                <h5>Khối <a style="color: red">*</a>:</h5>
+                                                                <input class="form-control form-control-sm" type="text" name="grade_level" value="${student.school_class_id.grade_level}" maxlength="25" title="Nhập tối đa 25 ký tự"/>
+                                                            </div>
+                                                        </td>
                                                         <td>
                                                             <div class="form-group">
                                                                 <h5>Họ Học Sinh <a style="color: red">*</a>:</h5>
@@ -383,12 +389,6 @@
                                                             <div class="form-group">
                                                                 <h5>Địa Chỉ <a style="color: red">*</a>:</h5>
                                                                 <textarea class="form-control form-control-sm" name="address" maxlength="50" required title="Tối đa 50 ký tự">${student.address}</textarea>
-                                                            </div>
-                                                        </td>
-                                                         <td>
-                                                            <div class="form-group">
-                                                                <h5>Địa Chỉ Trường Học <a style="color: red">*</a>:</h5>
-                                                                <textarea class="form-control form-control-sm" name="addressSchool" maxlength="50" required title="Tối đa 50 ký tự">${student.school_id.addressSchool}</textarea>
                                                             </div>
                                                         </td>
                                                     </tr>

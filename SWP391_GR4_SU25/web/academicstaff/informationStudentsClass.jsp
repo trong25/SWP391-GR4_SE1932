@@ -217,12 +217,7 @@
                                                             <h5>Tên Trường Học:</h5>
                                                             <input class="form-control-sm form-control" type="text" name="schoolName" value="${student.school_id.schoolName}" readonly>
                                                         </div></td>
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <h5>Tên Lớp Học:</h5>
-                                                            <input class="form-control-sm form-control" type="text" name="className" value="${student.school_class_id.className}" readonly>
-                                                        </div>
-                                                    </td>
+                                                 
                                                     <td>
                                                         <div class="form-group">
                                                             <h5>Địa chỉ Trường Học:</h5>
