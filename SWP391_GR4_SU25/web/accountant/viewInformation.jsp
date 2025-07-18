@@ -13,9 +13,9 @@
         <!-- Custom CSS-->
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/information-style.css">
-        
 
-               <style>
+
+        <style>
             .profile-info {
                 text-align: left;
                 max-width: 500px;
@@ -114,7 +114,7 @@
                                         </div>
                                     </div>
                                     <div class="profile-card">
-                                        <c:set var="personnel" value="${personnelBean.getPersonnelByUserId(sessionScope.personnel.userId)}"/>
+                                        <c:set var="personnel" value="${personnelBean.getPersonnel(sessionScope.personnel.id)}"/>
                                         <img src="${pageContext.request.contextPath}/images/${personnel.avatar}" alt="User Avatar">
                                         <div class="profile-info">
                                             <h3>${personnel.lastName} ${personnel.firstName}</h3>
@@ -125,12 +125,22 @@
                                             <br/>
                                             <p><strong>Ngày sinh:</strong> <fmt:formatDate value="${personnel.birthday}" pattern="yyyy/MM/dd"/> </p>
                                             <br/>
-                                            <p><strong>Địa chỉ</strong> ${personnel.address}</p>
+                                            <p><strong>Địa chỉ:</strong> ${personnel.address}</p>
                                             <br/>
                                             <p><strong>Email:</strong> ${personnel.email}</p>
                                             <br/>
                                             <p><strong>Số điện thoại:</strong> ${personnel.phoneNumber}</p>
                                             <br/>
+                                            <p><strong>Chuyên môn:</strong> ${personnel.specialization}</p>
+                                            <br/>
+                                            <p><strong>Trình độ:</strong> ${personnel.qualification}</p>
+                                            <br/>
+                                            <p><strong>Số năm kinh nghiệm:</strong> ${personnel.teaching_years}</p>
+                                            <br/>
+                                            <p><strong>Thành tích nổi bật:</strong> ${personnel.achievements}</p>
+                                            <br/>
+
+
                                         </div>
                                         <div class="profile-actions">
                                             <a href="information">Cập nhật thông tin</a>
@@ -144,7 +154,6 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-
 
     </body>
 

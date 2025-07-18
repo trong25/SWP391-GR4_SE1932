@@ -59,18 +59,20 @@ public class Role {
             case "2":
                 return "Giáo vụ";
             case "3":
-
-                return "Kế toán";
+                return "Giáo Viên";
             case "4":
-
-                return "Giáo viên";
+                return "Học Sinh";
             case "5":
+
 
                 return "Giáo viên";
             case "6":
 
                 return "Phụ huynh";
 
+
+                return "Kế Toán";
+           
 
         }
         return "";

@@ -198,7 +198,11 @@
                                                         Nhân viên IT
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==1}">
+
                                                         Hiệu trưởng
+
+                                                        Giám Đốc
+
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==2}">
                                                         Giáo vụ
@@ -325,6 +329,33 @@
                                                         </c:forEach>
                                                     </select>
                                                 </div>
+
+                                                <div class="form-group col-md-6">
+                                                    <label class="control-label">Trình độ<a style="color: red">(*)</a></label>
+                                                    <input class="form-control" type="text" id="qualification" name="qualification" value="${requestScope.qualification}"
+                                                           pattern="^[A-Za-z${vietnamesePattern}\s]{1,100}$" required>
+                                                </div>
+                                                <!-- New fields for specialization, achievements, and teaching_years -->
+                                                <div class="form-group col-md-6">
+                                                    <label class="control-label">Chuyên môn<a style="color: red">(*)</a></label>
+                                                    <input class="form-control" type="text" id="specialization" name="specialization" value="${requestScope.specialization}" pattern="^[A-Za-z${vietnamesePattern}\s]{1,100}$" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="control-label">Thành tựu<a style="color: red">(*)</a></label>
+                                                    <input class="form-control" type="text" id="achievements" name="achievements" value="${requestScope.achievements}" pattern="^[A-Za-z0-9,${vietnamesePattern}\s]{0,500}$">
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="control-label">Số năm kinh nghiệm<a style="color: red">(*)</a></label>
+                                                    <input class="form-control" type="number" id="teaching_years" name="teaching_years" value="${requestScope.teaching_years}" min="0" max="100" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="control-label">Tệp CV<a style="color: red">(*)</a></label>
+                                                    <input class="form-control" type="file" id="cv_file" name="cv_file" required accept=".pdf,.doc,.docx">
+                                                    <div id="cvPreview" class="mt-3 text-center" style="display: none;">
+                                                        <p id="cvFileName"></p>
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-12">
                                                     <label for="imageUpload" class="form-label"
                                                            style="cursor: pointer ;margin-left: 14px">Chọn hình ảnh<a
@@ -380,12 +411,14 @@
         <script src="js/plugins/pace.min.js"></script>
         <!--===============================================================================================-->
         <!--===============================================================================================-->
+
         <script>
                                                     document.getElementById('role').addEventListener('change', function () {
                                                         this.querySelector('option[hidden]').disabled = true;
                                                     });
         </script>
         <script>
+
 
             function redirect() {
                 window.location.href = "listpersonnel";
@@ -400,6 +433,7 @@
             });
         </script>
         <script>
+
 
             function readURL(input, thumbimage) {
                 if (input.files && input.files[0]) { //Sử dụng  cho Firefox - chrome
@@ -461,6 +495,8 @@
 
         </script>
         <script>
+
+
             document.addEventListener("DOMContentLoaded", function () {
                 const birthInput = document.getElementById("birthday");
 
@@ -577,6 +613,7 @@
                 document.getElementById('preview').src = ''; // Clear the image source
             });
         </script>
+
         <script>
             function isOver18(birthDate) {
                 const today = new Date();
@@ -595,6 +632,7 @@
                 return age >= 18;
             }
         </script>
+
         <!-- Page level plugins -->
         <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
         <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>

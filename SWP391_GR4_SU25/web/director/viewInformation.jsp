@@ -1,8 +1,3 @@
-<%--
-  User: ThanhNT
- Date: 23/06/2025
-  Time: 8:47 PM
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -11,7 +6,6 @@
 <html lang="en">
 
     <head>
-
         <title>Profile</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -21,7 +15,7 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/information-style.css">
 
 
-               <style>
+        <style>
             .profile-info {
                 text-align: left;
                 max-width: 500px;
@@ -120,7 +114,7 @@
                                         </div>
                                     </div>
                                     <div class="profile-card">
-                                        <c:set var="personnel" value="${personnelBean.getPersonnelByUserId(sessionScope.personnel.userId)}"/>
+                                        <c:set var="personnel" value="${personnelBean.getPersonnel(sessionScope.personnel.id)}"/>
                                         <img src="${pageContext.request.contextPath}/images/${personnel.avatar}" alt="User Avatar">
                                         <div class="profile-info">
                                             <h3>${personnel.lastName} ${personnel.firstName}</h3>
@@ -137,6 +131,16 @@
                                             <br/>
                                             <p><strong>Số điện thoại:</strong> ${personnel.phoneNumber}</p>
                                             <br/>
+                                            <p><strong>Chuyên môn:</strong> ${personnel.specialization}</p>
+                                            <br/>
+                                            <p><strong>Trình độ:</strong> ${personnel.qualification}</p>
+                                            <br/>
+                                            <p><strong>Số năm kinh nghiệm:</strong> ${personnel.teaching_years}</p>
+                                            <br/>
+                                            <p><strong>Thành tích nổi bật:</strong> ${personnel.achievements}</p>
+                                            <br/>
+
+
                                         </div>
                                         <div class="profile-actions">
                                             <a href="information">Cập nhật thông tin</a>
