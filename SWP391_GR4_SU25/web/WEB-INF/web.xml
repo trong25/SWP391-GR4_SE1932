@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!-- Filter Configuration -->
+<!-- Filter Configuration -->
 
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <filter>
@@ -223,8 +223,9 @@
         <servlet-class>Controller.accountant.TakeTimeKeepServlet</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>ListPersonnelServlett</servlet-name>
-        <servlet-class>Controller.accountant.ListPersonnelServlett</servlet-class>
+        <servlet-class>Controller.accountant.ListPersonnelSalaryServlett</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewPersonnelSalaryServlet</servlet-name>
@@ -233,6 +234,12 @@
     <servlet>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <servlet-class>Controller.accountant.CreateSalaryServlet</servlet-class>
+        
+    </servlet>
+    <servlet>
+        <servlet-name>ListPersonnelAdminServlet</servlet-name>
+        <servlet-class>Controller.admin.ListPersonnelAdminServlet</servlet-class>
+
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -421,6 +428,7 @@
         <url-pattern>/accountant/taketimekeep</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>ListPersonnelServlett</servlet-name>
         <url-pattern>/accountant/listpersonnell</url-pattern>
     </servlet-mapping>
@@ -431,5 +439,10 @@
     <servlet-mapping>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <url-pattern>/accountant/createsalary</url-pattern>
+        </servlet-mapping>
+ <servlet-mapping>
+        <servlet-name>ListPersonnelAdminServlet</servlet-name>
+        <url-pattern>/admin/listpersonnel</url-pattern>
+
     </servlet-mapping>
 </web-app>

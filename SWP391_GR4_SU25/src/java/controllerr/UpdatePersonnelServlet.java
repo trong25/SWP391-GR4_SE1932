@@ -96,12 +96,12 @@ public class UpdatePersonnelServlet extends HttpServlet {
             person.setAddress(address);
             person.setEmail(email);
             person.setPhoneNumber(phoneNumber);
-            if (person.getRoleId() == 3) {
+           
                 person.setSpecialization(specialization);
                 person.setQualification(qualification);
                 person.setTeaching_years(teachingYears);
                 person.setAchievements(achievements);
-            }
+            
             user.setEmail(email);
             boolean successUser = userDAO.updateUserById(user);
             boolean successPerson = personnelDAO.updatePerson(person);

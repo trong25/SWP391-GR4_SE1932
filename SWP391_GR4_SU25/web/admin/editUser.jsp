@@ -133,7 +133,7 @@
                                                                     <select style="border-radius: 5px" name="role">
                                                                         <option value="${user.getRoleId()}" hidden="">${roleMap[user.getRoleId()]}</option>
                                                                         <option value="0">NHÂN VIÊN IT</option>
-                                                                        <option value="1">HIỆU TRƯỞNG</option>
+                                                                        <option value="1">GIÁM ĐỐC</option>
                                                                         <option value="2">GIÁO VỤ</option>
                                                                         <option value="3">GIÁO VIÊN</option>
                                                                         <option value="4">HỌC SINH</option>

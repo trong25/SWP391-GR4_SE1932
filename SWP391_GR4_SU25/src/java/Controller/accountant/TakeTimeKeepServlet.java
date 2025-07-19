@@ -99,7 +99,7 @@ public class TakeTimeKeepServlet extends HttpServlet {
 
                 PersonnelAttendance attendance = new PersonnelAttendance();
                 attendance.setDay(day);
-                attendance.setPersonnel(personnelDAO.getPersonnel(personnelId));
+                attendance.setPersonnel(personnelDAO.getPersonnels(personnelId));
                 attendance.setStatus(status);
                 attendance.setNote(note);
 
