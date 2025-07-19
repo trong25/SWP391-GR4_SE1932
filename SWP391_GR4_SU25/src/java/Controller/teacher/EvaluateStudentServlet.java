@@ -118,9 +118,10 @@ public class EvaluateStudentServlet extends HttpServlet {
                             counter++;
                         }
                     }else {
-                        Evaluation result = evaluationDAO.createEvaluation(evaluation);
-                         if (result != null) {
-                         counter++;
+                        boolean result;
+                        result = evaluationDAO.createEvaluation(evaluation);
+                        if (result) {
+                            counter++;
                         }
                     }
 

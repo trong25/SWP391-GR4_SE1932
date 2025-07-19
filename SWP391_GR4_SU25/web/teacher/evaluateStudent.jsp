@@ -129,11 +129,15 @@
                                                     <input value="Nghỉ học" name="evaluation-${student.id}" readonly type="text" class="evaluation-input">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <select class="form-control evaluation-input" aria-label="Default select example" name="evaluation-${student.id}" required>
-                                                        <option value="" hidden="">-</option>
-                                                        <option value="Tốt" ${evaluation.getEvaluationByStudentIdAndDay(student.id,dateId).evaluation eq 'Tốt'?"selected":""} name="evaluationId-good">Tốt</option>
-                                                        <option value="" ${evaluation.getEvaluationByStudentIdAndDay(student.id,dateId).evaluation eq 'Khá'?"selected":""} name="evaluationId-bad">Khá</option>
-                                                    </select>
+                                                    <input type="number" 
+                                                           class="form-control evaluation-input" 
+                                                           name="evaluation-${student.id}" 
+                                                           min="0" 
+                                                           max="10" 
+                                                           step="0.1"                                                          
+                                                           value="${evaluation.getEvaluationByStudentIdAndDay(student.id,dateId).evaluation}"
+                                                           required
+                                                           oninput="validateScore(this)">
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
@@ -185,6 +189,19 @@
 <script>
     function goToAttendance() {
         window.location.href= 'takeattendance';
+    }
+    
+    function validateScore(input) {
+        var value = parseFloat(input.value);
+        if (value < 0) {
+            input.value = 0;
+        } else if (value > 10) {
+            input.value = 10;
+        }
+        // Giới hạn số thập phân tối đa 1 chữ số
+        if (input.value.includes('.') && input.value.split('.')[1].length > 1) {
+            input.value = parseFloat(input.value).toFixed(1);
+        }
     }
 </script>
 <!-- Page level plugins -->
