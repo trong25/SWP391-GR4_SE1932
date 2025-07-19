@@ -104,21 +104,31 @@ public class EvaluationDAO extends DBContext {
             throw new RuntimeException(e);
         }
         return false;
-    }
+    } 
                 
-        public List<Evaluation> getEvaluationByWeek(String weekId) {
+           public List<Evaluation> getEvaluationByWeek(String weekId) {
         List<Evaluation> list = new ArrayList<>();
-        String sql = "select e.id, e.student_id,e.date_id,e.evaluation,e.notes  from Evaluations e join Days d on e.date_id = d.id\n"
+        String sql = "select e.id, e.pupil_id,e.date_id,e.evaluation,e.notes  from Evaluations e join Days d on e.date_id = d.id\n"
                 + "join Weeks w on d.week_id = w.id\n"
                 + "where week_id= ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, weekId);
-
-    public List<Evaluation> getEvaluationByWeekandPupilId(String weekId, String pupil_id) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(createEvaluation(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+ 
+        
+    public List<Evaluation> getEvaluationByWeekandStudentId(String weekId, String student_id) {
         List<Evaluation> list = new ArrayList<>();
         String sql = """
-                   -- Lấy danh sách evaluation của một học sinh trong một tuần (theo tiết học)
+                  -- Lấy danh sách evaluation của một học sinh trong một tuần (theo tiết học)
                    SELECT 
                        e.id, 
                        e.student_id, 
@@ -136,7 +146,7 @@ public class EvaluationDAO extends DBContext {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, weekId);
-            preparedStatement.setString(2, pupil_id);
+            preparedStatement.setString(2, student_id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -387,7 +397,7 @@ public class EvaluationDAO extends DBContext {
 
 
 
-    public int countEvaluationOfWeek(String week_id, String pupil_id) {
+    public int countEvaluationOfWeek(String week_id, String student_id) {
         int result = 0;
         String sql = """
                      SELECT 
@@ -404,7 +414,7 @@ public class EvaluationDAO extends DBContext {
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, week_id);
-            statement.setString(2, pupil_id);
+            statement.setString(2, student_id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 result = resultSet.getInt("good_day");
