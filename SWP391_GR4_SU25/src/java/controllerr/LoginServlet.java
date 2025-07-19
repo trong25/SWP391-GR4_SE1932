@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controllerr;
 
 import java.io.IOException;
@@ -11,6 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.payment.Payment;
+import model.payment.PaymentDAO;
 import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import model.student.Student;
@@ -23,21 +25,20 @@ import model.user.UserDAO;
  * @author HuyDV
  */
 public class LoginServlet extends HttpServlet {
-   
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-      HttpSession session = request.getSession();
-       if (session.getAttribute("error") != null) {
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("error") != null) {
             String error = (String) session.getAttribute("error");
             request.setAttribute("error", error);
             session.removeAttribute("error");
         }
         request.getRequestDispatcher("login.jsp").forward(request, response);
-    } 
+    }
 
-  
-   @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get data from login form
@@ -52,7 +53,7 @@ public class LoginServlet extends HttpServlet {
         if (user != null && user.getIsDisabled() != 1) {
 
             // Lấy thông tin personnel tương ứng với user id
-           PersonnelDAO personnelDAO = new PersonnelDAO();
+            PersonnelDAO personnelDAO = new PersonnelDAO();
 
             Personnel personnel = personnelDAO.getPersonnelByUserId(user.getId());
 
@@ -67,6 +68,24 @@ public class LoginServlet extends HttpServlet {
             Student student = studentDAO.getStudentByUserId(user.getId());
 
             System.out.println(student);
+            /*if (student != null) {
+                // Lưu thông tin student vào session
+                HttpSession session = request.getSession();
+                session.setAttribute("student", student);
+            }
+
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            if (student != null) {
+                PaymentDAO paymentDAO = new PaymentDAO();
+                List<Payment> payments = paymentDAO.getListPaymentByStudentId(student.getId());
+                for (Payment payment : payments) {
+                    if (payment.getStatus().equals("Not yet")) {
+                        response.sendRedirect("student/payments");
+                        return;
+                    }
+                }
+            }*/
             if (student != null) {
                 // Lưu thông tin student vào session
                 HttpSession session = request.getSession();
@@ -75,7 +94,6 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-
             // Login success
             switch (user.getRoleId()) {
                 case 0:

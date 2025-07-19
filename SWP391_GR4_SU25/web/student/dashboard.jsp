@@ -11,6 +11,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var toastMessage = '<%= request.getAttribute("toastMessage") %>';
+                var toastType = '<%= request.getAttribute("toastType") %>';
+                if (toastMessage) {
+                    if (toastType === 'success') {
+                        toastr.success(toastMessage);
+                    } else if (toastType === 'error') {
+                        toastr.error(toastMessage);
+                    }
+                }
+            });
+        </script>
 
         <title>Tabi Learning Center</title>
 
@@ -22,7 +39,7 @@
             rel="stylesheet">
 
         <!-- Custom styles for this template-->
-        <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+        <!--<link href="../css/sb-admin-2.min.css" rel="stylesheet">-->
 
     </head>
 
@@ -31,7 +48,7 @@
             <jsp:include page="navbar.jsp"/>
             <div id="content-wrapper" class="d-flex flex-column">
                 <div id="content">
-                    <jsp:include page="header.jsp"/>
+                    <jsp:include page="header-student.jsp"/>
                     <div class="container-fluid">
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -211,130 +228,77 @@
                             </div>
                         </div>
 
-                        <!-- Event List -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Danh sách sự kiện</h6>
+
+                        <!-- Notification Modal -->
+                        <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="notificationModalLabel">
+                                            <i class="fas fa-bell mr-2"></i>Danh sách thông báo
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <c:choose>
-                                        <c:when test="${requestScope.listEvents.size() > 0}">
-                                            <div class="card-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>STT</th>
-                                                                <th>Tên sự kiện</th>
-                                                                <th>Ngày</th>
-                                                                <th>Người gửi</th>
-                                                                <th>Chi tiết</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <c:forEach var="event" items="${requestScope.listEvents}" varStatus="status">
-                                                                <tr>
-                                                                    <th scope="row">${status.index + 1}</th>
-                                                                    <td>${event.heading}</td>
-                                                                    <td><fmt:formatDate value="${event.date}" pattern="yyyy/MM/dd"/></td>
-                                                                    <td>
-                                                                        ${event.createdBy.lastName} ${event.createdBy.firstName}
-                                                                    </td>
-                                                                    <td class="text-center"><a href="eventDetail?id=${event.id}"
-                                                                                               class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>
-                                                                </tr>
-                                                            </c:forEach>
-                                                        </tbody>
-                                                    </table>
+                                    <div class="modal-body">
+                                        <c:choose>
+                                            <c:when test="${not empty requestScope.listNotifications}">
+                                                <div class="list-group">
+                                                    <c:forEach var="notification" items="${requestScope.listNotifications}" varStatus="status">
+                                                        <div class="list-group-item list-group-item-action">
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <h6 class="mb-1 text-primary">${notification.heading}</h6>
+                                                                <small class="text-muted">
+                                                                    <fmt:formatDate value="${notification.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
+                                                                </small>
+                                                            </div>
+                                                            <p class="mb-1">${notification.details}</p>
+                                                            <small class="text-muted">
+                                                                <i class="fas fa-user mr-1"></i>
+                                                                Từ: ${notification.createdBy.lastName} ${notification.createdBy.firstName}
+                                                            </small>
+                                                        </div>
+                                                    </c:forEach>
                                                 </div>
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div class="card-body">
-                                                <div class="alert alert-info text-center" role="alert">
-                                                    <strong>Không có sự kiện nào</strong>
-                                                    <p>Hiện tại không có sự kiện nào được lên lịch.</p>
-                                                    <i class="fas fa-calendar-alt fa-2x"></i>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="text-center py-4">
+                                                    <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                                                    <h5 class="text-muted">Không có thông báo nào</h5>
+                                                    <p class="text-muted">Hiện tại bạn không có thông báo mới nào.</p>
                                                 </div>
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
-                <jsp:include page="../footer.jsp"/>
-            </div>
-        </div>
+                        <script>
+                            function showNotifications() {
+                                $('#notificationModal').modal('show');
+                            }
+                        </script>
 
-        <!-- Notification Modal -->
-        <div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="notificationModalLabel">
-                            <i class="fas fa-bell mr-2"></i>Danh sách thông báo
-                        </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <c:choose>
-                            <c:when test="${not empty requestScope.listNotifications}">
-                                <div class="list-group">
-                                    <c:forEach var="notification" items="${requestScope.listNotifications}" varStatus="status">
-                                        <div class="list-group-item list-group-item-action">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h6 class="mb-1 text-primary">${notification.heading}</h6>
-                                                <small class="text-muted">
-                                                    <fmt:formatDate value="${notification.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
-                                                </small>
-                                            </div>
-                                            <p class="mb-1">${notification.details}</p>
-                                            <small class="text-muted">
-                                                <i class="fas fa-user mr-1"></i>
-                                                Từ: ${notification.createdBy.lastName} ${notification.createdBy.firstName}
-                                            </small>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="text-center py-4">
-                                    <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
-                                    <h5 class="text-muted">Không có thông báo nào</h5>
-                                    <p class="text-muted">Hiện tại bạn không có thông báo mới nào.</p>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <!-- Bootstrap core JavaScript-->
+                        <script src="../vendor/jquery/jquery.min.js"></script>
+                        <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <script>
-            function showNotifications() {
-                $('#notificationModal').modal('show');
-            }
-        </script>
+                        <!-- Core plugin JavaScript-->
+                        <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="../vendor/jquery/jquery.min.js"></script>
-        <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                        <!-- Custom scripts for all pages-->
+                        <script src="../js/sb-admin-2.min.js"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+                        <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+                        <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="../js/sb-admin-2.min.js"></script>
+                        <!-- Page level custom scripts -->
+                        <script src="../js/demo/datatables-demo.js"></script>
+                        </body>
 
-    </body>
-
-</html>
+                        </html>

@@ -83,31 +83,26 @@
 
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="listTimetable" items="${requestScope.listTimetable}" varStatus="loop">
+                                            <c:forEach var="tt" items="${pendingTimetables}" varStatus="loop">
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
-                                                    <td>${listTimetable.aClass.name}</td>
-                                                    <td>${listTimetable.aClass.grade.name}</td>
-                                                    <td>${listTimetable.createdBy.lastName} ${listTimetable.createdBy.firstName}</td>
+                                                    <td>${tt.aClass.name}</td>
+                                                    <td>${tt.aClass.grade.name}</td>
+                                                    <td>${tt.createdBy.lastName} ${tt.createdBy.firstName}</td>
                                                     <td>
-                                                        <fmt:formatDate value="${listTimetable.startDate}" pattern="yyyy/MM/dd"/>
-                                                        đến
-                                                        <fmt:formatDate value="${listTimetable.endDate}" pattern="yyyy/MM/dd"/>
+                                                        <fmt:formatDate value="${tt.day.date}" pattern="yyyy/MM/dd"/>
                                                     </td>
-
-                                                    <c:set value="${listTimetable.status}" var="status"/>
-                                                    <c:if test="${status eq 'đang chờ xử lý'}">
-                                                        <td><span class="badge badge-warning">${status}</span>  </td>
-                                                    </c:if>
-                                                    <td>${listTimetable.teacher.lastName} ${listTimetable.teacher.firstName}</td>
-
-                                                        <td>
-                                                            <div class="d-flex flex-column align-items-center">
-                                                                <a href="review-detail-timetable?classId=${listTimetable.aClass.id}&weekId=${listTimetable.weekId}&status=${listTimetable.status}" class="btn btn-sm btn-primary shadow-sm btn-custom-width">Chi tiết</a>
-                                                            </div>
-                                                        </td>
-
-                                                    
+                                                    <td>
+                                                        <span class="badge badge-warning">${tt.status}</span>
+                                                    </td>
+                                                    <td>${tt.teacher.lastName} ${tt.teacher.firstName}</td>
+                                                    <td>
+                                                        <form method="post" action="reviewTimetable">
+                                                            <input type="hidden" name="timetableId" value="${tt.id}" />
+                                                            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm btn-custom-width">Duyệt</button>
+                                                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm btn-custom-width">Từ chối</button>
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
 

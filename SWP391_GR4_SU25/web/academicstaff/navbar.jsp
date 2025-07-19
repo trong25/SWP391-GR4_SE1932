@@ -75,7 +75,7 @@
             <!-- Nav Item -->
             <!-- Nav Item - Timekeeping -->
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="mytimekeeping">
                     <i class="fas fa-fw fa-clock"></i>
                     <span>Chấm Công Của Tôi</span>
                 </a>

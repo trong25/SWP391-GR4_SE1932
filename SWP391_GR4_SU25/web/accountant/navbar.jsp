@@ -84,7 +84,11 @@
                     </div>
                 </div>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link" href="listpersonnell">
+                    <i class="fas fa-fw fa-user-friends"></i>
+                    <span>Quản lý Lương Nhân Viên</span></a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

@@ -64,6 +64,8 @@ public class StudentDAO extends DBContext {
             SchoolClass schoolClass = new SchoolClass();
             schoolClass.setId(resultSet.getString("school_class_id"));
             schoolClass.setClassName(resultSet.getString("class_name"));
+            schoolClass.setGrade_level(resultSet.getString("grade_level")); // Lấy tên khối từ grade_level
+
             student.setSchool_class_id(schoolClass);
 
             return student;
@@ -76,24 +78,27 @@ public class StudentDAO extends DBContext {
 
     public Student getLatest() {
         String sql = """
-            SELECT TOP 1 s.*, 
-                         sc.schoolName, 
-                         sc.addressSchool, 
-                         c.class_name 
-            FROM Students s 
-            LEFT JOIN Schools sc ON s.school_id = sc.id 
-            LEFT JOIN SchoolClasses c ON s.school_class_id = c.id 
-            ORDER BY s.id DESC
-        """;
+        SELECT TOP 1 s.*, 
+                     sc.schoolName, 
+                     sc.addressSchool, 
+                     c.class_name, 
+                     c.grade_level AS grade_level
+        FROM Students s 
+        LEFT JOIN Schools sc ON s.school_id = sc.id 
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id 
+        ORDER BY s.id DESC
+    """;
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
+
             if (resultSet.next()) {
                 return createStudent(resultSet);
             }
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
@@ -109,7 +114,6 @@ public class StudentDAO extends DBContext {
         return "HS" + result;
     }
 
-    
     public boolean createStudent(Student student) {
         String insertSql = """
         INSERT INTO [dbo].[Students]
@@ -121,24 +125,17 @@ public class StudentDAO extends DBContext {
     """;
 
         try (PreparedStatement stmt = connection.prepareStatement(insertSql)) {
-            // Sinh mã ID mới
+            // Sinh ID mới
             String newId = "HS000001";
             Student latest = getLatest();
-            if (latest != null && latest.getId() != null) {
+            if (latest != null) {
                 newId = generateId(latest.getId());
             }
             student.setId(newId);
 
             // Gán giá trị
             stmt.setString(1, student.getId());
-
-            // Kiểm tra user_id
-            if (student.getUserId() != null && isValidUserId(student.getUserId())) {
-                stmt.setString(2, student.getUserId());
-            } else {
-                stmt.setNull(2, java.sql.Types.VARCHAR);
-            }
-
+            stmt.setString(2, student.getUserId());
             stmt.setString(3, student.getFirstName());
             stmt.setString(4, student.getLastName());
             stmt.setString(5, student.getAddress());
@@ -151,130 +148,41 @@ public class StudentDAO extends DBContext {
                 stmt.setNull(8, java.sql.Types.DATE);
             }
 
-            stmt.setInt(9, student.getGender() ? 1 : 0);
+            stmt.setBoolean(9, student.getGender());
             stmt.setString(10, student.getFirstGuardianName());
             stmt.setString(11, student.getFirstGuardianPhoneNumber());
             stmt.setString(12, student.getAvatar());
+            stmt.setString(13, student.getSecondGuardianName());
+            stmt.setString(14, student.getSecondGuardianPhoneNumber());
 
-            if (student.getSecondGuardianName() != null && !student.getSecondGuardianName().isBlank()) {
-                stmt.setString(13, student.getSecondGuardianName());
-            } else {
-                stmt.setNull(13, java.sql.Types.NVARCHAR);
-            }
-
-            if (student.getSecondGuardianPhoneNumber() != null && !student.getSecondGuardianPhoneNumber().isBlank()) {
-                stmt.setString(14, student.getSecondGuardianPhoneNumber());
-            } else {
-                stmt.setNull(14, java.sql.Types.NVARCHAR);
-            }
-
-            // Kiểm tra created_by
-            if (student.getCreatedBy() != null && student.getCreatedBy().getId() != null
-                    && isValidPersonnelId(student.getCreatedBy().getId())) {
+            if (student.getCreatedBy() != null) {
                 stmt.setString(15, student.getCreatedBy().getId());
             } else {
                 stmt.setNull(15, java.sql.Types.VARCHAR);
             }
 
-            if (student.getParentSpecialNote() != null) {
-                stmt.setString(16, student.getParentSpecialNote());
-            } else {
-                stmt.setNull(16, java.sql.Types.NVARCHAR);
+            stmt.setString(16, student.getParentSpecialNote());
+            stmt.setString(17, student.getSchool_id() != null ? student.getSchool_id().getId() : null);
+            stmt.setString(18, student.getSchool_class_id() != null ? student.getSchool_class_id().getId() : null);
 
-            }
-
-            // Kiểm tra school_id
-            if (student.getSchool_id() != null && student.getSchool_id() != null
-                    && isValidSchoolId(student.getSchool_id().getId())) {
-                stmt.setString(17, student.getSchool_id().getId());
-            } else {
-                stmt.setNull(17, java.sql.Types.NVARCHAR);
-            }
-
-            // Kiểm tra school_class_id
-            if (student.getSchool_class_id() != null && student.getSchool_class_id() != null
-                    && isValidSchoolClassId(student.getSchool_class_id().getId())) {
-                stmt.setString(18, student.getSchool_class_id().getId());
-            } else {
-                stmt.setNull(18, java.sql.Types.NVARCHAR);
-            }
-
-            // Thực thi SQL
+            // Thực thi
             int result = stmt.executeUpdate();
             return result > 0;
 
         } catch (SQLException e) {
-            System.err.println("Lỗi khi tạo học sinh: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    private boolean isValidPersonnelId(String personnelId) {
-        String query = "SELECT COUNT(*) FROM Personnels WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, personnelId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra personnel_id: " + e.getMessage());
-        }
-        return false;
-    }
-
-// Phương thức kiểm tra user_id
-    private boolean isValidUserId(String userId) {
-        String query = "SELECT COUNT(*) FROM User WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, userId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra user_id: " + e.getMessage());
-        }
-        return false;
-    }
-
-// Phương thức kiểm tra school_id
-    private boolean isValidSchoolId(String schoolId) {
-        String query = "SELECT COUNT(*) FROM Schools WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, schoolId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra school_id: " + e.getMessage());
-        }
-        return false;
-    }
-
-// Phương thức kiểm tra school_class_id
-    private boolean isValidSchoolClassId(String schoolClassId) {
-        String query = "SELECT COUNT(*) FROM SchoolClasses WHERE id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, schoolClassId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
-        } catch (SQLException e) {
-            System.err.println("Lỗi khi kiểm tra school_class_id: " + e.getMessage());
-        }
-        return false;
-    }
-
     public List<Student> getStudentByStatus(String status) {
+        List<Student> students = new ArrayList<>();
         String sql = """
         SELECT s.*, 
                sch.schoolName AS schoolName, 
                sch.addressSchool AS addressSchool, 
-               cls.class_name AS class_name
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -282,18 +190,22 @@ public class StudentDAO extends DBContext {
         ORDER BY s.id DESC
     """;
 
-        List<Student> listStudents = new ArrayList<>();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, status);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                listStudents.add(createStudent(resultSet));
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Student student = createStudent(resultSet);
+                    if (student != null) {
+                        students.add(student);
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error retrieving students by status", e);
         }
-        return listStudents;
+
+        return students;
     }
 
     public int getPendingStudentCount() {
@@ -310,53 +222,99 @@ public class StudentDAO extends DBContext {
         return 0;
     }
 
-    public List<Student> getAllStudents() {
-        String sql = """
+    public List<Student> getStudentsByGrade(String gradeName) {
+    String sql = """
         SELECT s.*, 
                sch.schoolName AS schoolName,
                sch.addressSchool AS addressSchool,
-               cls.class_name AS class_name
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
+        FROM Students s
+        LEFT JOIN Schools sch ON s.school_id = sch.id
+        LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
+        WHERE cls.grade_level = ? AND s.status = N'Đang theo học'
+        ORDER BY s.id DESC
+    """;
+
+    List<Student> listStudent = new ArrayList<>();
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, gradeName); // ví dụ: "Khối 6"
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Student student = createStudent(resultSet);
+            if (student != null) {
+                listStudent.add(student);
+            }
+        }
+    } catch (SQLException e) {
+        throw new RuntimeException("Lỗi khi lấy học sinh theo khối và trạng thái: " + e.getMessage(), e);
+    }
+    return listStudent;
+}
+
+
+    public List<Student> getAllStudents() {
+    String sql = """
+        SELECT s.*, 
+               sch.schoolName AS schoolName,
+               sch.addressSchool AS addressSchool,
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
         ORDER BY s.id DESC
     """;
 
-        List<Student> listStudent = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Student student = createStudent(resultSet);
+    List<Student> listStudent = new ArrayList<>();
+    try {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        while (resultSet.next()) {
+            Student student = createStudent(resultSet);
+            if (student != null) {
                 listStudent.add(student);
+            } else {
+                System.err.println("⚠️ Lỗi tạo student từ ResultSet");
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
-        return listStudent;
+    } catch (SQLException e) {
+        throw new RuntimeException("❌ Lỗi khi lấy danh sách học sinh: ", e);
     }
+    return listStudent;
+}
 
-    public Student getStudentByUserId(String userId) {
+
+   public Student getStudentByUserId(String userId) {
     String sql = """
         SELECT s.*, 
                sc.schoolName, 
                sc.addressSchool, 
-               c.class_name
+               c.class_name,
+               c.grade_level
         FROM Students s
         LEFT JOIN Schools sc ON s.school_id = sc.id
         LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
         WHERE s.user_id = ?
     """;
-    try {
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
         preparedStatement.setString(1, userId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()) {
-            return createStudent(resultSet);
+
+        try (ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return createStudent(resultSet);
+            } else {
+                System.out.println("⚠️ Không tìm thấy học sinh với user_id = " + userId);
+            }
         }
+
     } catch (SQLException e) {
-        throw new RuntimeException("Error retrieving student by userId: " + userId, e);
+        System.err.println("❌ Lỗi khi truy vấn học sinh theo userId = " + userId);
+        e.printStackTrace();
     }
+
     return null;
 }
 
@@ -396,7 +354,8 @@ public class StudentDAO extends DBContext {
         SELECT s.*, 
                sch.schoolName AS schoolName,
                sch.addressSchool AS addressSchool,
-               cls.class_name AS class_name
+               cls.class_name AS class_name,
+               cls.grade_level AS grade_level
         FROM Students s
         LEFT JOIN Schools sch ON s.school_id = sch.id
         LEFT JOIN SchoolClasses cls ON s.school_class_id = cls.id
@@ -499,6 +458,12 @@ public class StudentDAO extends DBContext {
         WHERE id = ?
     """;
 
+        String updateGradeLevelSQL = """
+        UPDATE dbo.SchoolClasses
+        SET grade_level = ?
+        WHERE id = ?
+    """;
+
         try {
             connection.setAutoCommit(false); // Bắt đầu transaction
 
@@ -525,12 +490,21 @@ public class StudentDAO extends DBContext {
                 ps.executeUpdate();
             }
 
-            // 2. Cập nhật địa chỉ trường nếu có thông tin
+            // 2. Cập nhật địa chỉ trường nếu có
             if (student.getSchool_id() != null && student.getSchool_id().getAddressSchool() != null) {
                 try (PreparedStatement psSchool = connection.prepareStatement(updateSchoolSQL)) {
                     psSchool.setString(1, student.getSchool_id().getAddressSchool());
                     psSchool.setString(2, student.getSchool_id().getId());
                     psSchool.executeUpdate();
+                }
+            }
+
+            // 3. Cập nhật grade_level nếu có
+            if (student.getSchool_class_id() != null && student.getSchool_class_id().getGrade_level() != null) {
+                try (PreparedStatement psGrade = connection.prepareStatement(updateGradeLevelSQL)) {
+                    psGrade.setString(1, student.getSchool_class_id().getGrade_level());
+                    psGrade.setString(2, student.getSchool_class_id().getId());
+                    psGrade.executeUpdate();
                 }
             }
 
@@ -548,108 +522,6 @@ public class StudentDAO extends DBContext {
         } finally {
             try {
                 connection.setAutoCommit(true); // Trả lại trạng thái mặc định
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public boolean updateStudentClass(Student student) {
-        String updateStudentSQL = """
-        UPDATE dbo.Students 
-        SET first_guardian_name = ?, 
-            first_guardian_phone_number = ?, 
-            second_guardian_name = ?, 
-            second_guardian_phone_number = ?, 
-            address = ?, 
-            school_id = ?, 
-            school_class_id = ?, 
-            parent_special_note = ?, 
-            first_name = ?, 
-            last_name = ?, 
-            birthday = ?, 
-            email = ?, 
-            avatar = ? 
-        WHERE id = ?
-    """;
-
-        String updateSchoolSQL = """
-        UPDATE dbo.Schools
-        SET schoolName = ?, addressSchool = ?
-        WHERE id = ?
-    """;
-
-        String updateClassSQL = """
-        UPDATE dbo.SchoolClass
-        SET class_name = ?
-        WHERE id = ?
-    """;
-
-        try {
-            connection.setAutoCommit(false); // Transaction
-
-            // 1. Cập nhật thông tin học sinh
-            try (PreparedStatement ps = connection.prepareStatement(updateStudentSQL)) {
-                ps.setString(1, student.getFirstGuardianName());
-                ps.setString(2, student.getFirstGuardianPhoneNumber());
-                ps.setString(3, student.getSecondGuardianName());
-                ps.setString(4, student.getSecondGuardianPhoneNumber());
-                ps.setString(5, student.getAddress());
-                ps.setString(6, student.getSchool_id() != null ? student.getSchool_id().getId() : null);
-                ps.setString(7, student.getSchool_class_id() != null ? student.getSchool_class_id().getId() : null);
-                ps.setString(8, student.getParentSpecialNote());
-                ps.setString(9, student.getFirstName());
-                ps.setString(10, student.getLastName());
-                if (student.getBirthday() != null) {
-                    ps.setDate(11, new java.sql.Date(student.getBirthday().getTime()));
-                } else {
-                    ps.setNull(11, java.sql.Types.DATE);
-                }
-                ps.setString(12, student.getEmail());
-                ps.setString(13, student.getAvatar());
-                ps.setString(14, student.getId());
-                ps.executeUpdate();
-            }
-
-            // 2. Cập nhật tên và địa chỉ trường học nếu có
-            if (student.getSchool_id() != null
-                    && student.getSchool_id().getId() != null
-                    && (student.getSchool_id().getSchoolName() != null || student.getSchool_id().getAddressSchool() != null)) {
-
-                try (PreparedStatement psSchool = connection.prepareStatement(updateSchoolSQL)) {
-                    psSchool.setString(1, student.getSchool_id().getSchoolName());
-                    psSchool.setString(2, student.getSchool_id().getAddressSchool());
-                    psSchool.setString(3, student.getSchool_id().getId());
-                    psSchool.executeUpdate();
-                }
-            }
-
-            // 3. Cập nhật tên lớp học nếu có
-            if (student.getSchool_class_id() != null
-                    && student.getSchool_class_id().getId() != null
-                    && student.getSchool_class_id().getClassName() != null) {
-
-                try (PreparedStatement psClass = connection.prepareStatement(updateClassSQL)) {
-                    psClass.setString(1, student.getSchool_class_id().getClassName());
-                    psClass.setString(2, student.getSchool_class_id().getId());
-                    psClass.executeUpdate();
-                }
-            }
-
-            connection.commit();
-            return true;
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (Exception rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
-            return false;
-        } finally {
-            try {
-                connection.setAutoCommit(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -745,7 +617,8 @@ public class StudentDAO extends DBContext {
         SELECT s.*, 
                sch.schoolName, 
                sch.addressSchool AS addressSchool, 
-               cls.class_name
+               cls.class_name,
+                    cls.grade_level AS grade_level
         FROM Students s
         JOIN classDetails c ON s.id = c.student_id
         LEFT JOIN Schools sch ON s.school_id = sch.id
@@ -1025,6 +898,7 @@ public class StudentDAO extends DBContext {
         return students;
     }
 
+
     
         public List<Student> getListStudentOfTeacherBySchoolYear(String schoolYearId, String teacherId) {
         String sql = "SELECT *\n"
@@ -1081,3 +955,6 @@ public class StudentDAO extends DBContext {
     }
 
 }
+
+}
+

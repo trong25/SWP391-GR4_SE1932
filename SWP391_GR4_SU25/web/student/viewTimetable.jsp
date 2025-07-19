@@ -180,7 +180,9 @@
                                                         <c:when test="${not empty requestScope.timetables}">
                                                             <c:forEach var="timetable" items="${requestScope.timetables}">
                                                                 <c:if test="${timetable.timeslot.id eq timeslot.id && timetable.day.id eq day.id}">
-                                                                    ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName}
+                                                                    ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName}<span>
+                                                                        (${timetable.attendanceStatus})
+                                                                    </span>
                                                                 </c:if>
                                                             </c:forEach>
                                                         </c:when>

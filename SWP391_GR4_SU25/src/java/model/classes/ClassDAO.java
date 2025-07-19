@@ -43,13 +43,14 @@ public class ClassDAO extends DBContext {
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
         c.setStatus(resultSet.getString("status"));
+        c.setClassType(resultSet.getString("class_type"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
         return c;
     }
 
 
     public String createNewClass(Class c) {
-        String sql = "insert into [Class] values (?,?,?,?,?,?,?)";
+        String sql = "insert into [Class] values (?,?,?,?,?,?,?,?)";
         try {
             if (!isSchoolYearValid(c.getSchoolYear())) {
                 return "Lớp phải được tạo trước khi năm học bắt đầu 7 ngày";
@@ -75,6 +76,7 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(5, c.getSchoolYear().getId());
             preparedStatement.setString(6, "đang chờ xử lý");
             preparedStatement.setString(7, c.getCreatedBy().getId());
+            preparedStatement.setString(8, c.getClassType()); 
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -308,6 +310,9 @@ public class ClassDAO extends DBContext {
 
 
  public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
+
+       
+
         String sql = "update classDetails set class_id = ? where student_id= ? and class_id= ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -315,12 +320,17 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(2, studentId);
             preparedStatement.setString(3, oldClassId);
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
         return true;
     }
+
+
+
+   
  public String assignTeacherToClass(String teacherId, String classId) {
         String sql = "update [Class] set teacher_id = ? where id = ?";
         try {
@@ -328,10 +338,32 @@ public class ClassDAO extends DBContext {
             statement.setString(1, teacherId);
             statement.setString(2, classId);
             statement.executeUpdate();
+
         } catch (Exception e) {
             e.printStackTrace();
             return "Phân công giáo viên vào lớp thất bại! Vui lòng thử lại sau!";
         }
         return "success";
+    }
+ 
+    public List<Class> getClassByGradeIdAndSchoolYearAndStatus(String gradeId, String schoolYearId, String status) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "SELECT TOP (1000) [id], [name], [grade_id], [teacher_id], [school_year_id], [status], [created_by] "
+                + "FROM [Class] "
+                + "WHERE grade_id = ? AND school_year_id = ? AND status = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, gradeId);
+            statement.setString(2, schoolYearId);
+            statement.setString(3, status);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Class cls = createClass(rs);
+                classes.add(cls);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
     }
 }

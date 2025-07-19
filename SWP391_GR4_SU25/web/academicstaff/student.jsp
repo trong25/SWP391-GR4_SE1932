@@ -100,7 +100,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    
+
                                     <table class="table table-bordered" id="dataTable">
                                         <thead>
                                             <tr class="table">
@@ -111,6 +111,7 @@
                                                 <th>Mã Trường</th>
                                                 <th>Tên Trường Học</th>
                                                 <th>Tên Lớp Học</th>
+                                                <th>Khối Lớp</th>
                                                 <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
@@ -121,13 +122,14 @@
                                                     <th scope="row">${status.index + 1}</th>
                                                     <td>${student.id}</td>
                                                     <td>${student.lastName} ${student.firstName}</td>
-                                                    <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd"/></td>
+                                                    <td><fmt:formatDate value="${student.birthday}" pattern="dd/MM/yyyy"/></td>
+
                                                     <td>${student.school_id.id}</td>
                                                     <td>${student.school_id.schoolName}</td>
 
                                                     <td>${student.school_class_id.className}</td>
+                                                    <td>${student.school_class_id.grade_level}</td>
 
-                                                                                       
 
                                                     <c:set value="${student.status}" var="status"/>
                                                     <c:if test="${status eq 'đang theo học'}">
@@ -142,7 +144,7 @@
                                                         <c:if test="${status eq 'không được duyệt'}">
                                                         <td><span class="badge badge-danger">${status}</span></td>
                                                         </c:if>
-                                                   
+
                                                     <td class="text-center">
                                                         <form method="post" action="studentprofile">
                                                             <input hidden="" value="${student.id}" name="id"/>
@@ -255,6 +257,12 @@
                                                                         <option value="">-- Chọn lớp học --</option>
                                                                     </select>
                                                                 </div>
+
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="gradeLevel">Khối Học<a style="color: red">*</a></label>
+                                                                    <input type="text" class="form-control" id="gradeLevel" name="gradeName" style="width: 70%" value="${param.gradeName}">
+                                                                </div>
+
                                                                 <div class="form-group col-md-6">
                                                                     <label for="firstGuardianName">Họ tên Bố<a
                                                                             style="color: red">(*)</a></label>

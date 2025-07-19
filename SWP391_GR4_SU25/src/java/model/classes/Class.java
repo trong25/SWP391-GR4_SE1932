@@ -22,20 +22,31 @@ public class Class {
     private Personnel teacher;
     private SchoolYear schoolYear;
     private String status;
+    private String classType;
     private Personnel createdBy;
 
     public Class() {
     }
 
-    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, Personnel createdBy) {
+    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, String classType, Personnel createdBy) {
         this.id = id;
         this.name = name;
         this.grade = grade;
         this.teacher = teacher;
         this.schoolYear = schoolYear;
         this.status = status;
+        this.classType = classType;
         this.createdBy = createdBy;
     }
+
+    public String getClassType() {
+        return classType;
+    }
+
+    public void setClassType(String classType) {
+        this.classType = classType;
+    }
+
 
     public String getId() {
         return id;

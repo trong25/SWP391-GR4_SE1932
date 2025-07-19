@@ -72,7 +72,6 @@ public class DashboardStudentServlet extends HttpServlet {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             Date mon = calendar.getTime();
-            mon = new Date(125, 9, 8);
             Date sun = new Date(mon.getTime()+518400000);
             System.out.println(mon.toString());
             System.out.println(sun.toString());

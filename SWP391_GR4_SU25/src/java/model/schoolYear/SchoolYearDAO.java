@@ -297,5 +297,48 @@ public class SchoolYearDAO extends DBContext {
         String result = decimalFormat.format(number);
         return "SY" + result;
     }
+    public List<SchoolYear> getListSchoolYearsByPupilID(String id) {
+        List<SchoolYear> schoolYears = new ArrayList<>();
+        String sql = "select sy.* from Students p join classDetails cd on p.id = cd.student_id\n"
+                + "JOIN dbo.Class C on C.id = cd.class_id\n"
+                + "join dbo.SchoolYears SY on C.school_year_id = SY.id\n"
+                + "where p.id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                SchoolYear schoolYear = new SchoolYear();
+                schoolYear.setId(resultSet.getString("id"));
+                schoolYear.setName(resultSet.getString("name"));
+                schoolYear.setStartDate(resultSet.getDate("start_date"));
+                schoolYear.setEndDate(resultSet.getDate("end_date"));
+                schoolYear.setDescription(resultSet.getString("description"));
+                schoolYears.add(schoolYear);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return schoolYears;
+    }
+    
+    public boolean checkPupilInClassOfSchoolYear(String pupil_id, String school_year_id) {
+        String sql = "select * from Pupils p join classDetails cd on p.id = cd.pupil_id\n" +
+                "join dbo.Class C on cd.class_id = C.id\n" +
+                "where p.id =? and c.school_year_id =?";
+        try{
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, pupil_id);
+            statement.setString(2, school_year_id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }
