@@ -4,11 +4,10 @@
  */
 package model.schoolclass;
 
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
-import utils.DBContext;
 import utils.DBContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;

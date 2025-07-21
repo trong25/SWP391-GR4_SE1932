@@ -9,10 +9,10 @@ import model.grade.Grade;
 /**
  * Lớp Subject khai báo các thuộc tính của một môn học trong hệ thống. Được sử
  * dụng để quản lý thông tin về lớp học như: mã, tên, trạng thái, mô tả , kiểu
- * môn học và người tạo.
+ * môn học,giá tiền và người tạo.
  *
  * @author TrongNV
- * @author MSI
+ * @author ThanhNT
  */
 public class Subject {
 
@@ -22,6 +22,7 @@ public class Subject {
     private String description;
     private String status;
     private String subjectType;
+
 
     public Subject() {
     }
@@ -33,8 +34,8 @@ public class Subject {
         this.description = description;
         this.status = status;
         this.subjectType = subjectType;
+      
     }
-
     public String getId() {
         return id;
     }

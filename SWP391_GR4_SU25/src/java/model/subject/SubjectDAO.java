@@ -7,10 +7,6 @@ package model.subject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +44,7 @@ public class SubjectDAO extends DBContext {
         subject.setDescription(resultSet.getString("description"));
 
         // Thêm dòng này để lấy subject_type từ DB
-        subject.setSubjectType(resultSet.getString("subject_type"));
+        subject.setSubjectType(resultSet.getString("subject_type"));  
 
         return subject;
     }

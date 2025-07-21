@@ -9,13 +9,15 @@ import model.personnel.Personnel;
 import model.schoolYear.SchoolYear;
 
 /**
- * Lớp Class khai báo các thuộc tính của một lớp học trong hệ thống.
- * Được sử dụng để quản lý thông tin về lớp học như: mã, tên, khối, giáo viên,năm học, trạng thái,
- * mô tả và người tạo.
+ * Lớp Class khai báo các thuộc tính của một lớp học trong hệ thống. Được sử
+ * dụng để quản lý thông tin về lớp học như: mã, tên, khối, giáo viên,năm học,
+ * trạng thái, mô tả và người tạo.
+ *
  * @author TrongNV
  * @version1.0
  */
 public class Class {
+
     private String id;
     private String name;
     private Grade grade;
@@ -23,11 +25,12 @@ public class Class {
     private SchoolYear schoolYear;
     private String status;
     private Personnel createdBy;
+    private int fee;
 
     public Class() {
     }
 
-    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, Personnel createdBy) {
+    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, Personnel createdBy, int fee) {
         this.id = id;
         this.name = name;
         this.grade = grade;
@@ -35,6 +38,15 @@ public class Class {
         this.schoolYear = schoolYear;
         this.status = status;
         this.createdBy = createdBy;
+        this.fee = fee;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
     }
 
     public String getId() {
@@ -92,6 +104,5 @@ public class Class {
     public void setCreatedBy(Personnel createdBy) {
         this.createdBy = createdBy;
     }
-    
-    
+
 }
