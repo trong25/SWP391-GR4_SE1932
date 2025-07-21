@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller.director;
+package Controller.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +15,7 @@ import model.student.StudentDAO;
 /**
  * Servlet ReviewStudentServlet xử lý các yêu cầu HTTP liên quan đến việc duyệt học sinh.
  * 
- * URL Mapping: /director/reviewstudent
+ * URL Mapping: /admin/reviewstudent
  * 
  * 🔹 Chức năng:
  * - Phương thức GET: Lấy danh sách học sinh đang chờ xử lý từ cơ sở dữ liệu và hiển thị trên trang `reviewStudent.jsp`.

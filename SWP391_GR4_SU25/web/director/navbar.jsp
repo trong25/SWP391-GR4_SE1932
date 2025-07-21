@@ -66,7 +66,7 @@
         </div>
     </li>
 
-    <!-- Quản lý học sinh -->
+<!--     Quản lý học sinh 
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePupil">
             <i class="fas fa-fw fa-user"></i>
@@ -78,7 +78,7 @@
                 <a class="collapse-item" href="reviewstudent">Học Sinh Cần Phê Duyệt</a>
             </div>
         </div>
-    </li>
+    </li>-->
 
     <!-- Quản lý nhân sự -->
     <li class="nav-item">

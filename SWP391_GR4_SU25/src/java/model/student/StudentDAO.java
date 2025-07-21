@@ -1054,6 +1054,20 @@ public class StudentDAO extends DBContext {
         }
         return null;
     }
+    public List<String> getAllStudentStatus() {
+        String sql = "select distinct status from Students";
+        List<String> status = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                status.add(resultSet.getString("status"));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return status;
+    }
 
 }
 //     public List<Student> getStudentsWithoutClass(String schoolYearId) {

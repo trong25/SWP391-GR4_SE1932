@@ -54,32 +54,27 @@
                     <div class="container-fluid">
                         <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Học Sinh</h1>
                         <div class="row align-items-center">
-                            <c:set var="schoolYearSelect" value="${requestScope.schoolYearSelect}"/>
-                            <c:set var="classesSelect" value="${requestScope.classSelect}"/>
+                            <c:set var="sltedstatus" value="${requestScope.selectedStatus}" />
 
-                            <!-- Form section with select elements -->
-                            <div class="col-lg-8 d-flex">
-                                <form action="listpupil" id="myForm" class="d-flex w-100">
-                                    <div class="flex-grow-1 mb-4">
-                                        <label>Chọn năm học</label>
-                                        <select class="custom-select " aria-label="Default select example" onchange="resetClassAndSubmitForm()" name="schoolYear" style="width: 40%">
-                                            <c:forEach items="${requestScope.listSchoolYear}" var="year">
-                                                <option ${schoolYearSelect eq year.id ? "selected" : ""} value="${year.id}">${year.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <div class="me-3 flex-grow-1 mb-4 ">
-                                        <label>Chọn lớp</label>
-                                        <select id="classes" class="custom-select " aria-label="Default select example" onchange="submitForm()" name="classes" style="width: 40%">
-                                            <option value="">Chọn lớp</option>
-                                            <c:forEach items="${requestScope.listClass}" var="c">
-                                                <option ${classesSelect eq c.id ? "selected" : ""} value="${c.id}">${c.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                            <div class="class-form">
+                                <form action="listpupil" method="get" class="class-form">
+                                    <label>Trạng thái
+                                        <select name="status" onchange="this.form.submit()" class="custom-select">
+                                            <option value="" hidden>Trạng thái</option>
 
+                                            <!-- Duyệt các trạng thái -->
+                                            <c:forEach items="${requestScope.statuss}" var="r">
+                                                <option value="${r}" ${sltedstatus eq r ? "selected" : ""}>${r}</option>
+                                            </c:forEach>
+
+                                            <!-- Tùy chọn: Hiện toàn bộ trạng thái -->
+                                            <option value="all" ${sltedstatus eq 'all' or empty sltedstatus ? "selected" : ""}>Hiện toàn bộ trạng thái</option>
+                                        </select>
+                                    </label>
                                 </form>
+
                             </div>
+
                         </div>
 
 
@@ -130,6 +125,7 @@
                                                 <th>Họ và tên</th>
                                                 <th>Ngày sinh</th>
                                                 <th>Địa chỉ</th>
+                                                <th>Trạng thái</th>
                                                 <th>Hành động</th>
                                             </tr>
                                         </thead>
@@ -153,11 +149,25 @@
                                                 <td><fmt:formatDate value="${pupil.birthday}" pattern="yyyy/MM/dd" /></td>
                                                 <td>${pupil.address}</td>
                                                 <td>
+                                                    <c:choose>
+                                                        <c:when test="${pupil.status == 'đang theo học'}">
+                                                            <span class="badge badge-success">${pupil.status}</span>
+                                                        </c:when>
+                                                        <c:when test="${pupil.status == 'đang chờ xử lý'}">
+                                                            <span class="badge badge-warning">${pupil.status}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge badge-info">${pupil.status}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+
+                                                <td>
                                                     <form action="studentsprofile" method="post">
                                                         <input name="id" value="${pupil.id}" hidden/>
                                                         <button type="submit" class="btn btn-primary">Thông tin chi tiết</button>
                                                     </form>
-                                                </td>
+                                                </td>   
                                             </tr>
                                         </c:forEach>
                                         </tbody>

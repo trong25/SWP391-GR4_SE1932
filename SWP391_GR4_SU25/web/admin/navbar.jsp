@@ -93,6 +93,19 @@
                     <i class="fas fa-fw fa-user-friends"></i>
                     <span>Quản lý nhân sự</span></a>
             </li>
+             <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePupil">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Quản lý học sinh</span>
+        </a>
+        <div id="collapsePupil" class="collapse">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="listpupil">Danh Sách Học Sinh</a>
+                <a class="collapse-item" href="reviewstudent">Học Sinh Cần Phê Duyệt</a>
+            </div>
+        </div>
+    </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

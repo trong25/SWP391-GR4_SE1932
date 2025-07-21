@@ -262,13 +262,13 @@
                                                                     </c:if>
                                                                     <c:if test="${p.getStatus() == 'đang làm việc'}">
                                                                         <div class="col-lg-4">
-                                                                            <button class="btn btn-danger w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Nghỉ việc</button>
+                                                                            <button class="btn btn-danger w-100" onclick="confirmAndSubmit('resign', '${p.getId()}')">Nghỉ việc</button>
                                                                         </div>
 
                                                                     </c:if>
                                                                     <c:if test="${p.getStatus() == 'đã nghỉ việc'}">
                                                                         <div class="col-lg-4">
-                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Đi làm trở lại</button>
+                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('accept', '${p.getId()}')">Đi làm trở lại</button>
                                                                         </div>
 
                                                                     </c:if>
@@ -370,7 +370,10 @@
                     message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
                     break;
                 case 'decline':
-                    message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
+                    message = 'Bạn có chắc muốn từ chối nhân sự này không?';
+                    break;
+                case 'resign':
+                    message = 'Bạn có chắc muốn cho nghỉ nhân sự này không?';
                     break;
                 default:
                     message = 'Bạn có chắc muốn thực hiện hành động này không?';

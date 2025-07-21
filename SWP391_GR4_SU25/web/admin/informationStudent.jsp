@@ -198,7 +198,6 @@
                                                     ${student.userId != null ? student.userId : 'Chưa có tài khoản'}
                                                 </div>
                                             </div>
-
                                             <div class="info-item">
                                                 <div class="info-label">Ngày Sinh</div>
                                                 <div class="info-value">
@@ -212,6 +211,8 @@
                                                     </c:choose>
                                                 </div>
                                             </div>
+
+
 
                                             <!-- Guardian 1 Information -->
                                             <div class="info-item">
@@ -251,6 +252,7 @@
                                                 </div>
                                             </div>
 
+
                                             <!-- Address - Full Width -->
                                             <div class="info-item full-width">
                                                 <div class="info-label">Địa Chỉ</div>
@@ -267,43 +269,61 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row text-center align-content-center my-3">
+
+                                        <div class="row text-center my-3">
                                             <c:if test="${student.status == 'đang chờ xử lý'}">
-                                                <!-- Nút Chấp nhận -->
-                                                <div class="col-lg-4 mb-2">
-                                                    <form method="post" action="reviewstudent" id="accept-form-${student.id}">
-                                                        <input type="hidden" name="action" value="accept">
-                                                        <input type="hidden" name="id" value="${student.id}">
-                                                        <input type="hidden" name="status" value="${student.status}">
-                                                        <button type="button" class="btn btn-success w-100" 
-                                                                onclick="confirmAccept('accept-form-${student.id}', 'Bạn có chắc chắn duyệt học sinh này không?')">
-                                                            Chấp nhận
-                                                        </button>
+                                                <div class="col-lg-4">
+                                                    <form method="post" action="studentsprofile">
+                                                        <input type="hidden" name="action" value="accept"/>
+                                                        <input type="hidden" name="id" value="${student.id}"/>
+                                                        <button type="submit" class="btn btn-success w-100">Chấp nhận</button>
                                                     </form>
                                                 </div>
-
-                                                <!-- Nút Từ chối -->
-                                                <div class="col-lg-4 mb-2">
-                                                    <form method="post" action="reviewstudent" id="decline-form-${student.id}">
-                                                        <input type="hidden" name="action" value="decline">
-                                                        <input type="hidden" name="id" value="${student.id}">
-                                                        <input type="hidden" name="status" value="${student.status}">
-                                                        <button type="button" class="btn btn-danger w-100" 
-                                                                onclick="confirmAccept('decline-form-${student.id}', 'Bạn có chắc chắn từ chối học sinh này không?')">
-                                                            Từ chối
-                                                        </button>
+                                                <div class="col-lg-4">
+                                                    <form method="post" action="studentsprofile">
+                                                        <input type="hidden" name="action" value="decline"/>
+                                                        <input type="hidden" name="id" value="${student.id}"/>
+                                                        <button type="submit" class="btn btn-danger w-100">Từ chối</button>
                                                     </form>
                                                 </div>
                                             </c:if>
 
+                                            <c:if test="${student.status == 'đang theo học'}">
+                                                <div class="col-lg-4">
+                                                    <form method="post" action="studentsprofile">
+                                                        <input type="hidden" name="action" value="dropout"/>
+                                                        <input type="hidden" name="id" value="${student.id}"/>
+                                                        <button type="submit" class="btn btn-warning w-100">Nghỉ học</button>
+                                                    </form>
+                                                </div>
+                                            </c:if>
 
-                                            <!-- Nút Quay lại -->
-                                            <div class="col-lg-4 mb-2">
-                                                <button class="btn btn-info w-100" onclick="goBack()">
-                                                    <i class="fa fa-arrow-left"></i> Quay Lại
-                                                </button>
+                                            <c:if test="${student.status == 'đã nghỉ học'}">
+                                                <div class="col-lg-4">
+                                                    <form method="post" action="studentsprofile">
+                                                        <input type="hidden" name="action" value="accept"/>
+                                                        <input type="hidden" name="id" value="${student.id}"/>
+                                                        <button type="submit" class="btn btn-success w-100">Đi học lại</button>
+                                                    </form>
+                                                </div>
+                                            </c:if>
+
+                                            <c:if test="${student.status == 'không được duyệt'}">
+                                                <div class="col-lg-4">
+                                                    <form method="post" action="studentsprofile">
+                                                        <input type="hidden" name="action" value="accept"/>
+                                                        <input type="hidden" name="id" value="${student.id}"/>
+                                                        <button type="submit" class="btn btn-success w-100">Chấp nhận lại</button>
+                                                    </form>
+                                                </div>
+                                            </c:if>
+
+                                            <!-- Nút quay lại -->
+                                            <div class="col-lg-4">
+                                                <a href="listpupil" class="btn btn-info w-100">Quay lại</a>
                                             </div>
                                         </div>
+
 
                                     </div>
                                 </div>
