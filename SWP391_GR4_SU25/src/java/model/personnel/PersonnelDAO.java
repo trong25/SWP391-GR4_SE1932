@@ -244,16 +244,8 @@ public List<Personnel> getActivePersonnels() {
    public Personnel getPersonnel(String id) {
     String sql = """
         SELECT 
-            p.*, 
-            s.id AS salary_id,
-            s.salary_month, 
-            s.salary_year,
-            s.base_salary, 
-            s.total_salary, 
-            s.payment_status, 
-            s.payment_date
+            p.*
         FROM Personnels p
-        LEFT JOIN Salaries s ON p.id = s.personnel_id
         WHERE p.id = ?
     """;
 

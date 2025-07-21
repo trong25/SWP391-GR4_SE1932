@@ -96,9 +96,9 @@
                                                     <td>
                                                         <span class="badge badge-warning">${tt.status}</span>
                                                     </td>
-                                                    <td>${tt.teacher.lastName} ${tt.teacher.firstName}</td>
+                                                    <td>${tt.createdBy.lastName} ${tt.createdBy.firstName}</td>
                                                     <td>
-                                                        <form method="post" action="${pageContext.request.contextPath}/director/reviewTimetable">
+                                                        <form method="post" action="reviewtimetable">
                                                             <input type="hidden" name="timetableId" value="${tt.id}" />
                                                             <button type="submit" name="action" value="approve" class="btn btn-success btn-sm btn-custom-width">Duyệt</button>
                                                             <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm btn-custom-width">Từ chối</button>

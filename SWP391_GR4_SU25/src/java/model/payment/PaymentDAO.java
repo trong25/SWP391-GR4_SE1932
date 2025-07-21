@@ -27,6 +27,7 @@ public class PaymentDAO extends DBContext {
         payment.setYear(resultSet.getInt("year"));
         payment.setAmount(resultSet.getFloat("amount"));
         payment.setStatus(resultSet.getString("status"));
+        payment.setDueTo(resultSet.getDate("due_to"));
         payment.setPaymentDate(resultSet.getDate("payment_date"));
         payment.setNote(resultSet.getString("note"));
         return payment;
