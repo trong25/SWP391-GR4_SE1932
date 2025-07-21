@@ -19,7 +19,7 @@ public class Salary {
     private float totalSalary;
     private String paymentStatus;
     private Date paymentDate;
-
+private int workingDays;
     public Salary() {
     }
 
@@ -34,6 +34,16 @@ public class Salary {
         this.paymentDate = paymentDate;
     }
 
+    public int getWorkingDays() {
+        return workingDays;
+    }
+
+    public void setWorkingDays(int workingDays) {
+        this.workingDays = workingDays;
+    }
+
+    
+    
     public int getId() {
         return id;
     }
