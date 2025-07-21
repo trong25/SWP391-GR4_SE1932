@@ -1,3 +1,9 @@
+<%-- 
+    Document   : studentWait
+    Created on : Jul 22, 2025, 12:04:51 AM
+    Author     : MSI
+--%>
+
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -68,20 +74,7 @@
 
                         <!-- Form section with select elements -->
 
-                        <form action="student" id="myForm">
-                            <div class="row">
-                                <div class="col-lg-2 mb-4">
-                                    <label for="selectStatus">Chọn trạng thái</label>
-                                    <select class="custom-select" id="selectStatus" aria-label="Default select example" onchange="submitForm()" name="status">
-                                        <option ${param.status eq 'all'? "selected" :""} value="all">Tất cả</option>
-                                        <option  ${param.status eq 'pending'? "selected" :""} value="pending">Đang chờ xử lý</option>
-                                        <option ${param.status eq 'approve'? "selected" :""}  value="approve">Đang theo học</option>
-                                        <option  ${param.status eq 'decline'? "selected" :""} value="decline">Không được duyệt</option>
-                                        <option  ${param.status eq 'stop'? "selected" :""} value="stop">Đã thôi học</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
+
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -98,54 +91,36 @@
                                     <table class="table table-bordered" id="dataTable">
                                         <thead>
                                             <tr class="table">
-                                                <th>STT</th>
-                                                <th>Mã học sinh</th>
+                                                <th>STT</th>                                  
                                                 <th>Họ và tên</th>
                                                 <th>Ngày sinh</th>
-                                                <th>Mã Trường</th>
-                                                <th>Tên Trường Học</th>
-                                                <th>Tên Lớp Học</th>
-                                                <th>Khối Lớp</th>
-                                                <th>Trạng thái</th>
-                                                <th>Hành động</th>
+                                                <th>Địa chỉ</th>
+                                                <th>Email</th>
+                                                <th>Số điện Thoại</th>
+                                                <th>Giới Tính</th>
+
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach items="${requestScope.listStudent}" var="student" varStatus="status">
+                                            <c:forEach items="${requestScope.listStudentWait}" var="student" varStatus="status">
                                                 <tr>
-                                                    <th scope="row">${status.index + 1}</th>
-                                                    <td>${student.id}</td>
+                                                    <th scope="row">${status.index + 1}</th>                                                    
                                                     <td>${student.lastName} ${student.firstName}</td>
                                                     <td><fmt:formatDate value="${student.birthday}" pattern="dd/MM/yyyy"/></td>
-
-                                                    <td>${student.school_id.id}</td>
-                                                    <td>${student.school_id.schoolName}</td>
-
-                                                    <td>${student.school_class_id.className}</td>
-                                                    <td>${student.school_class_id.grade_level}</td>
-
-
-                                                    <c:set value="${student.status}" var="status"/>
-                                                    <c:if test="${status eq 'đang theo học'}">
-                                                        <td><span class="badge badge-success">${status}</span></td>
-                                                        </c:if>
-                                                        <c:if test="${status eq 'đã thôi học'}">
-                                                        <td><span class="badge badge-secondary">${status}</span></td>
-                                                        </c:if>
-                                                        <c:if test="${status eq 'đang chờ xử lý'}">
-                                                        <td><span class="badge badge-warning">${status}</span></td>
-                                                        </c:if>
-                                                        <c:if test="${status eq 'không được duyệt'}">
-                                                        <td><span class="badge badge-danger">${status}</span></td>
-                                                        </c:if>
-
-                                                    <td class="text-center">
-                                                        <form method="post" action="studentprofile">
-                                                            <input hidden="" value="${student.id}" name="id"/>
-                                                            <input hidden="" value="view" name="action"/>
-                                                            <button type="submit" class="btn btn-primary"> Thông tin chi tiết</button>
-                                                        </form>
+                                                    <td>${student.address}</td>
+                                                    <td>${student.email}</td>
+                                                    <td>${student.phoneNumber}</td>
+                                                    <td>
+                                                        <c:choose>
+                                                            <c:when test="${student.gender}">
+                                                                Nam
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                Nữ
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </td>
+
                                                 </tr>
                                             </c:forEach>
                                         <tbody>
@@ -167,32 +142,9 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <form action="student?action=create" method="post" id="create-form" onsubmit="return validateForm()">
+                                    <form action="studentwait?action=create" method="post" id="create-form" onsubmit="return validateForm()">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="imageUpload" class="form-label"
-                                                       style="cursor: pointer ;margin-left: 14px">Chọn hình ảnh<a
-                                                        style="color: red">(*)</a></label>
-                                                <input type="file" class="form-control" id="imageUpload"
-                                                       accept="image/*" onchange="previewImage(event)" name="avatar"
-                                                       value="${param.avatar}">
 
-                                                <div id="imagePreview" class="mt-3 text-center" style="display: none;">
-                                                    <img id="preview" src="../images${param.avatar}"
-                                                         class="img-fluid rounded-circle" alt="Preview Image">
-                                                </div>
-                                            </div>
-                                            <script>
-                                                function previewImage(event) {
-                                                    var reader = new FileReader();
-                                                    reader.onload = function () {
-                                                        var preview = document.getElementById('preview');
-                                                        preview.src = reader.result;
-                                                        document.getElementById('imagePreview').style.display = 'block';
-                                                    };
-                                                    reader.readAsDataURL(event.target.files[0]);
-                                                }
-                                            </script>
 
                                             <div class="col-md-9">
                                                 <c:set var="vietnamesePattern"
@@ -208,12 +160,7 @@
                                                                         style="color: red"> (*) </a><a
                                                                         style="font-weight: normal">là thông tin bắt buộc phải
                                                                         nhập</a></p>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="id">Mã học sinh</label>
-                                                                    <input type="text" class="form-control" id="id" name="id"
-                                                                           style="width: 70%" value="${requestScope.newStudentId}"
-                                                                           readonly>
-                                                                </div>
+
                                                                 <div class="form-group col-md-6">
                                                                     <label for="address">Địa chỉ<a
                                                                             style="color: red">(*)</a></label>
@@ -233,58 +180,15 @@
                                                                     <input type="text" class="form-control" id="firstName" style="width: 70%"
                                                                            name="firstName" value="${param.firstName}">
                                                                 </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="schoolID">Mã Trường Học<a style="color: red">(*)</a></label>
-                                                                    <select class="form-control" id="schoolID" name="schoolID" style="width: 70%" onchange="loadSchoolClasses(this.value)">
-                                                                        <option value="">-- Chọn trường học --</option>
-                                                                        <c:forEach var="school" items="${schoolList}">
-                                                                            <option value="${school.id}" ${param.schoolID == school.id ? "selected" : ""}>
-                                                                                ${school.id} - ${school.schoolName}
-                                                                            </option>
-                                                                        </c:forEach>
-                                                                    </select>
-                                                                </div>
+
 
                                                                 <div class="form-group col-md-6">
-                                                                    <label for="schoolClassID">Mã Lớp Học<a style="color: red">(*)</a></label>
-                                                                    <select class="form-control" id="schoolClassID" name="schoolClassId" style="width: 70%">
-                                                                        <option value="">-- Chọn lớp học --</option>
-                                                                    </select>
-                                                                </div>
-
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="gradeLevel">Khối Học<a style="color: red">*</a></label>
-                                                                    <input type="text" class="form-control" id="gradeLevel" name="gradeName" style="width: 70%" value="${param.gradeName}">
-                                                                </div>
-
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="firstGuardianName">Họ tên Bố<a
-                                                                            style="color: red">(*)</a></label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="firstGuardianName" name="firstGuardianName"
-                                                                           value="${param.firstGuardianName}">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="firstGuardianPhoneNumber" style="">Số điện thoại
-                                                                        Bố<a style="color: red">(*)</a></label><br>
-                                                                    <input style="width: 50%" type="text" class="form-control"
-                                                                           id="firstGuardianPhoneNumber"
-                                                                           name="firstGuardianPhoneNumber"
-                                                                           value="${param.firstGuardianPhoneNumber}">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="secondGuardianName">Họ tên </label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="secondGuardianName" name="secondGuardianName"
-                                                                           value="${param.secondGuardianName}">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại Mẹ
+                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại
                                                                     </label><br>
                                                                     <input style="width: 50%" type="text" class="form-control"
-                                                                           id="secondGuardianPhoneNumber"
-                                                                           name="secondGuardianPhoneNumber"
-                                                                           value="${param.secondGuardianPhoneNumber}">
+                                                                           id="phoneNumber"
+                                                                           name="phoneNumber"
+                                                                           value="${param.phoneNumber}">
                                                                 </div>
 
                                                                 <div class=" form-group col-md-6">
@@ -322,13 +226,7 @@
                                                                            id="cancel-button">Hủy bỏ</a>
                                                                     </div>
                                                                 </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="parentNote">Cam kết thông tin trên là chính xác<a
-                                                                            style="color: red">(*)</a></label>
-                                                                    <textarea name="note" class="form-control" id="parentNote"
-                                                                              rows="4" style="height: 60%"
-                                                                              >${param.note}</textarea>
-                                                                </div>
+                                                                
 
                                                             </div>
                                                         </div>
@@ -349,66 +247,15 @@
         </div>
 
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const form = document.querySelector("form"); // điều chỉnh selector nếu cần
-                form.addEventListener("submit", function (event) {
-                    const schoolSelect = document.getElementById("schoolID");
-                    const classSelect = document.getElementById("schoolClassID");
-
-                    let isValid = true;
-                    let message = "";
-
-                    if (schoolSelect.value.trim() === "") {
-                        isValid = false;
-                        message += "Vui lòng chọn trường học.\n";
-                    }
-
-                    if (classSelect.value.trim() === "") {
-                        isValid = false;
-                        message += "Vui lòng chọn lớp học.\n";
-                    }
-
-                    if (!isValid) {
-                        event.preventDefault(); // Ngăn không cho submit form
-                        alert(message); // hoặc thay bằng toast nếu bạn đang dùng thư viện thông báo
-                    }
-                });
-            });
-
-            function loadSchoolClasses(schoolId) {
-                const classSelect = document.getElementById("schoolClassID");
-                classSelect.innerHTML = '<option value="">-- Đang tải lớp học --</option>';
-
-                fetch('student?schoolId=' + schoolId, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                        .then(response => response.json())
-                        .then(data => {
-                            classSelect.innerHTML = '<option value="">-- Chọn lớp học --</option>';
-                            data.forEach(function (schoolClass) {
-                                const option = document.createElement("option");
-                                option.value = schoolClass.id;
-                                option.text = schoolClass.className;
-                                classSelect.appendChild(option);
-                            });
-                        })
-                        .catch(error => {
-                            classSelect.innerHTML = '<option value="">-- Không thể tải lớp học --</option>';
-                        });
-            }
-        </script>
+        
 
         <script>
             function validateForm() {
                 var vietnamesePattern = "ĐđaáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵAÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶEÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊOÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢUÚÙỦŨỤƯỨỪỬỮỰYÝỲỶỸỴ";
-                var phoneNumber1 = document.getElementById('firstGuardianPhoneNumber').value;
-                var phoneNumber2 = document.getElementById('secondGuardianPhoneNumber').value;
+               
+                var phoneNumber2 = document.getElementById('phoneNumber').value;
                 var address = document.getElementById('address').value;
-                var guardianName1 = document.getElementById("firstGuardianName").value;
-                var guardianName2 = document.getElementById("secondGuardianName").value;
+                
                 var firstName = document.getElementById("firstName").value;
                 var lastName = document.getElementById("lastName").value;
                 var email = document.getElementById(("email")).value;
@@ -487,10 +334,9 @@
                 document.getElementById('address').value = '';
                 document.getElementById('lastName').value = '';
                 document.getElementById('firstName').value = '';
-                document.getElementById('secondGuardianName').value = '';
-                document.getElementById('firstGuardianName').value = '';
-                document.getElementById('secondGuardianPhoneNumber').value = '';
-                document.getElementById('firstGuardianPhoneNumber').value = '';
+               
+                document.getElementById('phoneNumber').value = '';
+                
                 document.getElementById('birth').value = '';
                 document.getElementById('email').value = '';
                 document.getElementById('parentNote').value = '';
@@ -506,5 +352,6 @@
 
     </body>
 </html>
+
 
 

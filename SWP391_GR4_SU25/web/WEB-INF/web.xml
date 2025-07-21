@@ -231,6 +231,10 @@
         <servlet-name>CreateSalaryServlet</servlet-name>
         <servlet-class>Controller.accountant.CreateSalaryServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentWaitServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.StudentWaitServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -426,5 +430,9 @@
     <servlet-mapping>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <url-pattern>/accountant/createsalary</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentWaitServlet</servlet-name>
+        <url-pattern>/academicstaff/studentwait</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -87,7 +87,11 @@
                     <span>Xem Điểm Danh Học Sinh</span>
                 </a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link" href="studentwait">
+                    <i class="fas fa-fw fa-solid fa-graduation-cap"></i>
+                    <span>Quản lý học sinh chờ</span></a>
+            </li>
             <!-- Nav Item -->
             <li class="nav-item">
                 <a class="nav-link" href="student">
@@ -132,11 +136,11 @@
                     <span>Quản lý môn học</span></a>
             </li>
 
-<!--            <li class="nav-item">
-                <a class="nav-link" href="">
-                    <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
-                    <span>Danh Sách Sự Kiện</span></a>
-            </li>-->
+            <!--            <li class="nav-item">
+                            <a class="nav-link" href="">
+                                <i class="fas fa-fw fa-calendar-check" aria-hidden="true"></i>
+                                <span>Danh Sách Sự Kiện</span></a>
+                        </li>-->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseNoti"
                    aria-expanded="true" aria-controls="collapseTwo">
