@@ -247,6 +247,10 @@
         <servlet-name>SendPaymentNoticeServlet</servlet-name>
         <servlet-class>Controller.accountant.SendPaymentNoticeServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>viewSentInvoicesServlet</servlet-name>
+        <servlet-class>Controller.accountant.viewSentInvoicesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -458,5 +462,9 @@
     <servlet-mapping>
         <servlet-name>SendPaymentNoticeServlet</servlet-name>
         <url-pattern>/accountant/notify-payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewSentInvoicesServlet</servlet-name>
+        <url-pattern>/accountant/view-sentInvoices</url-pattern>
     </servlet-mapping>
 </web-app>

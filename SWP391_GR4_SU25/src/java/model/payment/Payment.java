@@ -16,22 +16,24 @@ public class Payment {
     private String code;
     private String studentId;
     private String classId;
-    private String dayId;
-    private int amount;
+    private int month;        // Thêm field này
+    private int year;         // Thêm field này
+    private float amount;     // Đổi từ int sang float
     private String status;
     private Date paymentDate;
-    private Date dueDate;
+    private Date dueDate;     // Tương ứng với due_to trong DB
     private String note;
 
     public Payment() {
     }
 
-    public Payment(Integer id, String code, String studentId, String classId, String dayId, int amount, String status, Date paymentDate, Date dueDate, String note) {
+    public Payment(Integer id, String code, String studentId, String classId, int month, int year, float amount, String status, Date paymentDate, Date dueDate, String note) {
         this.id = id;
         this.code = code;
         this.studentId = studentId;
         this.classId = classId;
-        this.dayId = dayId;
+        this.month = month;
+        this.year = year;
         this.amount = amount;
         this.status = status;
         this.paymentDate = paymentDate;
@@ -71,19 +73,27 @@ public class Payment {
         this.classId = classId;
     }
 
-    public String getDayId() {
-        return dayId;
+    public int getMonth() {
+        return month;
     }
 
-    public void setDayId(String dayId) {
-        this.dayId = dayId;
+    public void setMonth(int month) {
+        this.month = month;
     }
 
-    public int getAmount() {
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 
@@ -118,7 +128,5 @@ public class Payment {
     public void setNote(String note) {
         this.note = note;
     }
-
-   
 
 }

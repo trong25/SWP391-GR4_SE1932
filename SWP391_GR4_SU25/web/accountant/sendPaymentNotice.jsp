@@ -8,7 +8,7 @@
         <title>Tạo Hóa Đơn Học Phí</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+
         <!-- Toast CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -24,7 +24,7 @@
             session.removeAttribute("toastMessage");
             session.removeAttribute("toastType");
         %>
-        
+
         <script>
             $(document).ready(function () {
                 // Toast configuration
@@ -34,10 +34,10 @@
                     showMethod: 'fadeIn',
                     hideMethod: 'fadeOut'
                 };
-                
+
                 var toastMessage = '<%= toastMessage %>';
                 var toastType = '<%= toastType %>';
-                
+
                 if (toastMessage && toastMessage !== 'null') {
                     if (toastType === 'success') {
                         toastr.success(toastMessage);
@@ -48,7 +48,7 @@
             });
         </script>
     </head>
-    
+
     <body id="page-top">
         <div id="wrapper">
             <jsp:include page="navbar.jsp"/>
@@ -98,7 +98,7 @@
                                                                     <c:when test="${not empty student.avatar}">
                                                                         <img src="../images/${student.avatar}" 
                                                                              class="img-thumbnail"
-                                                                             style="width: 60px; height: 60px; object-fit: cover;"
+                                                                             style="width: 120px; height: 150px; object-fit: cover;"
                                                                              alt="Avatar của ${student.firstName}">
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -131,10 +131,13 @@
                                                                         data-student-name="${student.lastName} ${student.firstName}"
                                                                         data-class-code="${student.classId}"
                                                                         data-class-name="${student.className}"
-                                                                        data-fee="${student.fee}">
-                                                                    <i class="fas fa-file-invoice"></i> Tạo hóa đơn
+                                                                        data-fee="${student.fee}"
+                                                                        data-present-count="${student.presentCount}">
+                                                                    <i class="fas fa-file-invoice"></i> Tạo hóa đơn - 
+                                                                    <fmt:formatNumber value="${student.fee * student.presentCount}" type="number" groupingUsed="true"/>₫ / ${student.presentCount} buổi
                                                                 </button>
                                                             </td>
+
                                                         </tr>
                                                     </c:forEach>
                                                 </tbody>
@@ -207,12 +210,17 @@
                                                     <div class="form-group">
                                                         <label class="font-weight-bold text-danger">Số tiền cần đóng *</label>
                                                         <div class="input-group">
-                                                            <input type="number" name="amount" id="amount" class="form-control" required min="1" step="1000">
+                                                            <input type="text" name="amount" id="amount" class="form-control" required>
                                                             <div class="input-group-append">
                                                                 <span class="input-group-text">₫</span>
                                                             </div>
                                                         </div>
-                                                        <small class="text-muted">Học phí chuẩn: <span id="standardFee"></span></small>
+
+                                                        <small class="text-muted">
+                                                            Học phí chuẩn: <span id="standardFeeFormatted"></span>₫ /
+                                                            <span id="totalSessions"></span> buổi
+                                                        </small>
+
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
@@ -258,15 +266,71 @@
 
         <!-- JavaScript -->
         <script>
+            function formatCurrency(number) {
+                return number.toLocaleString('vi-VN');
+            }
+
+            document.querySelectorAll('.open-modal').forEach(button => {
+                button.addEventListener('click', function () {
+                    const fee = parseInt(this.getAttribute('data-fee'));
+                    const presentCount = parseInt(this.closest('tr').querySelector('[data-present-count]').dataset.presentCount);
+
+                    const total = fee * presentCount;
+
+                    // Hiển thị lên các ô input
+                    document.getElementById('amount').value = formatCurrency(total);
+                    document.getElementById('standardFeeFormatted').innerText = formatCurrency(fee);
+                    document.getElementById('totalSessions').innerText = presentCount;
+                });
+            });
+        </script>
+
+        <script>
+            const amountInput = document.getElementById("amount");
+
+            amountInput.addEventListener("input", function () {
+                let raw = this.value.replace(/\D/g, ""); // bỏ hết ký tự không phải số
+                if (!raw)
+                    return this.value = "";
+
+                let formatted = new Intl.NumberFormat('vi-VN').format(raw);
+                this.value = formatted;
+            });
+
+            // Nếu cần lấy giá trị raw (không có dấu chấm) khi submit:
+            document.querySelector("form").addEventListener("submit", function () {
+                const raw = amountInput.value.replace(/\./g, "").replace(/,/g, "");
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = "amount_raw";
+                hiddenInput.value = raw;
+                this.appendChild(hiddenInput);
+            });
+        </script>
+
+        <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const openModalButtons = document.querySelectorAll(".open-modal");
                 const form = document.getElementById("paymentForm");
-                
-                // Set minimum date for due date (tomorrow)
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                const minDate = tomorrow.toISOString().split('T')[0];
-                document.getElementById("dueDate").setAttribute("min", minDate);
+
+                // Thiết lập ngày hạn tối thiểu (20 ngày kể từ hôm nay)
+                openModalButtons.forEach(button => {
+                    button.addEventListener("click", function () {
+                        // ...
+
+                        // Thiết lập min cho dueDate ngay khi mở modal
+                        const dueDateInput = document.getElementById("dueDate");
+                        const todayPlus20 = new Date();
+                        todayPlus20.setDate(todayPlus20.getDate() + 20);
+                        const minDate = todayPlus20.toISOString().split('T')[0];
+                        dueDateInput.setAttribute("min", minDate);
+
+                        // Thiết lập ngày hạn mặc định là 20 ngày sau
+                        dueDateInput.value = minDate;
+
+                        // ...
+                    });
+                });
 
                 openModalButtons.forEach(button => {
                     button.addEventListener("click", function () {
@@ -276,10 +340,10 @@
                         const className = this.getAttribute("data-class-name");
                         const fee = this.getAttribute("data-fee");
 
-                        // Generate invoice code
+                        // Tạo mã hóa đơn ngẫu nhiên
                         const code = "HD" + Date.now();
-                        
-                        // Set display values
+
+                        // Gán các giá trị hiển thị
                         document.getElementById("displayCode").value = code;
                         document.getElementById("displayStudentId").value = studentId;
                         document.getElementById("studentName").value = studentName;
@@ -287,55 +351,59 @@
                         document.getElementById("className").value = className;
                         document.getElementById("standardFee").textContent = new Intl.NumberFormat('vi-VN').format(fee) + " ₫";
 
-                        // Set hidden values
+                        // Gán giá trị số tiền (input ẩn)
+                        document.getElementById("amount").value = parseFloat(fee);
+
+                        // Gán các giá trị ẩn
                         document.getElementById("code").value = code;
                         document.getElementById("student_id").value = studentId;
                         document.getElementById("class_id").value = classId;
-                        
-                        // Set default amount to class fee
-                        document.getElementById("amount").value = fee;
-                        
-                        // Set default due date (30 days from now)
+
+                        // Thiết lập ngày hạn mặc định là 20 ngày sau
                         const defaultDueDate = new Date();
-                        defaultDueDate.setDate(defaultDueDate.getDate() + 30);
+                        defaultDueDate.setDate(defaultDueDate.getDate() + 20);
                         document.getElementById("dueDate").value = defaultDueDate.toISOString().split('T')[0];
-                        
-                        // Clear note
+
+                        // Reset ghi chú
                         document.getElementById("note").value = "";
                     });
                 });
 
-                // Form submission handling
-                form.addEventListener("submit", function(e) {
+                // Xử lý khi submit form
+                form.addEventListener("submit", function (e) {
                     const submitBtn = document.getElementById("submitBtn");
                     const amount = document.getElementById("amount").value;
                     const dueDate = document.getElementById("dueDate").value;
-                    
-                    // Basic validation
+
                     if (!amount || parseFloat(amount) <= 0) {
                         e.preventDefault();
                         toastr.error("Vui lòng nhập số tiền hợp lệ!");
                         return;
                     }
-                    
+
                     if (!dueDate) {
                         e.preventDefault();
                         toastr.error("Vui lòng chọn hạn đóng tiền!");
                         return;
                     }
-                    
-                    // Disable submit button to prevent double submission
+
+                    // Vô hiệu hóa nút để tránh submit nhiều lần
                     submitBtn.disabled = true;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
                 });
             });
         </script>
 
+
         <!-- DataTables JavaScript -->
         <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
         <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
+                if ($.fn.DataTable.isDataTable('#dataTable')) {
+                    $('#dataTable').DataTable().destroy();
+                }
+
                 $('#dataTable').DataTable({
                     language: {
                         url: "//cdn.datatables.net/plug-ins/1.10.24/i18n/Vietnamese.json"
@@ -344,6 +412,7 @@
                     pageLength: 25
                 });
             });
+
         </script>
     </body>
 </html>
