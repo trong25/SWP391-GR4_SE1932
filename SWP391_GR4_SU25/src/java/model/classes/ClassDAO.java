@@ -60,8 +60,7 @@ public class ClassDAO extends DBContext {
 
     public String createNewClass(Class c) {
 
-        String sql = "INSERT INTO [Class] (id, name, grade_id, teacher_id, school_year_id, status, created_by, fee)"
-                + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into [Class] values (?,?,?,?,?,?,?,?,?)";
 
         try {
             if (!isSchoolYearValid(c.getSchoolYear())) {
@@ -94,8 +93,13 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(5, c.getSchoolYear().getId());
             preparedStatement.setString(6, "đang chờ xử lý");
             preparedStatement.setString(7, c.getCreatedBy().getId());
+
+            preparedStatement.setString(8, c.getClassType()); 
+            preparedStatement.setInt(9,c.getFee()); 
+
             // Thêm giá trị fee
             preparedStatement.setInt(8, c.getFee());
+
 
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -146,7 +150,7 @@ public class ClassDAO extends DBContext {
     }
 
     public List<Class> getByStatus(String status, String schoolYearId) {
-        String sql = "SELECT * FROM Class WHERE [status] = ? AND school_year_id = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM [Class] WHERE [status] = ? AND school_year_id = ? ORDER BY id DESC";
         try {
             List<Class> classes = new ArrayList<>();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -166,7 +170,7 @@ public class ClassDAO extends DBContext {
     }
 
     public Class getClassById(String id) {
-        String sql = "select * from [Class] where id = ?";
+        String sql = "SELECT * FROM [Class] WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, id);
@@ -182,7 +186,7 @@ public class ClassDAO extends DBContext {
 
     public List<Class> getBySchoolYear(String schoolYearId) {
         List<Class> classes = new ArrayList<>();
-        String sql = "select * from Class where school_year_id = ? order by id desc";
+        String sql = "SELECT * FROM [Class] WHERE school_year_id = ? order by id desc";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, schoolYearId);
@@ -198,10 +202,7 @@ public class ClassDAO extends DBContext {
     }
 
     public Class getClassNameByTeacher(String teacherId) {
-        String sql = "SELECT *\n"
-                + "                FROM Class\n"
-                + "                WHERE teacher_id = ?";
-
+        String sql = "SELECT * FROM [Class] WHERE teacher_id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, teacherId);
@@ -217,7 +218,7 @@ public class ClassDAO extends DBContext {
 
     public List<Class> getAll() {
         List<Class> classes = new ArrayList<>();
-        String sql = "SELECT * FROM Class ORDER BY id DESC";
+        String sql = "SELECT * FROM [Class] ORDER BY id DESC";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery();
@@ -254,7 +255,7 @@ public class ClassDAO extends DBContext {
 
     public List<Class> getBySchoolYearandStatus(String schoolYearId) {
         List<Class> classes = new ArrayList<>();
-        String sql = "select * from Class where school_year_id = ? and status = N'đã được duyệt'";
+        String sql = "SELECT * FROM [Class] WHERE school_year_id = ? AND status = N'đã được duyệt'";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, schoolYearId);
@@ -293,7 +294,7 @@ public class ClassDAO extends DBContext {
     }
 
     public Class getTeacherClassByYear(String year, String teacherId) {
-        String sql = "select * from Class c where teacher_id= ? and school_year_id= ?";
+        String sql = "SELECT * FROM [Class] WHERE teacher_id= ? AND school_year_id= ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, teacherId);
@@ -311,9 +312,9 @@ public class ClassDAO extends DBContext {
 
     public List<Class> getClassesByGradeAndSchoolYear(String classId, String gradeId, String schoolYearId) {
         List<Class> list = new ArrayList<>();
-        String sql = " select * from class where school_year_id= ? and grade_id= ? and status= N'đã được duyệt'";
+        String sql = "SELECT * FROM [Class] WHERE school_year_id= ? AND grade_id= ? AND status= N'đã được duyệt'";
         if (classId != null) {
-            sql += " and id != '" + classId + "'";
+            sql += " AND id != '" + classId + "'";
         }
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -382,4 +383,27 @@ public class ClassDAO extends DBContext {
         return "success";
     }
 
+ 
+    public List<Class> getClassByGradeIdAndSchoolYearAndStatus(String gradeId, String schoolYearId, String status) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "SELECT * FROM [Class] WHERE grade_id = ? AND school_year_id = ? AND status = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, gradeId);
+            statement.setString(2, schoolYearId);
+            statement.setString(3, status);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Class cls = createClass(rs);
+                classes.add(cls);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
+    }
 }
+
+
+}
+

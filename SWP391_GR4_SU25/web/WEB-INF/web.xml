@@ -258,6 +258,10 @@
         <servlet-name>ListPersonnelAdminServlet</servlet-name>
         <servlet-class>Controller.admin.ListPersonnelAdminServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentWaitServlet</servlet-name>
+        <servlet-class>Controller.academicstaff.StudentWaitServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
         <url-pattern>/academicstaff/dashboard</url-pattern>
@@ -455,6 +459,12 @@
         <url-pattern>/admin/listpersonnel</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
+        <servlet-name>StudentWaitServlet</servlet-name>
+        <url-pattern>/academicstaff/studentwait</url-pattern>
+    </servlet-mapping>
+</web-app>
+
         <servlet-name>ListStudentServlet</servlet-name>
         <url-pattern>/admin/listpupil</url-pattern>
     </servlet-mapping>
@@ -483,3 +493,4 @@
         <url-pattern>/director/viewpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>
+
