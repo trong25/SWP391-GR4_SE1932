@@ -49,7 +49,7 @@ public class Day {
     public void setDate(Date date) {
         this.date = date;
     }
-    
+
     public String convertToWeekDay()
         {
             // Create a Calendar object and set the date

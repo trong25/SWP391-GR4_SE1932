@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee          https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <!-- Filter Configuration -->
+<!-- Filter Configuration -->
+
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>utils.LoginFilter</filter-class>
@@ -174,10 +175,12 @@
         <servlet-name>ListStudentServlet</servlet-name>
         <servlet-class>Controller.director.ListStudentServlet</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>SchoolYearServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SchoolYearServlet</servlet-class>
     </servlet>
+
     <servlet>
         <servlet-name>SubjectServlet</servlet-name>
         <servlet-class>Controller.academicstaff.SubjectServlet</servlet-class>
@@ -220,6 +223,7 @@
         <servlet-class>Controller.accountant.TakeTimeKeepServlet</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>ListPersonnelServlett</servlet-name>
         <servlet-class>Controller.accountant.ListPersonnelSalaryServlett</servlet-class>
     </servlet>
@@ -230,6 +234,12 @@
     <servlet>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <servlet-class>Controller.accountant.CreateSalaryServlet</servlet-class>
+        
+    </servlet>
+    <servlet>
+        <servlet-name>ListPersonnelAdminServlet</servlet-name>
+        <servlet-class>Controller.admin.ListPersonnelAdminServlet</servlet-class>
+
     </servlet>
     <servlet>
         <servlet-name>StudentWaitServlet</servlet-name>
@@ -363,10 +373,12 @@
         <servlet-name>ResetPassword</servlet-name>
         <url-pattern>/admin/resetpassword</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>SchoolYearServlet</servlet-name>
         <url-pattern>/academicstaff/schoolyear</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>SubjectServlet</servlet-name>
         <url-pattern>/academicstaff/subject</url-pattern>
@@ -420,6 +432,7 @@
         <url-pattern>/accountant/taketimekeep</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>ListPersonnelServlett</servlet-name>
         <url-pattern>/accountant/listpersonnell</url-pattern>
     </servlet-mapping>
@@ -430,6 +443,11 @@
     <servlet-mapping>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <url-pattern>/accountant/createsalary</url-pattern>
+        </servlet-mapping>
+ <servlet-mapping>
+        <servlet-name>ListPersonnelAdminServlet</servlet-name>
+        <url-pattern>/admin/listpersonnel</url-pattern>
+
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>StudentWaitServlet</servlet-name>

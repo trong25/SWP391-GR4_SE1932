@@ -141,6 +141,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Ngày</th>
+                                                <th>Môn học</th>
+                                                <th>Ca học</th>
                                                 <th>Giáo viên</th>
                                                 <th>Trạng thái điểm danh</th>
                                                 <th>Ghi chú</th>
@@ -148,27 +150,42 @@
                                         </thead>
                                         <tbody>
                                             <c:forEach var="day" items="${requestScope.days}" varStatus="status">
-                                                <tr>
-                                                    <fmt:setLocale value="vi_VN" />
-                                                    <td>
-                                                        <fmt:formatDate value="${day.date}" pattern="EEEE" /> - <fmt:formatDate value="${day.date}" pattern="yyyy/MM/dd" />
-                                                    </td>
-                                                    <td>
-                                                        ${personneBean.getPersonnel(timetableBean.getTeacherByDayId(day.id)).lastName} ${personneBean.getPersonnel(timetableBean.getTeacherByDayId(day.id)).firstName}
-                                                    </td>
-                                                    <c:set var="attendance" value="${studentAttendanceBean.getAttendanceByStudentAndDay(requestScope.studentId, day.id)}"/>
-                                                    <c:set value="${attendance.status}" var="s"/>
-                                                    <c:if test="${s eq 'present'}">
-                                                        <td><span class="badge badge-success">có mặt</span></td>
-                                                    </c:if>
-                                                    <c:if test="${s eq 'absent'}">
-                                                        <td><span class="badge badge-danger">vắng</span>  </td>
-                                                    </c:if>
-                                                    <c:if test="${s == null}">
-                                                        <td><span class="badge badge-warning">chưa cập nhật</span>  </td>
-                                                    </c:if>
-                                                    <td>${attendance.note}</td>
-                                                </tr>
+                                                <c:set var="attendance" value="${studentAttendanceBean.getAttendanceByStudentAndDay(requestScope.studentId, day.id)}"/>
+                                                <c:forEach items="${timetableBean.getTeacherByDayId(day.id,sessionScope.student.id)}" var="teacherSlot" varStatus="countStatus">
+                                                    <tr>
+                                                        <fmt:setLocale value="vi_VN" />
+                                                        <c:if test="${countStatus.index eq 0}">
+                                                            <td rowspan="${timetableBean.getTeacherByDayId(day.id,sessionScope.student.id).size()}">
+                                                                <fmt:formatDate value="${day.date}" pattern="EEEE" /> - <fmt:formatDate value="${day.date}" pattern="yyyy/MM/dd" />
+                                                            </td>
+                                                        </c:if>
+                                                        <td>${teacherSlot.subjectName}</td>
+                                                        <td>${teacherSlot.timeslotName}</td>
+                                                        <c:if test="${timetableBean.getTeacherByDayId(day.id,sessionScope.student.id) == null}">
+                                                            <td>-</td>
+                                                        </c:if>
+                                                        <td>
+                                                            ${personneBean.getPersonnel(teacherSlot.teacherId).lastName} 
+                                                            ${personneBean.getPersonnel(teacherSlot.teacherId).firstName} 
+                                                        </td>
+
+                                                        <c:set value="${attendance.status}" var="s"/>
+                                                        <c:if test="${s eq 'present'}">
+                                                            <td><span class="badge badge-success">có mặt</span></td>
+                                                        </c:if>
+                                                        <c:if test="${s eq 'absent'}">
+                                                            <td><span class="badge badge-danger">vắng</span>  </td>
+                                                        </c:if>
+                                                        <c:if test="${s == null}">
+                                                            <td><span class="badge badge-warning">chưa cập nhật</span>  </td>
+                                                        </c:if>
+
+                                                        <td>${attendance.note}</td>
+
+
+
+                                                    </tr>
+                                                </c:forEach>
                                             </c:forEach>
                                         </tbody>
                                     </table>

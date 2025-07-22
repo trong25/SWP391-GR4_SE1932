@@ -62,7 +62,7 @@ public class ViewPersonnelServlet extends HttpServlet {
             String xpage = request.getParameter("page");
             Personnel person;
             PersonnelDAO personnelDAO = new PersonnelDAO();
-            person = personnelDAO.getPersonnel(xid);
+            person = personnelDAO.getPersonnels(xid);
             if (person == null) {
                 session.setAttribute("message", "Không tìm thấy nhân viên.");
                 session.setAttribute("type", "error");
