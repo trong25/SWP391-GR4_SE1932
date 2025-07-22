@@ -19,19 +19,19 @@ import utils.DBContext;
  */
 public class PaymentDAO extends DBContext {
 
-    public Payment createPayment(ResultSet rs) throws SQLException {
+     public Payment createPayment(ResultSet resultSet) throws SQLException {
         Payment payment = new Payment();
-        Student student = new Student();
-        payment.setId(rs.getInt("id"));
-        student.setAvatar("avatar");
-        payment.setCode(rs.getString("code"));
-        payment.setStudentId(rs.getString("student_id"));
-        payment.setClassId(rs.getString("class_id"));
-        payment.setAmount(rs.getInt("amount"));
-        payment.setStatus(rs.getString("status"));
-        payment.setPaymentDate(rs.getDate("payment_date"));
-        payment.setDueDate(rs.getDate("due_to"));
-        payment.setNote(rs.getString("note"));
+        payment.setId(resultSet.getInt("id"));
+        payment.setCode(resultSet.getString("code"));
+        payment.setStudentId(resultSet.getString("student_id"));
+        payment.setClassId(resultSet.getString("class_id"));
+        payment.setMonth(resultSet.getInt("month"));
+        payment.setYear(resultSet.getInt("year"));
+        payment.setAmount(resultSet.getFloat("amount"));
+        payment.setStatus(resultSet.getString("status"));
+        payment.setDueTo(resultSet.getDate("due_to"));
+        payment.setPaymentDate(resultSet.getDate("payment_date"));
+        payment.setNote(resultSet.getString("note"));
         return payment;
     }
 
@@ -101,7 +101,7 @@ public class PaymentDAO extends DBContext {
             ps.setInt(5, payment.getYear());
             ps.setFloat(6, payment.getAmount());
             ps.setString(7, payment.getNote());
-            ps.setDate(8, new java.sql.Date(payment.getDueDate().getTime())); //  dùng giá trị từ form
+            ps.setDate(8, new java.sql.Date(payment.getDueTo().getTime())); //  dùng giá trị từ form
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -203,6 +203,47 @@ public class PaymentDAO extends DBContext {
         }
 
         return list;
+    }
+
+    public boolean updatePaymentStatus(int paymentId, String newStatus) {
+        String sql = "UPDATE Payment SET status = ? WHERE payment_id = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            ps.setString(1, newStatus);
+            ps.setInt(2, paymentId);
+
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Update payment status - Rows affected: " + rowsAffected);
+
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating payment status: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } catch (Exception e) {
+            System.err.println("Unexpected error updating payment status: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updatePaymentNote(int paymentId, String note) {
+        String sql = "UPDATE Payment SET note = ? WHERE payment_id = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, note);
+            ps.setInt(2, paymentId);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error updating payment note: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }
