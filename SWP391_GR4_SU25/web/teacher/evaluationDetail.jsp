@@ -71,7 +71,7 @@
                                                     <c:if test="${evaluation.evaluation eq 'Tốt'}">
                                                         <span class="badge badge-success">${evaluation.evaluation}</span>
                                                     </c:if>
-                                                    <c:if test="${evaluation.evaluation eq ''}">
+                                                    <c:if test="${evaluation.evaluation eq 'Khá'}">
                                                         <span class="badge badge-danger">${evaluation.evaluation}</span>
                                                     </c:if>
                                                     <c:if test="${evaluation.evaluation eq 'Nghỉ học'}">

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : newjsp
-    Created on : 12 thg 7, 2025
-    Author     : PC
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -125,19 +120,15 @@
                                         <td>${student.lastName} ${student.firstName}</td>
                                         <td class="text-center" style="align-content: center">
                                             <c:choose>
-                                                <c:when test="${StudentAttendance.getAttendanceByStudentAndDay(student.id,dateId).status eq 'absent'}">
+                                                <c:when test="${studentAttendance.getAttendanceByStudentAndDay(student.id,dateId).status eq 'absent'}">
                                                     <input value="Nghỉ học" name="evaluation-${student.id}" readonly type="text" class="evaluation-input">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <input type="number" 
-                                                           class="form-control evaluation-input" 
-                                                           name="evaluation-${student.id}" 
-                                                           min="0" 
-                                                           max="10" 
-                                                           step="0.1"                                                          
-                                                           value="${evaluation.getEvaluationByStudentIdAndDay(student.id,dateId).evaluation}"
-                                                           required
-                                                           oninput="validateScore(this)">
+                                                    <select class="form-control evaluation-input" aria-label="Default select example" name="evaluation-${student.id}" required>
+                                                        <option value="" hidden="">-</option>
+                                                        <option value="Ngày Học Tốt" ${evaluation.getEvaluationByStudentIdAndDay(student.id,dateId).evaluation eq 'Tốt'?"selected":""} name="evaluationId-good">Ngày Học Tốt</option>
+                                                        <option value="Ngày Học Khá" ${evaluation.getEvaluationByStudentIdAndDay(student.id,dateId).evaluation eq 'Khá'?"selected":""} name="evaluationId-bad">Ngày Học Khá</option>
+                                                    </select>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
@@ -189,19 +180,6 @@
 <script>
     function goToAttendance() {
         window.location.href= 'takeattendance';
-    }
-    
-    function validateScore(input) {
-        var value = parseFloat(input.value);
-        if (value < 0) {
-            input.value = 0;
-        } else if (value > 10) {
-            input.value = 10;
-        }
-        // Giới hạn số thập phân tối đa 1 chữ số
-        if (input.value.includes('.') && input.value.split('.')[1].length > 1) {
-            input.value = parseFloat(input.value).toFixed(1);
-        }
     }
 </script>
 <!-- Page level plugins -->

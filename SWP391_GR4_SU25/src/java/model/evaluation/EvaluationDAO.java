@@ -38,12 +38,12 @@ public class EvaluationDAO extends DBContext {
         return evaluation;
     }
 
-    public Evaluation getEvaluationByStudentIdAndDay(String studentId, String timetableId) {
-        String sql = "select * from Evaluations where student_id=? and timetable_id=?";
+    public Evaluation getEvaluationByStudentIdAndDay(String studentId, String dateId) {
+        String sql = "select * from Evaluations where student_id=? and date_id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, studentId);
-            preparedStatement.setString(2, timetableId);
+            preparedStatement.setString(2, dateId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return createEvaluation(resultSet);

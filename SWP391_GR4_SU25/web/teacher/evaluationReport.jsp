@@ -1,8 +1,4 @@
-<%-- 
-    Document   : newjsp
-    Created on : 12 thg 7, 2025
-    Author     : PC
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -33,7 +29,7 @@
         <div id="content">
             <jsp:include page="../header.jsp"/>
             <div class="container-fluid">
-                <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Đánh </h1>
+                <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Phiếu Bé Ngoan</h1>
                 <form action="evaluationreport" method="post" id="myForm">
                     <div class="row">
                         <!-- Dropdown Chọn Năm Học -->
@@ -115,12 +111,12 @@
                                     <th>Họ và tên</th>
                                     <th>Ngày sinh</th>
                                     <th>Tổng số buổi nghỉ trong tuần</th>
-                                    <th>Số lượt đánh giá </th>
+                                    <th>Số lượt đánh giá ngoan của trẻ</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <jsp:useBean id="evaluationDAO" class="model.evaluation.EvaluationDAO"/>
-                                <c:forEach var="student" items="${requestScope.listStudent}" varStatus="status">
+                                <c:forEach var="student" items="${requestScope.listtudent}" varStatus="status">
                                     <tr>
                                         <th scope="row">${status.index + 1}</th>
                                         <td>${student.id}</td>
@@ -132,7 +128,7 @@
                                         <td>${student.lastName} ${student.firstName}</td>
                                         <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd" /></td>
                                         <td class="text-center align-middle">${evaluationDAO.getNumberOfStatus('Nghỉ học',student.id,weekId)}</td>
-                                        <td class="text-center align-middle">${evaluationDAO.getNumberOfStatus('Tốt',student.id,weekId)}</td>
+                                        <td class="text-center align-middle">${evaluationDAO.getNumberOfStatus('Ngoan',student.id,weekId)}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

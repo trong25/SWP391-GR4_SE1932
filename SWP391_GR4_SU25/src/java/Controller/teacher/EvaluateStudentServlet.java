@@ -26,7 +26,7 @@ import utils.Helper;
 
 
 @WebServlet(name = "teacher/EvaluateStudentServlet", value = "/teacher/evaluate")
-public class EvaluateStudentServlet1 extends HttpServlet {
+public class EvaluateStudentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         StudentDAO studentDAO = new  StudentDAO();
