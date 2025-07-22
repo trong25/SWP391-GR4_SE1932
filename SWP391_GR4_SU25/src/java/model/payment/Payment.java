@@ -12,22 +12,22 @@ import java.util.Date;
  */
 public class Payment {
 
-    private Integer id;
+   private Integer id;
     private String code;
     private String studentId;
     private String classId;
-    private int month;        // Thêm field này
-    private int year;         // Thêm field này
-    private float amount;     // Đổi từ int sang float
+    private Integer month;
+    private Integer year;
+    private Float amount;
     private String status;
+    private Date dueTo;
     private Date paymentDate;
-    private Date dueDate;     // Tương ứng với due_to trong DB
     private String note;
 
     public Payment() {
     }
 
-    public Payment(Integer id, String code, String studentId, String classId, int month, int year, float amount, String status, Date paymentDate, Date dueDate, String note) {
+    public Payment(Integer id, String code, String studentId, String classId, Integer month, Integer year, Float amount, String status, Date dueTo, Date paymentDate, String note) {
         this.id = id;
         this.code = code;
         this.studentId = studentId;
@@ -36,8 +36,8 @@ public class Payment {
         this.year = year;
         this.amount = amount;
         this.status = status;
+        this.dueTo = dueTo;
         this.paymentDate = paymentDate;
-        this.dueDate = dueDate;
         this.note = note;
     }
 
@@ -73,27 +73,27 @@ public class Payment {
         this.classId = classId;
     }
 
-    public int getMonth() {
+    public Integer getMonth() {
         return month;
     }
 
-    public void setMonth(int month) {
+    public void setMonth(Integer month) {
         this.month = month;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 
@@ -105,20 +105,20 @@ public class Payment {
         this.status = status;
     }
 
+    public Date getDueTo() {
+        return dueTo;
+    }
+
+    public void setDueTo(Date dueTo) {
+        this.dueTo = dueTo;
+    }
+
     public Date getPaymentDate() {
         return paymentDate;
     }
 
     public void setPaymentDate(Date paymentDate) {
         this.paymentDate = paymentDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
     }
 
     public String getNote() {
@@ -128,5 +128,8 @@ public class Payment {
     public void setNote(String note) {
         this.note = note;
     }
+
+   
+
 
 }

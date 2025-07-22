@@ -269,68 +269,70 @@
             function formatCurrency(number) {
                 return number.toLocaleString('vi-VN');
             }
+        </script>
 
-            document.querySelectorAll('.open-modal').forEach(button => {
-                button.addEventListener('click', function () {
-                    const fee = parseInt(this.getAttribute('data-fee'));
-                    const presentCount = parseInt(this.closest('tr').querySelector('[data-present-count]').dataset.presentCount);
+        <!-- Fixed JavaScript for amount input formatting -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const amountInput = document.getElementById("amount");
 
-                    const total = fee * presentCount;
+                // Format amount input with proper number formatting
+                amountInput.addEventListener("input", function () {
+                    let raw = this.value.replace(/\D/g, ""); // Remove non-digits
+                    if (!raw) return this.value = "";
 
-                    // Hiển thị lên các ô input
-                    document.getElementById('amount').value = formatCurrency(total);
-                    document.getElementById('standardFeeFormatted').innerText = formatCurrency(fee);
-                    document.getElementById('totalSessions').innerText = presentCount;
+                    let formatted = new Intl.NumberFormat('vi-VN').format(raw);
+                    this.value = formatted;
+                });
+
+                // Handle form submission with raw amount value
+                const form = document.getElementById("paymentForm");
+                form.addEventListener("submit", function (e) {
+                    const submitBtn = document.getElementById("submitBtn");
+                    const amount = document.getElementById("amount").value;
+                    const dueDate = document.getElementById("dueDate").value;
+
+                    // Validate amount
+                    if (!amount || amount.trim() === '') {
+                        e.preventDefault();
+                        toastr.error("Vui lòng nhập số tiền hợp lệ!");
+                        return;
+                    }
+
+                    // Validate due date
+                    if (!dueDate) {
+                        e.preventDefault();
+                        toastr.error("Vui lòng chọn hạn đóng tiền!");
+                        return;
+                    }
+
+                    // Convert formatted amount to raw number for server
+                    const raw = amount.replace(/\./g, "").replace(/,/g, "");
+                    
+                    // Remove existing hidden input if any
+                    const existingHidden = document.querySelector('input[name="amount_raw"]');
+                    if (existingHidden) {
+                        existingHidden.remove();
+                    }
+                    
+                    // Create new hidden input with raw amount
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "amount_raw";
+                    hiddenInput.value = raw;
+                    this.appendChild(hiddenInput);
+
+                    // Disable submit button to prevent double submission
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
                 });
             });
         </script>
 
-        <script>
-            const amountInput = document.getElementById("amount");
-
-            amountInput.addEventListener("input", function () {
-                let raw = this.value.replace(/\D/g, ""); // bỏ hết ký tự không phải số
-                if (!raw)
-                    return this.value = "";
-
-                let formatted = new Intl.NumberFormat('vi-VN').format(raw);
-                this.value = formatted;
-            });
-
-            // Nếu cần lấy giá trị raw (không có dấu chấm) khi submit:
-            document.querySelector("form").addEventListener("submit", function () {
-                const raw = amountInput.value.replace(/\./g, "").replace(/,/g, "");
-                const hiddenInput = document.createElement("input");
-                hiddenInput.type = "hidden";
-                hiddenInput.name = "amount_raw";
-                hiddenInput.value = raw;
-                this.appendChild(hiddenInput);
-            });
-        </script>
-
+        <!-- Fixed JavaScript for modal handling -->
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 const openModalButtons = document.querySelectorAll(".open-modal");
-                const form = document.getElementById("paymentForm");
-
-                // Thiết lập ngày hạn tối thiểu (20 ngày kể từ hôm nay)
-                openModalButtons.forEach(button => {
-                    button.addEventListener("click", function () {
-                        // ...
-
-                        // Thiết lập min cho dueDate ngay khi mở modal
-                        const dueDateInput = document.getElementById("dueDate");
-                        const todayPlus20 = new Date();
-                        todayPlus20.setDate(todayPlus20.getDate() + 20);
-                        const minDate = todayPlus20.toISOString().split('T')[0];
-                        dueDateInput.setAttribute("min", minDate);
-
-                        // Thiết lập ngày hạn mặc định là 20 ngày sau
-                        dueDateInput.value = minDate;
-
-                        // ...
-                    });
-                });
 
                 openModalButtons.forEach(button => {
                     button.addEventListener("click", function () {
@@ -338,62 +340,52 @@
                         const studentName = this.getAttribute("data-student-name");
                         const classId = this.getAttribute("data-class-code");
                         const className = this.getAttribute("data-class-name");
-                        const fee = this.getAttribute("data-fee");
+                        const fee = parseFloat(this.getAttribute("data-fee"));
+                        const presentCount = parseInt(this.getAttribute("data-present-count"));
 
-                        // Tạo mã hóa đơn ngẫu nhiên
+                        // Calculate total amount
+                        const total = fee * presentCount;
+
+                        // Generate invoice code
                         const code = "HD" + Date.now();
 
-                        // Gán các giá trị hiển thị
+                        // Set display values
                         document.getElementById("displayCode").value = code;
                         document.getElementById("displayStudentId").value = studentId;
                         document.getElementById("studentName").value = studentName;
                         document.getElementById("classCode").value = classId;
                         document.getElementById("className").value = className;
-                        document.getElementById("standardFee").textContent = new Intl.NumberFormat('vi-VN').format(fee) + " ₫";
+                        
+                        // Set amount with proper formatting
+                        document.getElementById("amount").value = formatCurrency(total);
+                        document.getElementById("standardFeeFormatted").textContent = formatCurrency(fee);
+                        document.getElementById("totalSessions").textContent = presentCount;
 
-                        // Gán giá trị số tiền (input ẩn)
-                        document.getElementById("amount").value = parseFloat(fee);
-
-                        // Gán các giá trị ẩn
+                        // Set hidden values
                         document.getElementById("code").value = code;
                         document.getElementById("student_id").value = studentId;
                         document.getElementById("class_id").value = classId;
 
-                        // Thiết lập ngày hạn mặc định là 20 ngày sau
-                        const defaultDueDate = new Date();
-                        defaultDueDate.setDate(defaultDueDate.getDate() + 20);
-                        document.getElementById("dueDate").value = defaultDueDate.toISOString().split('T')[0];
+                        // Set due date (minimum 20 days from today)
+                        const dueDateInput = document.getElementById("dueDate");
+                        const todayPlus20 = new Date();
+                        todayPlus20.setDate(todayPlus20.getDate() + 20);
+                        const minDate = todayPlus20.toISOString().split('T')[0];
+                        
+                        dueDateInput.setAttribute("min", minDate);
+                        dueDateInput.value = minDate;
 
-                        // Reset ghi chú
+                        // Reset note
                         document.getElementById("note").value = "";
+                        
+                        // Re-enable submit button in case it was disabled
+                        const submitBtn = document.getElementById("submitBtn");
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check"></i> Tạo hóa đơn';
                     });
-                });
-
-                // Xử lý khi submit form
-                form.addEventListener("submit", function (e) {
-                    const submitBtn = document.getElementById("submitBtn");
-                    const amount = document.getElementById("amount").value;
-                    const dueDate = document.getElementById("dueDate").value;
-
-                    if (!amount || parseFloat(amount) <= 0) {
-                        e.preventDefault();
-                        toastr.error("Vui lòng nhập số tiền hợp lệ!");
-                        return;
-                    }
-
-                    if (!dueDate) {
-                        e.preventDefault();
-                        toastr.error("Vui lòng chọn hạn đóng tiền!");
-                        return;
-                    }
-
-                    // Vô hiệu hóa nút để tránh submit nhiều lần
-                    submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
                 });
             });
         </script>
-
 
         <!-- DataTables JavaScript -->
         <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
@@ -412,7 +404,6 @@
                     pageLength: 25
                 });
             });
-
         </script>
     </body>
 </html>
