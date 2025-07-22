@@ -39,14 +39,14 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
             if (weekDAO.getCurrentWeek(currentDate) != null) {
                 sltedw = weekDAO.getCurrentWeek(currentDate);
                 sltedy = weekDAO.getYearByWeek(sltedw);
-            } else if (schoolYearDAO.getClosestSchoolYears() != null && schoolYearDAO.checkPupilInClassOfSchoolYear(pupilDAO.getStudentByUserId(user.getId()).getId(), schoolYearDAO.getClosestSchoolYears().getId())) {
+            } else if (schoolYearDAO.getClosestSchoolYears() != null && schoolYearDAO.checkStudentInClassOfSchoolYear(pupilDAO.getStudentByUserId(user.getId()).getId(), schoolYearDAO.getClosestSchoolYears().getId())) {
                 sltedy = schoolYearDAO.getClosestSchoolYears().getId();
                 sltedw = weekDAO.getfirstWeekOfClosestSchoolYear(sltedy).getId();
             } else {
                 sltedw = weekDAO.getLastWeekOfClosestSchoolYearOfPupil(pupilDAO.getStudentByUserId(user.getId()).getId()).getId();
                 sltedy = weekDAO.getYearByWeek(sltedw);
             }
-            List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByPupilID(pupilDAO.getStudentByUserId(user.getId()).getId());
+            List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByStudentID(pupilDAO.getStudentByUserId(user.getId()).getId());
             List<Week> weekList = weekDAO.getWeeks(sltedy);
             List<Evaluation> evaluationList = evaluationDAO.getEvaluationByWeekandPupilId(sltedw, pupilDAO.getStudentByUserId(user.getId()).getId());
             int good_day = evaluationDAO.countEvaluationOfWeek(sltedw, pupilDAO.getStudentByUserId(user.getId()).getId());
@@ -89,7 +89,7 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
                     request.setAttribute("evaluationList", evaluationList);
                     request.setAttribute("good_day", good_day);
                 }
-                List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByPupilID(pupilDAO.getStudentByUserId(user.getId()).getId());
+                List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByStudentID(pupilDAO.getStudentByUserId(user.getId()).getId());
                 List<Week> weekList = weekDAO.getWeeks(sltedy);
 
                 request.setAttribute("pupil", pupil);

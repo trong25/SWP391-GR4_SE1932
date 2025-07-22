@@ -244,7 +244,6 @@ public class PersonnelDAO extends DBContext {
         }
         return personnel;
     }
-
     public Personnel getPersonnel(String id) {
         String sql = """
         SELECT 

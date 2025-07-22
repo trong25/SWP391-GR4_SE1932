@@ -76,7 +76,7 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(5, c.getSchoolYear().getId());
             preparedStatement.setString(6, "đang chờ xử lý");
             preparedStatement.setString(7, c.getCreatedBy().getId());
-            preparedStatement.setString(8, c.getClassType());
+            preparedStatement.setString(8, c.getClassType()); 
             preparedStatement.setInt(9, c.getFee());
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {

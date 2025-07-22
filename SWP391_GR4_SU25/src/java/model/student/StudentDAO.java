@@ -863,6 +863,7 @@ public class StudentDAO extends DBContext {
         int a = studentDAO.getPendingStudentCount();
         System.out.println("Số học sinh đang chờ xử lý: " + a);
     }
+    
 
     // Add this method to check data
     public void checkDataForAttendance(String teacherId, String date) {
@@ -969,7 +970,7 @@ public class StudentDAO extends DBContext {
                sch.schoolName, 
                sch.addressSchool, 
                c.class_name,
-               g.name AS grade_name
+               g.name AS grade_level
         FROM classDetails cd
         JOIN Students s ON cd.student_id = s.id
         LEFT JOIN Schools sch ON s.school_id = sch.id

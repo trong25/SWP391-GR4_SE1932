@@ -105,7 +105,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     String teacherSchoolAddress = teacher.getAddressSchool();
 
                     for (String studentId : studentSelected) {
-                        Student student = studentDAO.getStudentById2(studentId);
+                        Student student = studentDAO.getStudentsById(studentId);
                         if (student != null) {
                             Schools studentSchool = student.getSchool_id();
 
