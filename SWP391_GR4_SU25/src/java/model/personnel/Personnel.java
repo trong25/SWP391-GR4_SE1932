@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model.personnel;
 
 import java.util.ArrayList;
@@ -5,6 +9,10 @@ import java.util.Date;
 import java.util.List;
 import model.Salaries.Salary;
 
+/**
+ *
+ * @author MSI
+ */
 public class Personnel {
 
     private String id;
@@ -21,29 +29,21 @@ public class Personnel {
     private String userId;
     private String school_id;
     private String school_class_id;
+    private String schoolName;
+    private String className;
+    private String addressSchool;
     private String specialization;
     private String qualification;
     private int teaching_years;
     private String achievements;
     private String cv_file;
+    private List<Salary> salaries;
 
-  private List<Salary> salaries;
- 
-
-    private String schoolName;
-    private String className;
-    private String addressSchool;
-    private int baseSalary;
-private int totalSalary;
-
-
-
-    // Constructors
     public Personnel() {
         this.salaries = new ArrayList<>();
     }
 
-    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String specialization, String qualification, int teaching_years, String achievements, String cv_file, String schoolName, String className, String addressSchool, int baseSalary, int totalSalary) {
+    public Personnel(String id, String firstName, String lastName, boolean gender, Date birthday, String address, String email, String phoneNumber, int roleId, String status, String avatar, String userId, String school_id, String school_class_id, String schoolName, String className, String addressSchool, String specialization, String qualification, int teaching_years, String achievements, String cv_file) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,17 +58,17 @@ private int totalSalary;
         this.userId = userId;
         this.school_id = school_id;
         this.school_class_id = school_class_id;
+        this.schoolName = schoolName;
+        this.className = className;
+        this.addressSchool = addressSchool;
         this.specialization = specialization;
         this.qualification = qualification;
         this.teaching_years = teaching_years;
         this.achievements = achievements;
         this.cv_file = cv_file;
-
     }
 
-   
-   
-   public List<Salary> getSalaries() {
+    public List<Salary> getSalaries() {
         return salaries;
     }
 
@@ -78,13 +78,22 @@ private int totalSalary;
 
     public void addSalary(Salary salary) {
         this.salaries.add(salary);
+    }
 
-        this.schoolName = schoolName;
-        this.className = className;
-        this.addressSchool = addressSchool;
-        this.baseSalary = baseSalary;
-        this.totalSalary = totalSalary;
+    public String getSchool_id() {
+        return school_id;
+    }
 
+    public void setSchool_id(String school_id) {
+        this.school_id = school_id;
+    }
+
+    public String getSchool_class_id() {
+        return school_class_id;
+    }
+
+    public void setSchool_class_id(String school_class_id) {
+        this.school_class_id = school_class_id;
     }
 
     public String getId() {
@@ -111,7 +120,23 @@ private int totalSalary;
         this.lastName = lastName;
     }
 
-    public boolean isGender() {
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public boolean getGender() {
         return gender;
     }
 
@@ -183,20 +208,12 @@ private int totalSalary;
         this.userId = userId;
     }
 
-    public String getSchool_id() {
-        return school_id;
+    public String getAddressSchool() {
+        return addressSchool;
     }
 
-    public void setSchool_id(String school_id) {
-        this.school_id = school_id;
-    }
-
-    public String getSchool_class_id() {
-        return school_class_id;
-    }
-
-    public void setSchool_class_id(String school_class_id) {
-        this.school_class_id = school_class_id;
+    public void setAddressSchool(String addressSchool) {
+        this.addressSchool = addressSchool;
     }
 
     public String getSpecialization() {
@@ -239,98 +256,44 @@ private int totalSalary;
         this.cv_file = cv_file;
     }
 
-public Salary calculateSalary(Personnel p, int month, int year) {
-    Salary salary = new Salary();
-    salary.setPersonnelId(p.getId());
-    salary.setSalaryMonth(month);
-    salary.setSalaryYear(year);
+    public Salary calculateSalary(Personnel p, int month, int year) {
+        Salary salary = new Salary();
+        salary.setPersonnelId(p.getId());
+        salary.setSalaryMonth(month);
+        salary.setSalaryYear(year);
 
-    int base;
-    switch (p.getQualification()) {
+        int base;
+        switch (p.getQualification()) {
+            case "Cử nhân":
+                base = 6000000;
+                break;
+            case "Thạc Sĩ":
+                base = 8000000;
+                break;
+            case "Tiến Sĩ":
+                base = 10000000;
+                break;
+            default:
+                base = 5000000;
+                break;
+        }
 
+        int bonus = 0;
+        int years = p.getTeaching_years();
+        if (years >= 1 && years <= 3) {
+            bonus = 500000;
+        } else if (years >= 4 && years <= 6) {
+            bonus = 1000000;
+        } else if (years > 6) {
+            bonus = 2000000;
+        }
 
-    public String getSchoolName() {
-        return schoolName;
+        salary.setBaseSalary(base);
+        salary.setTotalSalary(base + bonus);
+        salary.setPaymentStatus("chưa thanh toán"); // mặc định ban đầu
+        salary.setPaymentDate(null); // chưa thanh toán nên chưa có ngày
+
+        return salary;
     }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public void setClassName(String className) {
-        this.className = className;
-    }
-
-    public String getAddressSchool() {
-        return addressSchool;
-    }
-
-    public void setAddressSchool(String addressSchool) {
-        this.addressSchool = addressSchool;
-    }
-
-    public int getBaseSalary() {
-        return baseSalary;
-    }
-
-    public void setBaseSalary(int baseSalary) {
-        this.baseSalary = baseSalary;
-    }
-
-    public int getTotalSalary() {
-        return totalSalary;
-    }
-
-    public void setTotalSalary(int totalSalary) {
-        this.totalSalary = totalSalary;
-    }
-
-
-   
-
-   
-   
-
-public void calculateSalary() {
-    int base = 0;
-    switch (this.getQualification()) {
-
-        case "Cử nhân":
-            base = 6000000;
-            break;
-        case "Thạc Sĩ":
-            base = 8000000;
-            break;
-        case "Tiến Sĩ":
-            base = 10000000;
-            break;
-        default:
-            base = 5000000;
-            break;
-    }
-
-    int bonus = 0;
-    int years = p.getTeaching_years();
-    if (years >= 1 && years <= 3) bonus = 500000;
-    else if (years >= 4 && years <= 6) bonus = 1000000;
-    else if (years > 6) bonus = 2000000;
-
-    salary.setBaseSalary(base);
-    salary.setTotalSalary(base + bonus);
-    salary.setPaymentStatus("chưa thanh toán"); // mặc định ban đầu
-    salary.setPaymentDate(null); // chưa thanh toán nên chưa có ngày
-
-    return salary;
-}
-
-
 
 }
-
-
-}
-

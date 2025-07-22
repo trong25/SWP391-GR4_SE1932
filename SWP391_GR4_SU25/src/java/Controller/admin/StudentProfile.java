@@ -63,7 +63,7 @@ public class StudentProfile extends HttpServlet {
         String action = request.getParameter("action");
 
         StudentDAO studentDAO = new StudentDAO();
-        Student student = studentDAO.getStudentById(id);
+        Student student = studentDAO.getStudentsById(id);
 
         if (student == null) {
             request.setAttribute("toastMessage", "Không tìm thấy học sinh với ID: " + id);
@@ -97,7 +97,7 @@ public class StudentProfile extends HttpServlet {
         }
 
         // Lấy lại thông tin mới sau khi cập nhật
-        student = studentDAO.getStudentById(id);
+        student = studentDAO.getStudentsById(id);
         request.setAttribute("student", student);
         request.setAttribute("status", studentDAO.getAllStudentStatus());
         request.setAttribute("toastMessage", message);

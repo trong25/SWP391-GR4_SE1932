@@ -12,8 +12,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import model.day.DayDAO;
@@ -27,7 +25,6 @@ import model.timetablepivot.TimetableDAO;
 import model.timetablepivot.TimetablePivot;
 import model.user.User;
 import model.week.WeekDAO;
-import utils.DBContext;
 
 /**
  * Servlet DashboardStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điều khiển của học sinh.
@@ -54,8 +51,6 @@ public class DashboardStudentServlet extends HttpServlet {
         //Lấy thông tin từ session
         User user = (User) request.getSession().getAttribute("user");
         Student student = (Student) request.getSession().getAttribute("student");
-    
-
         String studentId = student.getId();
 
         //Khởi tạo các DAO

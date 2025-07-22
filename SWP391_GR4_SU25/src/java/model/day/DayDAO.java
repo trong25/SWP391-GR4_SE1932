@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.week.WeekDAO;
-import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -85,32 +84,6 @@ public class DayDAO extends DBContext {
         return day;
     }
 
-    public Day getDayByDate(String date) {
-        String sql = "select * from days where date = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, date);
-
-            // Debug logs
-            System.out.println("Debug - Looking for date: " + date);
-            System.out.println("Debug - SQL: " + sql);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Day day = createDay(resultSet);
-                System.out.println("Debug - Found day: " + day.getId() + " - " + day.getDate());
-                return day;
-            } else {
-                System.out.println("Debug - No day found for date: " + date);
-            }
-        } catch (SQLException e) {
-            System.out.println("Debug - Error in getDayByDate: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
 //    public Day getDayByDate(String date) {
 //        String sql = "select * from days where date = ?";
 //        try {
@@ -135,6 +108,9 @@ public class DayDAO extends DBContext {
 //        }
 //        return null;
 //    }
+
+
+
 
 
     public String getDateIDbyDay(java.util.Date day) {

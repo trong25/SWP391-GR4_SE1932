@@ -65,7 +65,7 @@ public class RegisterAccountServlet extends HttpServlet {
             for (String username : selectedUserIds) {
                 switch (username.substring(0, 2)) {
                     case "HS":
-                        u = userDAO.createNewUser(username, studentDAO.getStudentById(username).getEmail(), 4, (byte) 0);
+                        u = userDAO.createNewUser(username, studentDAO.getStudentsById(username).getEmail(), 4, (byte) 0);
                         if (u == true) {
                             session.setAttribute("success", "success");
                         } else {

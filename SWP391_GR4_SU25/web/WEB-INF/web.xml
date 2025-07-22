@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Filter Configuration -->
-
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -164,24 +163,28 @@
         <servlet-class>Controller.admin.ResetPassword</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>WaitlistPersonnelServlet</servlet-name>
-        <servlet-class>Controller.director.WaitlistPersonnelServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ViewPersonnelServlet</servlet-name>
-        <servlet-class>Controller.director.ViewPersonnelServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ListStudentServlet</servlet-name>
         <servlet-class>Controller.admin.ListStudentServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>viewSentInvoicesServlet</servlet-name>
+        <servlet-class>Controller.accountant.viewSentInvoicesServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendPaymentNoticeServlet</servlet-name>
+        <servlet-class>Controller.accountant.SendPaymentNoticeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StudentProfile</servlet-name>
+        <servlet-class>Controller.admin.StudentProfile</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ReviewStudentServlet</servlet-name>
         <servlet-class>Controller.admin.ReviewStudentServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>StudentProfile</servlet-name>
-        <servlet-class>Controller.admin.StudentProfile</servlet-class>
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.WaitlistPersonnelServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ListSubjectServlet</servlet-name>
@@ -190,6 +193,10 @@
     <servlet>
         <servlet-name>ReviewSubjectServlet</servlet-name>
         <servlet-class>Controller.director.ReviewSubjectServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <servlet-class>Controller.director.ViewPersonnelServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>SchoolYearServlet</servlet-name>
@@ -236,7 +243,6 @@
         <servlet-class>Controller.accountant.TakeTimeKeepServlet</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ListPersonnelServlett</servlet-name>
         <servlet-class>Controller.accountant.ListPersonnelSalaryServlett</servlet-class>
     </servlet>
@@ -247,12 +253,10 @@
     <servlet>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <servlet-class>Controller.accountant.CreateSalaryServlet</servlet-class>
-        
     </servlet>
     <servlet>
         <servlet-name>ListPersonnelAdminServlet</servlet-name>
         <servlet-class>Controller.admin.ListPersonnelAdminServlet</servlet-class>
-
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardAcademicStaffServlet</servlet-name>
@@ -427,7 +431,6 @@
         <url-pattern>/accountant/taketimekeep</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>ListPersonnelServlett</servlet-name>
         <url-pattern>/accountant/listpersonnell</url-pattern>
     </servlet-mapping>
@@ -438,10 +441,45 @@
     <servlet-mapping>
         <servlet-name>CreateSalaryServlet</servlet-name>
         <url-pattern>/accountant/createsalary</url-pattern>
-        </servlet-mapping>
- <servlet-mapping>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendPaymentNoticeServlet</servlet-name>
+        <url-pattern>/accountant/notify-payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>viewSentInvoicesServlet</servlet-name>
+        <url-pattern>/accountant/view-sentInvoices</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>ListPersonnelAdminServlet</servlet-name>
         <url-pattern>/admin/listpersonnel</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListStudentServlet</servlet-name>
+        <url-pattern>/admin/listpupil</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentProfile</servlet-name>
+        <url-pattern>/admin/studentsprofile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewStudentServlet</servlet-name>
+        <url-pattern>/admin/reviewstudent</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListSubjectServlet</servlet-name>
+        <url-pattern>/director/listsubject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReviewSubjectServlet</servlet-name>
+        <url-pattern>/director/reviewsubject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WaitlistPersonnelServlet</servlet-name>
+        <url-pattern>/director/waitlistpersonnel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewPersonnelServlet</servlet-name>
+        <url-pattern>/director/viewpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>

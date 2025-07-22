@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import model.grade.Grade;
 import model.grade.GradeDAO;
 import utils.DBContext;
@@ -37,14 +36,10 @@ public class SubjectDAO extends DBContext {
         subject.setDescription(resultSet.getString("description"));
 
         // Thêm dòng này để lấy subject_type từ DB
-        subject.setSubjectType(resultSet.getString("subject_type"));  
+        subject.setSubjectType(resultSet.getString("subject_type"));
 
         return subject;
     }
-
-
-
-    
 
     public boolean checkSubjectExist(String name, String gradeId) {
         String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt')";
@@ -61,9 +56,6 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
-
-
-
 
     public Subject getSubjectBySubjectId(String subjectId) {
         String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
@@ -109,55 +101,30 @@ public class SubjectDAO extends DBContext {
         return subjects;
     }
 
-public List<Subject> getSubjectsByStatus(String status) {
-    List<Subject> subjectList = new ArrayList<>();
-    String sql = "SELECT * FROM Subjects WHERE status = ? ORDER BY id DESC";
+    public List<Subject> getSubjectsByStatus(String status) {
+        List<Subject> subjectList = new ArrayList<>();
+        String sql = "SELECT * FROM Subjects WHERE status = ? ORDER BY id DESC";
 
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        preparedStatement.setString(1, status); // "Đang hoạt động", "Ngừng hoạt động", v.v.
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()) {
-                Subject subject = createSubject(resultSet);
-                subjectList.add(subject);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, status); // "Đang hoạt động", "Ngừng hoạt động", v.v.
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Subject subject = createSubject(resultSet);
+                    subjectList.add(subject);
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi truy vấn môn học theo trạng thái", e);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        throw new RuntimeException("Lỗi truy vấn môn học theo trạng thái", e);
+
+        return subjectList;
     }
-
-
-
-
-    return subjectList;
-}
-
-
 
     public Subject getLastest() {
         String sql = "Select top 1 * from Subjects order by id desc";
-
-
-    public boolean updateStatusById(String id, String status) {
-        String sql = "update Subjects set status =? where id = ?";
-
-
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);
-            preparedStatement.setString(2, id);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e);
-
-        }
-        return false;
-    }
-
-    public Subject getLatest() {
-        String sql = "SELECT TOP 1 * FROM Subjects ORDER BY id DESC";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return createSubject(resultSet);
@@ -188,7 +155,7 @@ public List<Subject> getSubjectsByStatus(String status) {
         }
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            String newId = (getLatest() == null) ? "S000001" : generateId(getLatest().getId());
+            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
 
             preparedStatement.setString(1, newId);
             preparedStatement.setString(2, subject.getName());
@@ -205,44 +172,6 @@ public List<Subject> getSubjectsByStatus(String status) {
             return "Tạo thất bại! Lỗi cơ sở dữ liệu: " + e.getMessage();
         }
     }
-
-
-
-    public boolean checkSubjectExist(String name, String gradeId) {
-        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt')";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, gradeId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-
-        }
-        return false;
-    }
-
-    private boolean checkSubjectExistByID(String name, String gradeId, String id) {
-        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt') and id != ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, gradeId);
-            preparedStatement.setString(3, id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
-    }
-
-
 
     public String editSubject(Subject subject) {
         // Kiểm tra xem môn học đã tồn tại chưa (trừ chính nó)
@@ -321,8 +250,18 @@ public List<Subject> getSubjectsByStatus(String status) {
         return subjects;
     }
 
+    public boolean updateStatusById(String id, String status) {
+        String sql = "update Subjects set status =? where id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+        return false;
+    }
 }
-
-
-
-

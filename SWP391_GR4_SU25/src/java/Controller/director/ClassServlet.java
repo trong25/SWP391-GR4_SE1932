@@ -19,19 +19,11 @@ import model.schoolYear.SchoolYearDAO;
 /**
  *
  * @author ThanhNT
-
+ *
  */
 public class ClassServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+  
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -48,44 +40,69 @@ public class ClassServlet extends HttpServlet {
             out.println("</html>");
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       // processRequest(request, response);
-       try {
+        // processRequest(request, response);
+        try {
             SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
             ClassDAO classDAO = new ClassDAO();
-            request.setAttribute("schoolYears", schoolYearDAO.getAll());
+
+            // Lấy danh sách tất cả năm học
+            List<SchoolYear> schoolYears = schoolYearDAO.getAll();
+            request.setAttribute("schoolYears", schoolYears);
+
+            // Xử lý schoolYearId
             String schoolYearId = request.getParameter("schoolYearId");
-            if (schoolYearId == null) {
-                SchoolYear lastestSchoolYear = schoolYearDAO.getLatest();
-                schoolYearId = lastestSchoolYear.getId();
+            if (schoolYearId == null || schoolYearId.trim().isEmpty()) {
+                SchoolYear latestSchoolYear = schoolYearDAO.getLatest();
+                if (latestSchoolYear != null) {
+                    schoolYearId = latestSchoolYear.getId();
+                } else {
+                    // Nếu không có năm học nào, tạo danh sách rỗng
+                    request.setAttribute("classes", new java.util.ArrayList<>());
+                    request.setAttribute("error", "Chưa có năm học nào được tạo");
+                    request.getRequestDispatcher("class.jsp").forward(request, response);
+                    return;
+                }
             }
+
+            // Xử lý status filter
             String status = request.getParameter("status");
+            if (status == null) {
+                status = "all";
+            }
+
+            // Lấy danh sách lớp học theo điều kiện
             List<Class> classes;
             if (status != null && !status.equals("all") && !status.equals("đang chờ xử lý")) {
                 classes = classDAO.getByStatus(status, schoolYearId);
             } else {
-                status = "all";
                 classes = classDAO.getBySchoolYear(schoolYearId);
             }
+
+            // Kiểm tra nếu classes là null
+            if (classes == null) {
+                classes = new java.util.ArrayList<>();
+                request.setAttribute("error", "Có lỗi xảy ra khi tải danh sách lớp học");
+            }
+
+            // Set các attribute để JSP sử dụng
             request.setAttribute("status", status);
             request.setAttribute("selectedSchoolYearId", schoolYearId);
             request.setAttribute("classes", classes);
+
+            // Debug log
+            System.out.println("Classes found: " + classes.size());
+            System.out.println("School Year ID: " + schoolYearId);
+            System.out.println("Status: " + status);
+
             request.getRequestDispatcher("class.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
+            request.getRequestDispatcher("class.jsp").forward(request, response);
         }
     }
 
@@ -101,7 +118,7 @@ public class ClassServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // processRequest(request, response);
-        
+
     }
 
     /**

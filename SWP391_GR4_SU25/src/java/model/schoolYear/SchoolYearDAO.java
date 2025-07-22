@@ -111,12 +111,7 @@ public class SchoolYearDAO extends DBContext {
     }
 
     // hàm lấy tất cả danh sách năm học(TrongNV)
-
-
     // hàm lấy tất cả danh sách năm học(TrongNV)
-
-
-
     public List<SchoolYear> getAll() {
         List<SchoolYear> schoolYears = new ArrayList<SchoolYear>();
         String sql = "select * from schoolYears order by id desc";
@@ -213,7 +208,6 @@ public class SchoolYearDAO extends DBContext {
         return null;
     }
 
-
     private String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -225,8 +219,6 @@ public class SchoolYearDAO extends DBContext {
         String result = decimalFormat.format(number);
         return "SY" + result;
     }
-
-
 
     //Thanhnthe181132
     public List<SchoolYear> getFutureSchoolYears() {
@@ -245,13 +237,8 @@ public class SchoolYearDAO extends DBContext {
         return schoolYears;
     }
 
-
     // hàm chỉnh sửa năm học (TrongNV)
-
-
     // hàm chỉnh sửa năm học (TrongNV)
-
-
     public String editSchoolYear(SchoolYear schoolYear) {
         SchoolYear oldSchoolYear = getSchoolYear(schoolYear.getId());
         if (!new Date().before(oldSchoolYear.getStartDate())) {
@@ -288,8 +275,6 @@ public class SchoolYearDAO extends DBContext {
     }
 
 // hàm cập nhật năm học (TrongNV)
-
-
     private String updateSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
         try {
@@ -313,19 +298,6 @@ public class SchoolYearDAO extends DBContext {
             return "Thao tác thất bại! " + e.getMessage();
         }
         return "success";
-    }
-
-
-    private String generateId(String latestId) {
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(latestId);
-        int number = 0;
-        if (matcher.find()) {
-            number = Integer.parseInt(matcher.group()) + 1;
-        }
-        DecimalFormat decimalFormat = new DecimalFormat("000000");
-        String result = decimalFormat.format(number);
-        return "SY" + result;
     }
 
     public List<SchoolYear> getListSchoolYearsByPupilID(String id) {
@@ -353,26 +325,23 @@ public class SchoolYearDAO extends DBContext {
         }
         return schoolYears;
     }
-    
+
     public boolean checkPupilInClassOfSchoolYear(String pupil_id, String school_year_id) {
-        String sql = "select * from Pupils p join classDetails cd on p.id = cd.pupil_id\n" +
-                "join dbo.Class C on cd.class_id = C.id\n" +
-                "where p.id =? and c.school_year_id =?";
-        try{
+        String sql = "select * from Pupils p join classDetails cd on p.id = cd.pupil_id\n"
+                + "join dbo.Class C on cd.class_id = C.id\n"
+                + "where p.id =? and c.school_year_id =?";
+        try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, pupil_id);
             statement.setString(2, school_year_id);
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.next()){
+            if (resultSet.next()) {
                 return true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
-
 }
-
-

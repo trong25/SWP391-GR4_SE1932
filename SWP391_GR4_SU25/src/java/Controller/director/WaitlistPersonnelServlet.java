@@ -33,7 +33,23 @@ public class WaitlistPersonnelServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        try {
+            PersonnelDAO personnelDAO = new PersonnelDAO();
+
+            // Lấy danh sách nhân viên đang chờ phê duyệt
+            List<Personnel> waitlistPersonnel = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
+
+            // Set attribute để JSP có thể sử dụng
+            request.setAttribute("waitlistpersonnel", waitlistPersonnel);
+
+            // Forward đến JSP page
+            request.getRequestDispatcher("/director/waitlistPersonnel.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            // Xử lý lỗi
+            request.setAttribute("error", "Có lỗi xảy ra khi tải danh sách: " + e.getMessage());
+            request.getRequestDispatcher("/director/waitlistPersonnel.jsp").forward(request, response);
+        }
     }
 
     @Override

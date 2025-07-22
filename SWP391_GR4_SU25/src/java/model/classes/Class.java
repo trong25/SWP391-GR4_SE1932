@@ -31,9 +31,6 @@ public class Class {
     public Class() {
     }
 
-
-    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, String classType, Personnel createdBy) {
-
     public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, Personnel createdBy, int fee) {
 
         this.id = id;
@@ -62,7 +59,6 @@ public class Class {
     public void setClassType(String classType) {
         this.classType = classType;
     }
-
 
     public String getId() {
         return id;
@@ -120,10 +116,4 @@ public class Class {
         this.createdBy = createdBy;
     }
 
-    
-    
 }
-
-
-}
-

@@ -36,8 +36,6 @@ import utils.Helper;
  */
 public class ListPersonnelServlet extends HttpServlet {
 
-    
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -96,6 +94,9 @@ public class ListPersonnelServlet extends HttpServlet {
         String role = request.getParameter("role");
         String status = request.getParameter("status");
         String search = request.getParameter("search");
+//        System.out.println(role);
+//        System.out.println(status);
+
         List<Personnel> persons = new ArrayList<Personnel>();
         List<Role> roles = new ArrayList<>();
         PersonnelDAO personnelDAO = new PersonnelDAO();
@@ -114,7 +115,7 @@ public class ListPersonnelServlet extends HttpServlet {
                     persons = personnelDAO.getPersonnelByRoles(-1);
                 }
             } else {
-                persons = personnelDAO.getPersonnelByIdNameRoleStatus1(status, role);
+                persons = personnelDAO.getPersonnelByIdNameRoleStatuss(status, role);
             }
         }
         List<String> statuss = new ArrayList<>();

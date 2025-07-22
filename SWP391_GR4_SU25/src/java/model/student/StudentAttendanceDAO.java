@@ -22,8 +22,6 @@ public class StudentAttendanceDAO extends DBContext {
         studentAttendance.setId(resultSet.getString("id"));
         StudentDAO studentDAO = new StudentDAO();
 
-        studentAttendance.setStudent(studentDAO.getStudentById(resultSet.getString("student_id")));
-
         studentAttendance.setStudent(studentDAO.getStudentsById(resultSet.getString("student_id")));
 
         DayDAO dayDAO = new DayDAO();
