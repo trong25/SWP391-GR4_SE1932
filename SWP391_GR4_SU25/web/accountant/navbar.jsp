@@ -89,6 +89,18 @@
                     <i class="fas fa-fw fa-user-friends"></i>
                     <span>Quản lý Lương Nhân Viên</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="notify-payment">
+                    <i class="fas fa-fw fa-money-bill-wave"></i>
+                    <span>Tạo Đơn Đóng Học Phí</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="view-sentInvoices">
+                    <i class="fas fa-fw fa-money-bill-wave"></i>
+                    <span>Xem Hóa Đơn</span>
+                </a>
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

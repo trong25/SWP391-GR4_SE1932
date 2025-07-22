@@ -81,7 +81,7 @@ public class LoginServlet extends HttpServlet {
                 List<Payment> payments = paymentDAO.getListPaymentByStudentId(student.getId());
                 for (Payment payment : payments) {
                     if (payment.getStatus().equals("Not yet")) {
-                        response.sendRedirect("student/payments");
+                        response.sendRedirect("student/dashboard");
                         return;
                     }
                 }

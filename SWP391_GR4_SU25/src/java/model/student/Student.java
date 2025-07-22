@@ -37,6 +37,8 @@ public class Student {
     private Schools school_id;
     private SchoolClass school_class_id;
 
+    
+    
     public Student() {
     }
 

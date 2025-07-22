@@ -109,7 +109,13 @@ public class SchoolYearDAO extends DBContext {
         }
         return "success";
     }
+
     // hàm lấy tất cả danh sách năm học(TrongNV)
+
+
+    // hàm lấy tất cả danh sách năm học(TrongNV)
+
+
 
     public List<SchoolYear> getAll() {
         List<SchoolYear> schoolYears = new ArrayList<SchoolYear>();
@@ -207,6 +213,21 @@ public class SchoolYearDAO extends DBContext {
         return null;
     }
 
+
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "SY" + result;
+    }
+
+
+
     //Thanhnthe181132
     public List<SchoolYear> getFutureSchoolYears() {
         String sql = "select * from schoolYears where start_date > CAST(GETDATE() AS DATE)";
@@ -224,7 +245,13 @@ public class SchoolYearDAO extends DBContext {
         return schoolYears;
     }
 
+
     // hàm chỉnh sửa năm học (TrongNV)
+
+
+    // hàm chỉnh sửa năm học (TrongNV)
+
+
     public String editSchoolYear(SchoolYear schoolYear) {
         SchoolYear oldSchoolYear = getSchoolYear(schoolYear.getId());
         if (!new Date().before(oldSchoolYear.getStartDate())) {
@@ -259,7 +286,9 @@ public class SchoolYearDAO extends DBContext {
         }
         return updateSchoolYear(schoolYear);
     }
+
 // hàm cập nhật năm học (TrongNV)
+
 
     private String updateSchoolYear(SchoolYear schoolYear) {
         String sql = "insert into SchoolYears values(?,?,?,?,?,?)";
@@ -286,6 +315,7 @@ public class SchoolYearDAO extends DBContext {
         return "success";
     }
 
+
     private String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
@@ -297,6 +327,7 @@ public class SchoolYearDAO extends DBContext {
         String result = decimalFormat.format(number);
         return "SY" + result;
     }
+
     public List<SchoolYear> getListSchoolYearsByPupilID(String id) {
         List<SchoolYear> schoolYears = new ArrayList<>();
         String sql = "select sy.* from Students p join classDetails cd on p.id = cd.student_id\n"
@@ -341,4 +372,7 @@ public class SchoolYearDAO extends DBContext {
         return false;
     }
 
+
 }
+
+

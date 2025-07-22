@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import model.grade.Grade;
 import model.grade.GradeDAO;
 import utils.DBContext;
@@ -36,10 +37,12 @@ public class SubjectDAO extends DBContext {
         subject.setDescription(resultSet.getString("description"));
 
         // Thêm dòng này để lấy subject_type từ DB
-        subject.setSubjectType(resultSet.getString("subject_type"));
+        subject.setSubjectType(resultSet.getString("subject_type"));  
 
         return subject;
     }
+
+
 
     
 
@@ -58,6 +61,8 @@ public class SubjectDAO extends DBContext {
         }
         return false;
     }
+
+
 
 
     public Subject getSubjectBySubjectId(String subjectId) {
@@ -122,6 +127,8 @@ public List<Subject> getSubjectsByStatus(String status) {
     }
 
 
+
+
     return subjectList;
 }
 
@@ -129,8 +136,28 @@ public List<Subject> getSubjectsByStatus(String status) {
 
     public Subject getLastest() {
         String sql = "Select top 1 * from Subjects order by id desc";
+
+
+    public boolean updateStatusById(String id, String status) {
+        String sql = "update Subjects set status =? where id = ?";
+
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, id);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+        return false;
+    }
+
+    public Subject getLatest() {
+        String sql = "SELECT TOP 1 * FROM Subjects ORDER BY id DESC";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return createSubject(resultSet);
@@ -161,7 +188,7 @@ public List<Subject> getSubjectsByStatus(String status) {
         }
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            String newId = (getLastest() == null) ? "S000001" : generateId(getLastest().getId());
+            String newId = (getLatest() == null) ? "S000001" : generateId(getLatest().getId());
 
             preparedStatement.setString(1, newId);
             preparedStatement.setString(2, subject.getName());
@@ -179,9 +206,42 @@ public List<Subject> getSubjectsByStatus(String status) {
         }
     }
 
-   
 
-   
+
+    public boolean checkSubjectExist(String name, String gradeId) {
+        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt')";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, gradeId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
+        return false;
+    }
+
+    private boolean checkSubjectExistByID(String name, String gradeId, String id) {
+        String sql = "select * from Subjects where [name] = ? and grade_id= ? and (status =N'đang chờ xử lý' or status=N'đã được duyệt') and id != ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, gradeId);
+            preparedStatement.setString(3, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
 
 
     public String editSubject(Subject subject) {
@@ -231,7 +291,7 @@ public List<Subject> getSubjectsByStatus(String status) {
         }
         return false;
     }
-    
+
     public List<Subject> getSubjectsByGradeId(String gradeId) {
         List<Subject> subjects = new ArrayList<>();
         String sql = "SELECT s.id AS subject_id, s.name AS subject_name, g.id AS grade_id, g.name AS grade_name, s.description "
@@ -255,9 +315,14 @@ public List<Subject> getSubjectsByStatus(String status) {
                 subject.setDescription(rs.getString("description"));
                 subjects.add(subject);
             }
-    } catch (Exception e) {
-        e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return subjects;
     }
+
 }
+
+
+
+

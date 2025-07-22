@@ -116,6 +116,11 @@
                             </div>
 
                         </div>
+                        <c:set var="page" value="${page}" />
+                        <c:set var="status" value="${status}" />
+                        <c:set var="role" value="${role}" />
+                        <c:set var="search" value="${search}" />
+
                         <c:set var="p" value="${requestScope.person}"/>
 
 
@@ -145,16 +150,16 @@
                                                                         Nhân viên IT
                                                                     </c:if>
                                                                     <c:if test="${p.getRoleId()==1}">
-                                                                        Hiệu trưởng
+                                                                        Giám đốc
                                                                     </c:if>
                                                                     <c:if test="${p.getRoleId()==2}">
                                                                         Giáo vụ
                                                                     </c:if>
                                                                     <c:if test="${p.getRoleId()==3}">
-                                                                        Nhân viên kế toán
-                                                                    </c:if>
-                                                                    <c:if test="${p.getRoleId()==4}">
                                                                         Giáo viên
+                                                                    </c:if>
+                                                                    <c:if test="${p.getRoleId()==5}">
+                                                                        Nhân viên kế toán
                                                                     </c:if></p>
                                                             </div>
                                                         </div>
@@ -168,7 +173,6 @@
                                                                 <table class="table table-bordered">
                                                                     <tr>
                                                                         <th style="text-align: left;">Ngày sinh</th>
-
                                                                         <td style="text-align: left;"><fmt:formatDate value="${p.getBirthday()}" pattern="yyyy/MM/dd"/> </td>
                                                                     </tr>
                                                                     <tr>
@@ -176,50 +180,68 @@
                                                                             <c:if test="${p.getStatus() != null}">
                                                                                 <c:choose>
                                                                                     <c:when test="${p.getStatus() == 'đang làm việc'}">
-                                                                                    <td >
-                                                                                        <span class="badge badge-success">${p.getStatus()}</span>
-                                                                                    </td>
-                                                                                </c:when>
-                                                                                <c:when test="${p.getStatus() == 'đang chờ xử lý'}">
-                                                                                    <td>
-                                                                                        <span class="badge badge-warning">${p.getStatus()}</span>
-                                                                                    </td>
-                                                                                </c:when>
-                                                                                <c:otherwise>
-                                                                                    <td >
-                                                                                        <span class="badge badge-info">${p.getStatus()}</span>
-                                                                                    </td>
-                                                                                </c:otherwise>
-                                                                            </c:choose>
-                                                                        </c:if>
+                                                                                    <td><span class="badge badge-success">${p.getStatus()}</span></td>
+                                                                                    </c:when>
+                                                                                    <c:when test="${p.getStatus() == 'đang chờ xử lý'}">
+                                                                                    <td><span class="badge badge-warning">${p.getStatus()}</span></td>
+                                                                                    </c:when>
+                                                                                    <c:otherwise>
+                                                                                    <td><span class="badge badge-info">${p.getStatus()}</span></td>
+                                                                                    </c:otherwise>
+                                                                                </c:choose>
+                                                                            </c:if>
                                                                     </tr>
                                                                     <tr>
                                                                         <th style="text-align: left;">Giới tính</th>
-
                                                                         <td style="text-align: left;">
                                                                             <c:if test="${p.gender}">Nam</c:if>
                                                                             <c:if test="${not p.gender}">Nữ</c:if>
-
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th style="text-align: left;">Địa chỉ</th>
-
                                                                             <td style="text-align: left;">${p.getAddress()}</td>
                                                                     </tr>
-
                                                                     <tr>
                                                                         <th style="text-align: left;">Email</th>
-
                                                                         <td style="text-align: left;">${p.getEmail()}</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <th style="text-align: left;">Số điện thoại</th>
-
                                                                         <td style="text-align: left;">${p.getPhoneNumber()}</td>
                                                                     </tr>
 
+
+                                                                    <tr>
+                                                                        <th style="text-align: left;">Chuyên môn</th>
+                                                                        <td style="text-align: left;">${p.getSpecialization()}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="text-align: left;">Học vấn</th>
+                                                                        <td style="text-align: left;">${p.getQualification()}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="text-align: left;">Số năm kinh nghiệm</th>
+                                                                        <td style="text-align: left;">${p.getTeaching_years()}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="text-align: left;">Thành tích</th>
+                                                                        <td style="text-align: left;">${p.getAchievements()}</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="text-align: left;">Hồ sơ đính kèm (CV)</th>
+                                                                        <td style="text-align: left;">
+                                                                            <c:if test="${not empty p.getCv_file()}">
+                                                                                <a href="${pageContext.request.contextPath}/cv/${p.getCv_file()}" target="_blank">Xem CV</a>
+                                                                            </c:if>
+                                                                            <c:if test="${empty p.getCv_file()}">
+                                                                                Không có
+                                                                            </c:if>
+                                                                        </td>
+                                                                    </tr>
+
                                                                 </table>
+
                                                             </div>
                                                         </div>
                                                         <div style="height: 26px"></div>
@@ -235,32 +257,34 @@
                                                                         <div class="col-lg-4">
                                                                             <button class="btn btn-danger w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Từ chối</button>
                                                                         </div>
-                                                                    
+
 
                                                                     </c:if>
                                                                     <c:if test="${p.getStatus() == 'đang làm việc'}">
                                                                         <div class="col-lg-4">
-                                                                            <button class="btn btn-danger w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Nghỉ việc</button>
+                                                                            <button class="btn btn-danger w-100" onclick="confirmAndSubmit('resign', '${p.getId()}')">Nghỉ việc</button>
                                                                         </div>
-                                                                       
+
                                                                     </c:if>
                                                                     <c:if test="${p.getStatus() == 'đã nghỉ việc'}">
                                                                         <div class="col-lg-4">
-                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('decline', '${p.getId()}')">Đi làm trở lại</button>
+                                                                            <button class="btn btn-success w-100" onclick="confirmAndSubmit('accept', '${p.getId()}')">Đi làm trở lại</button>
                                                                         </div>
-                                                                       
+
                                                                     </c:if>
                                                                     <c:if test="${p.getStatus() == 'không được duyệt'}">
                                                                         <div class="col-lg-4">
                                                                             <button class="btn btn-success w-100" onclick="confirmAndSubmit('accept', '${p.getId()}')">Chấp nhận</button>
                                                                         </div>
-                                                                        
+
                                                                     </c:if>
+                                                                    <!-- Nút Quay lại -->
                                                                     <div class="col-lg-4">
-                                                                        <button class="btn btn-info w-100" onclick="redirect()">Quay Lại </button>
-
-
+                                                                        <button class="btn btn-info w-100" onclick="redirect()">
+                                                                            Quay Lại
+                                                                        </button>
                                                                     </div>
+
                                                                 </div>
                                                             </div>
 
@@ -305,7 +329,7 @@
     <!--===============================================================================================-->
     <script>
                                                                             function redirect() {
-                                                                                var xpage = "${page}";
+                                                                                var xpage = '<%= request.getAttribute("page") %>';
                                                                                 if (xpage === "list") {
                                                                                     window.location.href = "listpersonnel";
                                                                                 } else {
@@ -313,6 +337,7 @@
                                                                                 }
                                                                             }
     </script>
+
     <script>
         function submitForm(action, id) {
             // Tạo form
@@ -345,7 +370,10 @@
                     message = 'Bạn có chắc muốn chấp nhận nhân sự này không?';
                     break;
                 case 'decline':
-                    message = 'Bạn có chắc muốn từ chối / cho nghỉ nhân sự này không?';
+                    message = 'Bạn có chắc muốn từ chối nhân sự này không?';
+                    break;
+                case 'resign':
+                    message = 'Bạn có chắc muốn cho nghỉ nhân sự này không?';
                     break;
                 default:
                     message = 'Bạn có chắc muốn thực hiện hành động này không?';
