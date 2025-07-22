@@ -60,7 +60,7 @@ public class StudentDAO extends DBContext {
 
             school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
 
-//        school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
+            school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
             student.setSchool_id(school);
 
             // Tạo và gán SchoolClass object
@@ -267,21 +267,34 @@ public class StudentDAO extends DBContext {
     }
 
     public Student getStudentByUserId(String userId) {
-        String sql = "SELECT s.*, sc.schoolName, c.class_name "
-                + "FROM Students s "
-                + "LEFT JOIN Schools sc ON s.school_id = sc.id "
-                + "LEFT JOIN SchoolClasses c ON s.school_class_id = c.id "
-                + "WHERE s.user_id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql = """
+        SELECT s.*, 
+               sc.schoolName, 
+               sc.addressSchool, 
+               c.class_name,
+               c.grade_level
+        FROM Students s
+        LEFT JOIN Schools sc ON s.school_id = sc.id
+        LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
+        WHERE s.user_id = ?
+    """;
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return createStudent(resultSet);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return createStudent(resultSet);
+                } else {
+                    System.out.println("⚠️ Không tìm thấy học sinh với user_id = " + userId);
+                }
             }
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println("❌ Lỗi khi truy vấn học sinh theo userId = " + userId);
+            e.printStackTrace();
         }
+
         return null;
     }
 

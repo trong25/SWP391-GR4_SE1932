@@ -50,7 +50,6 @@ public class ClassDAO extends DBContext {
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
 
         c.setStatus(resultSet.getString("status"));
-        c.setClassType(resultSet.getString("class_type"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
 
         // Thêm dòng này để lấy fee từ ResultSet
@@ -97,7 +96,6 @@ public class ClassDAO extends DBContext {
             preparedStatement.setString(7, c.getCreatedBy().getId());
             // Thêm giá trị fee
             preparedStatement.setInt(8, c.getFee());
-
 
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -352,7 +350,6 @@ public class ClassDAO extends DBContext {
         return classes;
     }
 
-
     public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
 
         String sql = "update classDetails set class_id = ? where student_id= ? and class_id= ?";
@@ -385,8 +382,4 @@ public class ClassDAO extends DBContext {
         return "success";
     }
 
- 
 }
-
-
-
