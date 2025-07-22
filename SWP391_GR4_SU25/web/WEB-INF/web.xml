@@ -463,7 +463,7 @@
         <servlet-name>StudentWaitServlet</servlet-name>
         <url-pattern>/academicstaff/studentwait</url-pattern>
     </servlet-mapping>
-</web-app>
+ <servlet-mapping>
 
         <servlet-name>ListStudentServlet</servlet-name>
         <url-pattern>/admin/listpupil</url-pattern>
