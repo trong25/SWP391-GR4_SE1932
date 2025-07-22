@@ -179,7 +179,7 @@ public class SendPaymentNoticeServlet extends HttpServlet {
             payment.setAmount(amount);
             payment.setStatus(status != null ? status.trim() : "Chưa đóng");
             payment.setPaymentDate(paymentDate);
-            payment.setDueDate(dueDate);
+            payment.setDueTo(dueDate);
             payment.setNote(note != null ? note.trim() : "");
 
             System.out.println("Payment object created: " + payment.toString());
