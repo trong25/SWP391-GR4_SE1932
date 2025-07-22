@@ -31,7 +31,8 @@ public class Class {
     public Class() {
     }
 
-    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, String classType, Personnel createdBy) {
+    public Class(String id, String name, Grade grade, Personnel teacher, SchoolYear schoolYear, String status, Personnel createdBy, int fee) {
+
         this.id = id;
         this.name = name;
         this.grade = grade;
@@ -40,6 +41,15 @@ public class Class {
         this.status = status;
         this.classType = classType;
         this.createdBy = createdBy;
+        this.fee = fee;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
     }
 
     public int getFee() {

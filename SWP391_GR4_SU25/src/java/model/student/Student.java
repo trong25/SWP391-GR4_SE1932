@@ -91,7 +91,7 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
+}
 
     public String getAddress() {
         return address;
@@ -207,7 +207,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" + "id=" + id + ", userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", email=" + email + ", status=" + status + ", birthday=" + birthday + ", gender=" + gender + ", firstGuardianName=" + firstGuardianName + ", firstGuardianPhoneNumber=" + firstGuardianPhoneNumber + ", avatar=" + avatar + ", secondGuardianName=" + secondGuardianName + ", secondGuardianPhoneNumber=" + secondGuardianPhoneNumber + ", createdBy=" + createdBy + ", parentSpecialNote=" + parentSpecialNote + ", school_id=" + school_id + ", school_class_id=" + school_class_id + '}';
+return "Student{" + "id=" + id + ", userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", email=" + email + ", status=" + status + ", birthday=" + birthday + ", gender=" + gender + ", firstGuardianName=" + firstGuardianName + ", firstGuardianPhoneNumber=" + firstGuardianPhoneNumber + ", avatar=" + avatar + ", secondGuardianName=" + secondGuardianName + ", secondGuardianPhoneNumber=" + secondGuardianPhoneNumber + ", createdBy=" + createdBy + ", parentSpecialNote=" + parentSpecialNote + ", school_id=" + school_id + ", school_class_id=" + school_class_id + '}';
     }
 
    

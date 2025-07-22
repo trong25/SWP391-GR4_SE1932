@@ -37,8 +37,7 @@ public class Personnel {
     private int teaching_years;
     private String achievements;
     private String cv_file;
-  private List<Salary> salaries;
- 
+    private List<Salary> salaries;
 
     public Personnel() {
         this.salaries = new ArrayList<>();
@@ -69,9 +68,7 @@ public class Personnel {
         this.cv_file = cv_file;
     }
 
-   
-   
-   public List<Salary> getSalaries() {
+    public List<Salary> getSalaries() {
         return salaries;
     }
 
@@ -258,41 +255,45 @@ public class Personnel {
     public void setCv_file(String cv_file) {
         this.cv_file = cv_file;
     }
-public Salary calculateSalary(Personnel p, int month, int year) {
-    Salary salary = new Salary();
-    salary.setPersonnelId(p.getId());
-    salary.setSalaryMonth(month);
-    salary.setSalaryYear(year);
 
-    int base;
-    switch (p.getQualification()) {
-        case "Cử nhân":
-            base = 6000000;
-            break;
-        case "Thạc Sĩ":
-            base = 8000000;
-            break;
-        case "Tiến Sĩ":
-            base = 10000000;
-            break;
-        default:
-            base = 5000000;
-            break;
+    public Salary calculateSalary(Personnel p, int month, int year) {
+        Salary salary = new Salary();
+        salary.setPersonnelId(p.getId());
+        salary.setSalaryMonth(month);
+        salary.setSalaryYear(year);
+
+        int base;
+        switch (p.getQualification()) {
+            case "Cử nhân":
+                base = 6000000;
+                break;
+            case "Thạc Sĩ":
+                base = 8000000;
+                break;
+            case "Tiến Sĩ":
+                base = 10000000;
+                break;
+            default:
+                base = 5000000;
+                break;
+        }
+
+        int bonus = 0;
+        int years = p.getTeaching_years();
+        if (years >= 1 && years <= 3) {
+            bonus = 500000;
+        } else if (years >= 4 && years <= 6) {
+            bonus = 1000000;
+        } else if (years > 6) {
+            bonus = 2000000;
+        }
+
+        salary.setBaseSalary(base);
+        salary.setTotalSalary(base + bonus);
+        salary.setPaymentStatus("chưa thanh toán"); // mặc định ban đầu
+        salary.setPaymentDate(null); // chưa thanh toán nên chưa có ngày
+
+        return salary;
     }
-
-    int bonus = 0;
-    int years = p.getTeaching_years();
-    if (years >= 1 && years <= 3) bonus = 500000;
-    else if (years >= 4 && years <= 6) bonus = 1000000;
-    else if (years > 6) bonus = 2000000;
-
-    salary.setBaseSalary(base);
-    salary.setTotalSalary(base + bonus);
-    salary.setPaymentStatus("chưa thanh toán"); // mặc định ban đầu
-    salary.setPaymentDate(null); // chưa thanh toán nên chưa có ngày
-
-    return salary;
-}
-
 
 }

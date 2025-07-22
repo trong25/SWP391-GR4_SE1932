@@ -8,11 +8,11 @@ import java.util.Date;
 
 /**
  *
- * @author admin
+ * @author ThanhNT
  */
 public class Payment {
 
-    private Integer id;
+   private Integer id;
     private String code;
     private String studentId;
     private String classId;
@@ -20,13 +20,14 @@ public class Payment {
     private Integer year;
     private Float amount;
     private String status;
+    private Date dueTo;
     private Date paymentDate;
     private String note;
 
     public Payment() {
     }
 
-    public Payment(Integer id, String code, String studentId, String classId, Integer month, Integer year, Float amount, String status, Date paymentDate, String note) {
+    public Payment(Integer id, String code, String studentId, String classId, Integer month, Integer year, Float amount, String status, Date dueTo, Date paymentDate, String note) {
         this.id = id;
         this.code = code;
         this.studentId = studentId;
@@ -35,16 +36,9 @@ public class Payment {
         this.year = year;
         this.amount = amount;
         this.status = status;
+        this.dueTo = dueTo;
         this.paymentDate = paymentDate;
         this.note = note;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public Integer getId() {
@@ -53,6 +47,14 @@ public class Payment {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getStudentId() {
@@ -103,6 +105,14 @@ public class Payment {
         this.status = status;
     }
 
+    public Date getDueTo() {
+        return dueTo;
+    }
+
+    public void setDueTo(Date dueTo) {
+        this.dueTo = dueTo;
+    }
+
     public Date getPaymentDate() {
         return paymentDate;
     }
@@ -118,5 +128,8 @@ public class Payment {
     public void setNote(String note) {
         this.note = note;
     }
+
+   
+
 
 }

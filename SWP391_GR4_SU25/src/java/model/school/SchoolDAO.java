@@ -10,8 +10,8 @@ import utils.DBContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SchoolDAO extends DBContext{
-   
+public class SchoolDAO extends DBContext {
+
     public List<Schools> getAllSchools() {
         String sql = "SELECT * FROM Schools";
 
@@ -32,31 +32,6 @@ public class SchoolDAO extends DBContext{
         }
         return listSchools;
     }
-    public Schools getSchoolById(String id) {
-    String sql = "SELECT * FROM Schools WHERE id = ?";
-    
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setString(1, id);
-        ResultSet rs = stmt.executeQuery();
-
-        if (rs.next()) {
-            Schools school = new Schools();
-            school.setId(rs.getString("id"));
-            school.setSchoolName(rs.getString("schoolName"));
-            school.setAddressSchool(rs.getString("addressSchool"));
-            school.setEmail(rs.getString("email"));
-            // Thêm các trường khác nếu có
-
-            return school;
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-
-    return null; // Nếu không tìm thấy hoặc có lỗi
-}
-
-
 
     public Schools getSchoolsById(String id) {
         String sql = "SELECT * FROM Schools where id = ?";
@@ -77,6 +52,29 @@ public class SchoolDAO extends DBContext{
         }
         return null;
     }
+
+    public Schools getSchoolById(String id) {
+        String sql = "SELECT * FROM Schools WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Schools school = new Schools();
+                school.setId(rs.getString("id"));
+                school.setSchoolName(rs.getString("schoolName"));
+                school.setAddressSchool(rs.getString("addressSchool"));
+                school.setEmail(rs.getString("email"));
+                // Thêm các trường khác nếu có
+
+                return school;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Nếu không tìm thấy hoặc có lỗi
+    }
+
 }
-
-

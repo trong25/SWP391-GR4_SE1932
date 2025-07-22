@@ -21,40 +21,52 @@ import utils.DBContext;
 import utils.Helper;
 
 /**
- Lớp ClassDAO chịu trách nhiệm thao tác dữ liệu với bảng ClassDAO trong Database
- * Lấy dữ liệu từ database liên quan đến bảng ClassDAO
- * Thức hiên các chức năng như tạo lớp học, lấy lớp học qua id, cập nhật và chỉnh sửa lớp học, chuyển lớp cho học sinh, phân công giáo viên,..
- * Ví dụ: createNewClass(Class c),getAll, getByStatus(String status, String schoolYearId),
- * moveOutClassForStudent(String oldClassId, String newClassId, String studentId),assignTeacherToClass(String teacherId, String classId)
- * 
+ * Lớp ClassDAO chịu trách nhiệm thao tác dữ liệu với bảng ClassDAO trong
+ * Database Lấy dữ liệu từ database liên quan đến bảng ClassDAO Thức hiên các
+ * chức năng như tạo lớp học, lấy lớp học qua id, cập nhật và chỉnh sửa lớp học,
+ * chuyển lớp cho học sinh, phân công giáo viên,.. Ví dụ: createNewClass(Class
+ * c),getAll, getByStatus(String status, String schoolYearId),
+ * moveOutClassForStudent(String oldClassId, String newClassId, String
+ * studentId),assignTeacherToClass(String teacherId, String classId)
+ *
  * Sử dụng JDBC để kết nới với cơ sở dữ liệu SQL Server
+ *
  * @author TrongNV
  */
 public class ClassDAO extends DBContext {
 
-   private Class createClass(ResultSet resultSet) throws SQLException {
+    private Class createClass(ResultSet resultSet) throws SQLException {
         Class c = new Class();
         c.setId(resultSet.getString("id"));
         c.setName(resultSet.getString("name"));
+
         GradeDAO gradeDAO = new GradeDAO();
         c.setGrade(gradeDAO.getGrade(resultSet.getString("grade_id")));
+
         PersonnelDAO personnelDAO = new PersonnelDAO();
         c.setTeacher(personnelDAO.getPersonnel(resultSet.getString("teacher_id")));
+
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
+
         c.setStatus(resultSet.getString("status"));
-        c.setClassType(resultSet.getString("class_type"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
+
+        // Thêm dòng này để lấy fee từ ResultSet
+        c.setFee(resultSet.getInt("fee"));
+
         return c;
     }
 
-
     public String createNewClass(Class c) {
+
         String sql = "insert into [Class] values (?,?,?,?,?,?,?,?,?)";
+
         try {
             if (!isSchoolYearValid(c.getSchoolYear())) {
                 return "Lớp phải được tạo trước khi năm học bắt đầu 7 ngày";
             }
+
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             String newClassId;
             if (getLatest() != null) {
@@ -62,22 +74,33 @@ public class ClassDAO extends DBContext {
             } else {
                 newClassId = "C000001";
             }
+
             preparedStatement.setString(1, newClassId);
+
             if (c.getName().isBlank()) {
                 return "Tên lớp không được để trống";
             }
             preparedStatement.setString(2, c.getName());
+
             preparedStatement.setString(3, c.getGrade().getId());
+
             if (c.getTeacher() != null) {
                 preparedStatement.setString(4, c.getTeacher().getId());
             } else {
                 preparedStatement.setNull(4, java.sql.Types.VARCHAR);
             }
+
             preparedStatement.setString(5, c.getSchoolYear().getId());
             preparedStatement.setString(6, "đang chờ xử lý");
             preparedStatement.setString(7, c.getCreatedBy().getId());
+
             preparedStatement.setString(8, c.getClassType()); 
             preparedStatement.setInt(9,c.getFee()); 
+
+            // Thêm giá trị fee
+            preparedStatement.setInt(8, c.getFee());
+
+
             preparedStatement.executeUpdate();
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -286,7 +309,8 @@ public class ClassDAO extends DBContext {
         return null;
 
     }
-   public List<Class> getClassesByGradeAndSchoolYear(String classId, String gradeId, String schoolYearId) {
+
+    public List<Class> getClassesByGradeAndSchoolYear(String classId, String gradeId, String schoolYearId) {
         List<Class> list = new ArrayList<>();
         String sql = "SELECT * FROM [Class] WHERE school_year_id= ? AND grade_id= ? AND status= N'đã được duyệt'";
         if (classId != null) {
@@ -306,10 +330,28 @@ public class ClassDAO extends DBContext {
         return list;
     }
 
+    public List<Class> getClassByGradeIdAndSchoolYearAndStatus(String gradeId, String schoolYearId, String status) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "SELECT TOP (1000) [id], [name], [grade_id], [teacher_id], [school_year_id], [status], [created_by] "
+                + "FROM [Class] "
+                + "WHERE grade_id = ? AND school_year_id = ? AND status = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, gradeId);
+            statement.setString(2, schoolYearId);
+            statement.setString(3, status);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                Class cls = createClass(rs);
+                classes.add(cls);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
+    }
 
- public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
-
-       
+    public boolean moveOutClassForStudent(String oldClassId, String newClassId, String studentId) {
 
         String sql = "update classDetails set class_id = ? where student_id= ? and class_id= ?";
         try {
@@ -326,10 +368,7 @@ public class ClassDAO extends DBContext {
         return true;
     }
 
-
-
-   
- public String assignTeacherToClass(String teacherId, String classId) {
+    public String assignTeacherToClass(String teacherId, String classId) {
         String sql = "update [Class] set teacher_id = ? where id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -343,6 +382,7 @@ public class ClassDAO extends DBContext {
         }
         return "success";
     }
+
  
     public List<Class> getClassByGradeIdAndSchoolYearAndStatus(String gradeId, String schoolYearId, String status) {
         List<Class> classes = new ArrayList<>();
@@ -363,3 +403,7 @@ public class ClassDAO extends DBContext {
         return classes;
     }
 }
+
+
+}
+

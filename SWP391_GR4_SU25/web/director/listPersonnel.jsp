@@ -35,12 +35,12 @@
         <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
         <style>
             .profile_img {
-                width: 220px; 
-                height: 280px; 
-                object-fit: cover; 
-                border-radius: 10px; 
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
-                border: 1px solid #ccc; 
+                width: 220px;
+                height: 280px;
+                object-fit: cover;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                border: 1px solid #ccc;
             }
 
 
@@ -143,7 +143,7 @@
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Danh1 Sách Nhân Viên</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Danh Sách Nhân Viên</h6>
                             </div>
 
                             <div class="card-body">
@@ -188,13 +188,16 @@
                                                         Nhân viên IT
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==1}">
-                                                        Hiệu trưởng
+                                                        Giám đốc
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==2}">
                                                         Giáo vụ
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==3}">
                                                         Giáo viên
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==5}">
+                                                        Nhân viên kế toán
                                                     </c:if>
 
                                                 </td>

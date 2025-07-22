@@ -19,7 +19,7 @@
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
         <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,80...900,900i"
             rel="stylesheet">
 
         <!-- Custom styles for this template-->
@@ -72,7 +72,7 @@
                                                 <div class="text-xs font-weight-bold text-${requestScope.attendance.status eq "present"?"success":"danger"} text-uppercase mb-1">
                                                     Chấm công hôm nay
                                                 </div>
-                                                <div class="row no-gutters align-items-center">
+<div class="row no-gutters align-items-center">
                                                     <div class="col-auto">
                                                         <c:if test="${requestScope.attendance!=null}">
                                                             <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">${requestScope.attendance.status eq 'present'?"Có mặt":"Vắng" }</div>
@@ -116,7 +116,7 @@
                                 <div class="card border-left-warning shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
+<div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                     Tài khoản bị khóa/vô hiệu hóa
                                                 </div>
@@ -157,7 +157,7 @@
                                     <div class="card shadow h-100">
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                             <h6 class="m-0 font-weight-bold text-success">Nhân sự theo trạng thái</h6>
-                                            <div class="dropdown no-arrow">
+<div class="dropdown no-arrow">
                                                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
@@ -176,7 +176,7 @@
                                                     <i class="fas fa-circle text-warning"></i> Đang chờ xử lý
                                                 </span>
                                                 <span class="mr-3">
-                                                    <i class="fas fa-circle text-danger"></i> Từ chối
+                                                    <i class="fas fa-circle text-danger"></i> Không Được Duyệt
                                                 </span>
                                             </div>
                                         </div>
@@ -206,8 +206,8 @@
                 // Map màu theo trạng thái (dạng thường, không dấu)
                 const statusColorMap = {
                     "đang làm việc": "#1cc88a",
-                    "đang chờ xử lý": "#f6c23e",
-                    "từ chối": "#e74a3b"
+"đang chờ xử lý": "#f6c23e",
+                    "không được duyệt": "#e74a3b"
                 };
 
                 // Chuẩn hóa nhãn trạng thái (để khớp với key trong map)
@@ -276,7 +276,7 @@
                             }]
                     },
                     options: {
-                        responsive: true,
+responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {

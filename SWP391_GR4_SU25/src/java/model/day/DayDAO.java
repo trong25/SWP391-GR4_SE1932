@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.week.WeekDAO;
-import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -22,10 +21,14 @@ import utils.DBContext;
 
 import utils.Helper;
 
+
 /**
  *
  * @author MSI
  */
+
+
+
 public class DayDAO extends DBContext {
 
     private Day createDay(ResultSet resultSet) throws SQLException {
@@ -36,6 +39,9 @@ public class DayDAO extends DBContext {
         day.setDate(resultSet.getDate("date"));
         return day;
     }
+
+
+
 
     public List<Day> getAll() {
         String sql = """
@@ -53,6 +59,9 @@ public class DayDAO extends DBContext {
         }
         return list;
     }
+
+
+
 
     public Day getDayByID(String dateId) {
         String sql = "SELECT * FROM Days WHERE id = ?";
@@ -75,30 +84,34 @@ public class DayDAO extends DBContext {
         return day;
     }
 
-    public Day getDayByDate(String date) {
-        String sql = "select * from days where date = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, date);
+//    public Day getDayByDate(String date) {
+//        String sql = "select * from days where date = ?";
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, date);
+//
+//            // Debug logs
+//            System.out.println("Debug - Looking for date: " + date);
+//            System.out.println("Debug - SQL: " + sql);
+//
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            if (resultSet.next()) {
+//                Day day = createDay(resultSet);
+//                System.out.println("Debug - Found day: " + day.getId() + " - " + day.getDate());
+//                return day;
+//            } else {
+//                System.out.println("Debug - No day found for date: " + date);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Debug - Error in getDayByDate: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-            // Debug logs
-            System.out.println("Debug - Looking for date: " + date);
-            System.out.println("Debug - SQL: " + sql);
 
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                Day day = createDay(resultSet);
-                System.out.println("Debug - Found day: " + day.getId() + " - " + day.getDate());
-                return day;
-            } else {
-                System.out.println("Debug - No day found for date: " + date);
-            }
-        } catch (SQLException e) {
-            System.out.println("Debug - Error in getDayByDate: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-    }
+
+
 
     public String getDateIDbyDay(java.util.Date day) {
         String sql = "SELECT id FROM Days WHERE date = ?";
@@ -171,6 +184,11 @@ public class DayDAO extends DBContext {
         return days;
     }
 
+
+
+
+
+
     private Day getLatest() {
         String sql = "SELECT TOP 1 * FROM Days ORDER BY ID DESC";
         try {
@@ -202,6 +220,69 @@ public class DayDAO extends DBContext {
         return "D" + result;
     }
 
+
+
+  
+    public Day getDayByDate(String date) {
+        String sql = "SELECT * FROM Days WHERE date = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, date);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return createDay(resultSet);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    
+
+ 
+//    public List<Day> getDayByWeek(String weekId) {
+//        List<Day> days = new ArrayList<>();
+//        String sql = "SELECT * FROM Days WHERE week_id = ? ORDER BY day_of_week";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setString(1, weekId);
+//            ResultSet rs = statement.executeQuery();
+//            while (rs.next()) {
+//                days.add(createDay(rs));
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return days;
+//    }
+
+//    public List<Day> getDaysWithTimetableForClass(String weekId, String classId) {
+//        List<Day> days = new ArrayList<>();
+//        String sql = "SELECT DISTINCT d.* FROM Days d " +
+//                     "JOIN Timetables t ON d.id = t.date_id " +
+//                     "WHERE d.week_id = ? AND t.class_id = ? AND t.status = N'đã được duyệt' " +
+//                     "ORDER BY d.date ASC";
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, weekId);
+//            preparedStatement.setString(2, classId);
+//
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                days.add(createDay(resultSet));
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return days;
+//    }
+//
+
+
+
     public void generateDays(List<Week> weeks) {
         try {
             StringBuilder sql = new StringBuilder("insert into Days values ");
@@ -230,5 +311,42 @@ public class DayDAO extends DBContext {
             e.printStackTrace();
         }
     }
+
+
+
+    public List<Day> getDaysInFutureWithTimetableForClass(String classId) {
+        List<Day> days = new ArrayList<>();
+        String sql = "SELECT DISTINCT d.* FROM Days d " +
+                     "JOIN Timetables t ON d.id = t.date_id " +
+                     "WHERE d.date > GETDATE() AND t.class_id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, classId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                days.add(createDay(resultSet));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return days;
+    }
+
+    public static void main(String[] args) {
+        DayDAO dao = new DayDAO();
+        String classId = "C000001"; // Mã lớp test
+        List<Day> days = dao.getDaysInFutureWithTimetableForClass(classId);
+        if (days.isEmpty()) {
+            System.out.println("Không có ngày nào phù hợp.");
+        } else {
+            for (Day d : days) {
+                System.out.println("ID: " + d.getId());
+                System.out.println("Date: " + d.getDate());
+                System.out.println("Week ID: " + (d.getWeek() != null ? d.getWeek().getId() : "null"));
+                System.out.println("-----------");
+            }
+        }
+    }
+
 
 }
