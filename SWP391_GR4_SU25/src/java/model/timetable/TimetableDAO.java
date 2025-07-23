@@ -184,26 +184,25 @@ public class TimetableDAO extends DBContext {
         return timetables;
     }
 
-   
-        //    public List<TeacherSlot> getTeacherByDayId(String dayId, String studentId) {
-        //        List<TeacherSlot> list = new ArrayList<>();
-        //        String sql = """
-        //                     SELECT DISTINCT t.teacher_id,
-        //                                     sub.name AS subject_name,
-        //                                     ts.name AS timeslot_name,
-        //                                     ts.id AS timeslot_id,
-        //                                     ts.start_time,
-        //                                     ts.end_time,
-        //                                     ts.slot_number
-        //                     FROM Timetables t
-        //                     INNER JOIN Class c ON t.class_id = c.id
-        //                     INNER JOIN classDetails cd ON c.id = cd.class_id
-        //                     INNER JOIN Students s ON cd.student_id = s.id
-        //                     INNER JOIN Subjects sub ON t.subject_id = sub.id
-        //                     INNER JOIN Timeslots ts ON t.timeslot_id = ts.id
-        //                     WHERE t.date_id = ?
-        //                       AND s.id = ?;
-        //                     """;
+    //    public List<TeacherSlot> getTeacherByDayId(String dayId, String studentId) {
+    //        List<TeacherSlot> list = new ArrayList<>();
+    //        String sql = """
+    //                     SELECT DISTINCT t.teacher_id,
+    //                                     sub.name AS subject_name,
+    //                                     ts.name AS timeslot_name,
+    //                                     ts.id AS timeslot_id,
+    //                                     ts.start_time,
+    //                                     ts.end_time,
+    //                                     ts.slot_number
+    //                     FROM Timetables t
+    //                     INNER JOIN Class c ON t.class_id = c.id
+    //                     INNER JOIN classDetails cd ON c.id = cd.class_id
+    //                     INNER JOIN Students s ON cd.student_id = s.id
+    //                     INNER JOIN Subjects sub ON t.subject_id = sub.id
+    //                     INNER JOIN Timeslots ts ON t.timeslot_id = ts.id
+    //                     WHERE t.date_id = ?
+    //                       AND s.id = ?;
+    //                     """;
     public List<Timetable> getTimetableByStudentIdAndWeekId(String studentID, String weekId) {
         List<Timetable> timetables = new ArrayList<>();
         String sql = """
@@ -296,7 +295,7 @@ public class TimetableDAO extends DBContext {
         return list;
     }
 
-public int getTodayClassesCount(String teacherId, String dayId) {
+    public int getTodayClassesCount(String teacherId, String dayId) {
         String sql = "SELECT COUNT(*) as count "
                 + "FROM Timetables t "
                 + "WHERE t.teacher_id = ? AND t.date_id = ? AND t.status = N'đã được duyệt'";
@@ -322,7 +321,6 @@ public int getTodayClassesCount(String teacherId, String dayId) {
         }
         return 0;
     }
-    
 
     // Lấy số lớn nhất hiện tại trong DB
     public int getMaxTimetableNumber() {
@@ -501,67 +499,6 @@ public int getTodayClassesCount(String teacherId, String dayId) {
             e.printStackTrace();
         }
     }
-//   public List<Timetable> getTeacherTimetable(String teacherId, String weekId) {
-//        List<Timetable> timetables = new ArrayList<>();
-//        String sql = "SELECT t.id AS timetable_id,\n" +
-//                "c.id AS class_id,\n" +
-//                "                ts.id AS timeslot_id,\n" +
-//                "                  d.id AS date_id,\n" +
-//                "                 s.id AS subject_id,\n" +
-//                "                    t.created_by,\n" +
-//                "                   t.status,\n" +
-//                "                 t.note,\n" +
-//                "                    p.id AS teacher_id\n" +
-//                "             FROM Timetables t\n" +
-//                "              JOIN Class c ON t.class_id = c.id\n" +
-//                "             JOIN Timeslots ts ON t.timeslot_id = ts.id\n" +
-//                "             JOIN Days d ON t.date_id = d.id\n" +
-//                "            JOIN Subjects s ON t.subject_id = s.id\n" +
-//                "           JOIN Personnels p ON t.teacher_id = p.id\n" +
-//                "           JOIN Weeks w ON d.week_id = w.id\n" +
-//                "                WHERE p.id = ?\n" +
-//                "           AND w.id = ?\n" +
-//                "          AND t.status = ?";
-//
-//        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-//            statement.setString(1, teacherId);
-//            statement.setString(2, weekId);
-//            statement.setString(3, "đã được duyệt");
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            while (resultSet.next()) {
-//                // Fetching data from the result set and creating Timetable object for each row
-//                String timetableId = resultSet.getString("timetable_id");
-//                String classIdResult = resultSet.getString("class_id");
-//                String timeslotId = resultSet.getString("timeslot_id");
-//                String dateId = resultSet.getString("date_id");
-//                String subjectId = resultSet.getString("subject_id");
-//                String createdBy = resultSet.getString("created_by");
-//                String statusResult = resultSet.getString("status");
-//                String note = resultSet.getString("note");
-//
-//                // Fetch related entities using DAOs
-//                ClassDAO classDAO = new ClassDAO();
-//                TimeSlotDAO timeslotDAO = new TimeSlotDAO();
-//                DayDAO dayDAO = new DayDAO();
-//                SubjectDAO subjectDAO = new SubjectDAO();
-//                PersonnelDAO personnelDAO = new PersonnelDAO();
-//
-//                Class classs = classDAO.getClassById(classIdResult);
-//                TimeSlot timeslot = timeslotDAO.getTimeslotById(timeslotId);
-//                Day day = dayDAO.getDayByID(dateId);
-//                Subject subject = subjectDAO.getSubjectBySubjectId(subjectId);
-//                Personnel createdByObj = personnelDAO.getPersonnel(createdBy);
-//                Personnel teacher = personnelDAO.getPersonnel(teacherId);
-//// Create Timetable object
-//                Timetable timetable = new Timetable(timetableId, classs, timeslot, day, subject, createdByObj, statusResult, note, teacher);
-//                timetables.add(timetable);
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
-//        }
-//        return timetables;
-//    } 
 
     public boolean approveTimetable(String timetableId) {
         String sql = "UPDATE Timetables SET status = N'đã được duyệt' WHERE id = ?";
