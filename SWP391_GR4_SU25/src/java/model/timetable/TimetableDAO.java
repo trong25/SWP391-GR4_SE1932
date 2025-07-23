@@ -490,7 +490,7 @@ public int getTodayClassesCount(String teacherId, String dayId) {
         }
     }
 
-    public void updateTeacherOfTimetable(String classId, String teacherId) {
+public void updateTeacherOfTimetable(String classId, String teacherId) {
         String sql = "update Timetables set teacher_id = ? where class_id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -501,46 +501,7 @@ public int getTodayClassesCount(String teacherId, String dayId) {
             e.printStackTrace();
         }
     }
-    try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, teacherId);
-            statement.setString(2, weekId);
-            statement.setString(3, "đã được duyệt");
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                // Fetching data from the result set and creating Timetable object for each row
-                String timetableId = resultSet.getString("timetable_id");
-                String classIdResult = resultSet.getString("class_id");
-                String timeslotId = resultSet.getString("timeslot_id");
-                String dateId = resultSet.getString("date_id");
-                String subjectId = resultSet.getString("subject_id");
-                String createdBy = resultSet.getString("created_by");
-                String statusResult = resultSet.getString("status");
-                String note = resultSet.getString("note");
-
-                // Fetch related entities using DAOs
-                ClassDAO classDAO = new ClassDAO();
-                TimeSlotDAO timeslotDAO = new TimeSlotDAO();
-                DayDAO dayDAO = new DayDAO();
-                SubjectDAO subjectDAO = new SubjectDAO();
-                PersonnelDAO personnelDAO = new PersonnelDAO();
-
-                Class classs = classDAO.getClassById(classIdResult);
-                TimeSlot timeslot = timeslotDAO.getTimeslotById(timeslotId);
-                Day day = dayDAO.getDayByID(dateId);
-                Subject subject = subjectDAO.getSubjectBySubjectId(subjectId);
-                Personnel createdByObj = personnelDAO.getPersonnel(createdBy);
-                Personnel teacher = personnelDAO.getPersonnel(teacherId);
-// Create Timetable object
-                Timetable timetable = new Timetable(timetableId, classs, timeslot, day, subject, createdByObj, statusResult, note, teacher);
-                timetables.add(timetable);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
-        }
-        return timetables;
-    }
-
+    
     public boolean approveTimetable(String timetableId) {
         String sql = "UPDATE Timetables SET status = N'đã được duyệt' WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
