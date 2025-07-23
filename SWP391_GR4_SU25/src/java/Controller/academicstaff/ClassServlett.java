@@ -118,7 +118,7 @@ public class ClassServlett extends HttpServlet {
                 }
                 HttpSession session = request.getSession();
                 User user = (User) session.getAttribute("user");
-                c.setCreatedBy(personnelDAO.getPersonnelByUserId(user.getId()));
+                c.setCreatedBy(personnelDAO.getPersonnelByUserIds(user.getId()));
                 ClassDAO classDAO = new ClassDAO();
                 String result = classDAO.createNewClass(c);
                 //return result of creation to user
