@@ -4,7 +4,6 @@
  */
 package Controller.accountant;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.payment.Payment;
 import model.payment.PaymentDAO;
 import model.payment.StudentPaymentInfo;
 import model.student.Student;
@@ -53,9 +53,18 @@ public class viewSentInvoicesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PaymentDAO paymentDAO = new PaymentDAO();
-        List<StudentPaymentInfo> listPayment = paymentDAO.getStudentPaymentInfoList();
-        
+        List<StudentPaymentInfo> listPayment;
+
+        String status = request.getParameter("status");
+
+        if (status != null && !status.trim().isEmpty()) {
+            listPayment = paymentDAO.getStudentPaymentInfoByStatus(status);
+        } else {
+            listPayment = paymentDAO.getStudentPaymentInfoList(); // Dùng đúng kiểu StudentPaymentInfo
+        }
+
         request.setAttribute("listPayment", listPayment);
+        request.setAttribute("selectedStatus", status); // để giữ trạng thái khi lọc
         request.getRequestDispatcher("viewSentInvoices.jsp").forward(request, response);
     }
 

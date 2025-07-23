@@ -4,13 +4,13 @@
  */
 package model.payment;
 
-import java.sql.Types;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.student.Student;
+import java.sql.Timestamp;
 import utils.DBContext;
 
 /**
@@ -85,6 +85,78 @@ public class PaymentDAO extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return list;
+    }
+
+    public List<Payment> getPaymentsByStatus(String status) {
+        List<Payment> list = new ArrayList<>();
+        String sql = "SELECT * FROM Payments WHERE status = ? ORDER BY id DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Payment payment = createPayment(rs);
+                list.add(payment);
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách Payments theo trạng thái: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public List<StudentPaymentInfo> getStudentPaymentInfoByStatus(String status) {
+        List<StudentPaymentInfo> list = new ArrayList<>();
+        String sql = """
+        SELECT 
+            s.code AS payment_id,
+            st.id AS student_id,
+            st.first_name,
+            st.last_name,
+            st.email,
+            st.first_guardian_phone_number,
+            s.[month],
+            s.due_to,
+            s.amount,
+            s.status,
+            s.note                     
+        FROM Students st
+        JOIN Payments s ON s.student_id = st.id
+        WHERE s.status = ?
+        ORDER BY s.[month] DESC, st.last_name ASC
+    """;
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                StudentPaymentInfo info = new StudentPaymentInfo();
+                info.setId(rs.getString("payment_id"));
+                info.setStudentId(rs.getString("student_id"));
+                info.setFirstName(rs.getString("first_name"));
+                info.setLastName(rs.getString("last_name"));
+                info.setEmail(rs.getString("email"));
+                info.setFirstGuardianPhoneNumber(rs.getString("first_guardian_phone_number"));
+                info.setMonth(rs.getInt("month"));
+
+                Timestamp dueToTimestamp = rs.getTimestamp("due_to");
+                info.setDueTo(dueToTimestamp != null ? dueToTimestamp.toLocalDateTime() : null);
+
+                info.setAmount(rs.getFloat("amount"));
+                info.setStatus(rs.getString("status"));
+                info.setNote(rs.getString("note"));
+
+                list.add(info);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error in getStudentPaymentInfoByStatus: " + e.getMessage());
+            throw new RuntimeException("Error fetching filtered student payment info", e);
+        }
+
         return list;
     }
 
@@ -167,42 +239,82 @@ public class PaymentDAO extends DBContext {
         List<StudentPaymentInfo> list = new ArrayList<>();
         String sql = """
         SELECT 
-            st.id,
-            st.avatar,
+            s.code as payment_id,        -- ID của payment (cần cho servlet)
+            st.id as student_id,         -- ID của student  
             st.first_name,
             st.last_name,
             st.email,
-            st.first_guardian_name,
             st.first_guardian_phone_number,
             s.[month],
+            s.due_to,
             s.amount,
-            s.status
+            s.status,
+            s.note                     
         FROM Students st
         JOIN Payments s ON s.student_id = st.id
+        ORDER BY s.[month] DESC, st.last_name ASC
     """;
 
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 StudentPaymentInfo info = new StudentPaymentInfo();
-                info.setStudentId(rs.getString("id"));
-                info.setAvatar(rs.getString("avatar"));
+                info.setId(rs.getString("payment_id"));
+                info.setStudentId(rs.getString("student_id"));
                 info.setFirstName(rs.getString("first_name"));
                 info.setLastName(rs.getString("last_name"));
                 info.setEmail(rs.getString("email"));
-                info.setFirstGuardianName(rs.getString("first_guardian_name"));
                 info.setFirstGuardianPhoneNumber(rs.getString("first_guardian_phone_number"));
                 info.setMonth(rs.getInt("month"));
+
+                // Xử lý due_to timestamp
+                Timestamp dueToTimestamp = rs.getTimestamp("due_to");
+                info.setDueTo(dueToTimestamp != null ? dueToTimestamp.toLocalDateTime() : null);
+
                 info.setAmount(rs.getFloat("amount"));
                 info.setStatus(rs.getString("status"));
+
+                // QUAN TRỌNG: Bỏ comment dòng này
+                info.setNote(rs.getString("note"));
+
                 list.add(info);
             }
-
         } catch (SQLException e) {
+            System.err.println("Error in getStudentPaymentInfoList: " + e.getMessage());
             throw new RuntimeException("Error fetching student payment info", e);
         }
-
         return list;
+    }
+
+    public boolean updatePaymentStatus(String paymentId, String status) {
+        String sql = "UPDATE Payments SET status = ?, payment_date = ? WHERE code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            if ("paid".equals(status)) {
+                ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+            } else {
+                ps.setNull(2, java.sql.Types.TIMESTAMP);
+            }
+            ps.setString(3, paymentId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating payment status: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updatePaymentNote(String paymentId, String note) {
+        String sql = "UPDATE Payments SET note = ? WHERE code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, note);
+            ps.setString(2, paymentId);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating payment note: " + e.getMessage());
+            return false;
+        }
     }
 
 }
