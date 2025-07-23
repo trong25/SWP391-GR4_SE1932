@@ -1,7 +1,7 @@
 <%-- 
     Document   : viewSentInvoices
     Created on : Jul 21, 2025, 11:26:51 PM
-    Author     : admin
+    Author     : ThanhNT
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -281,7 +281,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <div class="table-responsive">
-                                            <table class="table table-bordered table-hover" id="dataTable">
+                                            <table class="table table-bordered" id="dataTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>STT</th>
@@ -450,10 +450,17 @@
                 </div>
             </div>
         </div>
-
-        <!-- DataTables JavaScript -->
-        <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-        <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/popper.min.js"></script>
+        <script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/bootstrap.min.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/main.js"></script>
+        <!--===============================================================================================-->
+        <script src="js/plugins/pace.min.js"></script>
+        <!--===============================================================================================-->
+        <!--===============================================================================================-->
 
         <script>
                             $(document).ready(function () {
@@ -482,10 +489,13 @@
                                     scrollX: true,
                                     columnDefs: [
                                         {responsivePriority: 1, targets: [0, 1, 2, 7, 8]}, // Ưu tiên cột STT, Mã HS, Họ tên, Trạng thái, Hành động
-                                        {responsivePriority: 2, targets: [-1]} // Cột Hành động
+                                        {responsivePriority: 2, targets: [-1]}, // Cột Hành động
+                                        {orderable: true, targets: '_all'} // Kích hoạt sắp xếp cho tất cả cột
                                     ]
                                 });
                             });
+
+// [Các phần còn lại giữ nguyên như mã gốc]
 
                             //đổi định dạng số
                             document.addEventListener("DOMContentLoaded", function () {
@@ -604,5 +614,11 @@
                                 });
                             }
         </script>
+        <!-- Page level plugins -->
+        <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+        <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="../js/demo/datatables-demo.js"></script>
     </body>
 </html>
