@@ -961,7 +961,7 @@ public class StudentDAO extends DBContext {
 //        }
 //        return listStudent;
 //    }
-    public List<Student> getStudentsByClassId(String classId) {
+public List<Student> getStudentsByClassId(String classId) {
         List<Student> students = new ArrayList<>();
 
         String sql = """
@@ -969,7 +969,7 @@ public class StudentDAO extends DBContext {
                sch.schoolName, 
                sch.addressSchool, 
                c.class_name,
-               g.name AS grade_name
+               g.name AS grade_level
         FROM classDetails cd
         JOIN Students s ON cd.student_id = s.id
         LEFT JOIN Schools sch ON s.school_id = sch.id
