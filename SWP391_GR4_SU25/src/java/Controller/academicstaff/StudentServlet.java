@@ -150,7 +150,7 @@ public class StudentServlet extends HttpServlet {
                     Date birthday = formatter.parse(birth);
 
                     // Lấy người tạo
-                    Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
+                    Personnel createdBy = personnelDAO.getPersonnelByUserIds(user.getId());
 
                     // Tạo đối tượng Student
                     Student student = new Student(null, user.getId(), Helper.formatName(firstName), Helper.formatName(lastName), address,
