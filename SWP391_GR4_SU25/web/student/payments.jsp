@@ -50,6 +50,7 @@
                                             <tr>
                                                 <th>STT</th>
                                                 <th>Tên</th>
+                                                <th>Hạn nộp</th>
                                                 <th>Link nộp</th>
                                                 <th>Trạng thái</th>
                                             </tr>
@@ -59,6 +60,7 @@
                                                 <tr>
                                                     <td scope="row">${status.index + 1}</td>
                                                     <td>Học phí tháng ${payment.month} năm ${payment.year}</td>
+                                                    <td>${payment.dueTo}</td>
                                                     <td><a href="payment?id=${payment.id}" target="_blank" ${payment.status == "Not yet"? "":"hidden"}>Thanh toán</a></td>
                                                     <td style='color: ${payment.status == "Not yet"? "red":"green"}'>${payment.status == "Not yet"? "Chưa thanh toán":"Đã thanh toán"}</td>
                                                 </tr>

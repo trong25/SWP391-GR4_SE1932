@@ -1,4 +1,4 @@
-﻿-- Script tạo database Cultural_Tutoring_Center_HN đã được sửa lỗi
+-- Script tạo database Cultural_Tutoring_Center_HN đã được sửa lỗi
 
 USE [master]
 GO
@@ -384,7 +384,6 @@ ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([school_year_id]) REFERENCES [School
 GO
 ALTER TABLE [ScoreReports] ADD FOREIGN KEY ([class_id]) REFERENCES [Class]([id])
 GO
-ALTER TABLE [Class] ADD class_type nvarchar(50);
 
 -- Tạo index
 CREATE UNIQUE INDEX [Class_index_0] ON [Class] ([name], [school_year_id])
