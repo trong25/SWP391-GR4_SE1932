@@ -22,19 +22,20 @@ public class EvaluationDAO extends DBContext {
         evaluation.setId(resultSet.getString("id"));
         Student student = studentDAO.getStudentsById(resultSet.getString("student_id"));
         evaluation.setStudent(student);
-        Timetable timetable = timetableDAO.getTimetableById(resultSet.getString("timetable_id"));
+        // Sử dụng date_id thay cho timetable_id
+        Timetable timetable = timetableDAO.getTimetableByDateId(resultSet.getString("date_id"));
         evaluation.setTimetable(timetable);
         evaluation.setEvaluation(resultSet.getString("evaluation"));
         evaluation.setNotes(resultSet.getString("notes"));
         return evaluation;
     }
 
-    public Evaluation getEvaluationByStudentIdAndDay(String studentId, String timetableId) {
-        String sql = "select * from Evaluations where student_id=? and timetable_id=?";
+    public Evaluation getEvaluationByStudentIdAndDay(String studentId, String dateId) {
+        String sql = "select * from Evaluations where student_id=? and date_id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, studentId);
-            preparedStatement.setString(2, timetableId);
+            preparedStatement.setString(2, dateId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return createEvaluation(resultSet);
@@ -52,12 +53,11 @@ public class EvaluationDAO extends DBContext {
                    SELECT 
                        e.id, 
                        e.student_id, 
-                       e.timetable_id, 
+                       e.date_id, 
                        e.evaluation, 
                        e.notes  
                    FROM [Evaluations] e 
-                       JOIN [Timetables] t ON e.timetable_id = t.id
-                       JOIN [Days] d ON t.date_id = d.id
+                       JOIN [Days] d ON e.date_id = d.id
                        JOIN [Weeks] w ON d.week_id = w.id
                    WHERE 
                        d.week_id = ?           -- Tham số 1: week_id
@@ -72,7 +72,7 @@ public class EvaluationDAO extends DBContext {
                 list.add(createEvaluation(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e);  
         }
         return list;
     }
@@ -83,8 +83,7 @@ public class EvaluationDAO extends DBContext {
                      SELECT 
                          COUNT(e.evaluation) AS good_day 
                      FROM [Evaluations] e 
-                         JOIN [Timetables] t ON e.timetable_id = t.id
-                         JOIN [Days] d ON t.date_id = d.id
+                         JOIN [Days] d ON e.date_id = d.id
                          JOIN [Weeks] w ON d.week_id = w.id
                      WHERE 
                          w.id = ?                    -- Tham số 1: week_id
@@ -111,8 +110,7 @@ public class EvaluationDAO extends DBContext {
             WITH T AS (
                 SELECT school_year_id, week_id, COUNT(evaluation) AS good_day 
                 FROM Evaluations e
-                JOIN Timetables t ON e.timetable_id = t.id
-                JOIN Days d ON t.date_id = d.id
+                JOIN Days d ON e.date_id = d.id
                 JOIN Weeks w ON d.week_id = w.id
                 WHERE e.student_id = ? AND e.evaluation = 'Ngoan'
                 GROUP BY school_year_id, week_id

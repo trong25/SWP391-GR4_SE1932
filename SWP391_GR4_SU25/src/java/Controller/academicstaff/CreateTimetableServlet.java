@@ -173,7 +173,7 @@ public class CreateTimetableServlet extends HttpServlet {
                     System.out.println("Không tìm thấy giáo viên cho lớp, dùng user hiện tại làm giáo viên: " + (teacher != null ? teacher.getId() : "null"));
                 }
                 timetable.setTeacher(teacher);
-                Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
+                Personnel createdBy = personnelDAO.getPersonnelByUserIds(user.getId());
                 timetable.setCreatedBy(createdBy);
                 if (createdBy == null) {
                     session.setAttribute("toastType", "error");

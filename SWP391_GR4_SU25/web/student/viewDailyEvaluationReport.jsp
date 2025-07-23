@@ -181,20 +181,6 @@
                                 </div>
                             </div>
                         </c:if>
-                        <c:if test="${requestScope.display eq 'year'}">
-                            <div class="card shadow mb-4">
-
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary"> Đánh giá Theo Năm học</h6>
-                                    <h6 class="m-0 font-weight-bold text-primary"> Học sinh : ${requestScope.student.getLastName()} ${requestScope.student.getFirstName()} </h6>
-
-                                </div>
-
-
-                                
-                                </div>
-                            </div>
-                        </c:if>
                     </div>
 
                 </div>

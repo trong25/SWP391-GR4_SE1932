@@ -32,33 +32,42 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
             EvaluationDAO evaluationDAO = new EvaluationDAO();
             WeekDAO weekDAO = new WeekDAO();
             Date currentDate = Date.from(Instant.now());
+
+            // Lấy student 1 lần duy nhất
+            Student student = studentDAO.getStudentByUserId(user.getId());
+
             String sltedw = "";
             String sltedy = "";
             String display = "week";
-            Student student = studentDAO.getStudentByUserId(user.getId());
+
+            // Xác định tuần và năm học hiện tại
             if (weekDAO.getCurrentWeek(currentDate) != null) {
                 sltedw = weekDAO.getCurrentWeek(currentDate);
                 sltedy = weekDAO.getYearByWeek(sltedw);
-            } else if (schoolYearDAO.getClosestSchoolYears() != null && schoolYearDAO.checkStudentInClassOfSchoolYear(studentDAO.getStudentByUserId(user.getId()).getId(), schoolYearDAO.getClosestSchoolYears().getId())) {
+            } else if (schoolYearDAO.getClosestSchoolYears() != null &&
+                    schoolYearDAO.checkStudentInClassOfSchoolYear(student.getId(), schoolYearDAO.getClosestSchoolYears().getId())) {
                 sltedy = schoolYearDAO.getClosestSchoolYears().getId();
                 sltedw = weekDAO.getfirstWeekOfClosestSchoolYear(sltedy).getId();
             } else {
-                sltedw = weekDAO.getLastWeekOfClosestSchoolYearOfStudent(studentDAO.getStudentByUserId(user.getId()).getId()).getId();
+                sltedw = weekDAO.getLastWeekOfClosestSchoolYearOfStudent(student.getId()).getId();
                 sltedy = weekDAO.getYearByWeek(sltedw);
             }
-            List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByStudentID(studentDAO.getStudentByUserId(user.getId()).getId());
+
+            List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByStudentID(student.getId());
             List<Week> weekList = weekDAO.getWeeks(sltedy);
-            List<Evaluation> evaluationList = evaluationDAO.getEvaluationByWeekandStudentId(sltedw, studentDAO.getStudentByUserId(user.getId()).getId());
-            int good_day = evaluationDAO.countEvaluationOfWeek(sltedw, studentDAO.getStudentByUserId(user.getId()).getId());
+            List<Evaluation> evaluationList = evaluationDAO.getEvaluationByWeekandStudentId(sltedw, student.getId());
             Week choosenweek = weekDAO.getWeek(sltedw);
+
+            // Set attribute cho JSP
             request.setAttribute("student", student);
-            request.setAttribute("good_day", good_day);
             request.setAttribute("schoolYearList", schoolYears);
             request.setAttribute("weekList", weekList);
             request.setAttribute("evaluationList", evaluationList);
             request.setAttribute("display", display);
             request.setAttribute("sltedy", sltedy);
             request.setAttribute("sltedw", sltedw);
+            request.setAttribute("cweek", choosenweek);
+
             request.getRequestDispatcher("viewDailyEvaluationReport.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,30 +87,27 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
             String sltedw = request.getParameter("week");
             String display = request.getParameter("display");
             Student student = studentDAO.getStudentByUserId(user.getId());
-            if (display.equalsIgnoreCase("week") && sltedw == null && sltedy == null) {
+            if ("week".equalsIgnoreCase(display) && sltedw == null && sltedy == null) {
                 response.sendRedirect("viewdailyevaluationreport");
-            } else if (display.equalsIgnoreCase("week")) {
+            } else if ("week".equalsIgnoreCase(display)) {
                 if (weekDAO.checkWeekInSchoolYear(sltedw, sltedy)) {
                     Week choosenweek = weekDAO.getWeek(sltedw);
                     request.setAttribute("cweek", choosenweek);
-                    List<Evaluation> evaluationList = evaluationDAO.getEvaluationByWeekandStudentId(sltedw, studentDAO.getStudentByUserId(user.getId()).getId());
-                    int good_day = evaluationDAO.countEvaluationOfWeek(sltedw, studentDAO.getStudentByUserId(user.getId()).getId());
+                    List<Evaluation> evaluationList = evaluationDAO.getEvaluationByWeekandStudentId(sltedw, student.getId());
                     request.setAttribute("evaluationList", evaluationList);
-                    request.setAttribute("good_day", good_day);
                 }
-                List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByStudentID(studentDAO.getStudentByUserId(user.getId()).getId());
+                List<SchoolYear> schoolYears = schoolYearDAO.getListSchoolYearsByStudentID(student.getId());
                 List<Week> weekList = weekDAO.getWeeks(sltedy);
 
                 request.setAttribute("student", student);
                 request.setAttribute("schoolYearList", schoolYears);
                 request.setAttribute("weekList", weekList);
-
                 request.setAttribute("sltedy", sltedy);
                 request.setAttribute("sltedw", sltedw);
                 request.setAttribute("display", display);
                 request.getRequestDispatcher("viewDailyEvaluationReport.jsp").forward(request, response);
             } else {
-                List<String> dataList = evaluationDAO.NumberOfGoodEvaluationsPerYear(studentDAO.getStudentByUserId(user.getId()).getId());
+                List<String> dataList = evaluationDAO.NumberOfGoodEvaluationsPerYear(student.getId());
                 List<SchoolYear> schoolYears = new ArrayList<>();
                 List<Integer> good_day = new ArrayList<>();
                 List<Integer> week = new ArrayList<>();
@@ -117,11 +123,9 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
                 request.setAttribute("week", week);
                 request.setAttribute("display", display);
                 request.getRequestDispatcher("viewDailyEvaluationReport.jsp").forward(request, response);
-
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

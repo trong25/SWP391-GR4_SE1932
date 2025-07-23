@@ -59,8 +59,6 @@ public class StudentDAO extends DBContext {
             school.setSchoolName(resultSet.getString("schoolName"));
 
             school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
-
-            school.setAddressSchool(resultSet.getString("addressSchool")); // ✅ Lấy đúng địa chỉ từ ResultSet
             student.setSchool_id(school);
 
             // Tạo và gán SchoolClass object
