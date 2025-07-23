@@ -145,8 +145,8 @@
                 </a>
                 <div id="collapseNoti" class="collapse" aria-labelledby="headingNoti" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">Tạo Thông Báo</a>
-                        <a class="collapse-item" href="">Thông Báo Đã Gửi</a>
+                        <a class="collapse-item" href="createnotifi">Tạo Thông Báo</a>
+                        <a class="collapse-item" href="listsentnotifi">Thông Báo Đã Gửi</a>
                     </div>
                 </div>
             </li>

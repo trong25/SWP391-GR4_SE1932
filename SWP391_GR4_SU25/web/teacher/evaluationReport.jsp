@@ -65,9 +65,9 @@
                         document.getElementById("myForm").submit();
                     }
 
-                    function submitForm() {
-                        document.getElementById("myForm").submit();
-                    }
+//                    function submitForm() {
+//                        document.getElementById("myForm").submit();
+//                    }
                 </script>
                 <%----%>
                 <div class="card shadow mb-4">
@@ -110,13 +110,13 @@
                                     <th>Ảnh</th>
                                     <th>Họ và tên</th>
                                     <th>Ngày sinh</th>
-                                    <th>Tổng số buổi nghỉ trong tuần</th>
-                                    <th>Số lượt đánh giá ngoan của trẻ</th>
+                                    <th>Tổng số buổi nghỉ trong tuần</th>   
+                                    <th>Ngày học tốt</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <jsp:useBean id="evaluationDAO" class="model.evaluation.EvaluationDAO"/>
-                                <c:forEach var="student" items="${requestScope.listtudent}" varStatus="status">
+                                <c:forEach var="student" items="${requestScope.listStudent}" varStatus="status">
                                     <tr>
                                         <th scope="row">${status.index + 1}</th>
                                         <td>${student.id}</td>
@@ -128,7 +128,7 @@
                                         <td>${student.lastName} ${student.firstName}</td>
                                         <td><fmt:formatDate value="${student.birthday}" pattern="yyyy/MM/dd" /></td>
                                         <td class="text-center align-middle">${evaluationDAO.getNumberOfStatus('Nghỉ học',student.id,weekId)}</td>
-                                        <td class="text-center align-middle">${evaluationDAO.getNumberOfStatus('Ngoan',student.id,weekId)}</td>
+                                        <td class="text-center align-middle">${evaluationDAO.getNumberOfStatus('Tốt',student.id,weekId)}</td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
