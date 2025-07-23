@@ -64,7 +64,7 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
             request.setAttribute("weekList", weekList);
             request.setAttribute("evaluationList", evaluationList);
             request.setAttribute("display", display);
-            request.setAttribute("sltedy", sltedy);
+request.setAttribute("sltedy", sltedy);
             request.setAttribute("sltedw", sltedw);
             request.setAttribute("cweek", choosenweek);
 
@@ -117,7 +117,7 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
                     good_day.add(Integer.parseInt(parts[1]));
                     week.add(Integer.parseInt(parts[2]));
                 }
-                request.setAttribute("student", student);
+request.setAttribute("student", student);
                 request.setAttribute("schoolYears", schoolYears);
                 request.setAttribute("good_day", good_day);
                 request.setAttribute("week", week);

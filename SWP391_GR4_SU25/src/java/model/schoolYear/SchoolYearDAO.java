@@ -298,8 +298,13 @@ public class SchoolYearDAO extends DBContext {
         DecimalFormat decimalFormat = new DecimalFormat("000000");
         String result = decimalFormat.format(number);
         return "SY" + result;
+
     }  
-       public List<SchoolYear> getListSchoolYearsByStudentID(String id) {
+       
+
+    
+    public List<SchoolYear> getListSchoolYearsByStudentID(String id) {
+
         List<SchoolYear> schoolYears = new ArrayList<>();
         String sql = "select sy.* from Students p join classDetails cd on p.id = cd.student_id\n"
                 + "JOIN dbo.Class C on C.id = cd.class_id\n"
@@ -325,8 +330,6 @@ public class SchoolYearDAO extends DBContext {
         return schoolYears;
     }
 
-  
-
     public boolean checkStudentInClassOfSchoolYear(String student_id, String school_year_id) {
         String sql = "select * from Students p join classDetails cd on p.id = cd.student_id\n" +
                 "join dbo.Class C on cd.class_id = C.id\n" +
@@ -345,4 +348,9 @@ public class SchoolYearDAO extends DBContext {
         return false;
     }
 
+
 }
+
+
+
+
