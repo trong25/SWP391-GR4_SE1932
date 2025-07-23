@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller.auth;
+package Controllerr;
 
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;

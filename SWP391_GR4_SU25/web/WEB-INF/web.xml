@@ -52,7 +52,7 @@
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>Controller.auth.LoginServlet</servlet-class>
+        <servlet-class>Controllerr.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DashboardTeacherServlet</servlet-name>
@@ -76,11 +76,11 @@
     </servlet>
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
-        <servlet-class>Controller.auth.ForgotPasswordServlet</servlet-class>
+        <servlet-class>Controllerr.ForgotPasswordServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ValidatePassword</servlet-name>
-        <servlet-class>Controller.auth.ValidatePassword</servlet-class>
+        <servlet-class>Controllerr.ValidatePassword</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ReviewTimetableServlet</servlet-name>
@@ -104,11 +104,11 @@
     </servlet>
     <servlet>
         <servlet-name>UpdatePersonnelServlet</servlet-name>
-        <servlet-class>Controller.auth.UpdatePersonnelServlet</servlet-class>
+        <servlet-class>Controllerr.UpdatePersonnelServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePasswords</servlet-name>
-        <servlet-class>Controller.auth.ChangePasswords</servlet-class>
+        <servlet-class>Controllerr.ChangePasswords</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewInformationDirectorServlet</servlet-name>
