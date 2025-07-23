@@ -69,29 +69,34 @@
                                     <tr>
                                         <td>${status.index + 1}</td>
                                         <td>${student.lastName} ${student.firstName}</td>
-                                                                <c:forEach var="day" items="${requestScope.days}">
-                            <c:set var="evaluation" value="${studentEvaluationBean.getEvaluationByStudentIdAndDay(student.id, day.id)}"/>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${evaluation != null}">
-                                        <c:set value="${evaluation.evaluation}" var="s"/>
-                                        <c:if test="${s eq 'Tốt'}">
-                                            <span class="badge badge-success">Tốt</span>
-                                        </c:if>
-                                        <c:if test="${s eq 'Khá'}">
-                                            <span class="badge badge-warning">Khá</span>
-                                        </c:if>
-                                        <c:if test="${s eq 'Trung bình'}">
-                                            <span class="badge badge-info">Trung bình</span>
-                                        </c:if>
-                                        <c:if test="${s eq 'Yếu'}">
-                                            <span class="badge badge-danger">Yếu</span>
-                                        </c:if>
-                                    </c:when>
-             
-                                </c:choose>
-                            </td>
-                        </c:forEach>
+                                        <c:forEach var="day" items="${requestScope.days}">
+                                            <c:set var="evaluation" value="${studentEvaluationBean.getEvaluationByStudentIdAndDay(student.id, day.id)}"/>
+                                            <td>
+                                                
+                                                <c:choose>
+                                                    <c:when test="${evaluation != null}">
+                                                        <c:set value="${evaluation.evaluation}" var="s"/>
+                                                        <c:choose>
+                                                            <c:when test="${s eq 'Ngày Học Tốt'}">
+                                                                <span class="badge badge-success">Ngày Học Tốt</span>
+                                                            </c:when>
+                                                            <c:when test="${s eq 'Ngày Học Khá'}">
+                                                                <span class="badge badge-warning">Ngày Học Khá</span>
+                                                            </c:when>
+                                                            <c:when test="${s eq 'Nghỉ học'}">
+                                                                <span class="badge badge-secondary">Nghỉ học</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="badge badge-info">${s}</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge badge-danger">Chưa cập nhật</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                        </c:forEach>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

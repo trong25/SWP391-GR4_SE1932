@@ -31,8 +31,8 @@ public class EvaluationDAO extends DBContext {
         evaluation.setId(resultSet.getString("id"));
         Student student = studentDAO.getStudentById(resultSet.getString("student_id"));
         evaluation.setStudent(student);
-        Timetable timetable = timetableDAO.getTimetableById(resultSet.getString("timetable_id"));
-        evaluation.setTimetable(timetable);
+//        Timetable timetable = timetableDAO.getTimetableById(resultSet.getString("timetable_id"));
+//        evaluation.setTimetable(timetable);
         evaluation.setEvaluation(resultSet.getString("evaluation"));
         evaluation.setNotes(resultSet.getString("notes"));
         return evaluation;
