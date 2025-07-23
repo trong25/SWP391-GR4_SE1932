@@ -5,8 +5,8 @@
 
 package Controller.academicstaff;
 
-import StudentWait.StudentWait;
-import StudentWait.StudentWaitDAO;
+import model.StudentWait.StudentWait;
+import model.StudentWait.StudentWaitDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;

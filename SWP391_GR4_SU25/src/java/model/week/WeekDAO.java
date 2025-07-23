@@ -240,9 +240,8 @@ weeks.add(week);
         return false;
     }
 
-    public Object getLastWeekOfClosestSchoolYearOfStudent(String id) {
-               Week week = new Week();
-
+public Week getLastWeekOfClosestSchoolYearOfStudent(String id){
+        Week week = new Week();
         String sql = " select top 1 w.* from classDetails cd join dbo.Class C on cd.class_id = C.id\n" +
                 "join dbo.SchoolYears SY on C.school_year_id = SY.id\n" +
                 "join dbo.Weeks W on SY.id = W.school_year_id\n" +
