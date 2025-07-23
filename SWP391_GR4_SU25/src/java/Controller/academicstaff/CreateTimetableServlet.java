@@ -22,6 +22,7 @@ import model.day.Day;
 import model.day.DayDAO;
 import model.grade.Grade;
 import model.grade.GradeDAO;
+import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
@@ -164,11 +165,32 @@ public class CreateTimetableServlet extends HttpServlet {
 
                 timetable.setaClass(classDAO.getClassById(classId));
                 // Định nghĩa các tham số khác
-                timetable.setCreatedBy(personnelDAO.getPersonnelByUserId(user.getId()));
+                // Lấy giáo viên cho lớp, nếu không có thì lấy tạm user hiện tại làm giáo viên
+                Personnel teacher = personnelDAO.getTeacherByClass(classId);
+                if (teacher == null) {
+                    // Nếu không có giáo viên phân công, lấy user hiện tại làm giáo viên (nếu là personnel)
+                    teacher = personnelDAO.getPersonnelByUserId(user.getId());
+                    System.out.println("Không tìm thấy giáo viên cho lớp, dùng user hiện tại làm giáo viên: " + (teacher != null ? teacher.getId() : "null"));
+                }
+                timetable.setTeacher(teacher);
+                Personnel createdBy = personnelDAO.getPersonnelByUserId(user.getId());
+                timetable.setCreatedBy(createdBy);
+                if (createdBy == null) {
+                    session.setAttribute("toastType", "error");
+                    session.setAttribute("toastMessage", "Thiếu thông tin người tạo! Vui lòng kiểm tra tài khoản nhân sự.");
+                    response.sendRedirect("timetable");
+                    return;
+                }
                 String status = "đang chờ xử lý";
                 timetable.setStatus(status);
-                timetable.setTeacher(personnelDAO.getTeacherByClass(classId));
 
+                // Kiểm tra dữ liệu giáo viên và người tạo
+                if (timetable.getTeacher() == null || timetable.getCreatedBy() == null) {
+                    session.setAttribute("toastType", "error");
+                    session.setAttribute("toastMessage", "Thiếu thông tin giáo viên hoặc người tạo!");
+                    response.sendRedirect("timetable");
+                    return;
+                }
                 // Thu thập tất cả các `dayId` từ tham số đầu vào
                 Enumeration<String> parameterNames = request.getParameterNames();
                 Set<String> dayIds = new HashSet<>();
@@ -181,21 +203,27 @@ public class CreateTimetableServlet extends HttpServlet {
                     }
                 }
 
-                // Kiểm tra thời khóa biểu tồn tại cho tất cả `dayId`
+                // Kiểm tra thời khóa biểu tồn tại cho tất cả dayId và timeslotId
                 for (String dayId : dayIds) {
-                    if (timetableDAO.existsTimetableForClassInCurrentWeek(classId, dayId)) {
-                        session.setAttribute("toastType", "error");
-                        session.setAttribute("toastMessage", "Thời khóa biểu của lớp này đã được tạo!");
-                        response.sendRedirect("timetable");
-                        return; // Dừng lại nếu thời khóa biểu đã tồn tại
+                    for (TimeSlot timeslot : new TimeSlotDAO().getTimeslotsForTimetable()) {
+                        String paramName = "timeslotId_" + dayId + "_" + timeslot.getId();
+                        String timeslotIdValue = request.getParameter(paramName);
+                        if (timeslotIdValue != null && !timeslotIdValue.isEmpty()) {
+                            if (timetableDAO.existsTimetableForClassDayAndTimeslot(classId, dayId, timeslot.getId())) {
+                                session.setAttribute("toastType", "error");
+                                session.setAttribute("toastMessage", "Thời khóa biểu của lớp này đã được tạo cho ca học này!");
+                                response.sendRedirect("timetable");
+                                return; // Dừng lại nếu thời khóa biểu đã tồn tại
+                            }
+                        }
                     }
                 }
 
-                parameterNames = request.getParameterNames();
-                StringBuilder sql = new StringBuilder("insert into Timetables([id], [class_id], [timeslot_id], [date_id], [subject_id], [created_by], [status], [note], [teacher_id]) values ");
                 // Lấy số lớn nhất hiện tại trong DB một lần
                 int maxNumber = timetableDAO.getMaxTimetableNumber();
-
+                StringBuilder sql = new StringBuilder("insert into Timetables([id], [class_id], [timeslot_id], [date_id], [subject_id], [created_by], [status], [note], [teacher_id]) values ");
+                boolean hasInsert = false;
+                parameterNames = request.getParameterNames();
                 while (parameterNames.hasMoreElements()) {
                     String paramName = parameterNames.nextElement();
                     if (paramName.startsWith("timeslotId_")) {
@@ -205,21 +233,38 @@ public class CreateTimetableServlet extends HttpServlet {
                             String dayId = parts[1];
                             String timeslotId = parts[2];
                             String subjectId = timeslotIdValue; // ID môn học được chọn
-
+                            // Kiểm tra dữ liệu đầu vào
+                            if (classId == null || dayId == null || timeslotId == null || subjectId == null ||
+                                timetable.getCreatedBy().getId() == null) {
+                                System.out.println("Bỏ qua bản ghi lỗi: " + classId + ", " + dayId + ", " + timeslotId + ", " + subjectId);
+                                continue; // Bỏ qua bản ghi lỗi
+                            }
                             // Tăng số và sinh mã mới cho từng bản ghi
                             maxNumber++;
                             String timetableId = String.format("TT%06d", maxNumber);
-
+                            if (hasInsert) sql.append(",");
                             sql.append("('").append(timetableId).append("','").append(classId).append("','")
                                 .append(timeslotId).append("','").append(dayId).append("','")
                                 .append(subjectId).append("','").append(timetable.getCreatedBy().getId())
-                                .append("',N'").append(status).append("',NULL").append(",'")
-                                .append(timetable.getTeacher().getId()).append("'),");
+                                .append("',N'").append(status).append("',NULL,");
+                            if (timetable.getTeacher() != null) {
+                                sql.append("'").append(timetable.getTeacher().getId()).append("')");
+                            } else {
+                                sql.append("NULL)");
+                            }
+                            hasInsert = true;
+                            // In log chi tiết để debug
+                            System.out.println("Insert: id=" + timetableId + ", classId=" + classId + ", dayId=" + dayId + ", timeslotId=" + timeslotId + ", subjectId=" + subjectId + ", createdBy=" + timetable.getCreatedBy().getId() + ", teacherId=" + (timetable.getTeacher() != null ? timetable.getTeacher().getId() : "NULL"));
                         }
                     }
                 }
-                sql.deleteCharAt(sql.length() - 1);
-                System.out.println(sql.toString());
+                if (!hasInsert) {
+                    session.setAttribute("toastType", "error");
+                    session.setAttribute("toastMessage", "Không có tiết học nào hợp lệ để tạo thời khóa biểu!");
+                    response.sendRedirect("timetable");
+                    return;
+                }
+                System.out.println("SQL to insert: " + sql.toString());
                 String entryCreated = timetableDAO.createTimetable(sql.toString());
                 if (entryCreated.equals("success")) {
                     session.setAttribute("toastType", entryCreated);
@@ -234,7 +279,10 @@ public class CreateTimetableServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("toastType", "error");
+            session.setAttribute("toastMessage", "Có lỗi xảy ra khi tạo thời khóa biểu!");
+            response.sendRedirect("timetable");
         }
     }
 
@@ -249,3 +297,4 @@ public class CreateTimetableServlet extends HttpServlet {
     }// </editor-fold>
 
 }
+

@@ -45,7 +45,7 @@ public class EvaluationDAO extends DBContext {
         return null;
     }
 
-    public List<Evaluation> getEvaluationByWeekandPupilId(String weekId, String pupil_id) {
+    public List<Evaluation> getEvaluationByWeekandStudentId(String weekId, String student_id) {
         List<Evaluation> list = new ArrayList<>();
         String sql = """
                    -- Lấy danh sách evaluation của một học sinh trong một tuần (theo tiết học)
@@ -66,7 +66,7 @@ public class EvaluationDAO extends DBContext {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, weekId);
-            preparedStatement.setString(2, pupil_id);
+            preparedStatement.setString(2, student_id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 list.add(createEvaluation(resultSet));

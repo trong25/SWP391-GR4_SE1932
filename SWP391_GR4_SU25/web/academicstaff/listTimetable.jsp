@@ -93,6 +93,9 @@
                                                             <c:if test="${status eq 'đang chờ xử lý'}">
                                                             <td><span class="badge badge-warning">${status}</span>  </td>
                                                         </c:if>
+                                                            <c:if test="${status eq 'đã bị từ chối'}">
+                                                            <td><span class="badge badge-danger">${status}</span>  </td>
+                                                        </c:if>
                                                         <c:if test="${status eq 'không được duyệt'}">
                                                             <td><span class="badge badge-danger">${status}</span>  </td>
                                                         </c:if>

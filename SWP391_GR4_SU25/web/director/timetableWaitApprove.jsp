@@ -38,8 +38,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
         <script>
             $(document).ready(function () {
-                var toastMessage = '<%= request.getAttribute("toastMessage") %>';
-                var toastType = '<%= request.getAttribute("toastType") %>';
+                var toastMessage = '<%= session.getAttribute("toastMessage") %>';
+                var toastType = '<%= session.getAttribute("toastType") %>';
+                <% session.removeAttribute("toastMessage"); session.removeAttribute("toastType"); %>
                 if (toastMessage) {
                     if (toastType === 'success') {
                         toastr.success(toastMessage);
@@ -95,9 +96,9 @@
                                                     <td>
                                                         <span class="badge badge-warning">${tt.status}</span>
                                                     </td>
-                                                    <td>${tt.teacher.lastName} ${tt.teacher.firstName}</td>
+                                                    <td>${tt.createdBy.lastName} ${tt.createdBy.firstName}</td>
                                                     <td>
-                                                        <form method="post" action="reviewTimetable">
+                                                        <form method="post" action="reviewtimetable">
                                                             <input type="hidden" name="timetableId" value="${tt.id}" />
                                                             <button type="submit" name="action" value="approve" class="btn btn-success btn-sm btn-custom-width">Duyệt</button>
                                                             <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm btn-custom-width">Từ chối</button>

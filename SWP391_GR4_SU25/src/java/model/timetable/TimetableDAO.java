@@ -348,11 +348,13 @@ public int getTodayClassesCount(String teacherId, String dayId) {
         return "TT" + result;
     }
 
-    public boolean existsTimetableForClassInCurrentWeek(String classId, String dayId) {
-        String sql = "SELECT status FROM Timetables WHERE class_id = ? AND date_id = ?";
+    // Hàm kiểm tra trùng thời khóa biểu theo class, day, timeslot
+    public boolean existsTimetableForClassDayAndTimeslot(String classId, String dayId, String timeslotId) {
+        String sql = "SELECT status FROM Timetables WHERE class_id = ? AND date_id = ? AND timeslot_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, classId);
             stmt.setString(2, dayId);
+            stmt.setString(3, timeslotId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String status = rs.getString("status");
@@ -499,7 +501,54 @@ public int getTodayClassesCount(String teacherId, String dayId) {
             e.printStackTrace();
         }
     }
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, teacherId);
+            statement.setString(2, weekId);
+            statement.setString(3, "đã được duyệt");
+            ResultSet resultSet = statement.executeQuery();
 
-  
-    
+            while (resultSet.next()) {
+                // Fetching data from the result set and creating Timetable object for each row
+                String timetableId = resultSet.getString("timetable_id");
+                String classIdResult = resultSet.getString("class_id");
+                String timeslotId = resultSet.getString("timeslot_id");
+                String dateId = resultSet.getString("date_id");
+                String subjectId = resultSet.getString("subject_id");
+                String createdBy = resultSet.getString("created_by");
+                String statusResult = resultSet.getString("status");
+                String note = resultSet.getString("note");
+
+                // Fetch related entities using DAOs
+                ClassDAO classDAO = new ClassDAO();
+                TimeSlotDAO timeslotDAO = new TimeSlotDAO();
+                DayDAO dayDAO = new DayDAO();
+                SubjectDAO subjectDAO = new SubjectDAO();
+                PersonnelDAO personnelDAO = new PersonnelDAO();
+
+                Class classs = classDAO.getClassById(classIdResult);
+                TimeSlot timeslot = timeslotDAO.getTimeslotById(timeslotId);
+                Day day = dayDAO.getDayByID(dateId);
+                Subject subject = subjectDAO.getSubjectBySubjectId(subjectId);
+                Personnel createdByObj = personnelDAO.getPersonnel(createdBy);
+                Personnel teacher = personnelDAO.getPersonnel(teacherId);
+// Create Timetable object
+                Timetable timetable = new Timetable(timetableId, classs, timeslot, day, subject, createdByObj, statusResult, note, teacher);
+                timetables.add(timetable);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving timetables by classId and weekId", e);
+        }
+        return timetables;
+    }
+
+    public boolean approveTimetable(String timetableId) {
+        String sql = "UPDATE Timetables SET status = N'đã được duyệt' WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, timetableId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

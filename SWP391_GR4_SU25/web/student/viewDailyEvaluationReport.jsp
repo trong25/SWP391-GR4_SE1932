@@ -186,45 +186,12 @@
 
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary"> Đánh giá Theo Năm học</h6>
-                                    <h6 class="m-0 font-weight-bold text-primary"> Học sinh : ${requestScope.pupil.getLastName()} ${requestScope.pupil.getFirstName()} </h6>
+                                    <h6 class="m-0 font-weight-bold text-primary"> Học sinh : ${requestScope.student.getLastName()} ${requestScope.student.getFirstName()} </h6>
 
                                 </div>
 
 
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered"  width="100%" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>STT</th>
-                                                    <th>Năm học</th>
-                                                    <th>Số đánh giá trẻ Ngoan </th>
-                                                    <th>Danh hiệu Cháu Ngoan Bác Hồ</th>
-
-
-                                                </tr>
-                                            </thead>
-
-                                            <tbody>
-                                                <c:set var="good_day" value="${requestScope.good_day}"/>
-                                                <c:set var="week" value="${requestScope.week}"/>
-                                                <c:forEach var="schoolYear" items="${requestScope.schoolYears}" varStatus="status">
-                                                    <tr>
-                                                        <th scope="row">${status.index + 1}</th>
-                                                        <td>${schoolYear.getName()}</td>
-                                                        <td>${good_day.get(status.index)} / ${week.get(status.index)} </td>
-                                                        <c:if test="${good_day.get(status.index)>=week.get(status.index)/2}">
-                                                            <td>Đạt</td>
-                                                        </c:if><c:if test="${good_day.get(status.index) < week.get(status.index)/2}">
-                                                            <td>Không Đạt</td>
-                                                        </c:if>
-                                                    </tr>
-                                                </c:forEach>
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                
                                 </div>
                             </div>
                         </c:if>

@@ -301,6 +301,18 @@ public class SchoolYearDAO extends DBContext {
     }
 
     public List<SchoolYear> getListSchoolYearsByPupilID(String id) {
+    private String generateId(String latestId) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(latestId);
+        int number = 0;
+        if (matcher.find()) {
+            number = Integer.parseInt(matcher.group()) + 1;
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("000000");
+        String result = decimalFormat.format(number);
+        return "SY" + result;
+    }
+    public List<SchoolYear> getListSchoolYearsByStudentID(String id) {
         List<SchoolYear> schoolYears = new ArrayList<>();
         String sql = "select sy.* from Students p join classDetails cd on p.id = cd.student_id\n"
                 + "JOIN dbo.Class C on C.id = cd.class_id\n"
@@ -331,8 +343,14 @@ public class SchoolYearDAO extends DBContext {
                 + "join dbo.Class C on cd.class_id = C.id\n"
                 + "where p.id =? and c.school_year_id =?";
         try {
+
+    public boolean checkStudentInClassOfSchoolYear(String student_id, String school_year_id) {
+        String sql = "select * from Students p join classDetails cd on p.id = cd.student_id\n" +
+                "join dbo.Class C on cd.class_id = C.id\n" +
+                "where p.id =? and c.school_year_id =?";
+        try{
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, pupil_id);
+            statement.setString(1, student_id);
             statement.setString(2, school_year_id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {

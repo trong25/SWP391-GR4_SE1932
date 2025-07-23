@@ -189,17 +189,16 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="selectClass">Chọn lớp:</label>
-                                    <select class="form-control" id="selectClass" name="classId" onchange="submitForms()" style="width: 80%;" value="$">
+                                    <select class="form-control" id="selectClass" name="classId" onchange="submitForms()" style="width: 80%;" <c:if test="${empty param.schoolYearId || empty param.gradeId}">disabled</c:if>>
                                         <option>Chọn lớp</option>
-                                        <c:if test="${ not empty requestScope.classList}">
+                                        <c:if test="${not empty requestScope.classList}">
                                             <c:forEach var="classList" items="${requestScope.classList}">
                                                 <option value="${classList.id}" <c:if test="${param.classId == classList.id}">selected</c:if>>${classList.name}</option>
                                             </c:forEach>
                                         </c:if>
-                                        <c:if test="${empty requestScope.classList}">
+                                        <c:if test="${empty requestScope.classList && not empty param.schoolYearId && not empty param.gradeId}">
                                             <option>Chưa có lớp</option>
                                         </c:if>
-
                                     </select>
                                 </div>
                             </div>
