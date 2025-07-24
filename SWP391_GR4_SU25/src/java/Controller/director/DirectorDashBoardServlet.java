@@ -55,7 +55,7 @@ public class DirectorDashBoardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         // Lấy dữ liệu từ DAO
         StudentDAO studentDAO = new StudentDAO();
         ClassDAO classDAO = new ClassDAO();
@@ -77,7 +77,7 @@ public class DirectorDashBoardServlet extends HttpServlet {
 
         // Lấy doanh thu tháng hiện tại
         double currentMonthRevenue = paymentDAO.getCurrentMonthRevenue();
-
+        double allRevenue = paymentDAO.getAllRevenue();
         List<SchoolYear> schoolYears = schoolYearDAO.getAll();
         if (!schoolYears.isEmpty()) {
             schoolYearId = schoolYears.get(0).getId(); // lấy năm học đầu tiên
@@ -91,9 +91,10 @@ public class DirectorDashBoardServlet extends HttpServlet {
 
         // NEW: Lấy danh sách nhân sự đang chờ xử lý
         List<Personnel> waitlistPersonnel = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-      //gửi dữ liệu doanh thu 
+        //gửi dữ liệu doanh thu 
         request.setAttribute("currentDate", currentDate);
         request.setAttribute("currentMonthRevenue", currentMonthRevenue);
+        request.setAttribute("allRevenue", allRevenue);
         request.setAttribute("monthlyRevenue", monthlyRevenue);
         request.setAttribute("selectedYear", year);
         request.setAttribute("currentYear", currentYear);
