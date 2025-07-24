@@ -315,13 +315,13 @@
 
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label class="control-label" >Chức vụ<a
-                                                            style="color: red">(*)</a> </label>
+                                                    <label class="control-label">Chức vụ<a style="color: red">(*)</a> </label>
                                                     <select class="form-control" name="role" id="role" required>
                                                         <option value="" hidden> Chọn chức vụ</option>
                                                         <c:forEach items="${requestScope.roles}" var="r">
-                                                            <option ${requestScope.role eq r.getId() ? "selected" : ""}
-                                                                value="${r.getId()}">${r.getVNeseDescription()}</option>
+                                                            <c:if test="${r.getId() != 1}">
+                                                                <option ${requestScope.role eq r.getId() ? "selected" : ""} value="${r.getId()}">${r.getVNeseDescription()}</option>
+                                                            </c:if>
                                                         </c:forEach>
                                                     </select>
                                                 </div>
@@ -405,11 +405,11 @@
         <script src="js/plugins/pace.min.js"></script>
         <!--===============================================================================================-->
         <!--===============================================================================================-->
->
+        >
         <script>
-            function redirect() {
-                window.location.href = "listpersonnel";
-            }
+                                                    function redirect() {
+                                                        window.location.href = "listpersonnel";
+                                                    }
         </script>
         <script>
             document.getElementById('role').addEventListener('change', function () {

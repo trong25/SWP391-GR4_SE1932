@@ -132,12 +132,11 @@
                                                                     <h5>VAI TRÒ <a style="color: red">*</a> : </h5> 
                                                                     <select style="border-radius: 5px" name="role">
                                                                         <option value="${user.getRoleId()}" hidden="">${roleMap[user.getRoleId()]}</option>
-                                                                        <option value="0">NHÂN VIÊN IT</option>
-                                                                        <option value="1">GIÁM ĐỐC</option>
-                                                                        <option value="2">GIÁO VỤ</option>
-                                                                        <option value="3">GIÁO VIÊN</option>
-                                                                        <option value="4">HỌC SINH</option>
-                                                                        <option value="5">KẾ TOÁN</option>
+                                                                        <c:forEach items="${roleMap}" var="entry">
+                                                                            <c:if test="${entry.key != 1}">
+                                                                                <option value="${entry.key}">${entry.value}</option>
+                                                                            </c:if>
+                                                                        </c:forEach>
                                                                     </select><br />
                                                                 </div></td>
                                                             <td>
