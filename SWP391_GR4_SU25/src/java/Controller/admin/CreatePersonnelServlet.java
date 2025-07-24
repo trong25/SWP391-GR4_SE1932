@@ -112,8 +112,6 @@ public class CreatePersonnelServlet extends HttpServlet {
         id= decimalFormat.format(newid);
         if (role == 0) {
             id = "AD" + id;
-        } else if (role == 1) {
-            id = "GD" + id;
         } else if (role == 2) {
             id = "NV" + id;
         } else if (role==3){
@@ -121,7 +119,6 @@ public class CreatePersonnelServlet extends HttpServlet {
         }else if (role == 5){
             id = "KT"+ id;
         }
-        
         return id;
     }
         

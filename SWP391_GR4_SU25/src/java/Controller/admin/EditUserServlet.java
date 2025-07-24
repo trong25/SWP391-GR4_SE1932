@@ -50,7 +50,6 @@ public class EditUserServlet extends HttpServlet {
       Map<Integer, String> roleMap = new HashMap<>();
         Map<Byte, String> roleDis = new HashMap<>();
         roleMap.put(0, "NHÂN VIÊN IT");
-        roleMap.put(1, "HIỆU TRƯỞNG");
         roleMap.put(2, "GIÁO VỤ");
         roleMap.put(3, "GIÁO VIÊN");
         roleMap.put(4, "HỌC SINH");
