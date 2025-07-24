@@ -31,22 +31,22 @@ import model.week.Week;
 import model.week.WeekDAO;
 
 /**
- * Servlet ViewTimetableStudentServlet xử lý các yêu cầu HTTP để hiển thị thời khóa biểu của học sinh.
+ * Servlet ViewTimetableStudentServlet xử lý các yêu cầu HTTP để hiển thị thời
+ * khóa biểu của học sinh.
  *
  * URL Mapping: /student/view-timetable
  *
- * Chức năng:
- * - [GET] Lấy thông tin năm học, tuần, ngày học, khung giờ và lớp học của học sinh
- * - Nếu không có tuần được chọn, tự động xác định tuần hiện tại dựa trên ngày hiện tại
- * - Truy xuất dữ liệu thời khóa biểu từ cơ sở dữ liệu theo học sinh và tuần đã chọn
- * - Chuyển tiếp dữ liệu sang viewTimetable.jsp để hiển thị thời khóa biểu
+ * Chức năng: - [GET] Lấy thông tin năm học, tuần, ngày học, khung giờ và lớp
+ * học của học sinh - Nếu không có tuần được chọn, tự động xác định tuần hiện
+ * tại dựa trên ngày hiện tại - Truy xuất dữ liệu thời khóa biểu từ cơ sở dữ
+ * liệu theo học sinh và tuần đã chọn - Chuyển tiếp dữ liệu sang
+ * viewTimetable.jsp để hiển thị thời khóa biểu
  *
  * Phân quyền: Chỉ học sinh đã đăng nhập mới được phép truy cập chức năng này
  *
  * @author KienPN
  * @version 1.0
  */
-
 @WebServlet(name = "ViewTimetable", urlPatterns = {"/student/view-timetable"})
 public class ViewTimetableStudentServlet extends HttpServlet {
 
@@ -64,7 +64,7 @@ public class ViewTimetableStudentServlet extends HttpServlet {
             throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         Student student = (Student) request.getSession().getAttribute("student");
-        
+
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();
         request.setAttribute("schoolYearList", schoolYearList);
@@ -78,34 +78,32 @@ public class ViewTimetableStudentServlet extends HttpServlet {
         WeekDAO weekDAO = new WeekDAO();
         List<Week> weekList = weekDAO.getWeeks(schoolyear);
         request.setAttribute("weekList", weekList);
-        
+
         String week = request.getParameter("week");
-        if(week == null) {
+        if (week == null) {
             Date crDate = new Date();
             for (Week week1 : weekList) {
-                if(crDate.after(week1.getStartDate()) && crDate.before(week1.getEndDate())){
+                if (crDate.after(week1.getStartDate()) && crDate.before(week1.getEndDate())) {
                     week = week1.getId();
                     break;
                 }
             }
         }
-        
+
         request.setAttribute("sltedw", week);
-        
+
         DayDAO dayDAO = new DayDAO();
         List<Day> dayList = dayDAO.getDayByWeek(week);
         request.setAttribute("dayList", dayList);
-        
+
         TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
         List<TimeSlot> timeslotList = timeSlotDAO.getTimeslotsForTimetable();
         request.setAttribute("timeslotList", timeslotList);
-        
-        
-        
+
         SchoolClassDAO schoolClassDAO = new SchoolClassDAO();
         SchoolClass aClass = schoolClassDAO.getSchoolClassesById(student.getSchool_class_id().getId());
         request.setAttribute("aClass", aClass);
-        
+
         TimetableDAO timetableDAO = new TimetableDAO();
         List<Timetable> timetables = timetableDAO.getTimetableByStudentIdAndWeekId(student.getId(), week);
         request.setAttribute("timetables", timetables);

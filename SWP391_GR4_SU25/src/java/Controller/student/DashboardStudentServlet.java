@@ -27,22 +27,22 @@ import model.user.User;
 import model.week.WeekDAO;
 
 /**
- * Servlet DashboardStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điều khiển của học sinh.
- * 
+ * Servlet DashboardStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điều
+ * khiển của học sinh.
+ *
  * URL Mapping: /student/dashboard
- * 
- * Chức năng:
- * - Lấy thông tin học sinh từ session
- * - Truy xuất các dữ liệu liên quan như: thời khóa biểu, đánh giá, điểm danh, thông báo
- * - Tính toán tuần hiện tại, lọc thông tin tương ứng trong CSDL
- * - Chuyển tiếp dữ liệu sang trang dashboard.jsp để hiển thị
- * 
- * Phân quyền: Chỉ học sinh đã đăng nhập mới được truy cập trang bảng điều khiển này
- * 
+ *
+ * Chức năng: - Lấy thông tin học sinh từ session - Truy xuất các dữ liệu liên
+ * quan như: thời khóa biểu, đánh giá, điểm danh, thông báo - Tính toán tuần
+ * hiện tại, lọc thông tin tương ứng trong CSDL - Chuyển tiếp dữ liệu sang trang
+ * dashboard.jsp để hiển thị
+ *
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được truy cập trang bảng điều khiển
+ * này
+ *
  * @author KienPN
  * @version 1.0
  */
-
 public class DashboardStudentServlet extends HttpServlet {
 
     @Override
@@ -69,9 +69,9 @@ public class DashboardStudentServlet extends HttpServlet {
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             Date mon = calendar.getTime();
-            Date sun = new Date(mon.getTime()+518400000);
+            Date sun = new Date(mon.getTime() + 518400000);
             System.out.println(mon.toString());
-System.out.println(sun.toString());
+            System.out.println(sun.toString());
             List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivotByDateRange(studentId, mon, sun);
 
             // Đưa dữ liệu vào request scope
