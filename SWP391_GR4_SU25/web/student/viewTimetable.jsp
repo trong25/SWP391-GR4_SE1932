@@ -176,20 +176,29 @@
                                             <td>${timeslot.startTime} - ${timeslot.endTime}</td>
                                             <c:forEach var="day" items="${requestScope.dayList}">
                                                 <td>
-                                                    <c:choose>
-                                                        <c:when test="${not empty requestScope.timetables}">
-                                                            <c:forEach var="timetable" items="${requestScope.timetables}">
-                                                                <c:if test="${timetable.timeslot.id eq timeslot.id && timetable.day.id eq day.id}">
-                                                                    ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName}<span>
-                                                                        (${timetable.attendanceStatus})
+                                                    <c:set var="found" value="false" />
+                                                    <c:forEach var="timetable" items="${requestScope.timetables}">
+                                                        <c:if test="${timetable.timeslot.id eq timeslot.id && timetable.day.id eq day.id}">
+                                                            <c:set var="found" value="true" />
+                                                            <c:choose>
+                                                                <c:when test="${timetable.attendanceStatus eq 'present'}">
+                                                                    <span class="badge badge-success p-2">
+                                                                        ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName} (Có mặt)
                                                                     </span>
-                                                                </c:if>
-                                                            </c:forEach>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            -
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                                </c:when>
+                                                                <c:when test="${timetable.attendanceStatus eq 'absent'}">
+                                                                    <span class="badge badge-danger p-2">
+                                                                        ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName} (Vắng)
+                                                                    </span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span class="badge badge-secondary p-2">
+                                                                        ${timetable.subject.name} - ${timetable.teacher.lastName} ${timetable.teacher.firstName} (Chưa học)
+                                                                    </span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:if>
+                                                    </c:forEach>
                                                 </td>
                                             </c:forEach>
                                         </tr>

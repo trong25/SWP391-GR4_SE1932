@@ -25,9 +25,9 @@ public class EvaluationDAO extends DBContext {
         evaluation.setId(resultSet.getString("id"));
         Student student = studentDAO.getStudentsById(resultSet.getString("student_id"));
         evaluation.setStudent(student);
-        // Sử dụng date_id thay cho timetable_id
-//        Timetable timetable = timetableDAO.getTimetableByDateId(resultSet.getString("date_id"));
-//        evaluation.setTimetable(timetable);
+        // Sửa: set trường date cho Evaluation
+        Day day = dayDAO.getDayByID(resultSet.getString("date_id"));
+        evaluation.setDate(day);
         evaluation.setEvaluation(resultSet.getString("evaluation"));
         evaluation.setNotes(resultSet.getString("notes"));
         return evaluation;
@@ -75,7 +75,7 @@ public class EvaluationDAO extends DBContext {
                 list.add(createEvaluation(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);  
+            throw new RuntimeException(e);
         }
         return list;
     }
@@ -145,9 +145,8 @@ public class EvaluationDAO extends DBContext {
         }
         return list;
     }
-    
-    
-            public List<Evaluation> getEvaluationByWeek(String weekId) {
+
+    public List<Evaluation> getEvaluationByWeek(String weekId) {
         List<Evaluation> list = new ArrayList<>();
         String sql = "select e.id, e.student_id,e.date_id,e.evaluation,e.notes  from Evaluations e join Days d on e.date_id = d.id\n"
                 + "join Weeks w on d.week_id = w.id\n"
@@ -164,8 +163,8 @@ public class EvaluationDAO extends DBContext {
         }
         return list;
     }
-            
-                    public boolean checkEvaluationExist(String studentId, String dateId) {
+
+    public boolean checkEvaluationExist(String studentId, String dateId) {
         String sql = "select * from Evaluations where student_id=? and date_id=?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -180,8 +179,8 @@ public class EvaluationDAO extends DBContext {
         }
         return false;
     }
-                    
-                                public boolean updateEvaluationByStudentAndDay(Evaluation evaluation) {
+
+    public boolean updateEvaluationByStudentAndDay(Evaluation evaluation) {
         String sql = "update Evaluations set evaluation = ? where  student_id= ? and date_id= ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -197,8 +196,8 @@ public class EvaluationDAO extends DBContext {
         }
         return false;
     }
-                                
-                                                public boolean updateNoteByStudentAndDay(Evaluation evaluation) {
+
+    public boolean updateNoteByStudentAndDay(Evaluation evaluation) {
         String sql = "update Evaluations set notes = ? where  student_id= ? and date_id= ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -214,8 +213,8 @@ public class EvaluationDAO extends DBContext {
         }
         return false;
     }
-    
-        public boolean createEvaluation(Evaluation evaluation) {
+
+    public boolean createEvaluation(Evaluation evaluation) {
         EvaluationDAO evaluationDAO = new EvaluationDAO();
         String sql = "insert into Evaluations values (?,?,?,?,?)";
         try {
@@ -238,9 +237,9 @@ public class EvaluationDAO extends DBContext {
         }
         return false;
     }
-        
+
     // Generate new evaluation ID
-        private String generateEvaluationId(String latestId) {
+    private String generateEvaluationId(String latestId) {
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("\\d+");
         java.util.regex.Matcher matcher = pattern.matcher(latestId);
         int number = 0;
@@ -251,8 +250,8 @@ public class EvaluationDAO extends DBContext {
         String result = decimalFormat.format(number);
         return "E" + result;
     }
-    
-       private Evaluation getLatest() {
+
+    private Evaluation getLatest() {
         String sql = "SELECT TOP 1 * FROM Evaluations ORDER BY ID DESC";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -265,8 +264,8 @@ public class EvaluationDAO extends DBContext {
         }
         return null;
     }
-       
-        private String generateId(String latestId) {
+
+    private String generateId(String latestId) {
         Pattern pattern = Pattern.compile("\\d+");
         Matcher matcher = pattern.matcher(latestId);
         int number = 0;
@@ -277,7 +276,5 @@ public class EvaluationDAO extends DBContext {
         String result = decimalFormat.format(number);
         return "EVA" + result;
     }
-
-
 
 }
