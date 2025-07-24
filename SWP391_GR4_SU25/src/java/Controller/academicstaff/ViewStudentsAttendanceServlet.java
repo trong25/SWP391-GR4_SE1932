@@ -57,7 +57,7 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
                 DayDAO dayDAO = new DayDAO();
                 request.setAttribute("days", dayDAO.getDaysWithTimetableForClass(weekId, classId));
 
-                //send list of Students
+                //send list of students
                 Class classes = classDAO.getClassById(classId);
                 request.setAttribute("classes", classes);
                 StudentDAO studentDAO = new StudentDAO();

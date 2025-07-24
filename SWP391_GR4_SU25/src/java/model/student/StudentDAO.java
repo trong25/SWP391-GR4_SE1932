@@ -687,8 +687,7 @@ public class StudentDAO extends DBContext {
         SELECT s.*, 
                sch.schoolName, 
                sch.addressSchool AS addressSchool, 
-               cls.class_name,
-                    cls.grade_level AS grade_level
+               cls.class_name
         FROM Students s
         JOIN classDetails c ON s.id = c.student_id
         LEFT JOIN Schools sch ON s.school_id = sch.id
@@ -701,22 +700,19 @@ public class StudentDAO extends DBContext {
         }
 
         sql += "ORDER BY s.id";
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, classId);
             if (studentId != null) {
                 preparedStatement.setString(2, studentId);
             }
-            // Debug logs
-            System.out.println("Debug - Getting students for class: " + classId);
-            System.out.println("Debug - SQL: " + sql);
+
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Student student = createStudent(resultSet); // đã có addressSchool trong createStudent
                 listStudents.add(student);
             }
-            // Debug log for results
-            System.out.println("Debug - Total students found: " + listStudents.size());
 
         } catch (SQLException e) {
             e.printStackTrace();
