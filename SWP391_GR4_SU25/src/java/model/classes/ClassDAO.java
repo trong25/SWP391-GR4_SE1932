@@ -35,27 +35,18 @@ import utils.Helper;
  */
 public class ClassDAO extends DBContext {
 
-    private Class createClass(ResultSet resultSet) throws SQLException {
+   private Class createClass(ResultSet resultSet) throws SQLException {
         Class c = new Class();
         c.setId(resultSet.getString("id"));
         c.setName(resultSet.getString("name"));
-
         GradeDAO gradeDAO = new GradeDAO();
         c.setGrade(gradeDAO.getGrade(resultSet.getString("grade_id")));
-
         PersonnelDAO personnelDAO = new PersonnelDAO();
         c.setTeacher(personnelDAO.getPersonnel(resultSet.getString("teacher_id")));
-
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         c.setSchoolYear(schoolYearDAO.getSchoolYear(resultSet.getString("school_year_id")));
-
         c.setStatus(resultSet.getString("status"));
-        
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
-c.setClassType(resultSet.getString("class_type"));
-        // Thêm dòng này để lấy fee từ ResultSet
-        c.setFee(resultSet.getInt("fee"));
-
         return c;
     }
 
