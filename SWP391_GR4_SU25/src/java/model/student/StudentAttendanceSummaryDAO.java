@@ -35,7 +35,6 @@ public class StudentAttendanceSummaryDAO extends DBContext {
      * sinh đang theo học
      */
     public List<StudentAttendanceSummary> getActiveStudentsAttendance() {
-        
         List<StudentAttendanceSummary> list = new ArrayList<>();
         String sql = "DECLARE @currentMonth INT = MONTH(GETDATE()); "
                 + "DECLARE @currentYear INT = YEAR(GETDATE()); "
@@ -63,10 +62,8 @@ public class StudentAttendanceSummaryDAO extends DBContext {
                 + ") "
                 + "GROUP BY "
                 + "    s.id, s.avatar, s.first_name, s.last_name, "
-                + "    cd.class_id, cl.name, cl.fee "
-                + "HAVING "
-                + "    SUM(CASE WHEN sa.status = 'present' THEN 1 ELSE 0 END) + "
-                + "    SUM(CASE WHEN sa.status = 'absent' THEN 1 ELSE 0 END) > 0;";
+                + "    cd.class_id, cl.name, cl.fee";
+
         try (Connection conn = getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
