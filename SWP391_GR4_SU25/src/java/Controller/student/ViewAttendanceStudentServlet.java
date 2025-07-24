@@ -65,6 +65,7 @@ public class ViewAttendanceStudentServlet extends HttpServlet {
         User user = (User) request.getSession().getAttribute("user");
         Student student = (Student) request.getSession().getAttribute("student");
         request.setAttribute("studentFullname", student.getFirstName() + " " + student.getLastName());
+        request.setAttribute("studentId", student.getId());
 
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         List<SchoolYear> schoolYearList = schoolYearDAO.getAll();

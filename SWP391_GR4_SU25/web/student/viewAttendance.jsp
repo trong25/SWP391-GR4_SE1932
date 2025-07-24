@@ -170,15 +170,17 @@
                                                         </td>
 
                                                         <c:set value="${attendance.status}" var="s"/>
-                                                        <c:if test="${s eq 'present'}">
-                                                            <td><span class="badge badge-success">có mặt</span></td>
-                                                        </c:if>
-                                                        <c:if test="${s eq 'absent'}">
-                                                            <td><span class="badge badge-danger">vắng</span>  </td>
-                                                        </c:if>
-                                                        <c:if test="${s == null}">
-                                                            <td><span class="badge badge-warning">chưa cập nhật</span>  </td>
-                                                        </c:if>
+                                                        <c:choose>
+                                                            <c:when test="${s eq 'present'}">
+                                                                <td><span class="badge badge-success">có mặt</span></td>
+                                                            </c:when>
+                                                            <c:when test="${s eq 'absent'}">
+                                                                <td><span class="badge badge-danger">vắng</span></td>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <td><span class="badge badge-warning">chưa cập nhật</span></td>
+                                                            </c:otherwise>
+                                                        </c:choose>
 
                                                         <td>${attendance.note}</td>
 

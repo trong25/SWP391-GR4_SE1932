@@ -1,32 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/database_script_fixed.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/CreateTimetableServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/CreateTimetableServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ReviewTimetableServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/director/ReviewTimetableServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/ViewDailyEvaluationReportServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/student/ViewDailyEvaluationReportServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/evaluation/EvaluationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/evaluation/EvaluationDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/payment/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/payment/Payment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/personnel/PersonnelDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/personnel/PersonnelDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/schoolYear/SchoolYearDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/schoolYear/SchoolYearDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/timetable/TimetableDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/week/WeekDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/week/WeekDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/utils/DBContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/utils/DBContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/createTimetable.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/createTimetable.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/listTimetable.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/listTimetable.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/timetableWaitApprove.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/director/timetableWaitApprove.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/payments.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/payments.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewDailyEvaluationReport.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/student/viewDailyEvaluationReport.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataNEW1/database_scrip.sql" beforeDir="false" afterPath="$PROJECT_DIR$/dataNEW1/database_scrip.sql" afterDir="false" />
-    </list>
+    <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,17 +30,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merging main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -104,6 +79,7 @@
       <workItem from="1753282484051" duration="129000" />
       <workItem from="1753282631674" duration="44000" />
       <workItem from="1753289674610" duration="3000" />
+      <workItem from="1753347230141" duration="30000" />
     </task>
     <servers />
   </component>

@@ -215,7 +215,7 @@ public class TimetableDAO extends DBContext {
                         t.status,
                         t.note,
                         p.id AS teacher_id,
-                        -- Thêm các thông tin bổ sung hữu ích
+                        sa.status AS attendance_status, -- Lấy trạng thái điểm danh theo ngày
                         c.name AS class_name,
                         ts.name AS timeslot_name,
                         ts.start_time,
@@ -233,6 +233,7 @@ public class TimetableDAO extends DBContext {
                  INNER JOIN Weeks w ON d.week_id = w.id
                  INNER JOIN Subjects s ON t.subject_id = s.id
                  LEFT JOIN Personnels p ON t.teacher_id = p.id
+                 LEFT JOIN StudentsAttendance sa ON sa.day_id = t.date_id AND sa.student_id = st.id
                  WHERE st.id = ?
                    AND w.id = ?
                  ORDER BY d.date, ts.slot_number;
@@ -244,7 +245,9 @@ public class TimetableDAO extends DBContext {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                timetables.add(createTimetable(resultSet));
+                Timetable timetable = createTimetable(resultSet);
+                timetable.setAttendanceStatus(resultSet.getString("attendance_status"));
+                timetables.add(timetable);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving timetables by classId and weekId", e);

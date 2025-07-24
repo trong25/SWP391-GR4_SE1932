@@ -156,7 +156,7 @@
                                                     <c:forEach var="dayOfWeek" items="${daysOfWeek}">
                                                         <td>
                                                             <c:forEach var="evaluation" items="${requestScope.evaluationList}">
-                                                                <c:if test="${evaluation.timetable.getDay().convertToWeekDay() == dayOfWeek}">
+                                                                <c:if test="${evaluation.date.convertToWeekDay() == dayOfWeek}">
                                                                     ${evaluation.getEvaluation()}
                                                                 </c:if>
                                                             </c:forEach>
@@ -168,7 +168,7 @@
                                                     <c:forEach var="dayOfWeek" items="${daysOfWeek}">
                                                         <td>
                                                             <c:forEach var="evaluation" items="${requestScope.evaluationList}">
-                                                                <c:if test="${evaluation.timetable.getDay().convertToWeekDay() == dayOfWeek}">
+                                                                <c:if test="${evaluation.date.convertToWeekDay() == dayOfWeek}">
                                                                     ${evaluation.getNotes()}
                                                                 </c:if>
                                                             </c:forEach>

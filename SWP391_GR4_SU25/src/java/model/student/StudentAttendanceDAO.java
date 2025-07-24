@@ -335,4 +335,23 @@ public class StudentAttendanceDAO extends DBContext {
         return "HS" + result;
     }
 
+    public String getTodayAttendanceStatus(String studentId, String dayId) {
+        String sql = "SELECT status FROM StudentsAttendance WHERE student_id = ? AND day_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, studentId);
+            statement.setString(2, dayId);
+            ResultSet rs = statement.executeQuery();
+            boolean hasPresent = false;
+            while (rs.next()) {
+                String status = rs.getString("status");
+                if ("absent".equalsIgnoreCase(status)) return "absent";
+                if ("present".equalsIgnoreCase(status)) hasPresent = true;
+            }
+            if (hasPresent) return "present";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ""; // Chưa cập nhật
+    }
+
 }

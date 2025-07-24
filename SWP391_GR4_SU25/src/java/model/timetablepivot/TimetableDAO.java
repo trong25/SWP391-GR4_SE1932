@@ -28,13 +28,13 @@ public class TimetableDAO extends DBContext {
                         SELECT 
                             ts.slot_number, 
                             ts.start_time + ' - ' + ts.end_time AS time_slot, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Monday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Monday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Tuesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Tuesday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Wednesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Wednesday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Thursday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Thursday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Friday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Friday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Saturday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Saturday, 
-                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Sunday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ')' END) AS Sunday 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Monday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Monday, 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Tuesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Tuesday, 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Wednesday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Wednesday, 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Thursday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Thursday, 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Friday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Friday, 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Saturday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Saturday, 
+                            MAX(CASE WHEN DATENAME(WEEKDAY, d.date) = 'Sunday' THEN sub.name + ' (' + p.first_name + ' ' + p.last_name + ') - ' + ISNULL(sa.status, 'Not yet') END) AS Sunday 
                         FROM Students s 
                         INNER JOIN classDetails cd ON s.id = cd.student_id 
                         INNER JOIN Class c ON cd.class_id = c.id 
@@ -44,6 +44,7 @@ public class TimetableDAO extends DBContext {
                         INNER JOIN Timeslots ts ON t.timeslot_id = ts.id 
                         INNER JOIN Subjects sub ON t.subject_id = sub.id 
                         INNER JOIN Personnels p ON t.teacher_id = p.id 
+                        LEFT JOIN StudentsAttendance sa ON sa.student_id = s.id AND sa.day_id = d.id AND sa.teacher_id = p.id 
                         WHERE s.id = ? 
                         AND GETDATE() BETWEEN w.start_date AND w.end_date 
                         GROUP BY ts.slot_number, ts.start_time, ts.end_time 

@@ -7,13 +7,14 @@ package Controller.student;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.time.LocalDate;
+import java.sql.Date;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Calendar;
-import java.util.Date;
 import model.day.DayDAO;
 import model.evaluation.EvaluationDAO;
 import model.notification.Notification;
@@ -21,10 +22,13 @@ import model.notification.NotificationDAO;
 import model.student.Student;
 import model.student.StudentAttendanceDAO;
 import model.student.StudentDAO;
-import model.timetablepivot.TimetableDAO;
-import model.timetablepivot.TimetablePivot;
-import model.user.User;
+import model.timetable.Timetable;
+import model.timetable.TimetableDAO;
+import model.timeslot.TimeSlot;
+import model.timeslot.TimeSlotDAO;
+import model.day.Day;
 import model.week.WeekDAO;
+import model.user.User;
 
 /**
  * Servlet DashboardStudentServlet xử lý các yêu cầu HTTP để hiển thị bảng điều
@@ -60,28 +64,29 @@ public class DashboardStudentServlet extends HttpServlet {
         WeekDAO weekDAO = new WeekDAO();
         StudentDAO studentDAO = new StudentDAO();
         StudentAttendanceDAO studentAttendanceDAO = new StudentAttendanceDAO();
-        Date currentDate = Date.from(Instant.now());// Lấy ngày hiện tại
-//        Connection connection = new DBContext().getConnection();
+        TimeSlotDAO timeSlotDAO = new TimeSlotDAO();
+        // Lấy ngày hiện tại (chỉ lấy phần ngày, không có giờ/phút/giây)
+        LocalDate localDate = LocalDate.now();
+        Date currentDate = Date.valueOf(localDate);
         try {
-
-            // Gọi DAO để lấy dữ liệu
-            TimetableDAO timetableDAO = new TimetableDAO();
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            Date mon = calendar.getTime();
-            Date sun = new Date(mon.getTime() + 518400000);
-            System.out.println(mon.toString());
-            System.out.println(sun.toString());
-            List<TimetablePivot> timetableList = timetableDAO.getStudentTimetablePivotByDateRange(studentId, mon, sun);
-
-            // Đưa dữ liệu vào request scope
-            request.setAttribute("timetableList", timetableList);
+            // Lấy tuần hiện tại
+            String weekId = weekDAO.getCurrentWeek(currentDate);
+            List<Day> dayList = null;
+            List<TimeSlot> timeslotList = null;
+            List<Timetable> timetables = null;
+            if (weekId != null) {
+                dayList = dayDAO.getDayByWeek(weekId);
+                timeslotList = timeSlotDAO.getTimeslotsForTimetable();
+                TimetableDAO timetableDAO = new TimetableDAO();
+                timetables = timetableDAO.getTimetableByStudentIdAndWeekId(studentId, weekId);
+            }
+            request.setAttribute("dayList", dayList);
+            request.setAttribute("timeslotList", timeslotList);
+            request.setAttribute("timetables", timetables);
             request.setAttribute("studentId", studentId);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         //Xử lý đánh giá và điểm danh
         String evaluation = "";
         String takeAttendance = "";
@@ -92,8 +97,20 @@ public class DashboardStudentServlet extends HttpServlet {
             if (evaluationDAO.getEvaluationByStudentIdAndDay(studentDAO.getStudentByUserId(user.getId()).getId(), dayDAO.getDateIDbyDay(currentDate)) != null) {
                 evaluation = evaluationDAO.getEvaluationByStudentIdAndDay(studentDAO.getStudentByUserId(user.getId()).getId(), dayDAO.getDateIDbyDay(currentDate)).getEvaluation();
             }
-            if (studentAttendanceDAO.getAttendanceByStudentAndDay(studentDAO.getStudentByUserId(user.getId()).getId(), dayDAO.getDateIDbyDay(currentDate)) != null) {
-                takeAttendance = studentAttendanceDAO.getAttendanceByStudentAndDay(studentDAO.getStudentByUserId(user.getId()).getId(), dayDAO.getDateIDbyDay(currentDate)).getStatus();
+            String todayDateId = dayDAO.getDateIDbyDay(currentDate);
+            System.out.println("studentId: " + student.getId());
+            System.out.println("currentDate: " + currentDate);
+            System.out.println("todayDateId: " + todayDateId);
+            String todayStatus = studentAttendanceDAO.getTodayAttendanceStatus(student.getId(), todayDateId);
+            System.out.println("todayStatus: " + todayStatus);
+            if (todayStatus == null || todayStatus.isEmpty()) {
+                takeAttendance = "Chưa cập nhật";
+            } else if ("present".equals(todayStatus)) {
+                takeAttendance = "Có mặt";
+            } else if ("absent".equals(todayStatus)) {
+                takeAttendance = "Vắng";
+            } else {
+                takeAttendance = todayStatus;
             }
         }
         // Đếm số lượng thông báo
