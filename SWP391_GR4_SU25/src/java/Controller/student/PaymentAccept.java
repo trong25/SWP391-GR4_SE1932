@@ -15,8 +15,11 @@ import model.payment.Payment;
 import model.payment.PaymentDAO;
 
 /**
- *
- * @author admin
+ * Servlet xử lý việc xác nhận thanh toán cho sinh viên.
+ * URL: /student/PaymentAccept
+ * Nhận tham số `code` từ request và cập nhật trạng thái thanh toán tương ứng sang "Paid".
+ * 
+ * @author KienPN
  */
 @WebServlet(name = "PaymentAccept", urlPatterns = {"/student/PaymentAccept"})
 public class PaymentAccept extends HttpServlet {

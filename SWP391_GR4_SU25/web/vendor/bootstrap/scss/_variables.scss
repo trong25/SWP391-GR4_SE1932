@@ -104,7 +104,7 @@ $escaped-characters: (
   (">", "%3e"),
   ("#", "%23"),
   ("(", "%28"),
-  (")", "%29"),
+  (")", "%29")
 ) !default;
 
 
@@ -264,7 +264,7 @@ $embed-responsive-aspect-ratios: join(
     (21 9),
     (16 9),
     (4 3),
-    (1 1),
+    (1 1)
   ),
   $embed-responsive-aspect-ratios
 );

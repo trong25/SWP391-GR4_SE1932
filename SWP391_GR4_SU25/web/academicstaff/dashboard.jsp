@@ -41,7 +41,7 @@
                     <div class="container-fluid">
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Chào mừng đến với trung tâm dạy học TaBi</h1>
+                            <h1 class="h3 mb-0 text-gray-800">Bảng điều khiển Academic Staff</h1>
                         </div>
 
                         <!-- Content Row -->

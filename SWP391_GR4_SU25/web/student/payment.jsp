@@ -309,7 +309,7 @@
                                     </div>
                                     <div class="section-content" style="margin-bottom: 1rem;">
                                         <b><i class="fas fa-headset"></i> Liên hệ hỗ trợ:</b><br>
-                                        Hotline: 0123 456 789</a><br>
+                                        Hotline: 0899 160904</a><br>
                                         Email: support@tabi.edu.vn</a><br>
                                         Thời gian: <b>8:00 - 22:00</b> (T2 - CN)
                                     </div>
