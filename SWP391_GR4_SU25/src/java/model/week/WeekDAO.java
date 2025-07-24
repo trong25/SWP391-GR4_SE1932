@@ -12,15 +12,22 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
+
 import java.util.Date;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.Date;
+
+import model.schoolYear.SchoolYearDAO;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import model.day.DayDAO;
 import model.schoolYear.SchoolYear;
-import model.schoolYear.SchoolYearDAO;
 import utils.DBContext;
 import utils.Helper;
 
@@ -203,44 +210,7 @@ weeks.add(week);
         return null;
     }
 
-
-
-         
-             public Week getLastWeek(String schoolYearId){
-        String sql = "select top 1 * from [Weeks] where school_year_id = ? order by id desc";
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, schoolYearId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                return createWeek(resultSet);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    
-    public boolean checkWeekInSchoolYear(String week_id,String year_id){
-        String sql = "select * from Weeks where id = ? and school_year_id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, week_id);
-            preparedStatement.setString(2, year_id);
-
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                return true;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
-    }
-
-public Week getLastWeekOfClosestSchoolYearOfStudent(String id){
+    public Week getLastWeekOfClosestSchoolYearOfStudent(String id){
         Week week = new Week();
         String sql = " select top 1 w.* from classDetails cd join dbo.Class C on cd.class_id = C.id\n" +
                 "join dbo.SchoolYears SY on C.school_year_id = SY.id\n" +
@@ -258,5 +228,22 @@ public Week getLastWeekOfClosestSchoolYearOfStudent(String id){
             throw new RuntimeException(e);
         }
         return week;
+    }
+    
+    public boolean checkWeekInSchoolYear(String week_id,String year_id){
+        String sql = "select * from Weeks where id = ? and school_year_id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, week_id);
+            preparedStatement.setString(2, year_id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()){
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
     }
 }

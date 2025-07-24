@@ -52,7 +52,7 @@
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>Controllerr.LoginServlet</servlet-class>
+        <servlet-class>controllerr.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DashboardTeacherServlet</servlet-name>
@@ -76,11 +76,11 @@
     </servlet>
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
-        <servlet-class>Controllerr.ForgotPasswordServlet</servlet-class>
+        <servlet-class>controllerr.ForgotPasswordServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ValidatePassword</servlet-name>
-        <servlet-class>Controllerr.ValidatePassword</servlet-class>
+        <servlet-class>controllerr.ValidatePassword</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ReviewTimetableServlet</servlet-name>
@@ -104,11 +104,11 @@
     </servlet>
     <servlet>
         <servlet-name>UpdatePersonnelServlet</servlet-name>
-        <servlet-class>Controllerr.UpdatePersonnelServlet</servlet-class>
+        <servlet-class>controllerr.UpdatePersonnelServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePasswords</servlet-name>
-        <servlet-class>Controllerr.ChangePasswords</servlet-class>
+        <servlet-class>controllerr.ChangePasswords</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewInformationDirectorServlet</servlet-name>
@@ -459,9 +459,11 @@
         <url-pattern>/admin/listpersonnel</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>StudentWaitServlet</servlet-name>
         <url-pattern>/academicstaff/studentwait</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>ListStudentServlet</servlet-name>
         <url-pattern>/admin/listpupil</url-pattern>
@@ -491,3 +493,4 @@
         <url-pattern>/director/viewpersonnel</url-pattern>
     </servlet-mapping>
 </web-app>
+

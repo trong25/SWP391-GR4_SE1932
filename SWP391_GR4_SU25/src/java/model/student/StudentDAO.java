@@ -602,7 +602,19 @@ public class StudentDAO extends DBContext {
         }
     }
 
-
+    public boolean updateStudentStatus(String studentID, String status) {
+        String sql = "UPDATE Students SET [status] = ? WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, status);
+            preparedStatement.setString(2, studentID);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
 
     public int getSumStudentInClass(String classId) {
         String sql = "SELECT COUNT(*) AS total_students\n"
@@ -713,7 +725,7 @@ public class StudentDAO extends DBContext {
         return listStudents;
     }
 
-    public boolean addStudentToClass(String studentId, String classId) {
+    public boolean addStudentToClass(String pupilId, String classId) {
         String sql = "INSERT INTO [dbo].[classDetails]\n"
                 + "           ([student_id]\n"
                 + "           ,[class_id])\n"
@@ -721,7 +733,7 @@ public class StudentDAO extends DBContext {
                 + "           (?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, studentId);
+            preparedStatement.setString(1, pupilId);
             preparedStatement.setString(2, classId);
             preparedStatement.executeUpdate();
             return true;
@@ -979,69 +991,7 @@ public List<Student> getStudentsByClassId(String classId) {
         return students;
     }
 
-
-    
-
-
-
-    
-        public List<Student> getListStudentOfTeacherBySchoolYear(String schoolYearId, String teacherId) {
-        String sql = "SELECT *\n"
-                + "FROM  Class INNER JOIN\n"
-                + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
-                + "                  Students ON classDetails.student_id = Students.id INNER JOIN\n"
-                + "                  SchoolYears ON Class.school_year_id = SchoolYears.id\n"
-                + "\t\t\t\t  where teacher_id = ? and school_year_id= ?";
-        List<Student> listStudents = new ArrayList<>();
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, teacherId);
-            preparedStatement.setString(2, schoolYearId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Student student = new Student();
-                student.setId(resultSet.getString("student_id"));
-                student.setUserId(resultSet.getString("user_id"));
-                student.setFirstName(resultSet.getString("first_name"));
-                student.setLastName(resultSet.getString("last_name"));
-                student.setAddress(resultSet.getString("address"));
-                student.setEmail(resultSet.getString("email"));
-                student.setStatus(resultSet.getString("status"));
-                student.setBirthday(resultSet.getDate("birthday"));
-                student.setGender(resultSet.getBoolean("gender"));
-                student.setAvatar(resultSet.getString("avatar"));            
-
-//                Personnel personnel = PersonnelDAO.getPersonnel(resultSet.getString("created_by"));
-//                student.setCreatedBy(personnel);
-
-                student.setParentSpecialNote(resultSet.getString("parent_special_note"));
-                listStudents.add(student);
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return listStudents;
-    }
-        
-            public boolean updateStudentStatus(String studentId, String status) {
-        String sql = "UPDATE [dbo].[Students]\n"
-                + "   SET [status] = ? \n"
-                + " WHERE id = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, status);
-            preparedStatement.setString(2, studentId);
-            preparedStatement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return false;
-    }
-    
-    
-     private Student createStudents(ResultSet resultSet) throws SQLException {
-
+    private Student createStudents(ResultSet resultSet) throws SQLException {
         try {
             PersonnelDAO personnelDAO = new PersonnelDAO();
             Student student = new Student();
@@ -1082,7 +1032,6 @@ public List<Student> getStudentsByClassId(String classId) {
         return null;
 
     }
-
 
     public List<StudentWithClassDTO> getStudentsWithClassInfo() {
         List<StudentWithClassDTO> list = new ArrayList<>();
@@ -1192,8 +1141,69 @@ public List<Student> getStudentsByClassId(String classId) {
         }
         return listStudent;
     }
+    
+            public List<Student> getListStudentOfTeacherBySchoolYear(String schoolYearId, String teacherId) {
+        String sql = "SELECT *\n"
+                + "FROM  Class INNER JOIN\n"
+                + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
+                + "                  Students ON classDetails.student_id = Students.id INNER JOIN\n"
+                + "                  SchoolYears ON Class.school_year_id = SchoolYears.id\n"
+                + "\t\t\t\t  where teacher_id = ? and school_year_id= ?";
+        List<Student> listStudents = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, schoolYearId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = new Student();
+                student.setId(resultSet.getString("student_id"));
+                student.setUserId(resultSet.getString("user_id"));
+                student.setFirstName(resultSet.getString("first_name"));
+                student.setLastName(resultSet.getString("last_name"));
+                student.setAddress(resultSet.getString("address"));
+                student.setEmail(resultSet.getString("email"));
+                student.setStatus(resultSet.getString("status"));
+                student.setBirthday(resultSet.getDate("birthday"));
+                student.setGender(resultSet.getBoolean("gender"));
+                student.setAvatar(resultSet.getString("avatar"));            
+
+//                Personnel personnel = PersonnelDAO.getPersonnel(resultSet.getString("created_by"));
+//                student.setCreatedBy(personnel);
+
+                student.setParentSpecialNote(resultSet.getString("parent_special_note"));
+                listStudents.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listStudents;
+    }
 
 }
-
-
+//     public List<Student> getStudentsWithoutClass(String schoolYearId) {
+//        List<Student> listStudent = new ArrayList<>();
+//        String sql = "Select  Students.id    FROM  Students left  JOIN\n"
+//                + "                 classDetails ON Students.id = classDetails.student_id  left  JOIN\n"
+//                + "                Class ON Class.id = classDetails.class_id\n"
+//                + "               where  Students.status= N'đang theo học' and class_id is null \n"
+//                + "\t\t\t  union  \n"
+//                + "\t\t\t  Select  distinct student_id  from \n"
+//                + "\t\t\t  classDetails join Class on classDetails.class_id = Class.id\n"
+//                + "               where   pupil_id not in (Select pupil_id\n"
+//                + "\t\t\t   from classDetails  join Class on classDetails.class_id = Class.id\n"
+//                + "\t\t\t   where school_year_id = ? )";
+//
+//        try {
+//            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+//            preparedStatement.setString(1, schoolYearId);
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                listStudent.add(getStudentsById(resultSet.getString(1)));
+//            }
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return listStudent;
+//    }
 

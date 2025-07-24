@@ -61,7 +61,12 @@
                                     <tr>
                                         <th scope="row">${status.index + 1}</th>
                                         <td>${application.type.name}</td>
-                                        <td>${studentBean.getStudentByUserId(application.createdBy).lastName} ${studentBean.getByUserId(application.createdBy).firstName}</td>
+                                        <td>
+                                            <c:set var="student" value="${StudentBean.getStudentByUserId(application.createdBy)}"/>
+                                            <c:if test="${not empty student}">
+                                                ${student.lastName} ${student.firstName}
+                                            </c:if>
+                                        </td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${application.startDate eq application.endDate}">
