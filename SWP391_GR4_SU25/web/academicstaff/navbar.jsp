@@ -82,7 +82,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="">
+                <a class="nav-link" href="studentsattendance">
                     <i class="fas fa-fw fa-calendar-check"></i>
                     <span>Xem Điểm Danh Học Sinh</span>
                 </a>
@@ -155,14 +155,21 @@
                     </div>
                 </div>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="application">
+                    <i class="fas fa-fw fa-envelope" aria-hidden="true"></i>
+                    <span>Xử Lý Đơn Từ</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
+            
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
-
+          
         </ul>
         <!-- End of Sidebar -->
 

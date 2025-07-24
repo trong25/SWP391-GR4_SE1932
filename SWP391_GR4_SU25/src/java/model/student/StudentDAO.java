@@ -1141,6 +1141,44 @@ public List<Student> getStudentsByClassId(String classId) {
         }
         return listStudent;
     }
+    
+            public List<Student> getListStudentOfTeacherBySchoolYear(String schoolYearId, String teacherId) {
+        String sql = "SELECT *\n"
+                + "FROM  Class INNER JOIN\n"
+                + "                  classDetails ON Class.id = classDetails.class_id INNER JOIN\n"
+                + "                  Students ON classDetails.student_id = Students.id INNER JOIN\n"
+                + "                  SchoolYears ON Class.school_year_id = SchoolYears.id\n"
+                + "\t\t\t\t  where teacher_id = ? and school_year_id= ?";
+        List<Student> listStudents = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, schoolYearId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Student student = new Student();
+                student.setId(resultSet.getString("student_id"));
+                student.setUserId(resultSet.getString("user_id"));
+                student.setFirstName(resultSet.getString("first_name"));
+                student.setLastName(resultSet.getString("last_name"));
+                student.setAddress(resultSet.getString("address"));
+                student.setEmail(resultSet.getString("email"));
+                student.setStatus(resultSet.getString("status"));
+                student.setBirthday(resultSet.getDate("birthday"));
+                student.setGender(resultSet.getBoolean("gender"));
+                student.setAvatar(resultSet.getString("avatar"));            
+
+//                Personnel personnel = PersonnelDAO.getPersonnel(resultSet.getString("created_by"));
+//                student.setCreatedBy(personnel);
+
+                student.setParentSpecialNote(resultSet.getString("parent_special_note"));
+                listStudents.add(student);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return listStudents;
+    }
 
 }
 //     public List<Student> getStudentsWithoutClass(String schoolYearId) {
