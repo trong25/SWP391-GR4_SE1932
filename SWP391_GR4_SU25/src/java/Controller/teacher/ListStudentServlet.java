@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "teacher/ListStudentServlet", value = "/teacher/listStudent")
+@WebServlet(name = "teacher/ListStudentServlet", value = "/teacher/liststudent")
 public class ListStudentServlet extends HttpServlet {
 
     @Override
@@ -55,7 +55,7 @@ public class ListStudentServlet extends HttpServlet {
             if (!yearSelected.isEmpty()) {
                 listStudent = studentDAO.getListStudentOfTeacherBySchoolYear(yearSelected, teacher.getId());
 
-                ///  Get Class and grade of class of this teacher in one school year
+                //  Get Class and grade of class of this teacher in one school year
                 classes = classDAO.getTeacherClassByYear(yearSelected, teacher.getId());
             }
 

@@ -98,7 +98,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+<!--                <div class="col-md-6">
                     <form action="applicationdetails" method="post" id="applicationForm">
                         <label for="note">Ghi chú</label>
                         <textarea class="form-control mb-5" type="text" placeholder="${requestScope.application.processNote}"
@@ -112,7 +112,7 @@
                             Từ chối
                         </button>
                     </form>
-                </div>
+                </div>-->
 
                 <div class="btn-group-right float-right">
                     <button type="button" class="btn btn-primary" onclick="history.back()"  style="width: 100px">Quay lại</button>
