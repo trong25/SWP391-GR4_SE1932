@@ -209,7 +209,7 @@ public class PersonnelDAO extends DBContext {
         return list;
     }
 
-   public Personnel getPersonnelByUserId(String userId) {
+    public Personnel getPersonnelByUserId(String userId) {
         String sql = "SELECT * FROM [User] u JOIN Personnels p ON u.id = p.user_id WHERE u.id = ?";
         Personnel personnel = null;
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -244,6 +244,7 @@ public class PersonnelDAO extends DBContext {
         }
         return personnel;
     }
+
     public Personnel getPersonnel(String id) {
         String sql = """
         SELECT 
@@ -347,6 +348,7 @@ public class PersonnelDAO extends DBContext {
         }
         return persons;
     }
+
     public int getPendingTeacherCount() {
         String sql = "SELECT COUNT(*) AS total FROM Personnels WHERE status = ? AND role_id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -1885,8 +1887,8 @@ public class PersonnelDAO extends DBContext {
         }
         return persons;
     }
-    
-  public Personnel getPersonnelByUserIds(String userId) {
+
+    public Personnel getPersonnelByUserIds(String userId) {
         String sql = "select * from [User] u join Personnels p on u.id=p.user_id \n"
                 + "where u.id = ?";
         Personnel personnel = new Personnel();
@@ -1916,7 +1918,5 @@ public class PersonnelDAO extends DBContext {
         }
         return personnel;
     }
-
-    
 
 }

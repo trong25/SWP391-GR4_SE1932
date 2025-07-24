@@ -48,7 +48,7 @@ public class ListStudentServlet extends HttpServlet {
                 yearSelected = schoolYearDAO.getLatest().getId();
             }
             String schoolYear = request.getParameter("schoolYear");
-            Personnel teacher = personnelDAO.getPersonnelByUserId(user.getId());
+            Personnel teacher = personnelDAO.getPersonnelByUserIds(user.getId());
             if (schoolYear != null) {
                 yearSelected = schoolYear;
             }

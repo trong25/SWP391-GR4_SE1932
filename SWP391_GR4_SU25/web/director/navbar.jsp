@@ -96,9 +96,9 @@
 
     <!-- Tổng kết -->
     <li class="nav-item">
-        <a class="nav-link" href="schoolyearsummarize">
+        <a class="nav-link" href="revenue">
             <i class="fas fa-fw fa-bars"></i>
-            <span>Tổng kết khen thưởng học sinh</span>
+            <span>Doanh thu</span>
         </a>
     </li>
 

@@ -14,25 +14,24 @@ import java.io.IOException;
 import java.util.List;
 
 //this shows sent application from the teacher themselves
-
 /**
- * Servlet SentApplicationsServlet xử lý các yêu cầu HTTP để hiển thị danh sách đơn đã gửi của học sinh.
+ * Servlet SentApplicationsServlet xử lý các yêu cầu HTTP để hiển thị danh sách
+ * đơn đã gửi của học sinh.
  *
  * URL Mapping: /student/sentapplications
  *
- * Chức năng:
- * - [GET] Lấy danh sách đơn đã gửi bởi học sinh hiện tại (dựa theo session)
- * - Có thể lọc danh sách đơn theo trạng thái (status: all, đang chờ, đã duyệt, bị từ chối…)
- * - Chuyển tiếp danh sách sang trang JSP để hiển thị
+ * Chức năng: - [GET] Lấy danh sách đơn đã gửi bởi học sinh hiện tại (dựa theo
+ * session) - Có thể lọc danh sách đơn theo trạng thái (status: all, đang chờ,
+ * đã duyệt, bị từ chối…) - Chuyển tiếp danh sách sang trang JSP để hiển thị
  *
  * Phân quyền: Chỉ học sinh đã đăng nhập mới được phép truy cập
  *
  * @author KienPN
  * @version 1.0
  */
-
 @WebServlet(name = "student/SentApplicationsServlet", value = "/student/sentapplications")
 public class SentApplicationsServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String status = request.getParameter("status");
@@ -40,7 +39,7 @@ public class SentApplicationsServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         List<Application> sentApplications;
-        if (status==null || status.equals("all")) {
+        if (status == null || status.equals("all")) {
             sentApplications = applicationDAO.getSentApplications(user.getId());
         } else {
             sentApplications = applicationDAO.getSentApplicationsWithStatus(user.getId(), status);

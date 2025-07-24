@@ -9,7 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.student.Student;
 import utils.DBContext;
 
@@ -19,7 +22,7 @@ import utils.DBContext;
  */
 public class PaymentDAO extends DBContext {
 
-     public Payment createPayment(ResultSet resultSet) throws SQLException {
+    public Payment createPayment(ResultSet resultSet) throws SQLException {
         Payment payment = new Payment();
         payment.setId(resultSet.getInt("id"));
         payment.setCode(resultSet.getString("code"));
@@ -146,6 +149,59 @@ public class PaymentDAO extends DBContext {
             return false;
         }
     }
+// Lấy tổng doanh thu theo tháng hiện tại
+
+    public double getCurrentMonthRevenue() {
+        // SQL Server syntax với Calendar để lấy tháng/năm hiện tại
+        String sql = "SELECT SUM(amount) as total_revenue FROM Payments "
+                + "WHERE month = ? AND year = ? AND status = 'paid'";
+
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH bắt đầu từ 0
+        int currentYear = calendar.get(Calendar.YEAR);
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, currentMonth);
+            stmt.setInt(2, currentYear);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    double result = rs.getDouble("total_revenue");
+                    return rs.wasNull() ? 0.0 : result;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi getCurrentMonthRevenue: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
+
+// Lấy danh sách doanh thu theo từng tháng trong năm
+    public Map<Integer, Double> getMonthlyRevenue(int year) {
+        Map<Integer, Double> monthlyRevenue = new HashMap<>();
+        String sql = "SELECT month, SUM(amount) as total_revenue "
+                + "FROM Payments "
+                + "WHERE year = ? AND status = 'paid' "
+                + "GROUP BY month "
+                + "ORDER BY month";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, year);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int month = rs.getInt("month");
+                    double revenue = rs.getDouble("total_revenue");
+                    monthlyRevenue.put(month, revenue);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi getMonthlyRevenue: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return monthlyRevenue;
+    }
 
     public List<Payment> getALL() {
         String sql = " SELECT * FROM Payments ";
@@ -231,7 +287,7 @@ public class PaymentDAO extends DBContext {
 
     public boolean updatePaymentNote(int paymentId, String note) {
         String sql = "UPDATE Payment SET note = ? WHERE payment_id = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, note);
             ps.setInt(2, paymentId);

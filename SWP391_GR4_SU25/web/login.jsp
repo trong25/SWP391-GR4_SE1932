@@ -167,8 +167,8 @@
         <span><strong>TaBi Learning</strong></span>
     </div>
     <div class="right">
-        <div><i class="fa fa-envelope"></i> Email: contact@tabilearning.com</div>
-        <div><i class="fa fa-phone"></i> Hotline: 0123-456-789</div>
+        <div><i class="fa fa-envelope"></i> Email: he180086daovanhuy@gmail.com</div>
+        <div><i class="fa fa-phone"></i> Hotline: 0899160904</div>
     </div>
 </div>
 

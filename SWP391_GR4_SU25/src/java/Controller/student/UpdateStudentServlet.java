@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller.student;
 
 import java.io.IOException;
@@ -23,24 +22,23 @@ import model.user.UserDAO;
  * @author ASUS VIVOBOOK
  */
 public class UpdateStudentServlet extends HttpServlet {
-   
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-      
-    } 
+            throws ServletException, IOException {
 
-  
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-     
-     PersonnelDAO personnelDAO = new PersonnelDAO();
+            throws ServletException, IOException {
+
+        PersonnelDAO personnelDAO = new PersonnelDAO();
         UserDAO userDAO = new UserDAO();
         StudentDAO studentDAO = new StudentDAO();
         // Lấy thông tin student từ session
         HttpSession session = request.getSession();
-        Student student =  (Student) session.getAttribute("student");
+        Student student = (Student) session.getAttribute("student");
         User user = (User) session.getAttribute("user");
 
         // Lấy thông tin cần update từ request
@@ -79,11 +77,10 @@ public class UpdateStudentServlet extends HttpServlet {
         } else if (phoneNumberSecondGuardianExists) {
             request.setAttribute("toastType", "error");
             request.setAttribute("toastMessage", "Số điện thoại của mẹ đã tồn tại.");
-        } else if(firstGuardianPhoneNumber.equals(secondGuardianPhoneNumber)){
+        } else if (firstGuardianPhoneNumber.equals(secondGuardianPhoneNumber)) {
             request.setAttribute("toastType", "error");
             request.setAttribute("toastMessage", "Số điện thoại của bố và mẹ không được trùng nhau");
-        }
-        else {
+        } else {
 
             // Cập nhật thông tin của student
             student.setFirstGuardianName(firstGuardianName);
@@ -108,6 +105,5 @@ public class UpdateStudentServlet extends HttpServlet {
         }
         request.getRequestDispatcher("informationStudent.jsp").forward(request, response);
     }
-
 
 }

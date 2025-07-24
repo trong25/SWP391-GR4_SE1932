@@ -12,7 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Trung tâm dạy thêm TABI - DashBoard</title>
+        <title>Doanh Thu</title>
 
         <!-- Custom fonts for this template-->
         <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -91,197 +91,6 @@
                     <jsp:include page="../header.jsp"/>
                     <div class="container-fluid">
 
-                        <!-- Page Heading -->
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Chào mừng đến với trung tâm dạy học TaBi</h1>
-                        </div>
-
-                        <!-- Content Row - Các thống kê -->
-                        <div class="row">
-                            <!-- Card Doanh thu tháng hiện tại -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Doanh thu tháng <fmt:formatDate value="${currentDate}" pattern="MM/yyyy" />
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <c:choose>
-                                                        <c:when test="${not empty currentMonthRevenue && currentMonthRevenue > 0}">
-                                                            <fmt:formatNumber value="${currentMonthRevenue}" type="currency" currencySymbol="₫" />
-                                                        </c:when>
-                                                        <c:otherwise>0 ₫</c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Số học sinh -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Số học sinh đang theo học
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    ${requestScope.numberOfStudent}
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-user fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Số lớp học -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <c:choose>
-                                                    <c:when test="${requestScope.listClass.size() > 0}">
-                                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                            Số lớp trong năm học ${requestScope.listClass.get(0).schoolYear.name}
-                                                        </div>
-                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                            ${requestScope.listClass.size()}
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                            Chưa có lớp học trong năm
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer text-center">
-                                        <a href="${pageContext.request.contextPath}/director/class" class="btn btn-sm btn-outline-success">
-                                            Xem chi tiết
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Số môn học đang chờ duyệt -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-warning shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <c:choose>
-                                                    <c:when test="${not empty requestScope.listSubjectPending}">
-                                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                            Môn học đang chờ duyệt
-                                                        </div>
-                                                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                            ${requestScope.listSubjectPending.size()}
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                            Không có môn học chờ duyệt
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-book fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer text-center">
-                                        <a href="${pageContext.request.contextPath}/director/reviewsubject" class="btn btn-sm btn-outline-warning">
-                                            Xem chi tiết
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Lớp học chờ phê duyệt -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-warning shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Lớp học chờ phê duyệt
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <c:choose>
-                                                        <c:when test="${not empty pendingClasses}">
-                                                            ${fn:length(pendingClasses)}
-                                                        </c:when>
-                                                        <c:otherwise>0</c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <c:if test="${not empty pendingClasses}">
-                                        <div class="card-footer text-center">
-                                            <a href="${pageContext.request.contextPath}/director/reviewclass" class="btn btn-sm btn-outline-warning">
-                                                Xem chi tiết
-                                            </a>
-                                        </div>
-                                    </c:if>
-                                </div>
-                            </div>
-
-                            <!-- Nhân sự chờ phê duyệt -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    Nhân sự chờ phê duyệt
-                                                </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <c:choose>
-                                                        <c:when test="${not empty waitlistpersonnel}">
-                                                            ${fn:length(waitlistpersonnel)}
-                                                        </c:when>
-                                                        <c:otherwise>0</c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-user-clock fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <c:if test="${not empty waitlistpersonnel}">
-                                        <div class="card-footer text-center">
-                                            <a href="${pageContext.request.contextPath}/director/waitlistpersonnel" class="btn btn-sm btn-outline-info">
-                                                Xem chi tiết
-                                            </a>
-                                        </div>
-                                    </c:if>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Biểu đồ doanh thu -->
                         <div class="row">
                             <div class="col-xl-12">
@@ -289,9 +98,8 @@
                                     <div class="chart-header">
                                         <h4><i class="fas fa-chart-bar mr-2"></i>Biểu Đồ Doanh Thu Theo Tháng</h4>
                                     </div>
-
-                                    < <div class = "year-selector">
-                                        <c:set var="selectedYear" value="${param.year != null ? param.year : '2023'}" />
+                                    <div class = "year-selector">
+                                        <c:set var="selectedYear" value="${param.year != null ? param.year : '2025'}" />
                                         <select id="yearSelect" onchange="updateChart()">
                                             <option value="2023" ${selectedYear == '2023' ? 'selected' : ''}>2023</option>
                                             <option value="2024" ${selectedYear == '2024' ? 'selected' : ''}>2024</option>
@@ -429,7 +237,7 @@
                                                 const selectedYear = document.getElementById('yearSelect').value;
 
                                                 // Chuyển hướng đến trang với tham số năm để lấy dữ liệu mới từ database
-                                                window.location.href = '${pageContext.request.contextPath}/director/dashboard?year=' + selectedYear;
+                                                window.location.href = '${pageContext.request.contextPath}/director/revenue?year=' + selectedYear;
                                             }
 
                                             function updateStats(data) {

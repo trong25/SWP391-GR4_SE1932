@@ -26,59 +26,59 @@ import model.schoolYear.SchoolYear;
 import model.timetable.TimetableDAO;
 
 /**
- *Servlet ClassDetailServlet xử lý các yêu cầu HTTP để hiển thị danh sách học sinh trong một lớp học
- * và chỉnh sửa thông tin học sinh trong lớp học đó, thêm học sinh mới vào lớp học,
- * phân công giáo viên mới, đổi lớp cho học sinh
- * URL Mapping: /academicstaff/classdetail
- * Chức năng:
- * -Nhận dữ liệu từ form
- * - gọi ClassDAO để thêm hoc sinh, phân công giáo viên, đổi lớp cho học và lưu vào cơ sở dữ liệu
- * Phân quyền: chỉ Giáo Vụ mới được phép làm thêm học sinh vào lớp, phân công giáo viên, đổi lớp cho hoc sinh.
+ * Servlet ClassDetailServlet xử lý các yêu cầu HTTP để hiển thị danh sách học
+ * sinh trong một lớp học và chỉnh sửa thông tin học sinh trong lớp học đó, thêm
+ * học sinh mới vào lớp học, phân công giáo viên mới, đổi lớp cho học sinh URL
+ * Mapping: /academicstaff/classdetail Chức năng: -Nhận dữ liệu từ form - gọi
+ * ClassDAO để thêm hoc sinh, phân công giáo viên, đổi lớp cho học và lưu vào cơ
+ * sở dữ liệu Phân quyền: chỉ Giáo Vụ mới được phép làm thêm học sinh vào lớp,
+ * phân công giáo viên, đổi lớp cho hoc sinh.
+ *
  * @author TrongNV
  * @version 1.0
  */
 public class ClassDetailServlet extends HttpServlet {
 
     @Override
-  
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    StudentDAO studentDAO = new StudentDAO();
-    ClassDAO classDAO = new ClassDAO();
-    PersonnelDAO personnelDAO = new PersonnelDAO();
-    String classId = request.getParameter("classId");
-    HttpSession session = request.getSession();
-    session.setAttribute("classId", classId);
-    List<Student> listStudent = studentDAO.getListStudentsByClass(null, classId);
-    Class classes = classDAO.getClassById(classId);
-    String gradeLevel = classes.getGrade().getName();
-    List<Student> listAllStudent = studentDAO.getStudentsByGrade(gradeLevel);
-    request.setAttribute("checkedDate", isSchoolYearInThePast(classes.getSchoolYear()));
-    request.setAttribute("listAllStudent", listAllStudent);
-    request.setAttribute("teacher", classes.getTeacher());
 
-    // Kiểm tra null cho teacher trước khi tạo teacherName
-    String teacherName = "Chưa được phân công";
-    if (classes.getTeacher() != null) {
-        teacherName = classes.getTeacher().getLastName() + " " + 
-                      classes.getTeacher().getFirstName();
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        StudentDAO studentDAO = new StudentDAO();
+        ClassDAO classDAO = new ClassDAO();
+        PersonnelDAO personnelDAO = new PersonnelDAO();
+        String classId = request.getParameter("classId");
+        HttpSession session = request.getSession();
+        session.setAttribute("classId", classId);
+        List<Student> listStudent = studentDAO.getListStudentsByClass(null, classId);
+        Class classes = classDAO.getClassById(classId);
+        String gradeLevel = classes.getGrade().getName();
+        List<Student> listAllStudent = studentDAO.getStudentsByGrade(gradeLevel);
+        request.setAttribute("checkedDate", isSchoolYearInThePast(classes.getSchoolYear()));
+        request.setAttribute("listAllStudent", listAllStudent);
+        request.setAttribute("teacher", classes.getTeacher());
+
+        // Kiểm tra null cho teacher trước khi tạo teacherName
+        String teacherName = "Chưa được phân công";
+        if (classes.getTeacher() != null) {
+            teacherName = classes.getTeacher().getLastName() + " "
+                    + classes.getTeacher().getFirstName();
+        }
+        request.setAttribute("teacherName", teacherName);
+
+        request.setAttribute("classes", classes);
+        request.setAttribute("moveOutClass", classDAO.getClassesByGradeAndSchoolYear(classId, classes.getGrade().getId(), classes.getSchoolYear().getId()));
+        request.setAttribute("listStudent", listStudent);
+        request.setAttribute("freeTeachers", session.getAttribute("freeTeachers"));
+        request.setAttribute("popUpModal", session.getAttribute("popUpModal"));
+        request.setAttribute("dayId", session.getAttribute("dayId"));
+        session.removeAttribute("freeTeachers");
+        session.removeAttribute("popUpModal");
+        session.removeAttribute("dayId");
+
+        // Gửi danh sách giáo viên khả dụng
+        request.setAttribute("teachers", personnelDAO.getAvailableTeachers(classDAO.getClassById(classId).getSchoolYear().getId()));
+        request.getRequestDispatcher("classDetail.jsp").forward(request, response);
     }
-    request.setAttribute("teacherName", teacherName);
-
-    request.setAttribute("classes", classes);
-    request.setAttribute("moveOutClass", classDAO.getClassesByGradeAndSchoolYear(classId, classes.getGrade().getId(), classes.getSchoolYear().getId()));
-    request.setAttribute("listStudent", listStudent);
-    request.setAttribute("freeTeachers", session.getAttribute("freeTeachers"));
-    request.setAttribute("popUpModal", session.getAttribute("popUpModal"));
-    request.setAttribute("dayId", session.getAttribute("dayId"));
-    session.removeAttribute("freeTeachers");
-    session.removeAttribute("popUpModal");
-    session.removeAttribute("dayId");
-
-    // Gửi danh sách giáo viên khả dụng
-    request.setAttribute("teachers", personnelDAO.getAvailableTeachers(classDAO.getClassById(classId).getSchoolYear().getId()));
-    request.getRequestDispatcher("classDetail.jsp").forward(request, response);
-}
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -246,7 +246,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 //                response.sendRedirect("classdetail?classId=" + classId);
 //            }
 //        }
-    
+
         }
     }
 

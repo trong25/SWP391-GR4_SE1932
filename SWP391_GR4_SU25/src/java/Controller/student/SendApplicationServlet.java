@@ -19,24 +19,24 @@ import model.personnel.PersonnelDAO;
 import model.student.Student;
 
 /**
- * Servlet SendApplicationServlet xử lý các yêu cầu HTTP liên quan đến chức năng gửi đơn của học sinh.
+ * Servlet SendApplicationServlet xử lý các yêu cầu HTTP liên quan đến chức năng
+ * gửi đơn của học sinh.
  *
  * URL Mapping: /student/sendapplication
  *
- * Chức năng:
- * - [GET] Hiển thị form gửi đơn, danh sách loại đơn và người xử lý (giáo viên)
- * - [POST] Xử lý dữ liệu đơn từ form gửi lên: validate, lưu đơn vào cơ sở dữ liệu
- * - Hiển thị thông báo (toast) sau khi xử lý gửi đơn thành công hoặc thất bại
+ * Chức năng: - [GET] Hiển thị form gửi đơn, danh sách loại đơn và người xử lý
+ * (giáo viên) - [POST] Xử lý dữ liệu đơn từ form gửi lên: validate, lưu đơn vào
+ * cơ sở dữ liệu - Hiển thị thông báo (toast) sau khi xử lý gửi đơn thành công
+ * hoặc thất bại
  *
  * Phân quyền: Chỉ học sinh đã đăng nhập mới được sử dụng chức năng gửi đơn
  *
  * @author KienPN
  * @version 1.0
  */
-
-
 @WebServlet(name = "student/SendApplicationServlet", value = "/student/sendapplication")
 public class SendApplicationServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Hiển thị form gửi đơn và hiển thị thông báo nếu có
@@ -50,16 +50,16 @@ public class SendApplicationServlet extends HttpServlet {
         session.removeAttribute("toastMessage");
         request.setAttribute("toastType", toastType);
         request.setAttribute("toastMessage", toastMessage);
-        
+
         //Lấy danh sách loại đơn của học sinh
         ApplicationDAO applicationDAO = new ApplicationDAO();
         PersonnelDAO personnelDAO = new PersonnelDAO();
         List<ApplicationType> applicationTypes = applicationDAO.getAllApplicationTypes("pupil");
-        Student student = (Student)request.getSession().getAttribute("student");
+        Student student = (Student) request.getSession().getAttribute("student");
         List<Personnel> personnels = personnelDAO.getByStudentId(student.getId());
         request.setAttribute("applicationTypes", applicationTypes);
         request.setAttribute("personnels", personnels);
-        
+
         //Chuyển tiếp sang JSP
         request.getRequestDispatcher("sendApplication.jsp").forward(request, response);
     }
@@ -72,11 +72,11 @@ public class SendApplicationServlet extends HttpServlet {
         String startDateRaw = request.getParameter("startDate");
         String endDateRaw = request.getParameter("endDate");
         String processedBy = request.getParameter("teacher_id");
-        try{
+        try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = dateFormat.parse(startDateRaw);
             Date endDate = dateFormat.parse(endDateRaw);
-            
+
             //Tạo đối tượng Application
             ApplicationDAO applicationDAO = new ApplicationDAO();
             Application application = new Application();
@@ -89,7 +89,7 @@ public class SendApplicationServlet extends HttpServlet {
             application.setCreatedAt(new Date());
             application.setStartDate(startDate);
             application.setEndDate(endDate);
-            application.setId("APP"+new Date().getTime());
+            application.setId("APP" + new Date().getTime());
             Personnel personnel = new Personnel();
             personnel.setId(processedBy);
             application.setProcessedBy(personnel);
@@ -105,7 +105,6 @@ public class SendApplicationServlet extends HttpServlet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
 
         response.sendRedirect("sendapplication");
     }

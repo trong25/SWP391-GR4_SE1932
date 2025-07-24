@@ -9,9 +9,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 import model.classes.Class;
 import model.classes.ClassDAO;
+import model.payment.PaymentDAO;
 import model.personnel.Personnel;
 import model.personnel.PersonnelDAO;
 import model.schoolYear.SchoolYear;
@@ -51,13 +55,29 @@ public class DirectorDashBoardServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        // Lấy dữ liệu từ DAO
         StudentDAO studentDAO = new StudentDAO();
         ClassDAO classDAO = new ClassDAO();
         SchoolYearDAO schoolYearDAO = new SchoolYearDAO();
         PersonnelDAO personnelDAO = new PersonnelDAO();
         SubjectDAO subjectDAO = new SubjectDAO();
+        PaymentDAO paymentDAO = new PaymentDAO();
+
         String schoolYearId = null;
+        String yearParam = request.getParameter("year");
+        int year = (yearParam != null) ? Integer.parseInt(yearParam) : 2024;
+        Map<Integer, Double> monthlyRevenue = paymentDAO.getMonthlyRevenue(year);
+
+        // Lấy thông tin năm và tháng hiện tại
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH bắt đầu từ 0
+        Date currentDate = new Date();
+
+        // Lấy doanh thu tháng hiện tại
+        double currentMonthRevenue = paymentDAO.getCurrentMonthRevenue();
+
         List<SchoolYear> schoolYears = schoolYearDAO.getAll();
         if (!schoolYears.isEmpty()) {
             schoolYearId = schoolYears.get(0).getId(); // lấy năm học đầu tiên
@@ -71,10 +91,15 @@ public class DirectorDashBoardServlet extends HttpServlet {
 
         // NEW: Lấy danh sách nhân sự đang chờ xử lý
         List<Personnel> waitlistPersonnel = personnelDAO.getPersonnelByStatus("đang chờ xử lý");
-
-        // Gửi dữ liệu sang dashboard.jsp
+      //gửi dữ liệu doanh thu 
+        request.setAttribute("currentDate", currentDate);
+        request.setAttribute("currentMonthRevenue", currentMonthRevenue);
+        request.setAttribute("monthlyRevenue", monthlyRevenue);
+        request.setAttribute("selectedYear", year);
+        request.setAttribute("currentYear", currentYear);
+        request.setAttribute("currentMonth", currentMonth);
+//thông tin nhân như và học sinh
         request.setAttribute("listSubjectPending", subjectDAO.getSubjectsByStatus("đang chờ xử lý"));
-
         request.setAttribute("pendingClasses", pendingClasses);
         request.setAttribute("listClass", listClass);
         request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
