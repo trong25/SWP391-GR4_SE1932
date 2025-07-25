@@ -1301,14 +1301,12 @@ public void insertSalary(String personnelId, int month, int year, float baseSala
         return list;
     }
 
-    public List<Personnel> getAvailableTeachers(String schoolYearId) {
-
-        String sql = "SELECT t.*, s.schoolName, s.addressSchool "
+public List<Personnel> getAllTeachers(String schoolYearId) {
+        String sql = "SELECT DISTINCT t.*, s.schoolName, s.addressSchool "
                 + "FROM Personnels t "
-                + "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? "
                 + "LEFT JOIN Schools s ON t.school_id = s.id "
-                + "WHERE c.teacher_id IS NULL "
-                + "AND t.id LIKE 'GV%' "
+                + "LEFT JOIN Class c ON t.id = c.teacher_id AND c.school_year_id = ? "
+                + "WHERE t.id LIKE 'GV%' "
                 + "AND t.status LIKE N'đang làm việc%';";
 
         List<Personnel> teachers = new ArrayList<>();
@@ -1325,7 +1323,6 @@ public void insertSalary(String personnelId, int month, int year, float baseSala
         }
         return teachers;
     }
-
     public Personnel getPersonnelById(String id) {
         String sql = """
         SELECT p.*, s.schoolName, s.addressSchool
