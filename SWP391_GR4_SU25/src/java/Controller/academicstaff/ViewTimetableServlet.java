@@ -22,20 +22,34 @@ import model.week.Week;
 import model.week.WeekDAO;
 
 /**
+ * Servlet ViewTimetableServlet xử lý các yêu cầu HTTP để hiển thị chi tiết thời khóa biểu của một lớp học theo tuần.
  *
- * @author Admin
+ * URL Mapping: /academicstaff/view-timetable
+ *
+ * Chức năng:
+ * - Nhận classId, weekId, status từ request parameter
+ * - Lấy thông tin thời khóa biểu, tiết học, ngày học, lớp, tuần từ CSDL
+ * - Chuyển tiếp dữ liệu sang trang viewTimetable.jsp để hiển thị chi tiết
+ *
+ * Phân quyền: Chỉ nhân viên học vụ đã đăng nhập mới được phép xem chi tiết thời khóa biểu
+ *
+ * @author KienPN
  */
 @WebServlet(name = "ViewTimetableServlet", urlPatterns = {"/academicstaff/view-timetable"})
 public class ViewTimetableServlet extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Xử lý yêu cầu HTTP GET để hiển thị chi tiết thời khóa biểu của một lớp học theo tuần.
+     *
+     * Quy trình:
+     * - Lấy classId, weekId, status từ request parameter
+     * - Lấy thông tin thời khóa biểu, tiết học, ngày học, lớp, tuần từ CSDL
+     * - Đặt các thông tin vào attribute và forward sang viewTimetable.jsp
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,12 +79,12 @@ public class ViewTimetableServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Xử lý yêu cầu HTTP POST (không sử dụng trong chức năng này).
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -78,13 +92,13 @@ public class ViewTimetableServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Trả về mô tả ngắn gọn về servlet.
      *
-     * @return a String containing servlet description
+     * @return Chuỗi mô tả servlet
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet hiển thị chi tiết thời khóa biểu của một lớp học theo tuần.";
+    }
 
 }

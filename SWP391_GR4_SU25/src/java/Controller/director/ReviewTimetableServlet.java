@@ -18,20 +18,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpSession;
 
 /**
+ * Servlet ReviewTimetableServlet xử lý các yêu cầu HTTP để duyệt hoặc từ chối thời khóa biểu của các lớp học.
  *
- * @author ThanhNT
-
+ * URL Mapping: /director/reviewTimetable
+ *
+ * Chức năng:
+ * - Hiển thị danh sách thời khóa biểu đang chờ duyệt (GET)
+ * - Nhận yêu cầu duyệt hoặc từ chối thời khóa biểu (POST)
+ * - Cập nhật trạng thái thời khóa biểu trong CSDL
+ * - Thông báo kết quả duyệt/từ chối qua session
+ *
+ * Phân quyền: Chỉ giám đốc đã đăng nhập mới được phép duyệt thời khóa biểu
+ *
+ * @author KienPN
  */
 @WebServlet(name = "ReviewTimetableServlet", urlPatterns = {"/director/reviewTimetable"})
 public class ReviewTimetableServlet extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
+    /**
+     * Xử lý yêu cầu HTTP GET để hiển thị danh sách thời khóa biểu đang chờ duyệt.
+     *
+     * Quy trình:
+     * - Lấy danh sách thời khóa biểu có trạng thái "đang chờ xử lý" từ CSDL
+     * - Đặt danh sách vào attribute và forward sang trang timetableWaitApprove.jsp
+     *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,14 +55,21 @@ public class ReviewTimetableServlet extends HttpServlet {
         List<Timetable> pendingTimetables = timetableDAO.getTimetablesByStatus("đang chờ xử lý");
         request.setAttribute("pendingTimetables", pendingTimetables);
         request.getRequestDispatcher("timetableWaitApprove.jsp").forward(request, response);
-    } 
+    }
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
+    /**
+     * Xử lý yêu cầu HTTP POST để duyệt hoặc từ chối thời khóa biểu.
+     *
+     * Quy trình:
+     * - Nhận timetableId và action (approve/reject) từ request
+     * - Nếu approve: gọi DAO để duyệt thời khóa biểu, cập nhật trạng thái và thông báo kết quả
+     * - Nếu reject: cập nhật trạng thái "đã bị từ chối" và thông báo kết quả
+     * - Gọi lại doGet để cập nhật danh sách
+     *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -75,13 +96,14 @@ public class ReviewTimetableServlet extends HttpServlet {
         doGet(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
+    /**
+     * Trả về mô tả ngắn gọn về servlet.
+     *
+     * @return Chuỗi mô tả servlet
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet duyệt hoặc từ chối thời khóa biểu của các lớp học.";
     }// </editor-fold>
 
 }

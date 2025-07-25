@@ -28,29 +28,33 @@ import model.week.Week;
 import model.week.WeekDAO;
 
 /**
+ * Servlet ViewTimeTableClassServlet xử lý các yêu cầu HTTP để hiển thị thời khóa biểu của các lớp học theo năm học và tuần.
  *
- * @author TuyenCute
+ * URL Mapping: /academicstaff/viewtimetableclass
+ *
+ * Chức năng:
+ * - Hiển thị form chọn năm học, tuần, lớp (GET)
+ * - Nhận dữ liệu lọc và hiển thị thời khóa biểu của lớp theo tuần (POST)
+ * - Thông báo lỗi nếu không có lớp học hoặc dữ liệu không hợp lệ
+ *
+ * Phân quyền: Chỉ nhân viên học vụ đã đăng nhập mới được phép xem thời khóa biểu lớp
+ *
+ * @author KienPN
  */
 @WebServlet(name = "ViewTimeTableClassStaffServlet", urlPatterns = {"/academicstaff/viewtimetableclass"})
 public class ViewTimeTableClassServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Xử lý yêu cầu HTTP GET để hiển thị form chọn năm học, tuần, lớp.
+     *
+     * Quy trình:
+     * - Lấy danh sách năm học từ CSDL
+     * - Đặt vào attribute và forward sang viewTimetableClass.jsp
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -71,12 +75,19 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Xử lý yêu cầu HTTP POST để lọc và hiển thị thời khóa biểu lớp theo tuần.
+     *
+     * Quy trình:
+     * - Lấy classId, week, schoolyear từ request
+     * - Lấy danh sách lớp, tuần, năm học, tiết, ngày từ CSDL
+     * - Lấy thời khóa biểu của lớp theo tuần
+     * - Đặt các thông tin vào attribute và forward sang viewTimetableClass.jsp
+     * - Nếu không có lớp học, thông báo lỗi qua session
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -121,13 +132,13 @@ public class ViewTimeTableClassServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Trả về mô tả ngắn gọn về servlet.
      *
-     * @return a String containing servlet description
+     * @return Chuỗi mô tả servlet
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "Servlet hiển thị thời khóa biểu của các lớp học theo năm học và tuần.";
+    }
 
 }
