@@ -36,7 +36,7 @@ public class CategoryRoleServlet extends HttpServlet {
         List<Student> listStudents = new ArrayList<>();
         Map<Integer, String> roleMap = new HashMap<>();
         roleMap.put(0, "NHÂN VIÊN IT");
-        roleMap.put(1, "HIỆU TRƯỞNG");
+        roleMap.put(1, "GIÁM ĐỐC");
         roleMap.put(2, "GIÁO VỤ");
         roleMap.put(3, "GIÁO VIÊN");
         roleMap.put(4, "HỌC SINH");

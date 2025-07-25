@@ -153,7 +153,7 @@ public class StudentServlet extends HttpServlet {
                     Personnel createdBy = personnelDAO.getPersonnelByUserIds(user.getId());
 
                     // Tạo đối tượng Student
-                    Student student = new Student(null, user.getId(), Helper.formatName(firstName), Helper.formatName(lastName), address,
+                    Student student = new Student(null, null, Helper.formatName(firstName), Helper.formatName(lastName), address,
                             email, status, birthday, Integer.parseInt(genderRaw) == 1, Helper.formatName(firstGuardianName),
                             firstGuardianPhoneNumber, avatar,
                             secondGuardianName.isBlank() ? null : Helper.formatName(secondGuardianName),
