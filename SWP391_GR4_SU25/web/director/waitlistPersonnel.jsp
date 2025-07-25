@@ -107,22 +107,22 @@
                                                         </td>
                                                         <td><fmt:formatDate value="${p.getBirthday()}" pattern="yyyy/MM/dd"/> </td>
                                                     <td>
-                                                        <c:if test="${p.getRoleId()== 0}">
-                                                            Nhân viên IT
-                                                        </c:if>
-                                                        <c:if test="${p.getRoleId()==1}">
-                                                            Hiệu trưởng
-                                                        </c:if>
-                                                        <c:if test="${p.getRoleId()==2}">
-                                                            Giáo vụ
-                                                        </c:if>
-                                                        <c:if test="${p.getRoleId()==3}">
-                                                            Nhân viên kế toán
-                                                        </c:if>
-                                                        <c:if test="${p.getRoleId()==4}">
-                                                            Giáo viên
-                                                        </c:if>
-                                                    </td>
+                                                    <c:if test="${p.getRoleId()== 0}">
+                                                        Nhân viên IT
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==1}">
+                                                        Giám Đốc
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==2}">
+                                                        Giáo vụ
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==3}">
+                                                        Giáo viên
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==5}">
+                                                        Nhân viên kế toán
+                                                    </c:if>
+                                                </td>
                                                     <c:if test="${p.getStatus() != null}">
                                                         <c:choose>
                                                             <c:when test="${p.getStatus() == 'đang làm việc'}">

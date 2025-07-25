@@ -1741,7 +1741,6 @@ public void insertSalary(String personnelId, int month, int year, float baseSala
         e.printStackTrace();
     }
 }
-
     // Trả về số lượng nhân sự theo một vai trò cụ thể (role_id)
     public int getNumberOfPersonByRole(int id) {
         String sql = "select count(id) as numberofpersonbyrole\n"
