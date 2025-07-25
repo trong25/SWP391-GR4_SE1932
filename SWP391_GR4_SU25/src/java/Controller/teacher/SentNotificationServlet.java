@@ -84,7 +84,7 @@ public class SentNotificationServlet extends HttpServlet {
         List<Integer> role_id = notificationDAO.getRoleSentNotifiByIdandCreatBy(id, createby);
         Map<Integer, String> roleMap = new HashMap<>();
         roleMap.put(0, "QUẢN TRỊ VIÊN");
-        roleMap.put(1, "HIỆU TRƯỞNG");
+        roleMap.put(1, "GIÁM ĐỐC");
         roleMap.put(2, "GIÁO VỤ");
         roleMap.put(3, "KẾ TOÁN");
         roleMap.put(4, "GIÁO VIÊN");

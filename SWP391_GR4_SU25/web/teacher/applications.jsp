@@ -49,7 +49,6 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Loại đơn</th>
-                                    <th>Người gửi</th>
                                     <th>Ngày nghỉ</th>
                                     <th>Trạng thái</th>
                                     <th>Chi tiết</th>
@@ -71,6 +70,7 @@
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
+                                        <td>${application.type.name}</td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${application.startDate eq application.endDate}">
