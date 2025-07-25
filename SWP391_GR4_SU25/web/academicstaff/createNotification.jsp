@@ -110,19 +110,13 @@
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="role_id" value="3" id="receiver2">
                                             <label class="form-check-label" for="receiver2">
-                                                Kế toán
+                                                Giáo Viên
                                             </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="role_id" value="4" id="receiver3">
                                             <label class="form-check-label" for="receiver3">
-                                                Giáo viên
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="role_id" value="5" id="receiver4">
-                                            <label class="form-check-label" for="receiver4">
-                                                Phụ huynh
+                                                Học Sinh
                                             </label>
                                         </div>
                                     </div>
