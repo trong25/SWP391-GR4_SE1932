@@ -59,7 +59,7 @@ public class ApplicationDetailsServlet extends HttpServlet {
         PersonnelDAO personnelDAO = new PersonnelDAO();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        application.setProcessedBy(personnelDAO.getPersonnelByUserId(user.getId()));
+        application.setProcessedBy(personnelDAO.getPersonnelByUserIds(user.getId()));
         //update application status in database and get result
         String result = applicationDAO.processApplication(application);
         //sending result to JSP

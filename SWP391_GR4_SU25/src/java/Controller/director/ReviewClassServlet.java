@@ -17,10 +17,27 @@ import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
 
 /**
- *
+ * Servlet ReviewClassServlet xử lý các yêu cầu HTTP liên quan đến việc duyệt lớp học theo năm học.
+ * 
+ * URL Mapping: /director/reviewclass
+ * 
+ * Chức năng:
+ * - Trong phương thức `doGet`: 
+ *   + Lấy danh sách năm học và lớp học đang chờ duyệt theo năm học
+ *   + Gửi thông báo (success/error) từ session nếu có
+ *   + Hiển thị dữ liệu trên trang `reviewClass.jsp`
+ * 
+ * - Trong phương thức `doPost`: 
+ *   + Nhận hành động duyệt hoặc từ chối lớp từ người dùng
+ *   + Gọi `ClassDAO.reviewClass()` để cập nhật trạng thái lớp
+ *   + Lưu kết quả xử lý vào session và redirect về lại trang duyệt lớp
+ * 
+ * Phân quyền: Chỉ vai trò Director (Giám đốc) được phép truy cập chức năng này
+ * 
  * @author ThanhNT
-
+ * @version 1.0
  */
+
 public class ReviewClassServlet extends HttpServlet {
 
     /**
