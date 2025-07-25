@@ -4,7 +4,7 @@
 <html lang="en">
 
     <head>
-        <title>Title</title>
+        <title>THÔNG TIN HỌC SINH</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -204,14 +204,14 @@
                                                 </tbody>
                                             </table>
                                             <div class="d-flex justify-content-end">
-                                                <div class="m-2">
+<!--                                                <div class="m-2">
                                                     <button onclick="goBack()" type="button" class="btn btn-danger">Quay Lại</button>
                                                 </div>
                                                 <div class="m-2">
                                                     <button type="submit" class="btn btn-primary">Chỉnh Sửa</button>
-                                                </div>
+                                                </div>-->
 
-                                            </div>
+                                            </div>  
                                         </form>
                                     </div>
                                 </div>

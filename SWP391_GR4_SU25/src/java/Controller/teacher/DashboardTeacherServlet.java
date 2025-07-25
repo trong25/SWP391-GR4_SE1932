@@ -28,6 +28,8 @@ import model.schoolYear.SchoolYearDAO;
 import model.user.User;
 import model.timetable.TimetableDAO;
 import model.day.Day;
+import model.notification.Notification;
+import model.application.Application;
 
 /**
  *
@@ -61,14 +63,18 @@ public class DashboardTeacherServlet extends HttpServlet {
             ApplicationDAO applicationDAO = new ApplicationDAO();
             RoleDAO roleDAO = new RoleDAO();
             String roleName = roleDAO.getRoleName(personnel.getRoleId());
-            int sumApplication = applicationDAO.getForPersonnel(roleName).size();
+            List<Application> listApplications = applicationDAO.getForPersonnel(roleName);
+            int sumApplication = listApplications.size();
 
             NotificationDAO notificationDAO = new NotificationDAO();
-            int sumNotification = notificationDAO.getListNotifiByUserId(personnel.getUserId()).size();
+            List<Notification> listNotifications = notificationDAO.getListNotifiByUserId(personnel.getUserId());
+            int sumNotification = listNotifications.size();
             request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
             request.setAttribute("listStudentInClass", listStudentInClass);
             request.setAttribute("sumApplication", sumApplication);
             request.setAttribute("sumNotification", sumNotification);
+            request.setAttribute("listNotifications", listNotifications);
+            request.setAttribute("listApplications", listApplications);
 
             TimetableDAO timetableDAO = new TimetableDAO();
             DayDAO dayDAO = new DayDAO();

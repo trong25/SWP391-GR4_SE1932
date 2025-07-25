@@ -52,18 +52,27 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
 
         //get class id
         String classId = request.getParameter("classId");
-        if (classId != null){
-            if (!classId.isBlank()){
-                DayDAO dayDAO = new DayDAO();
-                request.setAttribute("days", dayDAO.getDaysWithTimetableForClass(weekId, classId));
-
-                //send list of students
-                Class classes = classDAO.getClassById(classId);
-                request.setAttribute("classes", classes);
-                StudentDAO studentDAO = new StudentDAO();
-                request.setAttribute("students", studentDAO.getListStudentsByClass(null, classes.getId()));
-                request.setAttribute("classId", classId);
+        StudentDAO studentDAO = new StudentDAO();
+        if (classId != null && !classId.isBlank()) {
+            // Nếu đã chọn lớp, chỉ lấy danh sách học sinh của lớp đó
+            Class classes = classDAO.getClassById(classId);
+            request.setAttribute("classes", classes);
+            request.setAttribute("students", studentDAO.getListStudentsByClass(null, classes.getId()));
+            request.setAttribute("classId", classId);
+            DayDAO dayDAO = new DayDAO();
+            request.setAttribute("days", dayDAO.getDaysWithTimetableForClass(weekId, classId));
+        } else {
+            // Nếu chưa chọn lớp, lấy danh sách học sinh của tất cả các lớp trong năm học đó
+            List<model.classes.Class> classList = classDAO.getBySchoolYear(schoolYearId);
+            List<model.student.Student> allStudents = new java.util.ArrayList<>();
+            for (Class c : classList) {
+                List<model.student.Student> studentsInClass = studentDAO.getListStudentsByClass(null, c.getId());
+                System.out.println("DEBUG - classId: " + c.getId() + ", số học sinh: " + studentsInClass.size());
+                allStudents.addAll(studentsInClass);
             }
+            System.out.println("DEBUG - Tổng số học sinh tất cả lớp: " + allStudents.size());
+            request.setAttribute("students", allStudents);
+            // Không cần lấy days, classes khi chưa chọn lớp
         }
 
 

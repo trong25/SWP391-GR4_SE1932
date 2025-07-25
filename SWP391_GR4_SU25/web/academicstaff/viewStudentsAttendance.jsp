@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:useBean id="studentAttendanceBean" class="model.student.StudentAttendanceDAO"/>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -61,7 +62,7 @@
                 <fmt:setLocale value="vi_VN" />
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Tình hình điểm danh ${requestScope.studentFullName}</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Tình hình điểm danh của học sinh ${requestScope.studentFullName}</h6>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -70,11 +71,13 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Họ và tên</th>
-                                    <c:forEach var="day" items="${requestScope.days}">
-                                        <th>
-                                            <fmt:formatDate value="${day.date}" pattern="EEEE" /> - <fmt:formatDate value="${day.date}" pattern="yyyy/MM/dd" />
-                                        </th>
-                                    </c:forEach>
+                                    <c:if test="${not empty requestScope.days}">
+                                        <c:forEach var="day" items="${requestScope.days}">
+                                            <th>
+                                                <fmt:formatDate value="${day.date}" pattern="EEEE" /> - <fmt:formatDate value="${day.date}" pattern="yyyy/MM/dd" />
+                                            </th>
+                                        </c:forEach>
+                                    </c:if>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -82,19 +85,21 @@
                                     <tr>
                                         <td>${status.index + 1}</td>
                                         <td>${student.lastName} ${student.firstName}</td>
-                                        <c:forEach var="day" items="${requestScope.days}">
-                                            <c:set var="attendance" value="${studentAttendanceBean.getAttendanceByStudentAndDay(student.id, day.id)}"/>
-                                            <c:set value="${attendance.status}" var="s"/>
-                                            <c:if test="${s eq 'present'}">
-                                                <td><span class="badge badge-success">có mặt</span></td>
-                                            </c:if>
-                                            <c:if test="${s eq 'absent'}">
-                                                <td><span class="badge badge-danger">vắng</span> </td>
-                                            </c:if>
-                                            <c:if test="${s == null}">
-                                                <td><span class="badge badge-warning">chưa cập nhật</span>  </td>
-                                            </c:if>
-                                        </c:forEach>
+                                        <c:if test="${not empty requestScope.days}">
+                                            <c:forEach var="day" items="${requestScope.days}">
+                                                <c:set var="attendance" value="${studentAttendanceBean.getAttendanceByStudentAndDay(student.id, day.id)}"/>
+                                                <c:set value="${attendance.status}" var="s"/>
+                                                <c:if test="${s eq 'present'}">
+                                                    <td><span class="badge badge-success">có mặt</span></td>
+                                                </c:if>
+                                                <c:if test="${s eq 'absent'}">
+                                                    <td><span class="badge badge-danger">vắng</span> </td>
+                                                </c:if>
+                                                <c:if test="${s == null}">
+                                                    <td><span class="badge badge-warning">chưa cập nhật</span>  </td>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

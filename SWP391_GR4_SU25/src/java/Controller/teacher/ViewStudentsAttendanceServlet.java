@@ -56,7 +56,7 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
             PersonnelDAO personnelDAO = new PersonnelDAO();
-            String teacherId = personnelDAO.getPersonnelByUserId(user.getId()).getId();
+            String teacherId = personnelDAO.getPersonnelByUserIds(user.getId()).getId();
             ClassDAO classDAO = new ClassDAO();
             Class classes = classDAO.getTeacherClassByYear(schoolYearId, teacherId);
             if (classes != null){
@@ -72,14 +72,14 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
                 request.setAttribute("students", students);
 
                 // Debug logs
-                System.out.println("Debug - Number of days: " + (days != null ? days.size() : 0));
-                System.out.println("Debug - Number of students: " + (students != null ? students.size() : 0));
-                if (days != null && !days.isEmpty()) {
-                    System.out.println("Debug - First day ID: " + days.get(0).getId());
-                }
-                if (students != null && !students.isEmpty()) {
-                    System.out.println("Debug - First student ID: " + students.get(0).getId());
-                }
+//                System.out.println("Debug - Number of days: " + (days != null ? days.size() : 0));
+//                System.out.println("Debug - Number of students: " + (students != null ? students.size() : 0));
+//                if (days != null && !days.isEmpty()) {
+//                    System.out.println("Debug - First day ID: " + days.get(0).getId());
+//                }
+//                if (students != null && !students.isEmpty()) {
+//                    System.out.println("Debug - First student ID: " + students.get(0).getId());
+//                }
             }
         }
         request.getRequestDispatcher("viewStudentsAttendance.jsp").forward(request, response);

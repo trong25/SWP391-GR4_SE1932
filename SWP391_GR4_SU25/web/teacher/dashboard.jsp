@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,6 +21,64 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+        <style>
+            .notification-section, .application-section {
+                display: none;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            .notification-item, .application-item {
+                border-left: 4px solid #4e73df;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            
+            .notification-item:hover, .application-item:hover {
+                transform: translateX(5px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            
+            .notification-date, .application-date {
+                font-size: 0.8rem;
+                color: #6c757d;
+            }
+            
+            .notification-heading, .application-heading {
+                font-weight: 600;
+                color: #2e3d49;
+                margin-bottom: 5px;
+            }
+            
+            .notification-details, .application-details {
+                color: #666;
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+            
+            .empty-notifications, .empty-applications {
+                text-align: center;
+                padding: 3rem;
+                color: #6c757d;
+            }
+            
+            .empty-notifications i, .empty-applications i {
+                font-size: 4rem;
+                margin-bottom: 1rem;
+                opacity: 0.5;
+            }
+            
+            .notification-card:hover, .application-card:hover {
+                cursor: pointer;
+                transform: translateY(-2px);
+                transition: all 0.3s ease;
+            }
+        </style>
 
     </head>
 
@@ -58,11 +117,9 @@
                                 </div>
                             </div>
 
-
-
                             <!-- Menu Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card border-left-info shadow h-100 py-2 application-card" id="applicationCard">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
@@ -86,7 +143,7 @@
 
                             <!-- Notifications Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card border-left-warning shadow h-100 py-2 notification-card" id="notificationCard">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
@@ -123,8 +180,128 @@
                             </div>
                         </div>
 
+                        <!-- Applications Section -->
+                        <div class="row application-section" id="applicationSection">
+                            <div class="col-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-paper-plane mr-2"></i>Danh sách đơn từ
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="hideApplications()">
+                                            <i class="fas fa-times"></i> Đóng
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <c:choose>
+                                            <c:when test="${empty requestScope.listApplications}">
+                                                <div class="empty-applications">
+                                                    <i class="fas fa-file-alt"></i>
+                                                    <h5>Không có đơn từ nào</h5>
+                                                    <p class="text-muted">Hiện tại bạn không có đơn từ nào.</p>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="list-group list-group-flush">
+                                                    <c:forEach var="application" items="${requestScope.listApplications}">
+                                                        <div class="list-group-item application-item" onclick="showApplicationDetail('${application.id}', '${application.type.name}', '${application.details}', '${application.status}', '${application.createdAt}', '${application.startDate}', '${application.endDate}', '${application.processNote}')">
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <div class="application-heading">${application.type.name}</div>
+                                                                <div class="application-date">
+                                                                    <fmt:formatDate value="${application.createdAt}" pattern="dd/MM/yyyy"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="application-details">
+                                                                <c:choose>
+                                                                    <c:when test="${fn:length(application.details) > 100}">
+                                                                        ${fn:substring(application.details, 0, 100)}...
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        ${application.details}
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </div>
+                                                            <div class="mt-2">
+                                                                <c:choose>
+                                                                    <c:when test="${application.status eq 'đã được duyệt'}">
+                                                                        <span class="badge badge-success">${application.status}</span>
+                                                                    </c:when>
+                                                                    <c:when test="${application.status eq 'đã bị từ chối'}">
+                                                                        <span class="badge badge-danger">${application.status}</span>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <span class="badge badge-warning">${application.status}</span>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                                <small class="text-muted ml-2">
+                                                                    <i class="fas fa-calendar mr-1"></i>
+                                                                    <fmt:formatDate value="${application.startDate}" pattern="dd/MM/yyyy"/> - 
+                                                                    <fmt:formatDate value="${application.endDate}" pattern="dd/MM/yyyy"/>
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    </c:forEach>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-
+                        <!-- Notifications Section -->
+                        <div class="row notification-section" id="notificationSection">
+                            <div class="col-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                        <h6 class="m-0 font-weight-bold text-primary">
+                                            <i class="fas fa-bell mr-2"></i>Danh sách thông báo
+                                        </h6>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="hideNotifications()">
+                                            <i class="fas fa-times"></i> Đóng
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <c:choose>
+                                            <c:when test="${empty requestScope.listNotifications}">
+                                                <div class="empty-notifications">
+                                                    <i class="fas fa-bell-slash"></i>
+                                                    <h5>Không có thông báo nào</h5>
+                                                    <p class="text-muted">Hiện tại bạn không có thông báo mới nào.</p>
+                                                </div>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="list-group list-group-flush">
+                                                    <c:forEach var="notification" items="${requestScope.listNotifications}">
+                                                        <div class="list-group-item notification-item" onclick="showNotificationDetail('${notification.id}', '${notification.heading}', '${notification.details}', '${notification.createdAt}', '${notification.createdBy.firstName} ${notification.createdBy.lastName}')">
+                                                            <div class="d-flex w-100 justify-content-between">
+                                                                <div class="notification-heading">${notification.heading}</div>
+                                                                <div class="notification-date">
+                                                                    <fmt:formatDate value="${notification.createdAt}" pattern="dd/MM/yyyy HH:mm"/>
+                                                                </div>
+                                                            </div>
+                                                            <div class="notification-details">
+                                                                <c:choose>
+                                                                    <c:when test="${fn:length(notification.details) > 100}">
+                                                                        ${fn:substring(notification.details, 0, 100)}...
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        ${notification.details}
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </div>
+                                                            <small class="text-muted">
+                                                                <i class="fas fa-user mr-1"></i>Gửi bởi: ${notification.createdBy.firstName} ${notification.createdBy.lastName}
+                                                            </small>
+                                                        </div>
+                                                    </c:forEach>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -132,6 +309,55 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
+
+        <script>
+            // Notification functions
+            function showNotifications() {
+                const notificationSection = document.getElementById('notificationSection');
+                notificationSection.style.display = 'block';
+                
+                // Smooth scroll to notifications section
+                notificationSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            
+            function hideNotifications() {
+                const notificationSection = document.getElementById('notificationSection');
+                notificationSection.style.display = 'none';
+            }
+            
+            function showNotificationDetail(id, heading, details, createdAt, createdBy) {
+                // Clean up the data to avoid JavaScript errors
+                var cleanDetails = details ? details.replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/\n/g, '<br>') : '';
+                
+                var htmlContent = '<div style="text-align: left; max-height: 400px; overflow-y: auto;">' +
+                    '<div style="margin-bottom: 15px;">' +
+                        '<strong>Nội dung:</strong>' +
+                        '<div style="margin-top: 8px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; line-height: 1.5;">' +
+                            cleanDetails +
+                        '</div>' +
+                    '</div>' +
+                    '<div style="border-top: 1px solid #e9ecef; padding-top: 10px; font-size: 0.9rem; color: #6c757d;">' +
+                        '<p><i class="fas fa-user"></i> <strong>Người gửi:</strong> ' + createdBy + '</p>' +
+                        '<p><i class="fas fa-calendar"></i> <strong>Thời gian:</strong> ' + createdAt + '</p>' +
+                    '</div>' +
+                '</div>';
+                
+                swal({
+                    title: heading,
+                    html: true,
+                    text: htmlContent,
+                    icon: "info",
+                    button: "Đóng",
+                    className: "notification-detail-modal"
+                });
+            }
+            
+            
+
+        </script>
 
     </body>
 </html>
