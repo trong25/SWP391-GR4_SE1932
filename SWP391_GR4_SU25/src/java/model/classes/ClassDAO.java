@@ -48,6 +48,7 @@ public class ClassDAO extends DBContext {
         c.setStatus(resultSet.getString("status"));
          c.setClassType(resultSet.getString("class_type"));
         c.setCreatedBy(personnelDAO.getPersonnel(resultSet.getString("created_by")));
+        c.setFee(resultSet.getInt("fee"));
        
         return c;
     }
