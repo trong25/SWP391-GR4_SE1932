@@ -85,15 +85,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row mb-3">
-                            <%
-                                Application app = (Application) request.getAttribute("application");
-                                String details = app.getDetails();
-                                if (details != null) {
-                                    details = details.replace("\r\n", "<br/>");
-                                }
-                            %>
                             <div class="col-sm-9" id="details">
-                                <%= details %>
+                                <c:out value="${detailsWithBr}" escapeXml="false"/>
                             </div>
                         </div>
                     </div>

@@ -10,8 +10,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
 <html>
     <head>
 
@@ -100,11 +98,10 @@
                                                         <td><span class="badge badge-danger">${s}</span>  </td>
                                                     </c:if>
                                                     <td>${classes.createdBy.lastName} ${classes.createdBy.firstName}</td>
-                                                    <td><fmt:formatNumber value="${classes.fee}" type="number" groupingUsed="true"/> VNĐ</td>
+                                                    <td>${classes.fee}</td>
 
-
-                                            </tr>
-                                        </c:forEach>
+                                                </tr>
+                                            </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

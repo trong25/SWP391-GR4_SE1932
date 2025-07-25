@@ -687,7 +687,8 @@ public class StudentDAO extends DBContext {
         SELECT s.*, 
                sch.schoolName, 
                sch.addressSchool AS addressSchool, 
-               cls.class_name
+               cls.class_name,
+               cls.grade_level
         FROM Students s
         JOIN classDetails c ON s.id = c.student_id
         LEFT JOIN Schools sch ON s.school_id = sch.id
