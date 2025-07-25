@@ -197,26 +197,26 @@
 
                         <!-- Content Row - Các thống kê -->
                         <div class="row">
-                            <!-- Card Tổng doanh thu -->
+                            <!-- Card Doanh thu năm hiện tại -->
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card border-left-primary shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Tổng doanh thu 
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Doanh thu năm <fmt:formatDate value="${currentDate}" pattern="yyyy" />
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                     <c:choose>
-                                                        <c:when test="${not empty allRevenue && allRevenue > 0}">
-                                                            <fmt:formatNumber value="${allRevenue}" type="currency" currencySymbol="₫" />
+                                                        <c:when test="${not empty currentYearRevenue && currentYearRevenue > 0}">
+                                                            <fmt:formatNumber value="${currentYearRevenue}" type="currency" currencySymbol="₫" />
                                                         </c:when>
                                                         <c:otherwise>0 ₫</c:otherwise>
                                                     </c:choose>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -421,9 +421,9 @@
                                     <div class = "year-selector">
                                         <c:set var="selectedYear" value="${param.year != null ? param.year : '2024'}" />
                                         <select id="yearSelect" onchange="updateChart()">
-                                            <option value="2023" ${selectedYear == '2024' ? 'selected' : ''}>2024</option>
-                                            <option value="2024" ${selectedYear == '2025' ? 'selected' : ''}>2025</option>
-                                            <option value="2025" ${selectedYear == '2026' ? 'selected' : ''}>2026</option>
+                                            <option value="2023" ${selectedYear == '2023' ? 'selected' : ''}>2023</option>
+                                            <option value="2024" ${selectedYear == '2024' ? 'selected' : ''}>2024</option>
+                                            <option value="2025" ${selectedYear == '2025' ? 'selected' : ''}>2025</option>
                                         </select>
                                     </div>
 

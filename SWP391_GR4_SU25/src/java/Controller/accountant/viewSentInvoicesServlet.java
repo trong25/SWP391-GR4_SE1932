@@ -4,7 +4,6 @@
  */
 package Controller.accountant;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,8 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.payment.PaymentDAO;
 import model.payment.StudentPaymentInfo;
-import model.student.Student;
-import model.student.StudentDAO;
 
 /**
  *
@@ -54,7 +51,11 @@ public class viewSentInvoicesServlet extends HttpServlet {
             throws ServletException, IOException {
         PaymentDAO paymentDAO = new PaymentDAO();
         List<StudentPaymentInfo> listPayment = paymentDAO.getStudentPaymentInfoList();
-        
+        String status = request.getParameter("status");
+        if (status != null) {
+            status = status.toLowerCase(); // chuẩn hóa chữ thường
+        }
+        request.setAttribute("status", status);
         request.setAttribute("listPayment", listPayment);
         request.getRequestDispatcher("viewSentInvoices.jsp").forward(request, response);
     }

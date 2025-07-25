@@ -140,88 +140,62 @@
                                                 </c:if>
                                                 <c:forEach items="${persons}" var="p" varStatus="status">
                                                     <c:forEach items="${p.salaries}" var="salary">
-                                                        <tr>
-                                                            <th scope="row">${status.index + 1}</th>
-                                                            <td><img class="profile_img" src="../images/${p.avatar}" alt="Ảnh nhân viên" width="191px" height="263px" style="object-fit: cover;"></td>
-                                                            <td>${p.id}</td>
-                                                            <td>${p.lastName} ${p.firstName}</td>
-                                                            <td>
-                                                                <c:if test="${p.gender}">Nam</c:if>
-                                                                <c:if test="${!p.gender}">Nữ</c:if>
-                                                            </td>
-                                                            <td><fmt:formatDate value="${p.birthday}" pattern="yyyy/MM/dd"/></td>
-                                                            <td>
-                                                                <c:choose>
-                                                                    <c:when test="${p.roleId == 0}">Nhân viên IT</c:when>
-                                                                    <c:when test="${p.roleId == 2}">Giáo vụ</c:when>
-                                                                    <c:when test="${p.roleId == 3}">Giáo viên</c:when>
-                                                                    <c:when test="${p.roleId == 5}">Nhân viên kế toán</c:when>
-                                                                    <c:otherwise>Khác</c:otherwise>
-                                                                </c:choose>
-                                                            </td>
-                                                            <td>${p.teaching_years != null ? p.teaching_years : '-'}</td>
-                                                            <td>${p.qualification != null ? p.qualification : '-'}</td>
-                                                            <td>${salary.salaryMonth}</td>
-                                                            <td>${salary.salaryYear}</td>
-                                                            <td>${salary.workingDays}</td>
-                                                            
-                                                            <td>
-                                                                <fmt:formatNumber value="${salary.totalSalary}" type="number" groupingUsed="true"/> VND
-                                                            </td>
-                                                            <td>
-                                                                <c:choose>
-                                                                    <c:when test="${salary.paymentStatus == 'đã thanh toán'}">
-                                                                        <span class="badge badge-success">Đã thanh toán</span>
-                                                                    </c:when>
-                                                                    <c:when test="${salary.paymentStatus == 'chưa thanh toán'}">
-                                                                        <span class="badge badge-warning">Chưa thanh toán</span>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <span class="badge badge-info">${salary.paymentStatus}</span>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </td>
-                                                            <td>${salary.paymentDate}</td>
-                                                            <td>
-                                                                <a href="viewpersonnel?id=${p.id}&month=${salary.salaryMonth}&year=${salary.salaryYear}" class="btn btn-sm btn-primary shadow-sm">Thanh Toán Lương</a>
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                    <c:if test="${empty p.salaries}">
-                                                        <tr>
-                                                            <th scope="row">${status.index + 1}</th>
-                                                            <td><img class="profile_img" src="../images/${p.avatar}" alt="Ảnh nhân viên" width="191px" height="263px" style="object-fit: cover;"></td>
-                                                            <td>${p.id}</td>
-                                                            <td>${p.lastName} ${p.firstName}</td>
-                                                            <td>
-                                                                <c:if test="${p.gender}">Nam</c:if>
-                                                                <c:if test="${!p.gender}">Nữ</c:if>
-                                                            </td>
-                                                            <td><fmt:formatDate value="${p.birthday}" pattern="yyyy/MM/dd"/></td>
-                                                            <td>
-                                                                <c:choose>
-                                                                    <c:when test="${p.roleId == 0}">Nhân viên IT</c:when>
-                                                                    <c:when test="${p.roleId == 2}">Giáo vụ</c:when>
-                                                                    <c:when test="${p.roleId == 3}">Giáo viên</c:when>
-                                                                    <c:when test="${p.roleId == 5}">Nhân viên kế toán</c:when>
-                                                                    <c:otherwise>Khác</c:otherwise>
-                                                                </c:choose>
-                                                            </td>
-                                                            <td>${p.teaching_years != null ? p.teaching_years : '-'}</td>
-                                                            <td>${p.qualification != null ? p.qualification : '-'}</td>
-                                                            <td>-</td>
-
-                                                            <td>-</td>
-                                                            
-
-                                                            <td>-</td>                                                           
-
-                                                            <td>-</td>
-                                                            <td>-</td>
-                                                            <td>-</td>
-                                                            <td><span class="text-muted">Không có chi tiết</span></td>
-                                                        </tr>
+                                                        <c:if test="${salary.salaryMonth != -1}">
+                                                            <tr>
+                                                                <th scope="row">${status.index + 1}</th>
+                                                                <td><img class="profile_img" src="../images/${p.avatar}" alt="Ảnh nhân viên" width="191px" height="263px" style="object-fit: cover;"></td>
+                                                                <td>${p.id}</td>
+                                                                <td>${p.lastName} ${p.firstName}</td>
+                                                                <td>
+                                                                    <c:if test="${p.gender}">Nam</c:if>
+                                                                    <c:if test="${!p.gender}">Nữ</c:if>
+                                                                </td>
+                                                                <td><fmt:formatDate value="${p.birthday}" pattern="yyyy/MM/dd"/></td>
+                                                                <td>
+                                                    <c:if test="${p.getRoleId()== 0}">
+                                                        Nhân viên IT
                                                     </c:if>
+                                                    <c:if test="${p.getRoleId()==1}">
+                                                        Giám Đốc
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==2}">
+                                                        Giáo vụ
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==3}">
+                                                        Giáo viên
+                                                    </c:if>
+                                                    <c:if test="${p.getRoleId()==5}">
+                                                        Nhân viên kế toán
+                                                    </c:if>
+                                                </td>
+                                                                <td>${p.teaching_years != null ? p.teaching_years : '-'}</td>
+                                                                <td>${p.qualification != null ? p.qualification : '-'}</td>
+                                                                <td>${salary.salaryMonth}</td>
+                                                                <td>${salary.salaryYear}</td>
+                                                                <td>${salary.workingDays}</td>
+                                                                <td>
+                                                                    <fmt:formatNumber value="${salary.totalSalary}" type="number" groupingUsed="true"/> VND
+                                                                </td>
+                                                                <td>
+                                                                    <c:choose>
+                                                                        <c:when test="${salary.paymentStatus == 'đã thanh toán'}">
+                                                                            <span class="badge badge-success">Đã thanh toán</span>
+                                                                        </c:when>
+                                                                        <c:when test="${salary.paymentStatus == 'chưa thanh toán'}">
+                                                                            <span class="badge badge-warning">Chưa thanh toán</span>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <span class="badge badge-info">${salary.paymentStatus}</span>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </td>
+                                                                <td>${salary.paymentDate}</td>
+                                                                <td>
+                                                                    <a href="viewpersonnel?id=${p.id}&month=${salary.salaryMonth}&year=${salary.salaryYear}" class="btn btn-sm btn-primary shadow-sm">Thanh Toán Lương</a>
+                                                                </td>
+                                                            </tr>
+                                                        </c:if>
+                                                    </c:forEach>
                                                 </c:forEach>
                                             </tbody>
                                         </table>

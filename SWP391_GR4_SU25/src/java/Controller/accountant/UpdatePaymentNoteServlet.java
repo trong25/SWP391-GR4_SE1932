@@ -14,9 +14,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.payment.PaymentDAO;
 
 /**
- *
- * @author admin
+ * Servlet UpdatePaymentNoteServlet xử lý các yêu cầu HTTP liên quan đến việc cập nhật ghi chú của hóa đơn thanh toán học phí.
+ * 
+ * URL Mapping: /accountant/updatePaymentNote
+ * 
+ * Chức năng:
+ * - Nhận dữ liệu từ client (qua Ajax hoặc form), bao gồm `paymentId` và `note`
+ * - Kiểm tra dữ liệu đầu vào (rỗng, độ dài hợp lệ, cho phép ghi chú trống)
+ * - Gọi `PaymentDAO` để cập nhật ghi chú thanh toán trong cơ sở dữ liệu
+ * - Trả về phản hồi dưới dạng JSON cho client (success/failure và thông báo)
+ * 
+ * Phân quyền: Chỉ vai trò Accountant (Kế toán) được phép truy cập chức năng này
+ * 
+ * @author ThanhNT
+ * @version 1.0
  */
+
 @WebServlet(name = "UpdatePaymentNoteServlet", urlPatterns = {"/accountant/updatePaymentNote"})
 public class UpdatePaymentNoteServlet extends HttpServlet {
 
@@ -59,14 +72,7 @@ public class UpdatePaymentNoteServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

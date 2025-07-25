@@ -37,29 +37,35 @@ import model.week.Week;
 import model.week.WeekDAO;
 
 /**
+ * Servlet CreateTimetableServlet xử lý các yêu cầu HTTP để tạo mới thời khóa biểu cho lớp học.
  *
- * @author admin
+ * URL Mapping: /academicstaff/timetable
+ *
+ * Chức năng:
+ * - Hiển thị form tạo thời khóa biểu (GET)
+ * - Nhận dữ liệu từ form và tạo mới thời khóa biểu (POST)
+ * - Kiểm tra phân quyền, kiểm tra trùng lặp, xác thực dữ liệu đầu vào
+ * - Thông báo kết quả thành công/thất bại qua session
+ *
+ * Phân quyền: Chỉ nhân viên học vụ đã đăng nhập mới được phép tạo thời khóa biểu
+ *
+ * @author KienPN
  */
 @WebServlet(name = "CreateTimetableServlet", urlPatterns = {"/academicstaff/timetable"})
 public class CreateTimetableServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Xử lý yêu cầu HTTP GET để hiển thị form tạo thời khóa biểu.
+     *
+     * Quy trình:
+     * - Lấy các tham số lọc (năm học, khối, lớp, tuần)
+     * - Lấy danh sách năm học, tuần, khối, lớp, ngày, tiết, môn học từ CSDL
+     * - Đặt các thông tin vào attribute và forward sang createTimetable.jsp
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -135,12 +141,19 @@ public class CreateTimetableServlet extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Xử lý yêu cầu HTTP POST để nhận dữ liệu form và tạo mới thời khóa biểu.
+     *
+     * Quy trình:
+     * - Lấy dữ liệu từ form (lớp, ngày, tiết, môn, giáo viên, người tạo)
+     * - Kiểm tra trùng lặp thời khóa biểu
+     * - Sinh mã thời khóa biểu mới, tạo bản ghi trong CSDL
+     * - Thông báo kết quả qua session (thành công/thất bại)
+     * - Redirect về trang tạo thời khóa biểu
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -287,13 +300,13 @@ public class CreateTimetableServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Trả về mô tả ngắn gọn về servlet.
      *
-     * @return a String containing servlet description
+     * @return Chuỗi mô tả servlet
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet tạo mới thời khóa biểu cho lớp học.";
     }// </editor-fold>
 
 }

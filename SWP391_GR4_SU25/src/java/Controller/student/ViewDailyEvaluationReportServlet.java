@@ -19,9 +19,38 @@ import model.user.User;
 import model.week.Week;
 import model.week.WeekDAO;
 
+/**
+ * Servlet ViewDailyEvaluationReportServlet xử lý các yêu cầu HTTP để hiển thị báo cáo đánh giá hàng ngày của học sinh.
+ *
+ * URL Mapping: /student/viewdailyevaluationreport
+ *
+ * Chức năng:
+ * - Kiểm tra người dùng đã đăng nhập chưa (qua session)
+ * - Lấy thông tin học sinh, năm học, tuần, đánh giá từ CSDL
+ * - Xác định tuần/năm học hiện tại hoặc gần nhất
+ * - Chuyển tiếp dữ liệu sang trang viewDailyEvaluationReport.jsp để hiển thị báo cáo
+ *
+ * Phân quyền: Chỉ học sinh đã đăng nhập mới được phép xem báo cáo đánh giá
+ *
+ * @author KienPN
+ */
 @WebServlet(name = "ViewDailyEvaluationReportServlet", urlPatterns = {"/student/viewdailyevaluationreport"})
 public class ViewDailyEvaluationReportServlet extends HttpServlet {
 
+    /**
+     * Xử lý yêu cầu HTTP GET để hiển thị báo cáo đánh giá hàng ngày của học sinh.
+     *
+     * Quy trình:
+     * - Lấy user từ session
+     * - Lấy thông tin học sinh, năm học, tuần, đánh giá từ CSDL
+     * - Xác định tuần/năm học hiện tại hoặc gần nhất
+     * - Đặt các thông tin vào attribute và forward sang viewDailyEvaluationReport.jsp
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -74,6 +103,21 @@ public class ViewDailyEvaluationReportServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Xử lý yêu cầu HTTP POST để lọc hoặc chuyển đổi chế độ hiển thị báo cáo đánh giá.
+     *
+     * Quy trình:
+     * - Lấy các tham số lọc từ request (schoolyear, week, display)
+     * - Lấy lại thông tin học sinh từ session
+     * - Nếu chế độ hiển thị là "week", kiểm tra tuần hợp lệ và lấy dữ liệu đánh giá tuần đó
+     * - Nếu không, lấy dữ liệu tổng hợp theo năm học
+     * - Đặt các thông tin vào attribute và forward sang viewDailyEvaluationReport.jsp
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

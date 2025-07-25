@@ -41,6 +41,86 @@
             });
         </script>
         <style>
+    .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        background-color: #fff;
+    }
+    .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+    }
+    .modal-title {
+        font-weight: 600;
+        color: #343a40;
+    }
+    .modal-body {
+        padding: 1.5rem;
+    }
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    .form-control, .custom-select {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        padding: 0.375rem 0.75rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus, .custom-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        outline: none;
+    }
+    .form-control.is-invalid, .custom-select.is-invalid {
+        border-color: #dc3545;
+    }
+    .invalid-feedback {
+        display: none;
+        color: #dc3545;
+        font-size: 0.875rem;
+    }
+    .is-invalid ~ .invalid-feedback {
+        display: block;
+    }
+    .btn-success, .btn-danger {
+        padding: 0.5rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 500;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .btn-success:hover {
+        background-color: #28a745;
+        transform: translateY(-1px);
+    }
+    .btn-danger:hover {
+        background-color: #dc3545;
+        transform: translateY(-1px);
+    }
+    .text-danger {
+        font-weight: bold;
+    }
+    .modal-footer {
+        border-top: 1px solid #e9ecef;
+        padding: 1rem 1.5rem;
+        background-color: #f8f9fa;
+    }
+    @media (max-width: 768px) {
+        .modal-dialog {
+            margin: 0.5rem;
+        }
+        .form-control, .custom-select {
+            font-size: 0.9rem;
+        }
+        .btn-success, .btn-danger {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+        <style>
             #imagePreview img {
                 width: 150px;
                 height: 150px;
@@ -131,112 +211,68 @@
 
 
                         <!-- New School Student Modal -->
-                        <div class="modal fade create-pupil" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                             aria-hidden="true" >
+                        <div class="modal fade create-pupil" id="createPupilModal" tabindex="-1" role="dialog" aria-labelledby="createPupilModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
-                                    <div class="row">
-                                        <div class="form-group col-md-12">
-                                            <span class="thong-tin-thanh-toan">
-                                                <h5 style="margin: 14px">Thêm học sinh mới</h5>
-                                            </span>
-                                        </div>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="createPupilModalLabel">Thêm Học Sinh Mới</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <form action="studentwait?action=create" method="post" id="create-form" onsubmit="return validateForm()">
-                                        <div class="row">
-
-
-                                            <div class="col-md-9">
-                                                <c:set var="vietnamesePattern"
-                                                       value="ĐđaáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵAÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶEÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊOÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢUÚÙỦŨỤƯỨỪỬỮỰYÝỲỶỸỴ"/>
-                                                <div class="tile">
-                                                    <div class="tile-body">
-
-                                                        <div class="container-fluid pl-0">
-                                                            <div class="row">
-
-                                                                <p style="margin-left: 11px;font-weight: bold">Ghi chú: <a
-                                                                        style="font-weight: normal">Các thông tin có dấu</a><a
-                                                                        style="color: red"> (*) </a><a
-                                                                        style="font-weight: normal">là thông tin bắt buộc phải
-                                                                        nhập</a></p>
-
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="address">Địa chỉ<a
-                                                                            style="color: red">(*)</a></label>
-                                                                    <input class="form-control" id="address" name="address"
-                                                                           value="${param.address}">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="lastName">Họ học sinh<a
-                                                                            style="color: red">(*)</a></label>
-                                                                    <input type="text" class="form-control" id="lastName"
-                                                                           name="lastName"
-                                                                           value="${param.lastName}">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="firstName">Tên học sinh<a
-                                                                            style="color: red">(*)</a></label>
-                                                                    <input type="text" class="form-control" id="firstName" style="width: 70%"
-                                                                           name="firstName" value="${param.firstName}">
-                                                                </div>
-
-
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="secondGuardianPhoneNumber">Số điện thoại
-                                                                    </label><br>
-                                                                    <input style="width: 50%" type="text" class="form-control"
-                                                                           id="phoneNumber"
-                                                                           name="phoneNumber"
-                                                                           value="${param.phoneNumber}">
-                                                                </div>
-
-                                                                <div class=" form-group col-md-6">
-                                                                    <label for="birth" class="form-label">Ngày sinh<a
-                                                                            style="color: red">(*)</a></label><br>
-                                                                    <input type="date" id="birth" class="form-control"
-                                                                           style="width: 70%" name="birth"
-                                                                           value="${param.birth}">
-                                                                </div>
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="gender" class="form-label">Giới tính<a
-                                                                            style="color: red; margin-right: 60px">(*)</a></label>
-                                                                    <select name="gender" id="gender"
-                                                                            class="custom-select"
-                                                                            aria-label="Default select example"
-                                                                            style="width: 53%;height: 50%;">
-                                                                        <option hidden="" value="-1">Chọn giới tính</option>
-                                                                        <option ${param.gender==1?"selected":""} value="1">Nam
-                                                                        </option>
-                                                                        <option ${param.gender==0?"selected":""} value="0">Nữ
-                                                                        </option>
-                                                                    </select>
-                                                                </div>
-
-                                                                <div class="form-group col-md-6">
-                                                                    <label for="email">Email<a
-                                                                            style="color: red">(*)</a></label>
-                                                                    <input type="text" class="form-control" id="email"
-                                                                           name="email"  value="${param.email}">
-                                                                    <div class="row" style="margin-top: 20px">
-                                                                        <button style="margin:0px 10px" class="btn btn-success"
-                                                                                type="submit">Lưu lại
-                                                                        </button>
-                                                                        <a class="btn btn-danger" data-dismiss="modal"
-                                                                           id="cancel-button">Hủy bỏ</a>
-                                                                    </div>
-                                                                </div>
-                                                                
-
-                                                            </div>
-                                                        </div>
+                                    <div class="modal-body">
+                                        <form action="studentwait?action=create" method="post" id="create-form" onsubmit="return validateForm()">
+                                            <div class="container-fluid">
+                                                <p class="text-muted mb-4">
+                                                    <strong>Ghi chú:</strong> Các trường có dấu <span class="text-danger">*</span> là bắt buộc.
+                                                </p>
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="lastName" class="form-label">Họ học sinh <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="lastName" name="lastName" value="${param.lastName}" required>
+                                                        <div class="invalid-feedback">Vui lòng nhập họ học sinh.</div>
                                                     </div>
-
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="firstName" class="form-label">Tên học sinh <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="firstName" name="firstName" value="${param.firstName}" required>
+                                                        <div class="invalid-feedback">Vui lòng nhập tên học sinh.</div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="birth" class="form-label">Ngày sinh <span class="text-danger">*</span></label>
+                                                        <input type="date" class="form-control" id="birth" name="birth" value="${param.birth}" required>
+                                                        <div class="invalid-feedback">Vui lòng chọn ngày sinh.</div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="gender" class="form-label">Giới tính <span class="text-danger">*</span></label>
+                                                        <select name="gender" id="gender" class="form-control custom-select" required>
+                                                            <option value="-1" disabled ${param.gender == null || param.gender == '-1' ? 'selected' : ''}>Chọn giới tính</option>
+                                                            <option value="1" ${param.gender == '1' ? 'selected' : ''}>Nam</option>
+                                                            <option value="0" ${param.gender == '0' ? 'selected' : ''}>Nữ</option>
+                                                        </select>
+                                                        <div class="invalid-feedback">Vui lòng chọn giới tính.</div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="address" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="address" name="address" value="${param.address}" required>
+                                                        <div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${param.phoneNumber}">
+                                                    </div>
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                                        <input type="email" class="form-control" id="email" name="email" value="${param.email}" required>
+                                                        <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                    </form>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">Lưu lại</button>
+                                                <button type="button" class="btn btn-danger" id="cancel-button" data-dismiss="modal">Hủy bỏ</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -247,15 +283,15 @@
         </div>
 
 
-        
+
 
         <script>
             function validateForm() {
                 var vietnamesePattern = "ĐđaáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵAÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶEÉÈẺẼẸÊẾỀỂỄỆIÍÌỈĨỊOÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢUÚÙỦŨỤƯỨỪỬỮỰYÝỲỶỸỴ";
-               
+
                 var phoneNumber2 = document.getElementById('phoneNumber').value;
                 var address = document.getElementById('address').value;
-                
+
                 var firstName = document.getElementById("firstName").value;
                 var lastName = document.getElementById("lastName").value;
                 var email = document.getElementById(("email")).value;
@@ -334,9 +370,9 @@
                 document.getElementById('address').value = '';
                 document.getElementById('lastName').value = '';
                 document.getElementById('firstName').value = '';
-               
+
                 document.getElementById('phoneNumber').value = '';
-                
+
                 document.getElementById('birth').value = '';
                 document.getElementById('email').value = '';
                 document.getElementById('parentNote').value = '';
