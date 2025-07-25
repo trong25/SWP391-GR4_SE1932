@@ -17,10 +17,23 @@ import model.schoolYear.SchoolYear;
 import model.schoolYear.SchoolYearDAO;
 
 /**
- *
+ * Servlet ClassServlet xử lý các yêu cầu HTTP liên quan đến việc hiển thị danh sách lớp học theo năm học và trạng thái.
+ * 
+ * URL Mapping: /director/class
+ * 
+ * Chức năng:
+ * - Trong phương thức `doGet`: 
+ *   + Lấy danh sách năm học từ `SchoolYearDAO`
+ *   + Lấy danh sách lớp học theo năm học và trạng thái (nếu có)
+ *   + Chuyển tiếp dữ liệu sang trang `class.jsp` để hiển thị
+ * - Trong phương thức `doPost`: chưa triển khai xử lý
+ * 
+ * Phân quyền: Chỉ vai trò Director (Giám đốc) được phép truy cập chức năng này
+ * 
  * @author ThanhNT
-
+ * @version 1.0
  */
+
 public class ClassServlet extends HttpServlet {
 
     
@@ -41,15 +54,7 @@ public class ClassServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,14 +86,7 @@ public class ClassServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

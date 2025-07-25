@@ -8,6 +8,22 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.payment.PaymentDAO;
+/**
+ * Servlet UpdatePaymentStatusServlet xử lý các yêu cầu HTTP để cập nhật trạng thái thanh toán của hóa đơn học phí.
+ * 
+ * URL Mapping: /accountant/updatePaymentStatus
+ * 
+ * Chức năng:
+ * - Nhận dữ liệu từ client, bao gồm `paymentId` và `status`
+ * - Kiểm tra tính hợp lệ của dữ liệu đầu vào
+ * - Gọi `PaymentDAO` để cập nhật trạng thái hóa đơn trong cơ sở dữ liệu
+ * - Phản hồi về client dưới dạng JSON thông báo kết quả (thành công/thất bại)
+ * 
+ * Phân quyền: Chỉ vai trò Accountant (Kế toán) được phép truy cập chức năng này
+ * 
+ * @author ThanhNT
+ * @version 1.0
+ */
 
 @WebServlet(name = "UpdatePaymentStatusServlet", urlPatterns = {"/accountant/updatePaymentStatus"})
 public class UpdatePaymentStatusServlet extends HttpServlet {
