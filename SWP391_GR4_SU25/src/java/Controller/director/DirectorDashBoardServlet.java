@@ -71,13 +71,13 @@ public class DirectorDashBoardServlet extends HttpServlet {
 
         // Lấy thông tin năm và tháng hiện tại
         Calendar calendar = Calendar.getInstance();
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH bắt đầu từ 0
+        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+         int currentYear = calendar.get(Calendar.YEAR);// Calendar.MONTH bắt đầu từ 0
         Date currentDate = new Date();
 
         // Lấy doanh thu tháng hiện tại
         double currentMonthRevenue = paymentDAO.getCurrentMonthRevenue();
-        double allRevenue = paymentDAO.getAllRevenue();
+       double currentYearRevenue = paymentDAO.getRevenueByYear(currentYear);
         List<SchoolYear> schoolYears = schoolYearDAO.getAll();
         if (!schoolYears.isEmpty()) {
             schoolYearId = schoolYears.get(0).getId(); // lấy năm học đầu tiên
@@ -94,7 +94,7 @@ public class DirectorDashBoardServlet extends HttpServlet {
         //gửi dữ liệu doanh thu 
         request.setAttribute("currentDate", currentDate);
         request.setAttribute("currentMonthRevenue", currentMonthRevenue);
-        request.setAttribute("allRevenue", allRevenue);
+        request.setAttribute("currentYearRevenue", currentYearRevenue);
         request.setAttribute("monthlyRevenue", monthlyRevenue);
         request.setAttribute("selectedYear", year);
         request.setAttribute("currentYear", currentYear);
