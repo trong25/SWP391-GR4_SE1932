@@ -58,7 +58,7 @@
                                 <tbody>
                                 <div style="color: red">${requestScope.error}</div> <c:forEach var="application" items="${requestScope.applications}" varStatus="status">
                                     <tr>
-                                        <th scope="row">${status.index + 1}</th>
+                                        <td>${status.index + 1}</td>
                                         <td>${application.type.name}</td>
                                         <td>
                                             <c:choose>
@@ -71,28 +71,26 @@
                                             </c:choose>
                                         </td>
                                         <td>
-                               
+                                            <c:if test="${not empty application.startDate && not empty application.endDate}">
+                                                <fmt:formatDate value="${application.startDate}" pattern="yyyy/MM/dd"/> đến <fmt:formatDate value="${application.endDate}" pattern="yyyy/MM/dd"/>
+                                            </c:if>
+                                        </td>
+                                        <td>
                                             <c:choose>
-                                                <c:when test="${application.startDate eq application.endDate}">
-                                                    <fmt:formatDate value="${application.startDate}" pattern="yyyy/MM/dd"/>
+                                                <c:when test="${application.status eq 'đã được duyệt'}">
+                                                    <span class="badge badge-success">${application.status}</span>
+                                                </c:when>
+                                                <c:when test="${application.status eq 'đang chờ xử lý'}">
+                                                    <span class="badge badge-warning">${application.status}</span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <fmt:formatDate value="${application.startDate}" pattern="yyyy/MM/dd"/> đến <fmt:formatDate value="${application.endDate}" pattern="yyyy/MM/dd"/>
+                                                    <span class="badge badge-danger">${application.status}</span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <c:set value="${application.status}" var="s"/>
-                                        <c:if test="${s eq 'đã được duyệt'}">
-                                            <td><span class="badge badge-success">${s}</span></td>
-                                        </c:if>
-                                        <c:if test="${s eq 'đang chờ xử lý'}">
-                                            <td><span class="badge badge-warning">${s}</span>  </td>
-                                        </c:if>
-                                        <c:if test="${s eq 'không được duyệt'}">
-                                            <td><span class="badge badge-danger">${s}</span>  </td>
-                                        </c:if>
-                                        <td class="text-center"><a href="applicationdetails?id=${application.id}"
-                                                                   class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Chi tiết</a></td>
+                                        <td>
+                                            <a href="applicationdetails?id=${application.id}" class="btn btn-primary">Chi tiết</a>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

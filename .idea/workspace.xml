@@ -2,15 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/accountant/viewSentInvoicesServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/accountant/viewSentInvoicesServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendanceSummaryDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendanceSummaryDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/accountant/viewSentInvoices.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/accountant/viewSentInvoices.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/SentNotificationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/academicstaff/SentNotificationServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/teacher/SentNotificationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/teacher/SentNotificationServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/notification/NotificationDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/notification/NotificationDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/createNotification.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/createNotification.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/studentWait.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/academicstaff/studentWait.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/applicationDetails.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/applicationDetails.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/applications.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/applications.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/teacher/dashboard.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +95,7 @@
       <workItem from="1753418224044" duration="29000" />
       <workItem from="1753418273648" duration="26000" />
       <workItem from="1753418309073" duration="28000" />
+      <workItem from="1753431922663" duration="18000" />
     </task>
     <servers />
   </component>

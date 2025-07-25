@@ -117,7 +117,7 @@
                                 </div>
                             </div>
 
-                            <!-- Menu Card Example -->
+<!--                             Menu Card Example 
                             <div class="col-xl-3 col-md-6 mb-4">
                                 <div class="card border-left-info shadow h-100 py-2 application-card" id="applicationCard">
                                     <div class="card-body">
@@ -139,7 +139,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <!-- Notifications Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
@@ -181,7 +181,7 @@
                         </div>
 
                         <!-- Applications Section -->
-                        <div class="row application-section" id="applicationSection">
+<!--                        <div class="row application-section" id="applicationSection">
                             <div class="col-12">
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -245,7 +245,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
 
                         <!-- Notifications Section -->
                         <div class="row notification-section" id="notificationSection">

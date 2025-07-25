@@ -132,21 +132,6 @@
                 </div>
             </li>
 
-<!--             Nav Item - Báo cáo sức khỏe -->
-<!--            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/teacher/list-student">
-                    <i class='fas fa-fw fa-hand-holding-heart'></i>
-                    <span>Báo cáo sức khỏe</span>
-                </a>
-            </li>-->
-
-<!--             Nav Item - Phiếu bé ngoan 
-            <li class="nav-item">
-                <a class="nav-link" href="evaluationreport">
-                    <i class='fas fa-fw fa-id-badge'></i>
-                    <span>Phiếu bé ngoan</span>
-                </a>
-            </li>-->
 
 <!--             Nav Item - Đánh giá học sinh hằng ngày -->
             <li class="nav-item">
@@ -164,11 +149,6 @@
                 </div>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link" href="application">
-                    <i class="fas fa-fw fa-envelope" aria-hidden="true"></i>
-                    <span>Xử Lý Đơn Từ</span></a>
-            </li>
 
 
             <!-- Divider -->
