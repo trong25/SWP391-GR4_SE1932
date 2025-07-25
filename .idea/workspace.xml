@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="" />
+    <list default="true" id="1f8bdf2b-82f8-4ae7-b7c1-a8f6ad95c420" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/build-impl.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/genfiles.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/nbproject/project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/accountant/viewSentInvoicesServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/Controller/accountant/viewSentInvoicesServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendanceSummaryDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/src/java/model/student/StudentAttendanceSummaryDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SWP391_GR4_SU25/web/accountant/viewSentInvoices.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/SWP391_GR4_SU25/web/accountant/viewSentInvoices.jsp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,17 +40,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -80,6 +90,12 @@
       <workItem from="1753282631674" duration="44000" />
       <workItem from="1753289674610" duration="3000" />
       <workItem from="1753347230141" duration="30000" />
+      <workItem from="1753417997295" duration="100000" />
+      <workItem from="1753418114990" duration="31000" />
+      <workItem from="1753418160968" duration="52000" />
+      <workItem from="1753418224044" duration="29000" />
+      <workItem from="1753418273648" duration="26000" />
+      <workItem from="1753418309073" duration="28000" />
     </task>
     <servers />
   </component>

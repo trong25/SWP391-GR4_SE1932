@@ -325,7 +325,6 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
         <script>
-            // Cập nhật giao diện với dữ liệu từ JSP
             function updatePaymentInfo() {
                 document.getElementById('amount-text').textContent =
                         new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(${payment.amount});

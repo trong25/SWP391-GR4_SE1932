@@ -16,19 +16,25 @@ import java.util.Map;
 import model.payment.PaymentDAO;
 
 /**
- *
- * @author admin
+ * Servlet ViewRevenueServlet xử lý các yêu cầu HTTP liên quan đến việc hiển thị doanh thu theo từng tháng trong năm.
+ * 
+ * URL Mapping: /director/revenue
+ * 
+ * Chức năng:
+ * - Nhận tham số năm từ client (qua request parameter)
+ * - Gọi PaymentDAO để truy xuất doanh thu từng tháng theo năm được chọn
+ * - Đưa dữ liệu vào request attribute và chuyển tiếp đến trang JSP `viewRevenue.jsp` để hiển thị
+ * 
+ * Phân quyền: Chỉ vai trò Director (Giám đốc) được phép truy cập chức năng này
+ * 
+ * @author ThanhNT
+ * @version 1.0
  */
+
 @WebServlet(name="ViewRevenueServlet", urlPatterns={"/director/revenue"})
 public class ViewRevenueServlet extends HttpServlet {
    
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -46,14 +52,7 @@ public class ViewRevenueServlet extends HttpServlet {
         }
     } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+  
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -71,23 +70,14 @@ public class ViewRevenueServlet extends HttpServlet {
 
     } 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
+ 
     @Override
     public String getServletInfo() {
         return "Short description";

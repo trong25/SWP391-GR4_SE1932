@@ -15,23 +15,36 @@ import model.payment.Payment;
 import model.payment.PaymentDAO;
 
 /**
- * Servlet xử lý việc xác nhận thanh toán cho sinh viên.
- * URL: /student/PaymentAccept
- * Nhận tham số `code` từ request và cập nhật trạng thái thanh toán tương ứng sang "Paid".
- * 
+ * Servlet PaymentAccept xử lý xác nhận thanh toán cho sinh viên.
+ *
+ * URL Mapping: /student/PaymentAccept
+ *
+ * Chức năng:
+ * - Nhận tham số 'code' từ request (GET)
+ * - Kiểm tra giao dịch thanh toán tương ứng trong CSDL
+ * - Nếu tồn tại, cập nhật trạng thái thanh toán sang "Paid"
+ * - Trả về mã trạng thái HTTP phù hợp (200 nếu thành công, 400 nếu lỗi)
+ *
+ * Phân quyền: Chỉ sinh viên đã đăng nhập và có mã giao dịch hợp lệ mới xác nhận được thanh toán
+ *
  * @author KienPN
  */
 @WebServlet(name = "PaymentAccept", urlPatterns = {"/student/PaymentAccept"})
 public class PaymentAccept extends HttpServlet {
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Xử lý yêu cầu HTTP GET để xác nhận thanh toán.
+     *
+     * Quy trình:
+     * - Lấy mã giao dịch từ request parameter (?code=...)
+     * - Tìm giao dịch trong CSDL qua PaymentDAO
+     * - Nếu không tìm thấy, trả về lỗi 400
+     * - Nếu tìm thấy, cập nhật trạng thái sang "Paid" và trả về 200
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -54,12 +67,12 @@ public class PaymentAccept extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Xử lý yêu cầu HTTP POST (không sử dụng trong chức năng này).
      *
      * @param request servlet request
      * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws ServletException nếu có lỗi servlet
+     * @throws IOException nếu có lỗi IO
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -67,13 +80,13 @@ public class PaymentAccept extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Trả về mô tả ngắn gọn về servlet.
      *
-     * @return a String containing servlet description
+     * @return Chuỗi mô tả servlet
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet xác nhận thanh toán cho sinh viên.";
     }// </editor-fold>
 
 }

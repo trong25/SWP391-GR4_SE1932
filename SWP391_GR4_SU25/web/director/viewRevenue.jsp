@@ -99,7 +99,7 @@
                                         <h4><i class="fas fa-chart-bar mr-2"></i>Biểu Đồ Doanh Thu Theo Tháng</h4>
                                     </div>
                                     <div class = "year-selector">
-                                        <c:set var="selectedYear" value="${param.year != null ? param.year : '2025'}" />
+                                        <c:set var="selectedYear" value="${param.year != null ? param.year : '2024'}" />
                                         <select id="yearSelect" onchange="updateChart()">
                                             <option value="2023" ${selectedYear == '2023' ? 'selected' : ''}>2023</option>
                                             <option value="2024" ${selectedYear == '2024' ? 'selected' : ''}>2024</option>

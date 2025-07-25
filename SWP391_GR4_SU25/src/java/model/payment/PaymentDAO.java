@@ -202,22 +202,24 @@ public class PaymentDAO extends DBContext {
         return monthlyRevenue;
     }
 
-    // lấy tổng doanh thu 
-    public double getAllRevenue() {
-        String sql = "SELECT SUM(amount) AS total FROM Payments WHERE status = 'paid'";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-
-            if (rs.next()) {
-                double result = rs.getDouble("total");
-                return rs.wasNull() ? 0.0 : result;
+ // Lấy doanh thu theo năm cụ thể
+    public double getRevenueByYear(int year) {
+        String sql = "SELECT SUM(amount) as total_revenue FROM Payments " +
+                    "WHERE year = ? AND status = 'paid'";
+        
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, year);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    double result = rs.getDouble("total_revenue");
+                    return rs.wasNull() ? 0.0 : result;
+                }
             }
-
         } catch (SQLException e) {
-            System.out.println("Lỗi getTotalRevenue: " + e.getMessage());
+            System.out.println("Lỗi getRevenueByYear: " + e.getMessage());
             e.printStackTrace();
         }
-
         return 0.0;
     }
 

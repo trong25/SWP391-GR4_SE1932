@@ -15,9 +15,26 @@ import model.payment.PaymentDAO;
 import model.student.StudentAttendanceSummary;
 
 /**
- * Servlet xử lý tạo thông báo thanh toán học phí
- * ThanhNT
+ * Servlet SendPaymentNoticeServlet xử lý các yêu cầu HTTP liên quan đến việc tạo và gửi thông báo thanh toán học phí cho học sinh.
+ * 
+ * URL Mapping: /notify-payment (gián tiếp thông qua cấu hình điều hướng hoặc đường dẫn servlet map nếu có)
+ * 
+ * Chức năng:
+ * - Trong phương thức `doGet`: 
+ *   + Lấy danh sách học sinh đang học và số buổi đã học trong tháng
+ *   + Hiển thị danh sách này trên trang JSP để kế toán tạo hóa đơn
+ * - Trong phương thức `doPost`: 
+ *   + Nhận dữ liệu từ form hóa đơn học phí (mã hóa đơn, học sinh, lớp, số tiền, hạn nộp...)
+ *   + Kiểm tra và xử lý dữ liệu, tạo đối tượng `Payment`
+ *   + Gọi `PaymentDAO` để lưu thông tin thanh toán vào cơ sở dữ liệu
+ *   + Thông báo kết quả (thành công/thất bại) qua session attribute
+ * 
+ * Phân quyền: Chỉ vai trò Accountant (Kế toán) được phép truy cập chức năng này
+ * 
+ * @author ThanhNT
+ * @version 1.0
  */
+
 public class SendPaymentNoticeServlet extends HttpServlet {
 
     @Override
@@ -77,16 +94,7 @@ public class SendPaymentNoticeServlet extends HttpServlet {
             String dueDateStr = request.getParameter("dueDate");
             String note = request.getParameter("note");
 
-            // Debug logging
-            System.out.println("=== Debug Payment Creation ===");
-            System.out.println("Code: " + code);
-            System.out.println("Student ID: " + studentId);
-            System.out.println("Class ID: " + classId);
-            System.out.println("Amount String: " + amountStr);
-            System.out.println("Due Date: " + dueDateStr);
-            System.out.println("Status: " + status);
-            System.out.println("Note: " + note);
-
+          
             // Validate required fields
             if (code == null || code.trim().isEmpty()) {
                 session.setAttribute("toastMessage", "Mã hóa đơn không được để trống!");

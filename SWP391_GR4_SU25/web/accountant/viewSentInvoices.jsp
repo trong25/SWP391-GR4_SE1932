@@ -121,15 +121,15 @@
                 }
             }
             .toast-success {
-                background-color: #28a745 !important; /* Màu xanh lá cho thông báo thành công */
+                background-color: #28a745 !important; 
                 color: white !important;
             }
             .toast-error {
-                background-color: #dc3545 !important; /* Màu đỏ cho thông báo lỗi */
+                background-color: #dc3545 !important; 
                 color: white !important;
             }
             .toast {
-                opacity: 1 !important; /* Đảm bảo thông báo rõ ràng */
+                opacity: 1 !important; 
                 border-radius: 5px;
                 font-size: 0.9rem;
             }
