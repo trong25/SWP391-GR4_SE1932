@@ -85,13 +85,20 @@
                     </div>
                     <div class="card-body">
                         <div class="row mb-3">
+                            <%
+                                Application app = (Application) request.getAttribute("application");
+                                String details = app.getDetails();
+                                if (details != null) {
+                                    details = details.replace("\r\n", "<br/>");
+                                }
+                            %>
                             <div class="col-sm-9" id="details">
-                                <c:out value="${detailsWithBr}" escapeXml="false"/>
+                                <%= details %>
                             </div>
                         </div>
                     </div>
                 </div>
-<!--                <div class="col-md-6">
+                <div class="col-md-6">
                     <form action="applicationdetails" method="post" id="applicationForm">
                         <label for="note">Ghi chú</label>
                         <textarea class="form-control mb-5" type="text" placeholder="${requestScope.application.processNote}"
@@ -105,7 +112,7 @@
                             Từ chối
                         </button>
                     </form>
-                </div>-->
+                </div>
 
                 <div class="btn-group-right float-right">
                     <button type="button" class="btn btn-primary" onclick="history.back()"  style="width: 100px">Quay lại</button>

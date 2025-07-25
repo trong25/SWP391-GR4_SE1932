@@ -188,9 +188,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             <i class="fas fa-paper-plane mr-2"></i>Danh sách đơn từ
                                         </h6>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="hideApplications()">
-                                            <i class="fas fa-times"></i> Đóng
-                                        </button>
+                         
                                     </div>
                                     <div class="card-body">
                                         <c:choose>
@@ -226,7 +224,7 @@
                                                                     <c:when test="${application.status eq 'đã được duyệt'}">
                                                                         <span class="badge badge-success">${application.status}</span>
                                                                     </c:when>
-                                                                    <c:when test="${application.status eq 'đã bị từ chối'}">
+                                                                    <c:when test="${application.status eq 'không được duyệt'}">
                                                                         <span class="badge badge-danger">${application.status}</span>
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -257,9 +255,7 @@
                                         <h6 class="m-0 font-weight-bold text-primary">
                                             <i class="fas fa-bell mr-2"></i>Danh sách thông báo
                                         </h6>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="hideNotifications()">
-                                            <i class="fas fa-times"></i> Đóng
-                                        </button>
+                                       
                                     </div>
                                     <div class="card-body">
                                         <c:choose>
@@ -309,55 +305,6 @@
                 <jsp:include page="../footer.jsp"/>
             </div>
         </div>
-
-        <script>
-            // Notification functions
-            function showNotifications() {
-                const notificationSection = document.getElementById('notificationSection');
-                notificationSection.style.display = 'block';
-                
-                // Smooth scroll to notifications section
-                notificationSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-            
-            function hideNotifications() {
-                const notificationSection = document.getElementById('notificationSection');
-                notificationSection.style.display = 'none';
-            }
-            
-            function showNotificationDetail(id, heading, details, createdAt, createdBy) {
-                // Clean up the data to avoid JavaScript errors
-                var cleanDetails = details ? details.replace(/'/g, '&#39;').replace(/"/g, '&quot;').replace(/\n/g, '<br>') : '';
-                
-                var htmlContent = '<div style="text-align: left; max-height: 400px; overflow-y: auto;">' +
-                    '<div style="margin-bottom: 15px;">' +
-                        '<strong>Nội dung:</strong>' +
-                        '<div style="margin-top: 8px; padding: 10px; background-color: #f8f9fa; border-radius: 5px; line-height: 1.5;">' +
-                            cleanDetails +
-                        '</div>' +
-                    '</div>' +
-                    '<div style="border-top: 1px solid #e9ecef; padding-top: 10px; font-size: 0.9rem; color: #6c757d;">' +
-                        '<p><i class="fas fa-user"></i> <strong>Người gửi:</strong> ' + createdBy + '</p>' +
-                        '<p><i class="fas fa-calendar"></i> <strong>Thời gian:</strong> ' + createdAt + '</p>' +
-                    '</div>' +
-                '</div>';
-                
-                swal({
-                    title: heading,
-                    html: true,
-                    text: htmlContent,
-                    icon: "info",
-                    button: "Đóng",
-                    className: "notification-detail-modal"
-                });
-            }
-            
-            
-
-        </script>
 
     </body>
 </html>

@@ -49,7 +49,6 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Loại đơn</th>
-                                    <th>Người gửi</th>
                                     <th>Ngày nghỉ</th>
                                     <th>Trạng thái</th>
                                     <th>Chi tiết</th>
@@ -60,8 +59,7 @@
                                 <c:forEach var="application" items="${requestScope.applications}" varStatus="status">
                                     <tr>
                                         <th scope="row">${status.index + 1}</th>
-                                        <td>${application.type.name}</td>
-                                        <td>${studentBean.getStudentByUserId(application.createdBy).lastName} ${studentBean.getByUserId(application.createdBy).firstName}</td>
+                                        <td>${application.type.name}</td>                                       
                                         <td>
                                             <c:choose>
                                                 <c:when test="${application.startDate eq application.endDate}">
