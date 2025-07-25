@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <jsp:useBean id="StudentBean" class="model.student.StudentDAO"/>
+                            <jsp:useBean id="bean" class="model.student.StudentDAO"/>
                             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
@@ -61,7 +61,16 @@
                                     <tr>
                                         <th scope="row">${status.index + 1}</th>
                                         <td>${application.type.name}</td>
-                                        <td>${studentBean.getStudentByUserId(application.createdBy).lastName} ${studentBean.getByUserId(application.createdBy).firstName}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty bean.getStudentByUserId(application.createdBy)}">
+                                                    ${bean.getStudentByUserId(application.createdBy).lastName} ${bean.getStudentByUserId(application.createdBy).firstName}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span style="color:red;">Không tìm thấy</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
                                         <td>
                                             <c:choose>
                                                 <c:when test="${application.startDate eq application.endDate}">

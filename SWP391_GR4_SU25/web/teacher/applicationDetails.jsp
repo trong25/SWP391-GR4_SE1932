@@ -56,8 +56,15 @@
                         <div class="row mb-3">
                             <div class="col-sm-3 font-weight-bold">Người gửi:</div>
                             <div class="col-sm-9" id="createdBy">
-                                ${bean.getStudentByUserId(requestScope.application.createdBy).id} -
-                                ${bean.getStudentByUserId(requestScope.application.createdBy).lastName} ${bean.getStudentByUserId(requestScope.application.createdBy).firstName}
+                                <c:choose>
+                                    <c:when test="${not empty bean.getStudentByUserId(requestScope.application.createdBy)}">
+                                        ${bean.getStudentByUserId(requestScope.application.createdBy).id} -
+                                        ${bean.getStudentByUserId(requestScope.application.createdBy).lastName} ${bean.getStudentByUserId(requestScope.application.createdBy).firstName}
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span style="color:red;">Không tìm thấy học sinh với user_id: ${requestScope.application.createdBy}</span>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="row mb-3">
