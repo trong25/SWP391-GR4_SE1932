@@ -91,6 +91,7 @@ public class PersonnelDAO extends DBContext {
             s.payment_date
         FROM Personnels p
         LEFT JOIN Salaries s ON p.id = s.personnel_id
+        WHERE p.role_id <> 1 AND LTRIM(RTRIM(p.status)) = N'đang làm việc'
         ORDER BY p.id, s.salary_year DESC, s.salary_month DESC
     """;
 
@@ -174,7 +175,8 @@ public class PersonnelDAO extends DBContext {
 //    }
     public List<Personnel> getActivePersonnels() {
         List<Personnel> list = new ArrayList<>();
-        String sql = "SELECT * FROM Personnels WHERE status = N'đang làm việc'";
+        String sql = "SELECT * FROM Personnels WHERE LTRIM(RTRIM(status)) = N'đang làm việc' AND role_id <> 1";
+
 
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
@@ -310,6 +312,34 @@ public class PersonnelDAO extends DBContext {
         }
         return person;
     }
+    
+    public boolean checkSalaryExists(String personnelId, int month, int year) {
+    String sql = "SELECT 1 FROM Salaries WHERE personnel_id = ? AND salary_month = ? AND salary_year = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, personnelId);
+        ps.setInt(2, month);
+        ps.setInt(3, year);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // true nếu có tồn tại
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+public void insertSalary(String personnelId, int month, int year, float baseSalary, float totalSalary) {
+    String sql = "INSERT INTO Salaries (personnel_id, salary_month, salary_year, base_salary, total_salary, payment_status) VALUES (?, ?, ?, ?, ?, N'chưa thanh toán')";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, personnelId);
+        ps.setInt(2, month);
+        ps.setInt(3, year);
+        ps.setFloat(4, baseSalary);
+        ps.setFloat(5, totalSalary);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
 
     //Hàm lấy tất cả nhân viên trong cơ sở dữ liệu
     public List<Personnel> getAllPersonnels() {
@@ -1663,44 +1693,54 @@ public class PersonnelDAO extends DBContext {
     }
 
     // Thêm một nhân sự mới vào bảng Personnels với các thông tin đầu vào
-    public void insertPersonnel(String id, String firstName, String lastName, int gender, String birthday, String address,
-            String email, String phone, int role, String avatar,
-            String qualification, String specialization, String achievements,
-            int teaching_years, String cv_file) {
+  public void insertPersonnel(String id, String firstName, String lastName, int gender, String birthday, String address,
+        String email, String phone, int role, String avatar,
+        String qualification, String specialization, String achievements,
+        int teaching_years, String cv_file) {
 
-        String sql = "INSERT INTO Personnels (id, first_name, last_name, gender, birthday, address, email, phone_number, role_id, status, avatar, user_id, school_id, school_class_id, specialization, qualification, teaching_years, achievements, cv_file) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO Personnels (id, first_name, last_name, gender, birthday, address, email, phone_number, role_id, status, avatar, user_id, school_id, school_class_id, specialization, qualification, teaching_years, achievements, cv_file) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            PreparedStatement st = connection.prepareStatement(sql);
-            st.setString(1, id);
-            st.setString(2, firstName);
-            st.setString(3, lastName);
-            st.setInt(4, gender);
-            st.setString(5, birthday);
-            st.setString(6, address);
-            st.setString(7, email);
-            st.setString(8, phone);
-            st.setInt(9, role);
-            st.setString(10, "đang chờ xử lý"); // status mặc định
-            st.setString(11, avatar);
-            st.setString(12, null); // user_id
-            st.setString(13, null); // school_id
-            st.setString(14, null); // school_class_id
-            st.setString(15, specialization);
-            st.setString(16, qualification);
-            st.setInt(17, teaching_years);
-            st.setString(18, achievements);
-            st.setString(19, cv_file);
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, id);
+        st.setString(2, firstName);
+        st.setString(3, lastName);
+        st.setInt(4, gender);
+        st.setString(5, birthday);
+        st.setString(6, address);
+        st.setString(7, email);
+        st.setString(8, phone);
+        st.setInt(9, role);
+        st.setString(10, "đang chờ xử lý"); // Trạng thái mặc định
+        st.setString(11, avatar);
+        st.setString(12, null); // user_id
+        st.setString(13, null); // school_id
+        st.setString(14, null); // school_class_id
+        st.setString(15, specialization);
+        st.setString(16, qualification);
+        st.setInt(17, teaching_years);
+        st.setString(18, achievements);
+        st.setString(19, cv_file);
 
-            st.executeUpdate();
-            System.out.println("✅ Insert thành công!");
-        } catch (Exception e) {
-            System.out.println("❌ Lỗi khi insert: " + e.getMessage());
-            e.printStackTrace();
-        }
+        st.executeUpdate();
+        System.out.println("✅ Insert nhân viên thành công!");
+
+        // 👉 Tạo bản ghi lương với tháng/năm hiện tại
+        int currentMonth = java.time.LocalDate.now().getMonthValue();
+        int currentYear = java.time.Year.now().getValue();
+
+        float salaryPerDay = 0f; // Sẽ tính sau ở ListPersonnelSalaryServlett
+        float totalSalary = 0f;  // Sẽ tính sau
+
+        insertSalary(id, currentMonth, currentYear, salaryPerDay, totalSalary);
+        System.out.println("✅ Insert bảng lương thành công!");
+
+    } catch (Exception e) {
+        System.out.println("❌ Lỗi khi insert: " + e.getMessage());
+        e.printStackTrace();
     }
-
+}
     // Trả về số lượng nhân sự theo một vai trò cụ thể (role_id)
     public int getNumberOfPersonByRole(int id) {
         String sql = "select count(id) as numberofpersonbyrole\n"

@@ -169,7 +169,7 @@ public class NotificationDAO extends DBContext  {
     public List<Integer> getRoleSentNotifiByIdandCreatBy(String id, String create_by) {
         List<Integer> listrole = new ArrayList<>();
         String sql = "SELECT DISTINCT role_id\n"
-                + "FROM [BoNo_Kindergarten].[dbo].[Notifications] n\n"
+                + "FROM [Cultural_Tutoring_Center_HN].[dbo].[Notifications] n\n"
 
                 + "INNER JOIN NotificationDetails nd ON n.id = nd.notification_id\n"
                 + "INNER JOIN [User] u ON u.id = nd.receiver_id\n"

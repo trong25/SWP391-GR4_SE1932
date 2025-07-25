@@ -35,6 +35,8 @@ public class ApplicationDetailsServlet extends HttpServlet {
         ApplicationDAO applicationDAO = new ApplicationDAO();
         Application application = applicationDAO.getApplicationById(applicationId);
         request.setAttribute("application", application);
+        String detailsWithBr = application.getDetails() != null ? application.getDetails().replaceAll("\\n", "<br/>") : "";
+        request.setAttribute("detailsWithBr", detailsWithBr);
         request.getRequestDispatcher("applicationDetails.jsp").forward(request, response);
     }
 

@@ -60,21 +60,21 @@ public class DashboardTeacherServlet extends HttpServlet {
         if (individualClass != null) {
             
             int listStudentInClass = studentDAO.getSumStudentInClass(individualClass.getId());
-            ApplicationDAO applicationDAO = new ApplicationDAO();
+//            ApplicationDAO applicationDAO = new ApplicationDAO();
             RoleDAO roleDAO = new RoleDAO();
             String roleName = roleDAO.getRoleName(personnel.getRoleId());
-            List<Application> listApplications = applicationDAO.getForPersonnel(roleName);
-            int sumApplication = listApplications.size();
+//            List<Application> listApplications = applicationDAO.getForPersonnel(roleName);
+//            int sumApplication = listApplications.size();
 
             NotificationDAO notificationDAO = new NotificationDAO();
             List<Notification> listNotifications = notificationDAO.getListNotifiByUserId(personnel.getUserId());
             int sumNotification = listNotifications.size();
             request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
             request.setAttribute("listStudentInClass", listStudentInClass);
-            request.setAttribute("sumApplication", sumApplication);
+//            request.setAttribute("sumApplication", sumApplication);
             request.setAttribute("sumNotification", sumNotification);
             request.setAttribute("listNotifications", listNotifications);
-            request.setAttribute("listApplications", listApplications);
+//            request.setAttribute("listApplications", listApplications);
 
             TimetableDAO timetableDAO = new TimetableDAO();
             DayDAO dayDAO = new DayDAO();

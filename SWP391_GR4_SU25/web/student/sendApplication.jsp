@@ -51,15 +51,6 @@
                                             <label for="endDate">Chọn Ngày Kết Thúc</label>
                                             <input type="date" class="form-control mb-3" id="endDate" name="endDate">
                                         </div>
-                                        <div class="form-group col-md-6" id="toTeacherContainer">
-                                            <label for="endDate">Đơn gửi đến giáo viên</label>
-                                            <select id="teacher_id" name="teacher_id" class="custom-select dropdown mb-3" aria-label="Default select example">
-                                                <c:forEach items="${requestScope.personnels}" var="per">
-                                                    <option value="${per.id}">${per.firstName} ${per.lastName} (${per.className})</option>
-                                                </c:forEach>
-                                            </select>
-
-                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <h4 class="h4 mb-2 text-gray-800">Lý do</h4>

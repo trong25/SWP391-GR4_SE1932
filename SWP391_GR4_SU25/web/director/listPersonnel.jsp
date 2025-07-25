@@ -183,12 +183,12 @@
                                                 </td>
 
                                                 <td><fmt:formatDate value="${p.getBirthday()}" pattern="yyyy/MM/dd"/> </td>
-                                                <td>
+                                              <td>
                                                     <c:if test="${p.getRoleId()== 0}">
                                                         Nhân viên IT
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==1}">
-                                                        Giám đốc
+                                                        Giám Đốc
                                                     </c:if>
                                                     <c:if test="${p.getRoleId()==2}">
                                                         Giáo vụ
@@ -199,7 +199,6 @@
                                                     <c:if test="${p.getRoleId()==5}">
                                                         Nhân viên kế toán
                                                     </c:if>
-
                                                 </td>
                                                 <td>
                                                     <c:choose>

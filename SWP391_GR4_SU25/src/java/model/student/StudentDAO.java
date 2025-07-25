@@ -159,7 +159,8 @@ public class StudentDAO extends DBContext {
                 stmt.setNull(8, java.sql.Types.DATE);
             }
 
-            stmt.setBoolean(9, student.getGender());
+           stmt.setInt(9, student.getGender() ? 1 : 0);
+
             stmt.setString(10, student.getFirstGuardianName());
             stmt.setString(11, student.getFirstGuardianPhoneNumber());
             stmt.setString(12, student.getAvatar());
@@ -908,7 +909,7 @@ public class StudentDAO extends DBContext {
                sc.schoolName, 
                sc.addressSchool, 
                c.class_name,
-               g.name AS grade_name
+               g.name AS grade_level
         FROM Students s
         LEFT JOIN Schools sc ON s.school_id = sc.id
         LEFT JOIN SchoolClasses c ON s.school_class_id = c.id
@@ -921,7 +922,7 @@ public class StudentDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Student student = createStudents(rs);
+                Student student = createStudent(rs);
                 list.add(student);
             }
         } catch (SQLException e) {
