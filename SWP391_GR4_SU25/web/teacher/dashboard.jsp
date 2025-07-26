@@ -117,29 +117,38 @@
                                 </div>
                             </div>
 
-<!--                             Menu Card Example 
+                            <!-- Attendance Status Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2 application-card" id="applicationCard">
+                                <div class="card border-left-info shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    Tổng số đơn từ
+                                                    Trạng thái chấm công
                                                 </div>
-                                                <div class="row no-gutters align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">${requestScope.sumApplication}</div>
-                                                    </div>
-
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <c:choose>
+                                                        <c:when test="${requestScope.attendanceStatus eq 'Đã chấm công'}">
+                                                            <span class="badge badge-success">Đã chấm công</span>
+                                                        </c:when>
+                                                        <c:when test="${requestScope.attendanceStatus eq 'Chưa chấm công'}">
+                                                            <span class="badge badge-danger">Chưa chấm công</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge badge-secondary">${requestScope.attendanceStatus}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-paper-plane fa-2x text-gray-300"></i>
+                                                <i class="fas fa-user-check fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
+
+
 
                             <!-- Notifications Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
@@ -180,72 +189,6 @@
                             </div>
                         </div>
 
-                        <!-- Applications Section -->
-<!--                        <div class="row application-section" id="applicationSection">
-                            <div class="col-12">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">
-                                            <i class="fas fa-paper-plane mr-2"></i>Danh sách đơn từ
-                                        </h6>
-                         
-                                    </div>
-                                    <div class="card-body">
-                                        <c:choose>
-                                            <c:when test="${empty requestScope.listApplications}">
-                                                <div class="empty-applications">
-                                                    <i class="fas fa-file-alt"></i>
-                                                    <h5>Không có đơn từ nào</h5>
-                                                    <p class="text-muted">Hiện tại bạn không có đơn từ nào.</p>
-                                                </div>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="list-group list-group-flush">
-                                                    <c:forEach var="application" items="${requestScope.listApplications}">
-                                                        <div class="list-group-item application-item" onclick="showApplicationDetail('${application.id}', '${application.type.name}', '${application.details}', '${application.status}', '${application.createdAt}', '${application.startDate}', '${application.endDate}', '${application.processNote}')">
-                                                            <div class="d-flex w-100 justify-content-between">
-                                                                <div class="application-heading">${application.type.name}</div>
-                                                                <div class="application-date">
-                                                                    <fmt:formatDate value="${application.createdAt}" pattern="dd/MM/yyyy"/>
-                                                                </div>
-                                                            </div>
-                                                            <div class="application-details">
-                                                                <c:choose>
-                                                                    <c:when test="${fn:length(application.details) > 100}">
-                                                                        ${fn:substring(application.details, 0, 100)}...
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        ${application.details}
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </div>
-                                                            <div class="mt-2">
-                                                                <c:choose>
-                                                                    <c:when test="${application.status eq 'đã được duyệt'}">
-                                                                        <span class="badge badge-success">${application.status}</span>
-                                                                    </c:when>
-                                                                    <c:when test="${application.status eq 'không được duyệt'}">
-                                                                        <span class="badge badge-danger">${application.status}</span>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <span class="badge badge-warning">${application.status}</span>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                                <small class="text-muted ml-2">
-                                                                    <i class="fas fa-calendar mr-1"></i>
-                                                                    <fmt:formatDate value="${application.startDate}" pattern="dd/MM/yyyy"/> - 
-                                                                    <fmt:formatDate value="${application.endDate}" pattern="dd/MM/yyyy"/>
-                                                                </small>
-                                                            </div>
-                                                        </div>
-                                                    </c:forEach>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
 
                         <!-- Notifications Section -->
                         <div class="row notification-section" id="notificationSection">

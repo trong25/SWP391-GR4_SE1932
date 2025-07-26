@@ -77,9 +77,4 @@ public class ViewTimetableServlet extends HttpServlet {
             request.getRequestDispatcher("viewTimetable.jsp").forward(request, response);
         }
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
 }

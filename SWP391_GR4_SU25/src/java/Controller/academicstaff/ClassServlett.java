@@ -82,7 +82,7 @@ public class ClassServlett extends HttpServlet {
             GradeDAO gradeDAO = new GradeDAO();
             request.setAttribute("grades", gradeDAO.getAll());
             PersonnelDAO personnelDAO = new PersonnelDAO();
-            request.setAttribute("teachers", personnelDAO.getAvailableTeachers(schoolYearId));
+            request.setAttribute("teachers", personnelDAO.getAllTeachers(schoolYearId));
             request.getRequestDispatcher("class.jsp").forward(request, response);
         } catch (Exception e) {
           e.printStackTrace();

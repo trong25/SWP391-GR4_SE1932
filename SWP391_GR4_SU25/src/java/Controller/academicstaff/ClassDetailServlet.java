@@ -76,7 +76,7 @@ public class ClassDetailServlet extends HttpServlet {
         session.removeAttribute("dayId");
 
         // Gửi danh sách giáo viên khả dụng
-        request.setAttribute("teachers", personnelDAO.getAvailableTeachers(classDAO.getClassById(classId).getSchoolYear().getId()));
+        request.setAttribute("teachers", personnelDAO.getAllTeachers(classDAO.getClassById(classId).getSchoolYear().getId()));
         request.getRequestDispatcher("classDetail.jsp").forward(request, response);
     }
 

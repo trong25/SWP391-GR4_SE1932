@@ -35,6 +35,12 @@
                                             <option ${requestScope.schoolYearId eq year.id ? "selected" : ""} value="${year.id}">${year.name}</option>
                                         </c:forEach>
                                     </select>
+                                    <label class="ml-1">Chọn lớp</label>
+                                    <select class="custom-select" style="width: 25%" aria-label="Default select example" onchange="submitForm('selectForm')" name="classId">
+                                        <c:forEach items="${requestScope.classList}" var="c">
+                                            <option value="${c.id}" <c:if test="${c.id eq selectedClassId}">selected</c:if>>${c.name}</option>
+                                        </c:forEach>
+                                    </select>
                                     <label class="ml-1">Chọn tuần</label>
                                     <select id="weekSelect" class="custom-select" style="width: 40%" aria-label="Default select example" onchange="submitForm('selectForm')" name="weekId">
                                         <option value="">- Chọn Tuần -</option>

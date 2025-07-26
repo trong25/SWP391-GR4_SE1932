@@ -11,7 +11,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Quản lý học sinh</title>
+        <title>Quản lý học sinh chờ</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -147,7 +147,7 @@
                 <div id="content">
                     <jsp:include page="../header.jsp"/>
                     <div class="container-fluid">
-                        <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Học Sinh</h1>
+                        <h1 class="h3 mb-4 text-gray-800 text-center">Danh Sách Học Sinh Chờ</h1>
 
                         <c:set var="schoolYearSelect" value="${requestScope.schoolYearSelect}"/>
                         <c:set var="classesSelect" value="${requestScope.classSelect}"/>
@@ -158,7 +158,7 @@
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                <h6 class="m-0 font-weight-bold text-primary">Danh Sách Học Sinh</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Danh Sách Học Sinh Chờ</h6>
                                 <button type="button" class="btn btn-outline-primary" data-toggle="modal"
                                         data-target=".create-pupil">
                                     <i class="fas fa-upload"></i> Thêm học sinh

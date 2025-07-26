@@ -55,6 +55,12 @@
                                                 <option ${yearChecked eq year.id ? "selected" : ""} value="${year.id}"  >${year.name}</option>
                                             </c:forEach>
                                         </select>
+                                        <label class="ml-1">Chọn lớp</label>
+                                        <select class="custom-select" style="width: 25%" aria-label="Default select example" onchange="submitForm()" name="classId">
+                                            <c:forEach items="${requestScope.classList}" var="c">
+                                                <option value="${c.id}" <c:if test="${c.id eq selectedClassId}">selected</c:if>>${c.name}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
                                 </form>
                             </div>

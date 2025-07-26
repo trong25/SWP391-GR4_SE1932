@@ -56,7 +56,7 @@
                 <div class="container-fluid">
                     <div style="display: flex; justify-content: center">
                         <div style="display: block; border: 2px solid black; border-radius: 5px;">
-                            <header style="background-color: #000; color: #fff; padding: 10px 200px;">THÔNG TIN NHÂN VIÊN</header>
+                            <header style="background-color: #000; color: #fff; padding: 10px 200px;">THÔNG TIN BẢNG LƯƠNG NHÂN VIÊN</header>
                         </div>
                     </div>
 

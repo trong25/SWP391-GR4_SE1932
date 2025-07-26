@@ -41,6 +41,8 @@ public class ListStudentServlet extends HttpServlet {
         List<Student> listStudent = new ArrayList<>();
         String gradeTeacher = null;
         String classTeacher = null;
+        List<Class> classList = new ArrayList<>();
+        String selectedClassId = null;
         if (session.getAttribute("user") != null) {
             user = (User) session.getAttribute("user");
 
@@ -53,17 +55,27 @@ public class ListStudentServlet extends HttpServlet {
                 yearSelected = schoolYear;
             }
             if (!yearSelected.isEmpty()) {
-                listStudent = studentDAO.getListStudentOfTeacherBySchoolYear(yearSelected, teacher.getId());
-
-                //  Get Class and grade of class of this teacher in one school year
-                classes = classDAO.getTeacherClassByYear(yearSelected, teacher.getId());
+                // Lấy danh sách lớp chủ nhiệm của giáo viên trong năm học này
+                classList = classDAO.getClassesByTeacherAndSchoolYear(teacher.getId(), yearSelected);
+                request.setAttribute("classList", classList);
+                selectedClassId = request.getParameter("classId");
+                if ((selectedClassId == null || selectedClassId.isEmpty()) && classList != null && !classList.isEmpty()) {
+                    selectedClassId = classList.get(0).getId();
+                }
+                request.setAttribute("selectedClassId", selectedClassId);
+                if (selectedClassId != null && !selectedClassId.isEmpty()) {
+                    listStudent = studentDAO.getStudentsByClassId(selectedClassId);
+                    classes = classDAO.getClassById(selectedClassId);
+                }
+                else {
+                    listStudent = studentDAO.getListStudentOfTeacherBySchoolYear(yearSelected, teacher.getId());
+                    classes = classDAO.getTeacherClassByYear(yearSelected, teacher.getId());
+                }
             }
-
             if (classes != null) {
                 gradeTeacher = classes.getGrade().getName();
                 classTeacher = classes.getName();
             }
-            
         }
         List<SchoolYear> listSchoolYear = schoolYearDAO.getAll();
         request.setAttribute("teacherGrade", gradeTeacher);

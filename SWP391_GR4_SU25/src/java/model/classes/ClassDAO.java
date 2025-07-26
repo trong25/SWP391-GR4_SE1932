@@ -377,6 +377,27 @@ public class ClassDAO extends DBContext {
         }
         return classes;
     }
+
+    /**
+     * Lấy tất cả các lớp mà giáo viên chủ nhiệm trong một năm học
+     */
+    public List<Class> getClassesByTeacherAndSchoolYear(String teacherId, String schoolYearId) {
+        List<Class> classes = new ArrayList<>();
+        String sql = "SELECT * FROM [Class] WHERE teacher_id = ? AND school_year_id = ? AND status = N'đã được duyệt' ORDER BY id DESC";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, teacherId);
+            preparedStatement.setString(2, schoolYearId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Class c = createClass(resultSet);
+                classes.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
+    }
 }
 
 

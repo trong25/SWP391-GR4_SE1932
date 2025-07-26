@@ -45,6 +45,14 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Danh sách học sinh</h6>
+                        <form method="get" action="takeattendance" style="display:inline-block; margin-bottom:0;">
+                            <label for="classId">Chọn lớp: </label>
+                            <select name="classId" id="classId" onchange="this.form.submit()">
+                                <c:forEach var="c" items="${classList}">
+                                    <option value="${c.id}" ${c.id == selectedClassId ? 'selected' : ''}>${c.name}</option>
+                                </c:forEach>
+                            </select>
+                        </form>
                         <h6 class="m-0 font-weight-bold text-primary">Lớp : <a style="margin-right: 60px" >${requestScope.className == null ?"Ngày hôm nay không có lớp":requestScope.className}</a></h6>
                     </div>
                     <div class="card-body">
