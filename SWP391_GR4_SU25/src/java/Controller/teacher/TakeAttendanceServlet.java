@@ -22,7 +22,6 @@ import java.util.List;
 public class TakeAttendanceServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //getting toast message sent from doPost after take attendance
         HttpSession session = request.getSession();
         String toastType = "", toastMessage = "";
         if (session.getAttribute("toastType") != null) {
@@ -34,44 +33,38 @@ public class TakeAttendanceServlet extends HttpServlet {
         request.setAttribute("toastType", toastType);
         request.setAttribute("toastMessage", toastMessage);
 
-        StudentDAO StudentDAO = new StudentDAO();
         User user = (User) session.getAttribute("user");
-        Date date = new Date();
+        String teacherId = user.getUsername();
+        String schoolYearId = "SY000001";
+        ClassDAO classDAO = new ClassDAO();
+        List<model.classes.Class> classList = classDAO.getClassesByTeacherAndSchoolYear(teacherId, schoolYearId);
+        request.setAttribute("classList", classList);
 
+        String selectedClassId = request.getParameter("classId");
+        if ((selectedClassId == null || selectedClassId.isEmpty()) && !classList.isEmpty()) {
+            selectedClassId = classList.get(0).getId();
+        }
+        request.setAttribute("selectedClassId", selectedClassId);
+
+        String className = null;
+        List<Student> students = null;
+        if (selectedClassId != null && !selectedClassId.isEmpty()) {
+            model.classes.Class selectedClass = classDAO.getClassById(selectedClassId);
+            if (selectedClass != null) {
+                className = selectedClass.getName();
+            }
+            StudentDAO studentDAO = new StudentDAO();
+            students = studentDAO.getStudentsByClassId(selectedClassId);
+        }
+        request.setAttribute("className", className);
+        request.setAttribute("students", students);
+
+        // Ngày hiện tại
+        Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = dateFormat.format(date);
-        
-        // Debug logs
-        System.out.println("Debug - User: " + user.getUsername());
-        System.out.println("Debug - Date: " + dateString);
-        
-        // Add data check
-        StudentDAO.checkDataForAttendance(user.getUsername().toUpperCase(), dateString);
-        
-        List<Student> Students = StudentDAO.getStudentsByTeacherAndTimetable(user.getUsername().toUpperCase(), dateString);
-        
-        // Debug log for students list
-        System.out.println("Debug - Number of students found: " + (Students != null ? Students.size() : 0));
-        if (Students != null && !Students.isEmpty()) {
-            System.out.println("Debug - First student ID: " + Students.get(0).getId());
-        }
-        
-        ClassDAO classDAO = new ClassDAO();
-        String className = classDAO.getClassNameByTeacherAndTimetable(user.getUsername(), dateString);
-        
-        // Debug log for class name
-        System.out.println("Debug - Class name: " + className);
-        
         request.setAttribute("currentDate", dateString);
-        request.setAttribute("className", className);
-        request.setAttribute("students", Students);
-        
-        // Debug log for request attributes
-        System.out.println("Debug - Request attributes set:");
-        System.out.println("Debug - currentDate: " + request.getAttribute("currentDate"));
-        System.out.println("Debug - className: " + request.getAttribute("className"));
-        System.out.println("Debug - students size: " + (request.getAttribute("students") != null ? ((List)request.getAttribute("students")).size() : 0));
-        
+
         request.getRequestDispatcher("takeAttendance.jsp").forward(request, response);
     }
 

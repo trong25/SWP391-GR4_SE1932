@@ -58,11 +58,24 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
             PersonnelDAO personnelDAO = new PersonnelDAO();
             String teacherId = personnelDAO.getPersonnelByUserIds(user.getId()).getId();
             ClassDAO classDAO = new ClassDAO();
-            Class classes = classDAO.getTeacherClassByYear(schoolYearId, teacherId);
+            // Lấy danh sách lớp chủ nhiệm của giáo viên trong năm học này
+            List<Class> classList = classDAO.getClassesByTeacherAndSchoolYear(teacherId, schoolYearId);
+            request.setAttribute("classList", classList);
+            String selectedClassId = request.getParameter("classId");
+            if ((selectedClassId == null || selectedClassId.isEmpty()) && classList != null && !classList.isEmpty()) {
+                selectedClassId = classList.get(0).getId();
+            }
+            request.setAttribute("selectedClassId", selectedClassId);
+
+            Class classes = null;
+            if (selectedClassId != null && !selectedClassId.isEmpty()) {
+                classes = classDAO.getClassById(selectedClassId);
+            }
             if (classes != null){
                 //get day list
                 DayDAO dayDAO = new DayDAO();
-                List<Day> days = dayDAO.getDaysWithTimetableForClass(weekId, classes.getId());
+                // Lấy tất cả ngày trong tuần (không chỉ ngày có timetable)
+                List<Day> days = dayDAO.getDayByWeek(weekId);
                 request.setAttribute("days", days);
                 request.setAttribute("classes", classes);
 
@@ -71,15 +84,6 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
                 List<Student> students = studentDAO.getListStudentsByClass(null, classes.getId());
                 request.setAttribute("students", students);
 
-                // Debug logs
-//                System.out.println("Debug - Number of days: " + (days != null ? days.size() : 0));
-//                System.out.println("Debug - Number of students: " + (students != null ? students.size() : 0));
-//                if (days != null && !days.isEmpty()) {
-//                    System.out.println("Debug - First day ID: " + days.get(0).getId());
-//                }
-//                if (students != null && !students.isEmpty()) {
-//                    System.out.println("Debug - First student ID: " + students.get(0).getId());
-//                }
             }
         }
         request.getRequestDispatcher("viewStudentsAttendance.jsp").forward(request, response);

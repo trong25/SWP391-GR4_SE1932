@@ -107,13 +107,13 @@
                                     </div>
                                     <h4 class="form-group h4 mb-2 text-gray-800">NGƯỜI NHẬN<span class="text-danger">*</span></h4>
                                     <div class="form-group d-inline">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="role_id" value="5" id="receiver4" checked disabled>
-                                            <input type="hidden" name="role_id" value="5">
-                                            <label class="form-check-label" for="receiver4">
-                                                Phụ huynh của lớp học
-                                            </label>
-                                        </div>
+                                        <label for="classId">Chọn lớp nhận thông báo:</label>
+                                        <select class="form-control" name="classId" id="classId" required>
+                                            <option value="" disabled selected>-- Chọn lớp --</option>
+                                            <c:forEach var="c" items="${classList}">
+                                                <option value="${c.id}">${c.name}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <h4 class="form-group h4 mb-2 text-gray-800" style="padding-top: 10px">NỘI DUNG<span class="text-danger">*</span></h4>

@@ -70,13 +70,20 @@ public class StudentsEvaluationServlet extends HttpServlet {
         }
 
         // Lấy lớp học của giáo viên trong năm học và danh sách học sinh theo lớp
+        List<Class> classList = null;
+        String selectedClassId = null;
         List<Student> students = null;
         if (schoolYearId != null && !schoolYearId.isEmpty() && user != null) {
-            // Lấy lớp học của giáo viên
-            Class teacherClass = classDAO.getTeacherClassByYear(schoolYearId, user.getUsername());
-            if (teacherClass != null) {
-                // Lấy danh sách học sinh theo lớp
-                students = studentDAO.getStudentByClass(teacherClass.getId());
+            // Lấy danh sách lớp chủ nhiệm của giáo viên trong năm học này
+            classList = classDAO.getClassesByTeacherAndSchoolYear(user.getUsername(), schoolYearId);
+            request.setAttribute("classList", classList);
+            selectedClassId = request.getParameter("classId");
+            if ((selectedClassId == null || selectedClassId.isEmpty()) && classList != null && !classList.isEmpty()) {
+                selectedClassId = classList.get(0).getId();
+            }
+            request.setAttribute("selectedClassId", selectedClassId);
+            if (selectedClassId != null && !selectedClassId.isEmpty()) {
+                students = studentDAO.getStudentByClass(selectedClassId);
             }
         }
 

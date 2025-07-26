@@ -75,6 +75,14 @@
                 </div>
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
+                        <form method="get" action="evaluate" style="display:inline-block; margin-bottom:0;">
+                            <label for="classId">Chọn lớp: </label>
+                            <select name="classId" id="classId" onchange="this.form.submit()">
+                                <c:forEach var="c" items="${classList}">
+                                    <option value="${c.id}" ${c.id == selectedClassId ? 'selected' : ''}>${c.name}</option>
+                                </c:forEach>
+                            </select>
+                        </form>
                         <c:choose>
                             <c:when test="${requestScope.teacherClass == null}">
                                 <h6 class="m-0 font-weight-bold text-primary">Lớp: <a

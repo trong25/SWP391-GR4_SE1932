@@ -60,7 +60,7 @@ public class ViewStudentsAttendanceServlet extends HttpServlet {
             request.setAttribute("students", studentDAO.getListStudentsByClass(null, classes.getId()));
             request.setAttribute("classId", classId);
             DayDAO dayDAO = new DayDAO();
-            request.setAttribute("days", dayDAO.getDaysWithTimetableForClass(weekId, classId));
+            request.setAttribute("days", dayDAO.getDayByWeek(weekId));
         } else {
             // Nếu chưa chọn lớp, lấy danh sách học sinh của tất cả các lớp trong năm học đó
             List<model.classes.Class> classList = classDAO.getBySchoolYear(schoolYearId);

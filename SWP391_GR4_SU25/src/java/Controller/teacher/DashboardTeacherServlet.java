@@ -36,16 +36,6 @@ import model.application.Application;
  * @author PC
  */
 public class DashboardTeacherServlet extends HttpServlet {
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -60,21 +50,17 @@ public class DashboardTeacherServlet extends HttpServlet {
         if (individualClass != null) {
             
             int listStudentInClass = studentDAO.getSumStudentInClass(individualClass.getId());
-//            ApplicationDAO applicationDAO = new ApplicationDAO();
             RoleDAO roleDAO = new RoleDAO();
             String roleName = roleDAO.getRoleName(personnel.getRoleId());
-//            List<Application> listApplications = applicationDAO.getForPersonnel(roleName);
-//            int sumApplication = listApplications.size();
-
             NotificationDAO notificationDAO = new NotificationDAO();
             List<Notification> listNotifications = notificationDAO.getListNotifiByUserId(personnel.getUserId());
             int sumNotification = listNotifications.size();
             request.setAttribute("numberOfStudent", studentDAO.getStudentByStatus("đang theo học").size());
             request.setAttribute("listStudentInClass", listStudentInClass);
-//            request.setAttribute("sumApplication", sumApplication);
+
             request.setAttribute("sumNotification", sumNotification);
             request.setAttribute("listNotifications", listNotifications);
-//            request.setAttribute("listApplications", listApplications);
+
 
             TimetableDAO timetableDAO = new TimetableDAO();
             DayDAO dayDAO = new DayDAO();
@@ -96,27 +82,10 @@ public class DashboardTeacherServlet extends HttpServlet {
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

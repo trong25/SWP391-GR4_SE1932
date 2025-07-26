@@ -85,13 +85,6 @@
                 </a>
             </li>
 
-<!--             Nav Item - Thực đơn 
-            <li class="nav-item">
-                <a class="nav-link" href="viewmealtimetable">
-                    <i class='fas fa-fw fa-cheese'></i>
-                    <span>Thực đơn</span>
-                </a>
-            </li>-->
 
             <!-- Nav Item - Điểm danh -->
             <li class="nav-item">

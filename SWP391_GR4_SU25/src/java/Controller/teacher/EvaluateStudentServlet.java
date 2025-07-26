@@ -32,7 +32,7 @@ public class EvaluateStudentServlet extends HttpServlet {
         StudentDAO studentDAO = new  StudentDAO();
         ClassDAO classDAO = new ClassDAO();
         DayDAO dayDAO = new DayDAO();
-         StudentAttendanceDAO  studentAttendanceDAO = new  StudentAttendanceDAO();
+        StudentAttendanceDAO  studentAttendanceDAO = new  StudentAttendanceDAO();
 
         HttpSession session = request.getSession();
         // Get the current date
@@ -44,8 +44,25 @@ public class EvaluateStudentServlet extends HttpServlet {
         String dateId =null;
         String checkAttendance ="notAttendance";
         User user = (User) session.getAttribute("user");
-        List< Student> listStudent = studentDAO.getStudentsByTeacherAndTimetable(user.getUsername().toUpperCase(), dateString);
-        String  className = classDAO.getClassNameByTeacherAndTimetable(user.getUsername(), dateString);
+        String teacherId = user.getUsername();
+        String schoolYearId = "SY000001";
+        // Lấy danh sách lớp chủ nhiệm của giáo viên trong năm học này
+        List<Class> classList = classDAO.getClassesByTeacherAndSchoolYear(teacherId, schoolYearId);
+        request.setAttribute("classList", classList);
+        String selectedClassId = request.getParameter("classId");
+        if ((selectedClassId == null || selectedClassId.isEmpty()) && classList != null && !classList.isEmpty()) {
+            selectedClassId = classList.get(0).getId();
+        }
+        request.setAttribute("selectedClassId", selectedClassId);
+        List<Student> listStudent = new ArrayList<>();
+        String className = null;
+        if (selectedClassId != null && !selectedClassId.isEmpty()) {
+            listStudent = studentDAO.getStudentsByClassId(selectedClassId);
+            Class selectedClass = classDAO.getClassById(selectedClassId);
+            if (selectedClass != null) {
+                className = selectedClass.getName();
+            }
+        }
         Day day = dayDAO.getDayByDate(dateString);
         if(day!=null){
             dateId = day.getId();
